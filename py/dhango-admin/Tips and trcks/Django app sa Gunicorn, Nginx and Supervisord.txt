@@ -1,0 +1,319 @@
+﻿Django app sa Gunicorn-om, Nginx-om i Supervisord na Ubuntu 16.04         1/6 
+
+Ovaj tutorijal je namenjen početnicima i deo je serije gde učimo da pokrenemo Django app sa gunicorn i 
+Nginx, i upravljamo sa njima uz pomoć Supervisord. U osnovi, pokušavamo da emuliramo produkciono 
+okružnje.
+
+Problem
+
+Mi smo sigurni da možemo pokrenuti našu Django app jednostavnim izvršavanjem ./manage.py 
+runserver komande. Takođe znamo da je tada pozvan development server. Vi znate da on nije robustan, 
+bezbedan, nitni itd. Prema tome kako stvarno da pokrenemo našu aplikaciju?
+
+Gunicorn
+gunicorn - jednostavan, lagan i brzi Python WSGI HTTP server za UNIX. Videćemo kako se koristi 
+gunicorn ali to nije glavni razlog što sam napisao ovaj vodič. Glavni razlog je: nazad u dan kada sam bio 
+prestravljen na pomisao na bilo šta u vezi sa production vs development, jer sam mislio, postoje Nginx i 
+gunicorn koji mogu podržati milione zahteva po sekundi i vrlo su sigurni / robusni / pouzdani i zbog toga 
+ne treba da bude teško naučiti i konfigurirati ih. 
+
+Želim da sprečim druge da dožive isto i da demonstriram da je to zaista jednostavno.  Dosta razgovora.
+
+Instalacija pip, virtualenv i virtualnog enviromenta
+Prvo, update/upgrade vaših paketa: sudo apt-get update
+
+sudo apt-get upgrade
+
+Sada instaliramo pip: sudo apt-get install python3-pip
+
+Potom instaliramo virtualenv: sudo pip3 install virtualenv
+
+Sada instaliramo virtual environment na virtualenv /opt/envs/myprojenv 
+"/opt/envs". Možete instalirati bilo gde i 
+koristiti opisnija imena za virtualenv: 
+I aktiviramo je sa: source /opt/envs/myprojenv/bin/activate
+
+Trebalo bi da vidite (myprojenv) na početku komandne linije. Sada hajde da instaliramo Django. 
+
+Instalacija django
+Sada koristimo samo pip a ne pip3, jer pip install django
+
+smo unutar virtualnog environmenta: 
+Kreirajmo Django projekat: django-admin startproject myproject
+
+Primenimo migracije i pokrenimo cd myproject
+
+development server: ./manage.py migrate
+./manage.py runserver
+
+Idemo na localhost:8000/admin i uverimo se da je sve pokrenuto kako treba! Sada sledi zamena 
+development servera sa gunicorn serverom:
+
+
+
+Django app sa Gunicorn-om, Nginx-om i Supervisord na Ubuntu 16.04         2/6 
+
+Instalacija gunicorn
+Instaliramo gunicorn: pip install gunicorn
+
+Pokrenimo ga i idemo na localhost:8000 gunicorn myproject.wsgi
+
+pogledajmo magiju:
+
+Sada se možda pitate što je dobra stvar taj WSGI. Pa, interfejs web servera i u osnovi je način na koji 
+aplikacije / okviri i serveri razgovaraju jedni s drugima. Ako server (poput gunicorna) primenjuje WSGI i 
+vaš okvir (Django), to znači da možete pokrenuti aplikaciju sa tim serverom. A ulazna tačka komunikacije 
+za ovo dvoje je promenljiva aplikacija koja se nalazi u MyProject/WSGI.py u našem slučaju. Više o tome 
+možete pročitati u PEP 333. 
+
+Igrajmo se sa njim malo da vidimo šta ima. 
+
+Gunicorn mogućnosti
+Možemo ga vezati za određeni port: gunicorn --bind 0.0.0.0:8030 myproject.wsgi
+
+Možemo povećeti broj workers-a za gunicorn --workers 3 myproject.wsgi
+
+serviranje zahteva:
+Možemo ga pokrenuti u servisnom gunicorn --daemon myproject.wsgi
+
+režimu:
+Ili sve to zajedno ( kraća verzija ): gunicorn -d -b 0.0.0.0:8030 -w 3 myproject.wsgi
+
+Ako su vam ove opcije preduge možete gunicorn -c /path/to/config/file myproject.wsgi
+
+kreirati ini fajl i pri pokretanju uraditi 
+ovo:
+
+Po pokretanju aplikacije sa gunicorn, idite na Django admin panel na localhost:8000/admin. Možete 
+videti da nema stilova. Rezon za to je što gunicorn ne servira static fajlove. Da rešimo taj problem, 
+pogledaćemo Nginx i koristiti reverse proxy za gunicorn. Govorićemo šta je reverse proxy.
+
+Nginx
+
+Ako ste pratili prethodni odeljak, pokrenuli smo našu Django aplikaciju sa gunicorn-om. Međutim, na 
+kraju smo videli da stilova admin panela nema. Razlog je taj što je gunicorn server web aplikacija i samo 
+pokreće aplikaciju (Aplikaciju Django u našem slučaju) i Django, kao što zna, ne služi statičke datoteke, 
+osim u razvoju. 
+
+Spas je Nginx! To će biti reversni proxy za gunicorn. Šta je dođavola reversni proxy? Dobro pitanje! Pre 
+svega reverse proxies, su prisilni.  Na primer, korisnik pokušava da pristupi našoj aplikaciji Django koji 
+radi na gunicorn-u. Misli da direktno pristupa aplikaciji. Međutim, ono što se dešava je da prvo pristupa 
+Nginx serveru koji odlučuje šta dalje. 
+
+Ako korisnik pristupa statičkoj datoteci, Nginx server će služiti sam. U suprotnom, preusmeriće na 
+gunicorn. U običnim uslovima, HTTP zahtevima će rukovati gunicorn a statičkim Nginx. 
+
+Zato nam treba Nginx. Pored toga, Nginx takođe poboljšava performanse, pouzdanost, sigurnost i 
+skaliranje.
+
+
+
+Django app sa Gunicorn-om, Nginx-om i Supervisord na Ubuntu 16.04         3/6 
+
+Instalacija Nginx
+Sada instaliramo Nginx: sudo apt-get install nginx
+
+Sada ćemo da konfigurišemo Nginx da prosleđuje saobraćaj Django procesu.
+
+Podešavanje Nginx
+Kreirajmo fajl /etc/nginx/sites-
+available/djtrump i upišimo sledeće:
+
+server {
+Server sluša na portu 8000,    listen 8000;
+Server sluša na svim interfejsima (    server_name 0.0.0.0;
+
+0.0.0.0 ).
+   location = /favicon.ico { 
+      access_log off; 
+
+Ova location naredba kaže Nginx da       log_not_found off;
+ignoriše probleme sa "favicon.ico".    }
+
+   location /static/ {
+Ovaj odeljak je vrlo važan. On govori o       root /home/ubuntu/myproject;
+static fajlovima, koji imaju URI prefix    }
+
+static/ koji bi trebao da gleda u 
+~/myproject/static/ dir.
+
+   location / {
+      include proxy_params;
+      proxy_pass   
+
+Poslednji location blok odgovara svim http://unix:/home/ubuntu/myproject/myproject.sock;
+
+drugim zahtevima. Nginx i gunicorn    }
+
+razgovaraju kroz unix socket. }
+
+Pridružimo path /home/myproject našem enviromentu.
+
+Sada omogućimo ovaj fajl linkovanjem na sites-enabled dir:
+
+sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled
+
+i proverimo da li je konfiguracija korektno napisana:
+
+sudo nginx -t
+
+Ako je sve OK, videćete nešto ovako:
+
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+Možda se pitate čemu linkovi i sites-enabled dir. Možemo imati ove postavke u podešavanjima u Nginx-
+ovom glavnom fajlu podešavanja /etc/nginx/nginx.conf. Ako tamo pogledamo videćemo:
+
+
+
+Django app sa Gunicorn-om, Nginx-om i Supervisord na Ubuntu 16.04         4/6 
+
+include /etc/nginx/sites-enabled/*
+
+Dakle, možemo videti da smo napravili modularnim i mnogo lakšim za održavanje kada imamo nekoliko 
+aplikacija koje će servirati Nginx.
+
+OK, sada imamo konfigurisan Nginx, hajde da vidimo neke akcije. 
+
+Dodatna podešavanja 
+Prvo, pomerimo naše static fajlove u STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+~/myproject/static/ jer podešavanje 
+Nginx će da gleda za njih tu. Otvorimo 
+"myproject/settings.py" i dodajmo, a 
+zatim sačuvajmo i zatvorimo.
+ Sada prikupimo sve njih u ovaj dir: ./manage.py collectstatic
+
+Potvrdimo operaciju i naši static fajlovi će biti tamo gde će ih Nginx naći.
+
+Sada, na kraju, pokrenimo našu aplikaciju:
+
+gunicorn --daemon --workers 3 --bind unix:/home/ubuntu/myproject/myproject.sock 
+myproject.wsgi
+
+Kao što smo rekli ranije pokrećemo gunicorn malo drugačije sada. Bindovali smo unix socket fajl koji je 
+potreban da bi web server razgovarao sa Nginx. Ovaj fajl će biti kreiran i omogućiće da Nginx i gunicorn 
+razgovaraju. Možete pitati o portu  i adresi? Nginx će voditi brigu o tome.  Mi smo konfigurisali da sluša 
+na 0.0.0.0:8000? Sada restartujemo Nginx da uzme sve promene u obzir.
+
+sudo service nginx restart
+
+Sada možemo da pristupimo 0.0.0.0:8000. Super naša aplikacija radi. Hajde da proverimo naš admin 
+panel na 0.0.0.0:8000/admin. I stilovi su tu. Postigli smo šta smo želeli.
+
+Supervisord
+
+Sada imamo pokrenutu Django aplikaciju sa Nginx i Gunicorn. Međutim svaki put kada se naša mašina 
+boot-uje moramo da startujemo gunicorn i kontrola gunicorn je teška (zaustavljanje, restartovanje itd).  
+Želimo neki laki način da uradimo sve to. 
+
+Zahvaljujući Supervisord možemo da nadgledamo i kontrolišemo više procesa na UNIX operativnim 
+sistemima.
+
+Setimo se kako smo startovali našu aplikaciju:
+
+gunicorn --daemon --workers 3 --bind unix:/home/ubuntu/myproject/myproject.sock 
+myproject.wsgi
+
+Vrlo je dugo ovo kucati, a kucanje path-ova može izazvati grešku. Pokušajmo da zaustavimo service. Mi 
+moramo da pronađemo sve gunicorn procese i da ih ubijemo, što je u najmanju ruku okrutan posao.
+
+
+
+Django app sa Gunicorn-om, Nginx-om i Supervisord na Ubuntu 16.04         5/6 
+
+Sa supervizord na raspolaganju, biće vrlo lako i prikladno izvršiti te komande:
+
+supervisorctl start myproject
+supervisorctl stop myproject
+supervisorctl restart myproject
+
+Hajde da to postavimo.
+
+Instalacija i podešavanje supervisord
+Za instaliranje pokrenite: sudo apt-get install supervisor
+
+Sada restartujte: sudo service supervisor restart
+
+Glavni konf. fajl supervisord je: [include]
+/etc/supervisor/supervisord.conf files = /etc/supervisor/conf.d/*.conf
+
+Ako pogledamo, videćemo da sadrži: 
+
+To znači da config fajlovi različitih projekata mogu biti smešteni u /etc/supervisor/conf.d/ i oni će 
+biti uključeni u glavni conf. fajl.
+
+Instalacija i podešavanje supervisord - nastavak
+Kreirajmo myproject.conf u sudo nano /etc/supervisor/conf.d/myproject.conf
+
+/etc/supervisor/conf.d/ diru:
+I konfigurišimo naš projekat:
+Ovde definišemo program i njegovo [program:myproject]
+
+ime.Ovo će ime biti korišćeno za 
+komande kao: 
+
+sudo supervisorctl start 
+myproject
+
+Ova linija se koristi za dfinisanje command=/home/ubuntu/myprojenv/bin/gunicorn -- 
+        workers 3 --bind 
+
+komande koja pokreće ili ponovo         unix:/home/ubuntu/myproject/myproject.sock 
+pokreće projekat.         myproject.wsgi
+
+Ova linija označava path odakle će 
+directory=/home/ubuntu/myproject
+
+gornja komanda biti pokrenuta.
+
+Autostart govori skripti da startuje na autostart=true
+
+system boot-u a autorestart govori da autorestart=true
+restartuje izlazi iz nekog rezona.
+
+Ovde definišemo dva log fajla. Greške se stderr_logfile=/var/log/myproject.err.log
+upisuju u myproject.err.log i sve stdout_logfile=/var/log/myproject.out.log
+
+drugo u myproject.out.log.
+
+Sačuvajmo fajl i izvršimo sledeće komande da bi promene imale efekta:
+
+sudo supervisorctl reread
+sudo supervisorctl update
+
+
+
+Django app sa Gunicorn-om, Nginx-om i Supervisord na Ubuntu 16.04         6/6 
+
+Da verifikujemo da sve radi unesimo:
+
+ps ax | grep gunicorn
+
+Trebalo bi da vidite nekoliko gunicorn procesa pokrenutih. Ili, možete otići na localhost:8000 i 
+videćete Django app podignutu i pokrenutu. 
+
+Možete koristiti supervisor da proverite da li je vaša aplikacija pokrenuta:
+
+sudo supervisorctl status myproject
+
+Sada, poigrajmo se sa supervisorctl komandama za start, stop, restart i proveru statusa aplikacije. 
+
+Uradimo još jednu stvar. Pogledajmo ugrađeni supervisor web interfejs u akciji. Za one koji ne vole 
+komandnu liniju za kontrolu procesa voleće ovo. 
+
+Otvorite /etc/supervisor/supervisor.conf i smestite sledeće linije na početak fajla:
+
+[inet_http_server]
+port=0.0.0.0:9001
+
+Ovo indicira supervisor web interfejs na 0.0.0.0:9001.
+
+Sačuvajmo i reučitajmo supervisor:
+
+sudo supervisorctl reload
+
+Otvorimo brauzer i idemo na 0.0.0.0:9001. Videćemo nešto ovako:
+
+Sada možete da se igrate sa kontrolom vašeg projekta iz web interfejsa.

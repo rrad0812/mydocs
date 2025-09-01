@@ -1,0 +1,44 @@
+﻿`is_superuser`
+
+`has_*_permission`
+
+
+
+`ModelAdmin.get_urls()`
+
+
+
+`admin/base_site.html`
+
+`change_form.html` `change_list.html`
+
+`change_form.html`
+
+
+
+`change_list.html`
+
+`ModelAdmin`
+
+
+
+`raw_id_fields`
+`list_select_related` `autocomplete_fields`
+
+`raw_id_fields`
+
+`ForeignKey`
+
+`raw_id_fields`
+
+`list_select_related` `get_list_select_related`
+
+`list_select_related`
+
+
+
+`autocomplete_fields`
+
+`raw_id_fields`
+
+`autocomplete_fields`

@@ -1,0 +1,1757 @@
+﻿Django aplikacije uz Gunicorn, Nginx i HTTPS
+Izgradnja Django aplikacije od razvoja do proizvodnje je zahtevan, ali isplativ proces. Ovaj vodič će vas 
+provesti kroz taj proces korak po korak, pružajući detaljan vodič koji počinje na prvi pogled sa 
+jednostavnom Django aplikacijom i dodaje Gunicorn, Nginx, registraciju domena i HTTP zaglavlja 
+fokusirana na bezbednost. Nakon što prođete kroz ovaj vodič, bićete bolje opremljeni da svoju Django 
+aplikaciju pokrenete u proizvodnju i poslužite je svetu.
+
+U ovom vodiču ćete naučiti:
+
+• Kako svoju Django aplikaciju možete prevesti od razvoja do proizvodnje 
+• Kako možete da hostujete svoju aplikaciju na javnom domenu u stvarnom svetu 
+• Kako uvesti Gunicorn i Nginx u lanac zahteva i odgovora 
+• Kako HTTP zaglavlja mogu da ojačaju HTTPS bezbednost vaše web lokacije 
+
+Da biste maksimalno iskoristili ovaj vodič, trebalo bi da imate uvodno razumevanje Python-a, Django-a i 
+mehanike visokog nivoa HTTP zahteva.
+
+Django i WSGIServer
+
+Django ćete koristiti kao okvir u jezgru vaše web aplikacije, koristeći ga za rutiranje URL-a, HTML 
+prikazivanje, autentifikaciju, administraciju i pozadinsku logiku. U ovom vodiču ćete dopuniti Django 
+komponentu sa još dva sloja, Gunicorn i Nginx, kako biste skalabilno služili aplikaciji. Ali pre nego što to 
+uradite, moraćete da podesite svoje okruženje i da pokrenete i pokrenete samu Django aplikaciju.
+
+Podešavanje virtuelne mašine u oblaku (VM)
+
+Prvo, moraćete da pokrenete i podesite virtuelnu mašinu (VM) na kojoj će web aplikacija raditi. Trebalo 
+bi da se upoznate sa najmanje jednom infrastrukturom kao dobavljač usluga u oblaku (IaaS) da biste 
+obezbedili VM. Ovaj odeljak će vas provesti kroz proces na visokom nivou, ali neće detaljno pokriti svaki 
+korak.
+
+Korišćenje VM-a za posluživanje web aplikacije je primer IaaS-a, gde imate potpunu kontrolu nad 
+serverskim softverom. Postoje i druge opcije osim IaaS-a:
+
+• Arhitektura bez servera vam omogućava da sastavite samo Django aplikaciju i dozvolite 
+zasebnom okviru ili dobavljaču oblaka da upravlja infrastrukturnom stranom. 
+
+• Kontejnerski pristup omogućava da više aplikacija radi nezavisno na istom operativnom sistemu 
+domaćina. 
+
+Međutim, za ovaj tutorijal ćete koristiti isprobani i pravi put servisiranja Nginx-a i Djanga direktno na 
+IaaS-u.
+
+Dve popularne opcije za virtuelne mašine su Azure VM i Amazon EC2. Da biste dobili dodatnu pomoć 
+pri pokretanju instance, trebalo bi da pogledate dokumentaciju za svog dobavljača oblaka:
+
+• Za Azure VM sledite njihov vodič za brzi početak za kreiranje Linuk virtuelne mašine na Azure 
+portalu. 
+
+• Za Amazon EC2, naučite kako da ga podesite. 
+
+
+
+Django projekat i sve ostalo uključeno u ovaj tutorijal nalaze se na t2.micro Amazon EC2 instanci na 
+kojoj radi Ubuntu Server 20.04.
+
+Jedna važna komponenta podešavanja VM-a su ulazna bezbednosna pravila. Ovo su detaljna pravila koja 
+kontrolišu ulazni saobraćaj ka vašoj instanci. Kreirajte sledeća ulazna bezbednosna pravila za početni 
+razvoj, koja ćete modifikovati u proizvodnji:
+
+Reference Tip Protokol Port Range Izvor
+1 Običan TCP 8000 my-laptop-ip-address/32
+
+2 Običan Sve Sve security-group-id
+
+3 SSH TCP 22 my-laptop-ip-address/32
+
+Sada ćete prolaziti kroz ove jedno po jedno:
+
+1. Pravilo 1. dozvoljava TCP preko porta 8000 sa IPv4 adrese vašeg ličnog računara, omogućavajući 
+vam da šaljete zahteve vašoj Django aplikaciji kada je servirate u razvoju preko porta 8000. 
+
+2. Pravilo 2. dozvoljava ulazni saobraćaj sa mrežnih interfejsa i instanci koje su dodeljene istoj 
+bezbednosnoj grupi, koristeći ID bezbednosne grupe kao izvor. Ovo je pravilo uključeno u 
+podrazumevanu AVS bezbednosnu grupu koje treba da povežete sa svojom instancom. 
+
+3. Pravilo 3. vam omogućava da pristupite svojoj VM preko SSH-a sa vašeg ličnog računara. 
+
+Takođe ćete želeti da dodate odlazno pravilo da biste dozvolili odlaznom saobraćaju da radi stvari kao što 
+su instaliranje paketa:
+
+Tip Protokol Port Range Izvor
+Običaj Sve Sve 0.0.0.0/0
+
+Povezujući sve to zajedno, vaš početni skup AVS bezbednosnih pravila može da se sastoji od tri ulazna i 
+jednog odlaznog pravila. Oni, pak, dolaze iz tri odvojene bezbednosne grupe — podrazumevane grupe, 
+grupe za HTTP pristup i grupe za SSH pristup:
+
+ Početni skup pravila bezbednosne grupe 
+
+Sa svog lokalnog računara, onda možete SSH u instancu:
+
+$ ssh -i ~/.ssh/<privkey>.pem ubuntu@<instance-public-ip-address>
+
+Ova komanda vas prijavljuje na vaš VM kao korisnika ubuntu. Ovde ~/.ssh/<privkey>.pem je put do 
+privatnog ključa koji je deo skupa bezbednosnih akreditiva koje ste vezali za VM. VM je mesto gde će se 
+nalaziti kod Django aplikacije.
+
+Uz to, trebalo bi da budete spremni da krenete dalje sa izgradnjom vaše aplikacije.
+
+Kreiranje Django aplikacije za rezanje kolačića
+
+Ne brinete se o pravljenju fensi Django projekta sa složenim URL rutiranjem ili naprednim funkcijama 
+baze podataka za ovaj vodič. Umesto toga, želite nešto što je jednostavno, malo i razumljivo, što vam 
+omogućava da brzo testirate da li vaša infrastruktura funkcioniše.
+
+U tu svrhu možete preduzeti sledeće korake da biste podesili aplikaciju.
+
+
+
+Prvo, SSH u svoj VM i uverite se da imate instalirane najnovije verzije zakrpe Python 3.8 i SQLite3:
+
+$ sudo apt-get update -y
+$ sudo apt-get install -y python3.8 python3.8-venv sqlite3
+$ python3 -V
+Python 3.8.10
+
+Ovde je Python 3.8 sistemski Python ili python3 verzija koja se isporučuje sa Ubuntu 20.04 (Focal). 
+Nadogradnja distribucije obezbeđuje da dobijete ispravke grešaka i bezbednosti iz najnovije verzije 
+Python 3.8.x. Opciono, možete u potpunosti da instalirate drugu verziju Python-a — kao što je 
+python3.9 — pored sistemskog tumača, koji biste morali eksplicitno da pozovete kao python3.9.
+
+Zatim kreirajte i aktivirajte virtuelno okruženje :
+
+$ cd  # Change directory to home directory
+$ python3 -m venv env
+$ source env/bin/activate
+
+Sada instalirajte Django 3.2:
+
+$ python -m pip install -U pip 'django==3.2.*'
+
+Sada možete da pokrenete Django projekat i aplikaciju koristeći Django komande za upravljanje:
+
+$ mkdir django-gunicorn-nginx/
+$ django-admin startproject project django-gunicorn-nginx/
+$ cd django-gunicorn-nginx/
+$ django-admin startapp myapp
+$ python manage.py migrate
+$ mkdir -pv myapp/templates/myapp/
+
+Ovo kreira Django aplikaciju myapp pored projekta pod nazivom project:
+
+/home/ubuntu/
+│
+├── django-gunicorn-nginx/
+│    │
+│    ├── myapp/
+│    │   ├── admin.py
+│    │   ├── apps.py
+│    │   ├── __init__.py
+│    │   ├── migrations/
+│    │   │   └── __init__.py
+│    │   ├── models.py
+│    │   ├── templates/
+│    │   │   └── myapp/
+│    │   ├── tests.py
+│    │   └── views.py
+│    │
+│    ├── project/
+│    │   ├── asgi.py
+│    │   ├── __init__.py
+│    │   ├── settings.py
+│    │   ├── urls.py
+│    │   └── wsgi.py
+|    |
+│    ├── db.sqlite3
+│    └── manage.py
+│
+
+
+
+└── env/  ← Virtual environment
+
+Koristeći uređivač terminala kao što je Vim ili GNU nano, otvorite project/settings.py i dodajte 
+svoju aplikaciju u INSTALLED_APPS:
+
+# project/settings.py
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "myapp",
+]
+
+Zatim otvorite myapp/templates/myapp/home.html i napravite kratku i slatku HTML stranicu:
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+  </head>
+  <body>
+    <p>Now this is some sweet HTML!</p>
+  </body>
+</html>
+
+Nakon toga, uredite myapp/views.py da biste prikazali tu HTML stranicu:
+
+from django.shortcuts import render
+
+def index(request):
+    return render(request, "myapp/home.html")
+
+Sada kreirajte i otvorite myapp/urls.py da povežete svoj prikaz sa URL obrascem:
+
+from django.urls import path
+from. import views
+
+urlpatterns = [
+    path("", views.index, name="index"),
+]
+
+Nakon toga, uredite project/urls.py u skladu sa tim:
+
+from django.urls import include, path
+
+urlpatterns = [
+    path("myapp/", include("myapp.urls")),
+    path("", include("myapp.urls")),
+]
+
+Možete da uradite još jednu stvar dok ste kod toga, a to je da se uverite da Django tajni ključ koji se 
+koristi za kriptografsko potpisivanje nije čvrsto kodiran u settings.py, što će Git verovatno pratiti. 
+Uklonite sledeći red iz project/settings.py:
+
+SECRET_KEY = "django-insecure-o6w@a46mx..."  # Remove this line
+
+
+
+Zamenite ga sledećim:
+
+import os
+#...
+
+try:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+except KeyError as e:
+    raise RuntimeError("Could not find a SECRET_KEY in environment") from e
+
+Ovo govori Djangu da traži u vašem okruženju umesto SECRET_KEY da ga uključuje u izvorni kod vaše 
+aplikacije.
+
+Napomena : Za veće projekte, proverite django-environ da li želite da konfigurišete svoju Django 
+aplikaciju sa varijablama okruženja.
+
+Konačno, postavite ključ u svom okruženju. Evo kako to možete da uradite na Ubuntu Linux-u koristeći 
+OpenSSL da postavite ključ na string od osamdeset znakova:
+
+$ echo "export SECRET_KEY='$(openssl rand -hex 40)'" >.DJANGO_SECRET_KEY
+$ source.DJANGO_SECRET_KEY
+
+Možete da vidite sa  cat sadržaj .DJANGO_SECRET_KEY da biste videli da openssl je generisao 
+kriptografski siguran heksadecimalni string ključ:
+
+$ cat.DJANGO_SECRET_KEY
+export SECRET_KEY='26a2d2ccaf9ef850...'
+
+U redu, sve je spremno. To je sve što vam treba da imate minimalno funkcionalnu Django aplikaciju.
+
+Korišćenje Django-ovog WSGIServera u razvoju
+
+U ovom odeljku ćete testirati Django razvojni web server koristeći httpie, odličan HTTP klijent 
+komandne linije za testiranje zahteva vašoj web aplikaciji sa konzole:
+
+$ pwd
+/home/ubuntu
+$ source env/bin/activate
+$ python -m pip install httpie
+
+Možete kreirati pseudonim koji će vam omogućiti da pošaljete GETzahtev koristeći httpievašu 
+aplikaciju:
+
+$ # Send GET request and follow 30x Location redirects
+$ alias GET='http --follow --timeout 6'
+
+Ovo je pseudonim GET za http poziv sa nekim podrazumevanim oznakama. Sada možete da koristite 
+GET docs.python.org da vidite zaglavlja i telo odgovora sa početne stranice Python dokumentacije.
+
+Pre nego što pokrenete Django razvojni server, možete da proverite svoj Django projekat da li ima 
+potencijalnih problema:
+
+$ cd django-gunicorn-nginx/
+$ python manage.py check
+System check identified no issues (0 silenced).
+
+
+
+Ako vaša provera ne identifikuje probleme, recite Django-ovom ugrađenom serveru aplikacija da počne 
+da sluša na lokalnom hostu, koristeći podrazumevani port 8000:
+
+$ # Listen on 127.0.0.1:8000 in the background
+$ nohup python manage.py runserver &
+$ jobs -l
+[1]+ 43689 Running                 nohup python manage.py runserver &
+
+Korišćenje nohup <command> & izvršava command u pozadini kako biste mogli da nastavite da koristite 
+svoju ljusku. Možete da koristite jobs -l da vidite identifikator procesa (PID) koji će vam omogućiti da 
+iznesete proces u prvi plan ili da ga prekinete. nohup će preusmeriti standardni izlaz (stdout) i standardnu 
+grešku (stderr) u datoteku nohup.out.
+
+Napomena : Ako se čini da nohup visi i ostavlja vas bez kursora, pritisnite Enter da biste vratili kursor 
+terminala i odzivnik ljuske.
+
+Django-ova runserver komanda, zauzvrat, koristi sledeću sintaksu:
+
+$ python manage.py runserver [address:port]
+
+Ako ostavite address:port argument nespecificiran kao što je gore urađeno, Django će podrazumevano 
+slušati na localhost:8000. Takođe možete koristiti lsof komandu da biste direktnije proverili da li je 
+python komanda pozvana za slušanje na portu 8000:
+
+$ sudo lsof -n -P -i TCP:8000 -s TCP:LISTEN
+COMMAND   PID   USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+python  43689 ubuntu    4u  IPv4  45944      0t0  TCP 127.0.0.1:8000 (LISTEN)
+
+U ovom trenutku u vodiču, vaša aplikacija sluša samo lokalni host, što je adresa 127.0.0.1. Još uvek nije 
+dostupan iz pregledača, ali još uvek možete da mu date prvog posetioca tako što ćete mu poslati GET 
+zahtev iz komandne linije unutar samog VM-a:
+
+$ GET :8000/myapp/
+HTTP/1.1 200 OK
+Content-Length: 182
+Content-Type: text/html; charset=utf-8
+Date: Sat, 25 Sep 2021 00:11:38 GMT
+Referrer-Policy: same-origin
+Server: WSGIServer/0.2 CPython/3.8.10
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+  </head>
+  <body>
+    <p>Now this is some sweet HTML!</p>
+  </body>
+</html>
+
+Zaglavlje Server: WSGIServer/0.2 Cpython/3.8.10 opisuje softver koji je generisao odgovor. U 
+ovom slučaju, to je verzija 0.2 WSGIServer uz CPython 3.8.10.
+
+
+
+WSGIServer nije ništa drugo do Python klasa koju definiše Django koja implementira Python WSGI 
+protokol. To znači da se pridržava interfejsa mrežnog prolaza za web server (WSGI), što je standard koji 
+definiše način interakcije softvera web servera i web aplikacija.
+
+U našem dosadašnjem primeru, django-gunicorn-nginx/ projekat je web aplikacija. Pošto služite 
+aplikaciji u razvoju, zapravo ne postoji poseban web server. Django koristi simple_server modul koji 
+implementira lagani HTTP server i spaja koncept web servera naspram servera aplikacija u jednu 
+komandu, runserver.
+
+Zatim ćete videti kako da počnete da predstavljate svoju aplikaciju u velikom vremenu tako što ćete je 
+povezati sa domenom iz stvarnog sveta.
+
+Stavljanje vaše web lokacije na mrežu pomoću Django, Gunicorn i Nginx
+
+U ovom trenutku, vaša lokacija je dostupna lokalno na vašem VM-u. Ako želite da vaš sajt bude dostupan 
+na URL-u koji izgleda stvarno, moraćete da zatražite ime domena i da ga povežete sa web serverom. Ovo 
+je takođe neophodno da biste omogućili HTTPS, pošto neki autoriteti sertifikata neće izdati sertifikat za 
+golu IP adresu ili poddomen koji niste u vašem vlasništvu. U ovom odeljku ćete videti kako da 
+registrujete i konfigurišete domen.
+
+Postavljanje statičke javne IP adrese
+
+Idealno je ako možete da usmerite konfiguraciju svog domena na javnu IP adresu za koju se garantuje da 
+se neće promeniti. Jedno neoptimalno svojstvo VM-ova u oblaku je da se njihova javna IP adresa može 
+promeniti ako se instanca stavi u zaustavljeno stanje. Alternativno, ako iz nekog razloga treba da 
+zamenite postojeći VM novom instancom, rezultujuća promena IP adrese bi bila problematična.
+
+Rešenje za ovu dilemu je da povežete statičku IP adresu sa instancom:
+
+• AWS ovo naziva elastičnom IP adresom. 
+• Azure ovo naziva rezervisanim IP-om. 
+
+Pratite dokumentaciju svog dobavljača usluga u oblaku da biste povezali statičku IP adresu sa VM-om u 
+oblaku. U AWS okruženju koje se koristi za primer u ovom vodiču, Elastic IP adresa 50.19.125.152 je 
+bila povezana sa EC2 instancom.
+
+Napomena : Zapamtite da ovo znači da ćete morati da promenite ciljnu IP adresu ssh da biste sa SSH 
+ušli u svoj VM:
+
+$ ssh [args] my-new-static-public-ip
+
+Nakon što ažurirate ciljnu IP adresu, moći ćete da se povežete na svoju VM u oblaku.
+
+Sa stabilnijom javnom IP-om ispred vašeg VM-a, spremni ste za povezivanje sa domenom.
+
+Povezivanje sa domenom
+
+U ovom odeljku ćete proći kroz kako da kupite, podesite i povežete ime domena sa postojećom 
+aplikacijom.
+
+
+
+Ovi primeri koriste Namecheap, ali nemojte to shvatiti kao nedvosmislenu podršku. Postoji više od 
+pregršt drugih opcija, kao što su domain.com, GoDaddi i Google Domains. Što se tiče pristrasnosti, 
+Namecheap je platio tačno 0 dolara zato što je predstavljen kao izabrani registar domena u ovom vodiču.
+
+Upozorenje : Ako želite da služite svojoj web lokaciji u razvoju na javnom domenu sa DEBUG podešenim 
+na True, morate da kreirate prilagođena ulazna bezbednosna pravila koja dozvoljavaju samo IP adrese 
+vašeg ličnog računara i VM-a. Ne bi trebalo da otvarate nikakva HTTP ili HTTPS ulazna pravila dok ih 
+barem 0.0.0.0 ne isključite.DEBUG
+
+Evo kako možete da počnete:
+
+1. Napravite nalog na Namecheap-u, pazeći da podesite dvofaktorsku autentifikaciju (2FA). 
+2. Sa početne stranice počnite da tražite ime domena koje odgovara vašem budžetu. Videćete da cene 
+
+mogu drastično da variraju u zavisnosti od domena najvišeg nivoa (TLD) i imena hosta. 
+3. Kupite domen kada ste zadovoljni izborom. 
+
+Ovaj vodič koristi domen supersecure.codes, ali ćete imati svoj.
+
+Napomena : Dok prolazite kroz ovaj vodič, zapamtite da supersecure.codes je to samo primer 
+domena i da se ne održava aktivno.
+
+Kada birate sopstveni domen, imajte na umu da izbor ezoteričnijeg naziva sajta i domena najvišeg nivoa 
+(TLD) obično dovodi do jeftinije cene nalepnice za kupovinu domena. Ovo može biti posebno korisno za 
+potrebe testiranja.
+
+Kada dobijete svoj domen, želećete da uključite zaštitu WithHeldForPrivacy, formalno nazvanu 
+WhoIsGuard. Ovo će maskirati vaše lične podatke kada neko pokrene whois pretragu na vašem domenu. 
+Evo kako da to uradite:
+
+1. Izaberite Nalog → Lista domena. 
+2. Izaberite Upravljaj pored svog domena. 
+3. Omogući zaštitu WithHeldForPrivacy. 
+
+Zatim, vreme je da podesite tabelu DNS zapisa za vašu web lokaciju. Svaki DNS zapis će postati red u 
+bazi podataka koji govori pretraživaču na koju osnovnu IP adresu upućuje potpuno kvalifikovano ime 
+domena (FKDN). U ovom slučaju, želimo supersecure.codes da usmerimo na 50.19.125.152, javnu 
+IPv4 adresu na kojoj se VM može doći:
+
+1. Izaberite Nalog → Lista domena. 
+2. Izaberite Upravljaj pored svog domena. 
+3. Izaberite Napredni DNS. 
+4. U odeljku Host Records, dodajte dva A zapisa za svoj domen. 
+
+Dodajte A zapise na sledeći način, zamenjujući 50.19.125.152 javnom IPv4 adresom vaše instance:
+
+Tip Domaćin Value TTL
+Rekord @ 50.19.125.152 Automatski
+
+Rekord www 50.19.125.152 Automatski
+
+
+
+A zapis vam omogućava da povežete ime domena ili poddomen sa IPv4 adresom web servera na kome 
+služite svoju aplikaciju. Iznad, polje Vrednost treba da koristi javnu IPv4 adresu vaše VM instance.
+
+Možete videti da postoje dve varijacije za polje Host :
+
+1. U ovom slučaju koristeći @tačke na osnovni domen .supersecure.codes 
+2. Korišćenje www znači koje www.supersecure.codes će ukazivati na isto mesto kao samo 
+
+supersecure.codes. Tehnički www je poddomen koji može da šalje korisnike na isto mesto kao i 
+kraći supersecure.codes. 
+
+Kada postavite tabelu zapisa DNS hosta, moraćete da sačekate do trideset minuta da rute stupe na snagu. 
+Sada možete ubiti postojeći runserver proces:
+
+$ jobs -l
+[1]+ 43689 Running                 nohup python manage.py runserver &
+$ kill 43689
+[1]+  Done                    nohup python manage.py runserver
+
+Možete potvrditi da je proces završen sa pgrepili tako što ćete ponovo proveriti aktivne poslove:
+
+$ pgrep runserver  # Empty
+$ jobs -l  # Empty or 'Done'
+$ sudo lsof -n -P -i TCP:8000 -s TCP:LISTEN  # Empty
+$ rm nohup.out
+
+Sa ovim stvarima na mestu, takođe morate da podesite Django postavku, ALLOWED_HOSTS, što je skup 
+imena domena koje pustite da vaša Django aplikacija služi:
+
+# project/settings.py
+# Replace 'supersecure.codes' with your domain
+ALLOWED_HOSTS = [".supersecure.codes"]
+
+Vodeća tačka (.) je džoker znak poddomena, koji dozvoljava i www.supersecure.codes i 
+supersecure.codes. Držite ovu listu čvrsto kako biste sprečili napade HTTP zaglavlja hosta.
+
+Sada možete ponovo pokrenuti WSGIServer sa jednom malom promenom:
+
+$ nohup python manage.py runserver '0.0.0.0:8000' &
+
+Obratite pažnju address:port da je argument sada 0.0.0.0:8000, dok nijedan ranije nije bio naveden:
+
+• Navođenje address:port podrazumeva prikazivanje aplikacije na localhost:8000. To znači da 
+je aplikacija bila dostupna samo iz samog VM-a. Mogli biste da razgovarate sa njom pozivanjem 
+httpie sa iste IP adrese, ali niste mogli da dođete do svoje aplikacije iz spoljašnjeg sveta.
+
+• Određivanje address:port sa '0.0.0.0:8000' čini vaš server vidljivim za spoljni svet, iako je 
+i dalje podrazumevano na portu 8000. To 0.0.0.0 je skraćenica za „vezivanje sa svim IP 
+adresama koje ovaj računar podržava“. U slučaju gotove VM u oblaku sa jednim kontrolerom 
+mrežnog interfejsa (NIC) pod nazivom eth0, korišćenje 0.0.0.0 deluje kao rezervni deo za 
+javnu IPv4 adresu mašine.
+
+Zatim uključite izlaz nohup.out da biste videli sve dolazne evidencije sa Django-ovog WSGIServer-a:
+
+$ tail -f nohup.out
+
+
+
+Sada za trenutak istine. Vreme je da svom sajtu date prvog posetioca. Sa svog ličnog računara unesite 
+sledeću URL adresu u web pregledač:
+
+http://www.supersecure.codes:8000/myapp/
+
+Zamenite gornje ime domena svojim. Trebalo bi da vidite da stranica brzo reaguje u svom sjaju:
+
+Ova URL adresa je dostupna vama—ali ne i drugima—zbog ulaznog bezbednosnog pravila koje ste 
+prethodno kreirali.
+
+Sada se vratite na ljusku vašeg VM-a. U kontinuiranom izlazu tail -f nohup.out, trebalo bi da vidite 
+nešto poput ove linije:
+
+[<date>] "GET /myapp/ HTTP/1.1" 200 182
+
+Čestitamo, upravo ste napravili prvi monumentalni korak ka hostovanju sopstvene web stranice! 
+Međutim, pauzirajte ovde i obratite pažnju na nekoliko velikih problema ugrađenih u URL 
+http://www.supersecure.codes:8000/myapp/:
+
+• Sajt se servira samo preko HTTP-a. Bez omogućavanja HTTPS-a, vaša web lokacija je suštinski 
+nesigurna ako želite da prenesete bilo kakve osetljive podatke sa klijenta na server ili obrnuto. 
+Korišćenje HTTP-a znači da se zahtevi i odgovori šalju u običnom tekstu. Uskoro ćeš to popraviti.
+
+• URL koristi nestandardni port 8000 naspram standardnog podrazumevanog HTTP porta broj 80. 
+To je nekonvencionalno i pomalo boli oči, ali još uvek ne možete da koristite 80. To je zato što je 
+port 80 privilegovan i korisnik koji nije root ne može — i ne treba — da se veže za njega. Kasnije 
+ćete u miks uvesti alat koji omogućava da vaša aplikacija bude dostupna na portu 80.
+
+Ako proverite u svom pretraživaču, videćete URL traku pretraživača koja nagoveštava ovo. Ako koristite 
+Firefok, pojaviće se crvena ikona katanca koja označava da je veza preko HTTP-a, a ne HTTPS-a:
+
+Ubuduće, želite da legitimišete operaciju. Možete početi da služite preko standardnog porta 80 za HTTP. 
+Još bolje, počnite da služite HTTPS (443) i preusmerite HTTP zahteve tamo. Uskoro ćete videti kako da 
+napredujete kroz ove korake.
+
+Zamena WSGIServera sa Gunicorn-om
+
+Da li želite da počnete da pomerate svoju aplikaciju ka stanju u kome je spremna za spoljni svet? Ako je 
+tako, trebalo bi da zamenite Djangov ugrađeni WSGIServer, koji je server aplikacija koji koristi 
+manage.py runserver, sa posebnim namenskim serverom aplikacija. Ali sačekajte malo: činilo se da 
+WSGIServer radi sasvim dobro. Zašto ga zameniti?
+
+Da biste odgovorili na ovo pitanje, možete pročitati šta Django dokumentacija ima da kaže:
+
+NE KORISTITE OVAJ SERVER U PROIZVODNOM POSTAVLJANJU. Nije prošao 
+bezbednosne revizije ili testove performansi. (I tako će ostati. Bavimo se pravljenjem web 
+okvira, a ne web servera, tako da je poboljšanje ovog servera da bi mogao da rukuje 
+proizvodnim okruženjem van okvira Djanga.) ( Izvor )
+
+Django je web okvir, a ne web server, i njegovi održavaoci žele da tu razliku učine jasnom. U ovom 
+odeljku ćete zameniti Djangovu runserver komandu sa Gunicorn. Gunicorn je pre svega Python WSGI 
+server aplikacija, i pritom testiran u borbi:
+
+
+
+• Brz je, optimizovan i dizajniran za proizvodnju. 
+• To vam daje detaljniju kontrolu nad samim serverom aplikacija. 
+• Ima potpunije i konfigurabilnije evidentiranje. 
+• Dobro je testiran, posebno zbog njegove funkcionalnosti kao servera aplikacija. 
+
+Gunicorn možete da instalirate sa pip u svoje virtuelno okruženje:
+
+$ pwd
+/home/ubuntu
+$ source env/bin/activate
+$ python -m pip install 'gunicorn==20.1.*'
+
+Zatim morate napraviti određeni nivo konfiguracije. Dobra stvar u vezi Gunicorn konfiguracione datoteke 
+je to što ona samo treba da bude važeći Python kod, sa imenima promenljivih koji odgovaraju 
+argumentima. Možete da skladištite više Gunicorn konfiguracionih datoteka u poddirektorijumu projekta:
+
+$ cd ~/django-gunicorn-nginx
+$ mkdir -pv config/gunicorn/
+mkdir: created directory 'config'
+mkdir: created directory 'config/gunicorn/'
+
+Zatim otvorite konfiguracionu datoteku za razvoj, config/gunicorn/dev.py i dodajte sledeće:
+
+"""Gunicorn *development* config file"""
+
+# Django WSGI application path in pattern MODULE_NAME:VARIABLE_NAME
+wsgi_app = "project.wsgi:application"
+# The granularity of Error log outputs
+loglevel = "debug"
+# The number of worker processes for handling requests
+workers = 2
+# The socket to bind
+bind = "0.0.0.0:8000"
+# Restart workers when code changes (development only!)
+reload = True
+# Write access and error info to /var/log
+accesslog = errorlog = "/var/log/gunicorn/dev.log"
+# Redirect stdout/stderr to log file
+capture_output = True
+# PID file so you can easily fetch process ID
+pidfile = "/var/run/gunicorn/dev.pid"
+# Daemonize the Gunicorn process (detach & enter background)
+daemon = True
+
+Pre nego što pokrenete Gunicorn, trebalo bi da zaustavite runserver proces. Koristite jobs da biste ga 
+pronašli i kill zaustavili:
+
+$ jobs -l
+[1]+ 26374 Running                 nohup python manage.py runserver &
+$ kill 26374
+[1]+  Done                    nohup python manage.py runserver
+
+Zatim se uverite da postoje direktorijumi dnevnika i PID za vrednosti postavljene u Gunicorn 
+konfiguracionoj datoteci iznad:
+
+$ sudo mkdir -pv /var/{log,run}/gunicorn/
+mkdir: created directory '/var/log/gunicorn/'
+mkdir: created directory '/var/run/gunicorn/'
+
+
+
+$ sudo chown -cR ubuntu:ubuntu /var/{log,run}/gunicorn/
+changed ownership of '/var/log/gunicorn/' from root:root to ubuntu:ubuntu
+changed ownership of '/var/run/gunicorn/' from root:root to ubuntu:ubuntu
+
+Ovim komandama ste obezbedili da postoje neophodni PID i direktorijumi dnevnika za Gunicorn i da 
+korisnik može da ih upiše ubuntu.
+
+Ako to izbacite iz puta, možete pokrenuti Gunicorn koristeći zastavu -c da biste ukazali na 
+konfiguracionu datoteku iz korena vašeg projekta:
+
+$ pwd
+/home/ubuntu/django-gunicorn-nginx
+$ source.DJANGO_SECRET_KEY
+$ gunicorn -c config/gunicorn/dev.py
+
+Ovo radi gunicorn u pozadini sa konfiguracionom datotekom za razvoj dev.py koju ste naveli iznad. 
+Kao i ranije, sada možete pratiti izlaznu datoteku da biste videli izlaz koji je Gunicorn evidentirao:
+
+$ tail -f /var/log/gunicorn/dev.log
+[2021-09-27 01:29:50 +0000] [49457] [INFO] Starting gunicorn 20.1.0
+[2021-09-27 01:29:50 +0000] [49457] [DEBUG] Arbiter booted
+[2021-09-27 01:29:50 +0000] [49457] [INFO] Listening at: http://0.0.0.0:8000 (49457)
+[2021-09-27 01:29:50 +0000] [49457] [INFO] Using worker: sync
+[2021-09-27 01:29:50 +0000] [49459] [INFO] Booting worker with pid: 49459
+[2021-09-27 01:29:50 +0000] [49460] [INFO] Booting worker with pid: 49460
+[2021-09-27 01:29:50 +0000] [49457] [DEBUG] 2 workers
+
+Sada ponovo posetite URL svog sajta u pregledaču. I dalje će vam trebati 8000 port:
+
+http://www.supersecure.codes:8000/myapp/
+
+Ponovo proverite svoj VM terminal. Trebalo bi da vidite jednu ili više linija kao što su sledeće iz 
+Gunicorn-ove evidencije:
+
+67.xx.xx.xx - - [27/Sep/2021:01:30:46 +0000] "GET /myapp/ HTTP/1.1" 200 182
+
+Ovi redovi su evidencije pristupa koje vam govore o dolaznim zahtevima:
+
+Sastavni deo Značenje
+67.xx.xx.xx IP adresa korisnika
+27/Sep/2021:01:30:46 +0000 Vremenska oznaka zahteva
+GET Metoda zahteva
+/myapp/ URL putanja
+HTTP/1.1 Protokol
+200 Kod statusa odgovora
+182 Dužina sadržaja odgovora
+
+Izuzetak gore radi sažetosti je korisnički agent, koji se takođe može pojaviti u vašem dnevniku. Evo 
+primera iz Firefox pretraživača na macOS-u:
+
+Mozilla/5.0 (Macintosh; Intel Mac OS X...) Gecko/20100101 Firefox/92.0
+
+Sa Gunicorn-om i slušanjem, vreme je da se u jednačinu uvede i legitimni web server.
+
+
+
+Uključujući Nginx
+
+U ovom trenutku, zamenili ste Djangovu runserver komandu u korist gunicorn servera aplikacija. 
+Postoji još jedan igrač za dodavanje u lanac zahteva: web server kao što je Nginx.
+
+Čekaj — već ste dodali Gunicorn! Zašto morate da dodate nešto novo na sliku? Razlog za to je što su 
+Nginx i Gunicorn dve različite stvari, i oni koegzistiraju i rade kao tim.
+
+Nginx sebe definiše kao web server visokih performansi i reverzni proxy server. Vredi ovo razbiti jer 
+pomaže da se objasni Nginx-ov odnos sa Gunicorn-om i Djangom.
+
+Prvo, Nginx je web server po tome što može poslužiti datoteke web korisniku ili klijentu. Datoteke su 
+bukvalni dokumenti: HTML, CSS, PNG, PDF - samo ime. U starim danima, pre pojave okvira kao što je 
+Django, bilo je uobičajeno da web lokacija funkcioniše u suštini kao direktan pogled u sistem datoteka. U 
+URL putanji, kose crte su predstavljale direktorijume na ograničenom delu serverskog sistema datoteka 
+koje možete zatražiti da ih vidite.
+
+Obratite pažnju na suptilnu razliku u terminologiji:
+
+• Django je web okvir. Omogućava vam da napravite osnovnu web aplikaciju koja pokreće stvarni 
+sadržaj na sajtu. On se bavi HTML prikazivanjem, autentifikacijom, administracijom i 
+pozadinskom logikom.
+
+• Gunicorn je server aplikacija. Prevodi HTTP zahteve u nešto što Python može da razume. 
+Gunicorn implementira Web Server Gateway Interface (WSGI), koji je standardni interfejs između 
+softvera web servera i web aplikacija.
+
+• Nginx je web server. To je javni rukovalac, formalnije nazvan obrnuti proxy, za dolazne zahteve i 
+skalira na hiljade istovremenih veza.
+
+Deo Nginx-ove uloge kao web servera je da može efikasnije da opslužuje statičke datoteke. To znači da, 
+za zahteve za statički sadržaj kao što su slike, možete da isečete posrednika koji je Django i da Nginx 
+direktno renderuje datoteke. Doći ćemo do ovog važnog koraka kasnije u tutorijalu.
+
+Nginx je takođe obrnuti proxy server jer se nalazi između spoljašnjeg sveta i vaše Gunicorn/Django 
+aplikacije. Na isti način na koji možete da koristite proxy za slanje odlaznih zahteva, možete koristiti 
+proxy kao što je Nginx da biste ih primili:
+
+Da biste počeli da koristite Nginx, instalirajte ga i proverite njegovu verziju:
+
+$ sudo apt-get install -y 'nginx=1.18.*'
+$ nginx -v  # Display version info
+nginx version: nginx/1.18.0 (Ubuntu)
+
+Zatim bi trebalo da promenite pravila za dolaznu dozvolu koju ste postavili za port 8000 u port 80. 
+Zamenite ulazno pravilo za TCP:8000 sledećim:
+
+Tip Protokol Port Range Izvor
+HTTP TCP 80 my-laptop-ip-address/32
+
+Ostala pravila, kao što je ono za SSH pristup, treba da ostanu nepromenjena.
+
+
+
+Sada pokrenite nginx uslugu i potvrdite da je njen status running:
+
+$ sudo systemctl start nginx
+$ sudo systemctl status nginx
+● nginx.service - A high performance web server and a reverse proxy server
+   Loaded: loaded (/lib/systemd/system/nginx.service; enabled;...
+   Active: active (running) since Mon 2021-09-27 01:37:04 UTC; 2min 49s ago
+...
+
+Sada možete da uputite zahtev na poznatu URL adresu:
+
+http://supersecure.codes/
+
+To je velika razlika u odnosu na ono što ste imali ranije. Više vam nije potreban port 8000 u URL-u. 
+Umesto toga, port je podrazumevano podešen na port 80, što izgleda mnogo normalnije.
+
+Ovo je prijateljska karakteristika Nginx-a. Ako pokrenete Nginx sa nultom konfiguracijom, on vam 
+prikazuje stranicu koja pokazuje da sluša. Sada isprobajte /myapp stranicu na sledećoj URL adresi:
+
+http://supersecure.codes/myapp/
+
+Ne zaboravite da zamenite supersecure.codes sopstvenim imenom domena.
+
+Trebalo bi da vidite odgovor 404, i to je u redu.
+
+To je zato što tražite /myapp putanju preko porta 80, gde Nginx, a ne Gunicorn, sluša. U ovom trenutku 
+imate sledeće podešavanje:
+
+• Nginx sluša na portu 80. 
+• Gunicorn sluša odvojeno na portu 8000. 
+
+Nema veze ili veze između njih dvoje dok to ne odredite. Nginx ne zna da Gunicorn i Django imaju neki 
+slatki HTML koji žele da svet vidi. Zato vraća 404 Not Found odgovor. Još ga niste podesili za proxy 
+zahteve za Gunicorn i Django:
+
+Morate da date Nginx-u neku golu konfiguraciju da biste mu rekli da usmerava zahteve ka Gunicorn-u, 
+koji će ih onda hraniti Djangu. Otvorite /etc/nginx/sites-available/supersecure i dodajte sledeći 
+sadržaj:
+
+server_tokens               off;
+access_log                  /var/log/nginx/supersecure.access.log;
+error_log                   /var/log/nginx/supersecure.error.log;
+
+# This configuration will be changed to redirect to HTTPS later
+server {
+  server_name              .supersecure.codes;
+  listen                    80;
+  location / {
+    proxy_pass              http://localhost:8000;
+    proxy_set_header        Host $host;
+  }
+}
+
+
+
+Zapamtite da morate da zamenite supersecure ime datoteke sa imenom hosta vaše web lokacije i 
+obavezno zamenite server_name vrednost .supersecure.codes sa sopstvenim domenom, sa prefiksom 
+tačke.
+
+Napomena : Verovatno ćete morati sa sudo da otvorite datoteke pod /etc.
+
+Ova datoteka je „Hello World“ konfiguracije obrnutog proxy Nginx. Govori Nginx-u kako da se ponaša:
+
+• Slušaj na portu 80 za zahteve koji koriste host za supersecure.codes i njegove poddomene. 
+• Prosledite te zahteve na http://localhost:8000, gde Gunicorn sluša. 
+
+Polje proxy_set_header je važan. Obezbeđuje da Nginx prolazi kroz Host zaglavlje HTTP zahteva 
+koje krajnji korisnik šalje na Gunicorn i Django. Nginx bi inače koristio Host: localhost 
+podrazumevano, ignorišući Host polje zaglavlja koje šalje pretraživač krajnjeg korisnika.
+
+Možete da potvrdite svoju konfiguracionu datoteku koristeći nginx configtest:
+
+$ sudo service nginx configtest /etc/nginx/sites-available/supersecure
+ * Testing nginx configuration                                  [ OK ]
+
+Izlaz [ OK ] pokazuje da je konfiguraciona datoteka važeća i da se može raščlaniti.
+
+Sada morate da simbolično povežete ovu datoteku sa direktorijumom sites-enabled, zamenjujući 
+supersecure domenom vašeg sajta:
+
+$ cd /etc/nginx/sites-enabled
+$ # Note: replace 'supersecure' with your domain
+$ sudo ln -s../sites-available/supersecure.
+$ sudo systemctl restart nginx
+
+Pre nego što uputite zahtev svom sajtu pomoću httpie, moraćete da dodate još jedno bezbednosno 
+pravilo za ulaz. Dodajte sledeće ulazno pravilo:
+
+Tip Protokol Port Range Izvor
+HTTP TCP 80 vm-static-ip-address/32
+
+Ovo bezbednosno pravilo dozvoljava ulazni HTTP saobraćaj sa javne (elastične) IP adrese same VM. To 
+bi u početku moglo izgledati kao preterano, ali morate to da uradite jer će zahtevi sada biti preusmereni 
+preko javnog Interneta, što znači da samoreferencijalno pravilo koje koristi ID bezbednosne grupe više 
+neće biti dovoljno.
+
+Sada kada koristi Nginx kao frontend web servera, ponovo pošaljite zahtev web lokaciji:
+
+$ GET http://supersecure.codes/myapp/
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: text/html; charset=utf-8
+Date: Mon, 27 Sep 2021 19:54:19 GMT
+Referrer-Policy: same-origin
+Server: nginx
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+  </head>
+  <body>
+    <p>Now this is some sweet HTML!</p>
+  </body>
+</html>
+
+Sada kada je Nginx ispred Djanga i Gunicorn-a, postoji nekoliko zanimljivih izlaza:
+
+• Nginx sada vraća Server zaglavlje kao Server: nginx, što ukazuje da je Nginx novi front-end 
+web server. Postavljanje server_tokens na vrednost off govori Nginx-u da ne emituje svoju 
+tačnu verziju, kao što je nginx/x.y.z (Ubuntu). Iz bezbednosne perspektive, to bi bilo 
+otkrivanje nepotrebnih informacija. 
+
+• Nginx koristi chunked za Transfer-Encoding zaglavlje umesto za oglašavanje Content-
+Length. 
+
+• Nginx takođe traži da ostane otvorena mrežna veza sa Connection: keep-alive. 
+
+Zatim ćete iskoristiti Nginx za jednu od njegovih osnovnih karakteristika: mogućnost brzog i efikasnog 
+serviranja statičkih datoteka.
+
+Posluživanje statičkih datoteka direktno pomoću Nginx-a
+
+Sada imate Nginx proxy zahteve na vašoj Django aplikaciji. Važno je da Nginx možete koristiti i za 
+direktno posluživanje statičkih datoteka. Ako imate DEBUG = True u project/settings.py, onda će 
+Django prikazati datoteke, ali ovo je krajnje neefikasno i verovatno nesigurno. Umesto toga, vaš web 
+server možete da ih direktno prikaže.
+
+Uobičajeni primeri statičkih datoteka uključuju lokalni JavaScript, slike i CSS—sve gde Django nije 
+zaista potreban kao deo jednačine da bi se dinamički prikazao sadržaj odgovora.
+
+Za početak, u direktorijumu vašeg projekta, napravite mesto za držanje i praćenje JavaScript statičkih 
+datoteka u razvoju:
+
+$ pwd
+/home/ubuntu/django-gunicorn-nginx
+$ mkdir -p static/js
+
+Sada otvorite novu datoteku static/js/greenlight.js i dodajte sledeći JavaScript:
+
+// Enlarge the #changeme element in green when hovered over
+(function () {
+    "use strict";
+    function enlarge() {
+        document.getElementById("changeme").style.color = "green";
+        document.getElementById("changeme").style.fontSize = "xx-large";
+        return false;
+    }
+    document.getElementById("changeme").addEventListener("mouseover", enlarge);
+}());
+
+
+
+Ovaj JavaScript će učiniti da se blok teksta raznese velikim zelenim fontom ako pređete preko njega. Da, 
+to je neki vrhunski front-end rad!
+
+Zatim dodajte sledeću konfiguraciju u project/settings.py, ažurirajući STATIC_ROOT sa imenom 
+vašeg domena:
+
+STATIC_URL = "/static/"
+# Note: Replace 'supersecure.codes' with your domain
+STATIC_ROOT = "/var/www/supersecure.codes/static"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+Vi kažete Django-ovoj collectstatic komandi gde da traži i postavlja rezultujuće statičke datoteke 
+koje su agregirane iz više Django aplikacija, uključujući Django sopstvene ugrađene aplikacije, kao što je 
+admin.
+
+Na kraju, ali ne i najmanje važno, izmenite HTML myapp/templates/myapp/home.htmltako da 
+uključuje JavaScript koji ste upravo kreirali:
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+  </head>
+  <body>
+    <p><span id="changeme">Now this is some sweet HTML!</span></p>
+    <script src="/static/js/greenlight.js"></script>
+  </body>
+</html>
+
+Uključivanjem /static/js/greenlight.js skripte, <span id="changeme"> element će imati 
+prikačen slušalac događaja.
+
+Napomena : Da bi ovaj primer bio jednostavan, čvrsto kodirate URL putanju do greenlight.js umesto 
+da koristite Django static oznaku šablona. Želeli biste da iskoristite tu funkciju u većem projektu.
+
+Sledeći korak je kreiranje putanje direktorijuma u kojoj će se nalaziti statički sadržaj vašeg projekta koji 
+će Nginx poslužiti:
+
+$ sudo mkdir -pv /var/www/supersecure.codes/static/
+mkdir: created directory '/var/www/supersecure.codes'
+mkdir: created directory '/var/www/supersecure.codes/static/'
+$ sudo chown -cR ubuntu:ubuntu /var/www/supersecure.codes/
+changed ownership of '/var/www/supersecure.codes/static'... to ubuntu:ubuntu
+changed ownership of '/var/www/supersecure.codes/'... to ubuntu:ubuntu
+
+Sada pokrenite collectstatic kao vaš non-root korisnik iz direktorijuma vašeg projekta:
+
+$ pwd
+/home/ubuntu/django-gunicorn-nginx
+$ python manage.py collectstatic
+129 static files copied to '/var/www/supersecure.codes/static'.
+
+Na kraju, dodajte location promenljivu za /static in /etc/nginx/sites-available/supersecure, 
+konfiguracionu datoteku vaše web lokacije za Nginx:
+
+
+
+server {
+  location / {
+    proxy_pass          http://localhost:8000;
+    proxy_set_header    Host $host;
+    proxy_set_header    X-Forwarded-Proto $scheme;
+  }
+
+  location /static {
+    autoindex on;
+    alias /var/www/supersecure.codes/static/;
+  }
+}
+
+Zapamtite da vaš domen verovatno nije supersecure.codes, tako da ćete morati da prilagodite ove 
+korake da biste radili za svoj projekat.
+
+Sada bi trebalo da isključite DEBUG režim u svom projektu u project/settings.py:
+
+# project/settings.py
+DEBUG = False
+
+Gunicorn će preuzeti ovu promenu pošto ste naveli reload = True u config/gunicorn/dev.py.
+
+Zatim ponovo pokrenite Nginx:
+
+$ sudo systemctl restart nginx
+
+Sada ponovo osvežite stranicu sajta i pređite kursorom preko teksta stranice:
+
+Ovo je jasan dokaz da je JavaScript funkcija enlarge() pokrenuta. Da bi dobio ovaj rezultat, pregledač 
+je morao da zahteva /static/js/greenlight.js. Ključno je u tome što je pretraživač tu datoteku dobio 
+direktno iz Nginx-a, a da Nginx nije morao da traži od Djanga.
+
+Primetite nešto drugačije u vezi sa gorenavedenim procesom: nigde niste dodali novu Django URL rutu 
+ili prikaz za isporuku JavaScript datoteke. To je zato što, nakon pokretanja collectstatic, Django više 
+nije odgovoran za određivanje kako mapirati URL u složeni prikaz i prikazati taj prikaz. Nginx može 
+jednostavno predati datoteku direktno pretraživaču.
+
+U stvari, ako dođete do ekvivalenta vašeg domena za https://supersecure.codes/static/js/, 
+videćete tradicionalni prikaz stabla sistema datoteka /static kreiran od strane Nginx-a. To znači bržu i 
+efikasniju isporuku statičkih datoteka.
+
+U ovom trenutku, imate odličnu osnovu za skalabilnu web lokaciju koja koristi Django, Gunicorn i 
+Nginx. Još jedan ogroman korak napred je da omogućite HTTPS za svoju web lokaciju, što ćete uraditi 
+sledeće.
+
+Pripremite svoju web lokaciju za proizvodnju pomoću HTTPS-a
+
+Bezbednost vašeg sajta možete podići od dobre do odlične uz još nekoliko koraka, uključujući 
+omogućavanje HTTPS-a i dodavanje skupa zaglavlja koji pomažu web pregledačima da rade sa vašom 
+web lokacijom na bezbedniji način. Omogućavanje HTTPS-a povećava pouzdanost vašeg sajta i 
+neophodno je ako vaš sajt koristi autentifikaciju ili razmenjuje osetljive podatke sa korisnicima.
+
+
+
+Uključivanje HTTPS-a
+
+Da biste omogućili posetiocima da pristupe vašoj web lokaciji preko HTTPS-a, biće vam potreban 
+SSL/TLS sertifikat koji se nalazi na vašem web serveru. Sertifikate izdaje autoritet za izdavanje 
+sertifikata (CA). U ovom vodiču ćete koristiti besplatni CA koji se zove Let's Encript. Da biste zaista 
+instalirali sertifikat, možete koristiti klijenta Certbot, koji vam daje potpuno bezbolnu seriju upita korak 
+po korak.
+
+Pre nego što počnete sa Certbot-om, možete unapred reći Nginx-u da onemogući TLS verziju 1.0 i 1.1 u 
+korist verzija 1.2 i 1.3. TLS 1.0 je na kraju životnog veka (EOL), dok je TLS 1.1 sadržao nekoliko 
+ranjivosti koje je ispravio TLS 1.2. Da biste to uradili, otvorite datoteku /etc/nginx/nginx.conf. 
+Pronađite sledeći red:
+
+# File: /etc/nginx/nginx.conf
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+Zamenite ga novijim implementacijama:
+
+# File: /etc/nginx/nginx.conf
+ssl_protocols TLSv1.2 TLSv1.3;
+
+Možete da koristite nginx -t da potvrdite da vaš Nginx podržava verziju 1.3:
+
+$ sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+Sada ste spremni da instalirate i koristite Certbot. Na Ubuntu Focal (20.04), možete koristiti snap za 
+instaliranje Certbot-a:
+
+$ sudo snap install --classic certbot
+$ sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+Konsultujte Certbot-ov vodič za uputstva da vidite korake instalacije za različite operativne sisteme i web 
+servere.
+
+Pre nego što budete mogli da dobijete i instalirate HTTPS sertifikate sa certbot, postoji još jedna 
+promena koju morate da unesete u pravila bezbednosne grupe vašeg VM-a. Pošto Let's Encript zahteva 
+internet vezu u svrhu provere valjanosti, moraćete da preduzmete važan korak da otvorite svoju web 
+lokaciju za javni Internet.
+
+Izmenite svoja ulazna bezbednosna pravila kako biste ih uskladili sa sledećim:
+
+Reference Tip Protokol Port Range Izvor
+1 HTTP TCP 80 0.0.0.0/0
+
+2 Običaj Sve Sve security-group-id
+
+3 SSH TCP 22 my-laptop-ip-address/32
+
+Ključna promena ovde je prvo pravilo, koje dozvoljava HTTP saobraćaj preko porta 80 iz svih izvora. 
+Možete da uklonite dolazno pravilo za TCP:80 tu javnu IP adresu vašeg VM-a sa bele liste pošto je to 
+sada suvišno. Druga dva pravila ostaju nepromenjena.
+
+
+
+Zatim možete izdati još jednu komandu, certbot, da instalirate sertifikat:
+
+$ sudo certbot --nginx --rsa-key-size 4096 --no-redirect
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+...
+
+Ovo kreira sertifikat sa RSA ključem veličine 4096 bajtova. Opcija --no-redirect govori certbot da 
+se ne primenjuje automatski konfiguracija povezana sa automatskim preusmeravanjem HTTP na HTTPS. 
+Ilustracije radi, uskoro ćete videti kako da ovo sami dodate.
+
+Proći ćete kroz niz koraka za podešavanje, od kojih većina treba da bude razumljiva sama po sebi, kao što 
+je unošenje adrese e-pošte. Kada se od vas zatraži da unesete imena svojih domena, unesite domen i www 
+poddomen odvojene zarezom:
+
+www.supersecure.codes,supersecure.codes
+
+Kada prođete kroz korake, trebalo bi da vidite poruku o uspehu poput sledeće:
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/supersecure.codes/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/supersecure.codes/privkey.pem
+This certificate expires on 2021-12-26.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this
+  certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for supersecure.codes
+  to /etc/nginx/sites-enabled/supersecure
+Successfully deployed certificate for www.supersecure.codes
+  to /etc/nginx/sites-enabled/supersecure
+Congratulations! You have successfully enabled HTTPS
+  on https://supersecure.codes and https://www.supersecure.codes
+
+Ako cat izvadite konfiguracionu datoteku u ekvivalentu /etc/nginx/sites-available/supersecure, 
+videćete da certbot je automatski dodala grupu linija povezanih sa SSL-om:
+
+# Nginx configuration: /etc/nginx/sites-available/supersecure
+server {
+  server_name              .supersecure.codes;
+  listen                    80;
+  location / {
+    proxy_pass              http://localhost:8000;
+    proxy_set_header        Host $host;
+  }
+
+  location /static {
+    autoindex on;
+    alias /var/www/supersecure.codes/static/;
+  }
+
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/www.supersecure.codes/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/www.supersecure.codes/privkey.pem;
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+Uverite se da Nginx preuzima te promene:
+
+
+
+$ sudo systemctl reload nginx
+
+Da biste svom sajtu pristupili preko HTTPS-a, trebaće vam još jedno poslednje bezbednosno pravilo. 
+Morate da dozvolite saobraćaj preko TCP:443, gde je 443 podrazumevani port za HTTPS. Izmenite svoja 
+ulazna bezbednosna pravila kako biste ih uskladili sa sledećim:
+
+Reference Tip Protokol Port Range Izvor
+1 HTTPS TCP 443 0.0.0.0/0
+
+2 HTTP TCP 80 0.0.0.0/0
+
+2 Običaj Sve Sve security-group-id
+
+3 SSH TCP 22 my-laptop-ip-address/32
+
+Svako od ovih pravila ima određenu svrhu:
+
+1. Pravilo 1. dozvoljava HTTPS saobraćaj preko porta 443 iz svih izvora. 
+2. Pravilo 2. dozvoljava HTTP saobraćaj preko porta 80 iz svih izvora. 
+3. Pravilo 3. dozvoljava ulazni saobraćaj sa mrežnih interfejsa i instanci koje su dodeljene istoj 
+
+bezbednosnoj grupi, koristeći ID bezbednosne grupe kao izvor. Ovo je pravilo uključeno u 
+podrazumevanu AVS bezbednosnu grupu koje treba da povežete sa svojom instancom. 
+
+4. Pravilo 4. vam omogućava da pristupite svojoj VM preko SSH-a sa vašeg ličnog računara. 
+
+Sada ponovo idite na svoju web lokaciju u pregledaču, ali sa jednom ključnom razlikom. Umesto http, 
+navedite httpskao protokol:
+
+https://www.supersecure.codes/myapp/
+
+Ako je sve u redu, trebalo bi da vidite jedno od prelepih životnih blaga, a to je vaša web lokacija koja se 
+isporučuje preko HTTPS-a:
+
+Ako koristite Firefox i kliknete na ikonu katanca, možete videti detaljnije informacije o sertifikatu koji je 
+uključen u obezbeđivanje veze:
+
+Jedan ste korak bliže bezbednoj web lokaciji. U ovom trenutku, sajt je i dalje dostupan preko HTTP-a kao 
+i HTTPS-a. To je bolje nego ranije, ali još uvek nije idealno.
+
+Preusmeravanje HTTP-a na HTTPS
+
+Vašoj web lokaciji je sada moguće pristupiti i preko HTTP-a i HTTPS-a. Kada HTTPS radi, možete samo 
+da isključite HTTP — ili mu se barem približite u praksi. Možete dodati nekoliko funkcija za automatsko 
+usmeravanje svih posetilaca koji pokušavaju da pristupe vašoj web lokaciji preko HTTP-a na HTTPS 
+verziju. Uredite svoj ekvivalent za /etc/nginx/sites-available/supersecure:
+
+# Nginx configuration: /etc/nginx/sites-available/supersecure
+server {
+  server_name              .supersecure.codes;
+  listen                    80;
+  return                    307 https://$host$request_uri;
+}
+
+server {
+  location / {
+    proxy_pass              http://localhost:8000;
+    proxy_set_header        Host $host;
+
+
+
+  }
+
+  location /static {
+    autoindex on;
+    alias /var/www/supersecure.codes/static/;
+  }
+
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/www.supersecure.codes/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/www.supersecure.codes/privkey.pem;
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+Dodati blok govori serveru da preusmeri pregledač ili klijent na HTTPS verziju bilo kog HTTP URL-a. 
+Možete da proverite da li je ova konfiguracija važeća:
+
+$ sudo service nginx configtest /etc/nginx/sites-available/supersecure
+ * Testing nginx configuration                                  [ OK ]
+
+Zatim recite nginx da ponovo učitate konfiguraciju:
+
+$ sudo systemctl reload nginx
+
+Zatim pošaljite GET zahtev sa --all zastavicom na HTTP URL vaše aplikacije da biste prikazali sve 
+lance preusmeravanja:
+
+$ GET --all http://supersecure.codes/myapp/
+HTTP/1.1 307 Temporary Redirect
+Connection: keep-alive
+Content-Length: 164
+Content-Type: text/html
+Date: Tue, 28 Sep 2021 02:16:30 GMT
+Location: https://supersecure.codes/myapp/
+Server: nginx
+
+<html>
+<head><title>307 Temporary Redirect</title></head>
+<body bgcolor="white">
+<center><h1>307 Temporary Redirect</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: text/html; charset=utf-8
+Date: Tue, 28 Sep 2021 02:16:30 GMT
+Referrer-Policy: same-origin
+Server: nginx
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+  </head>
+
+
+
+  <body>
+    <p><span id="changeme">Now this is some sweet HTML!</span></p>
+    <script src="/static/js/greenlight.js"></script>
+  </body>
+</html>
+
+Možete videti da ovde zapravo postoje dva odgovora:
+
+1. Početni zahtev dobija odgovor 307 statusnog koda koji preusmerava na HTTPS verziju. 
+2. Drugi zahtev je upućen istom URI-ju, ali sa HTTPS šemom, a ne HTTP. Ovog puta dobija sadržaj 
+
+stranice koji je tražio sa 200 OK odgovorom. 
+
+Zatim ćete videti kako da odete korak dalje od konfiguracije preusmeravanja pomažući pregledačima da 
+zapamte taj izbor.
+
+Korak dalje uz HSTS
+
+Postoji mala ranjivost u ovom podešavanju preusmeravanja kada se koristi izolovano:
+
+Kada korisnik ručno unese web domen (navodeći ime domena bez prefiksa http:// ili https://) 
+ili prati običnu http:// vezu, prvi zahtev web lokaciji se šalje nešifrovan, koristeći običan 
+HTTP.
+
+Većina bezbednih web lokacija odmah šalje nazad preusmeravanje da nadogradi korisnika na 
+HTTPS vezu, ali dobro postavljen napadač može da pokrene napad čoveka u sredini (MITM) 
+da presreće početni HTTP zahtev i može da kontroliše sesiju korisnika sa onda na. ( Izvor )
+
+Da biste ovo ublažili, možete dodati HSTS politiku koja će pregledačima reći da preferiraju HTTPS čak i 
+ako korisnik pokuša da koristi HTTP. Evo suptilne razlike između korišćenja samo preusmeravanja u 
+poređenju sa dodavanjem HSTS zaglavlja pored njega:
+
+• Sa običnim preusmeravanjem sa HTTP-a na HTTPS, server odgovara pretraživaču govoreći: 
+„Pokušajte to ponovo, ali sa HTTPS-om.“ Ako pregledač napravi 1.000 HTTP zahteva, biće mu 
+rečeno 1.000 puta da pokuša ponovo sa HTTPS-om.
+
+• Sa HSTS zaglavljem, pregledač obavlja početni posao efektivne zamene HTTP sa HTTPS nakon 
+prvog zahteva. Nema preusmeravanja. U ovom drugom scenariju, pregledač možete zamisliti kao 
+nadogradnju veze. Kada korisnik zatraži od svog pretraživača da poseti HTTP verziju vašeg sajta, 
+njegov pretraživač će kratko odgovoriti: „Ne, vodim vas na HTTPS verziju.“
+
+Da biste ovo popravili, možete reći Djangu da postavi Strict-Transport-Security zaglavlje. Dodajte 
+ove redove u svoj projekat settings.py:
+
+# Add to project/settings.py
+SECURE_HSTS_SECONDS = 30  # Unit is seconds; *USE A SMALL VALUE FOR TESTING!*
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+Imajte na umu da SECURE_HSTS_SECONDS je vrednost kratkotrajna na 30 sekundi. To je namerno u ovom 
+primeru. Kada pređete na stvarnu proizvodnju, trebalo bi da povećate ovu vrednost. Web lokacija Securiti 
+Headers preporučuje minimalnu vrednost od 2.592.000, što je 30 dana.
+
+
+
+Upozorenje : Pre nego što povećate vrednost SECURE_HSTS_SECONDS, pročitajte Django objašnjenje 
+HTTP stroge bezbednosti transporta. Pre nego što podesite HSTS vremenski prozor na veliku vrednost, 
+prvo treba da budete sigurni da HTTPS radi za vašu web lokaciju. Nakon što vide zaglavlje, pregledači 
+vam neće lako dozvoliti da poništite tu odluku i insistiraće na HTTPS-u preko HTTP-a.
+
+Neki pregledači kao što je Chrome mogu vam dozvoliti da zaobiđete ovo ponašanje i uredite liste HSTS 
+smernica, ali ne biste trebali da zavisite od tog trika. To ne bi bilo lako iskustvo za korisnika. Umesto 
+toga, zadržite malu vrednost SECURE_HSTS_SECONDS dok ne budete sigurni da na vašem sajtu nije došlo 
+do regresije koje se servira preko HTTPS-a.
+
+Kada budete spremni da preduzmete korak, moraćete da dodate još jednu liniju Nginx konfiguracije. 
+Uredite svoj ekvivalent da /etc/nginx/sites-available/supersecure biste dodali 
+proxy_set_header direktivu:
+
+  location / {
+    proxy_pass          http://localhost:8000;
+    proxy_set_header    Host $host;
+    proxy_set_header    X-Forwarded-Proto $scheme;
+  }
+
+Zatim recite Nginx-u da ponovo učita ažuriranu konfiguraciju:
+
+$ sudo systemctl reload nginx
+
+Efekat ovog dodatog proxy_set_header je da Nginx pošalje Djangu sledeće zaglavlje uključeno u 
+posredničke zahteve koji se prvobitno šalju web serveru preko HTTPS-a na portu 443:
+
+X-Forwarded-Proto: https
+
+Ovo se direktno povezuje sa SECURE_PROXY_SSL_HEADER vrednošću koju ste dodali iznad u 
+project/settings.py. Ovo je potrebno jer Nginx zapravo šalje obične HTTP zahteve Gunicorn/Djangu, 
+tako da Django nema drugog načina da sazna da li je originalni zahtev HTTPS. Pošto location je blok 
+iz Nginx konfiguracione datoteke iznad za port 443 (HTTPS), svi zahtevi koji dolaze preko ovog porta 
+treba da obaveste Django da su oni zaista HTTPS.
+
+Django dokumentacija ovo prilično dobro objašnjava:
+
+Međutim, ako vaša Django aplikacija stoji iza proxy, proxy možda „guta“ da li originalni 
+zahtev koristi HTTPS ili ne. Ako postoji ne-HTTPS veza između proxy i Djanga, onda 
+is_secure() će se uvek vratiti False — čak i za zahteve koje je krajnji korisnik uputio 
+preko HTTPS-a. Nasuprot tome, ako postoji HTTPS veza između proksija i Django-a, onda 
+is_secure()bi se uvek vraćalo True — čak i za zahteve koji su prvobitno napravljeni preko 
+HTTP-a. ( Izvor )
+
+Kako možete testirati da li ovo zaglavlje radi? Evo elegantnog načina koji vam omogućava da ostanete 
+unutar pregledača:
+
+1. U svom pretraživaču otvorite alatke za programere. Idite na karticu koja prikazuje mrežnu 
+aktivnost. U Firefok-u, ovo je desni klik → Pregledaj element → Mreža.
+
+2. Ponovo učitati stranicu. Prvo bi trebalo da vidite 307 Temporary Redirect odgovor kao deo 
+lanca odgovora. Ovo je prvi put da vaš pretraživač vidi zaglavlje Strict-Transport-Security.
+
+
+
+3. Promenite URL u svom pretraživaču nazad na HTTP verziju i ponovo zatražite stranicu. Ako ste u 
+Chrome-u, sada bi trebalo da vidite 307 Internal Redirect. U Firefok-u bi trebalo da vidite 
+200 OK odgovor jer je vaš pretraživač automatski otišao direktno na HTTPS zahtev čak i kada ste 
+pokušali da mu kažete da koristi HTTP. Dok ih pregledači prikazuju drugačije, oba ova odgovora 
+pokazuju da je pregledač izvršio automatsko preusmeravanje.
+
+Ako pratite Fajerfoks, trebalo bi da vidite nešto poput sledećeg:
+
+Na kraju, takođe možete da proverite prisustvo zaglavlja zahtevom sa konzole:
+
+$ GET -ph https://supersecure.codes/myapp/
+...
+Strict-Transport-Security: max-age=30; includeSubDomains; preload
+
+Ovo je dokaz da ste efektivno postavili Strict-Transport-Security zaglavlje koristeći odgovarajuće 
+vrednosti u project/settings.py. Kada budete spremni, možete povećati vrednost max-age, ali 
+zapamtite da će to nepovratno reći pretraživaču da nadogradi HTTP za to vreme.
+
+Postavljanje Referrer-Policyzaglavlja
+
+Django 3.k je takođe dodao mogućnost kontrole Referrer-Policy zaglavlja. Možete navesti 
+SECURE_REFERRER_POLICY u project/settings.py:
+
+# Add to project/settings.py
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+Kako funkcioniše ovo podešavanje? Kada pratite vezu od stranice A do stranice B, vaš zahtev za stranicu 
+B sadrži URL stranice A ispod zaglavlja Referer. Server koji postavlja Referrer-Policy zaglavlje, 
+koje možete da postavite u Djangu preko SECURE_REFERRER_POLICY, kontroliše kada i koliko informacija 
+se prosleđuje na ciljnu lokaciju. SECURE_REFERRER_POLICY može da preuzme više priznatih vrednosti, o 
+čemu možete detaljno da pročitate u Mozilla dokumentima.
+
+Na primer, ako koristite "strict-origin-when-cross-origin" a trenutna stranica korisnika je 
+https://example.com/page, Referer zaglavlje je ograničeno na sledeće načine:
+
+Ciljna lokacija RefererHeader
+
+https://ekample.com/otherpage https://example.com/page
+
+https://mozilla.org https://example.com/
+
+http://ekample.org (HTTP cilj) [Nijedan]
+
+Evo šta se dešava od slučaja do slučaja, pod pretpostavkom da je stranica trenutnog korisnika 
+https://example.com/page:
+
+• Ako korisnik prati vezu do https://example.com/otherpage, Referer uključiće punu putanju 
+trenutne stranice. 
+
+• Ako korisnik prati vezu ka zasebnom domenu https://mozilla.org, Referer isključiće 
+putanju trenutne stranice. 
+
+• Ako korisnik prati vezu do http://example.org sa http:// protokolom, Referer biće 
+prazan. 
+
+
+
+Ako dodate ovaj red project/settings.py i ponovo zatražite početnu stranicu svoje aplikacije, 
+videćete novog učesnika:
+
+$ GET -ph https://supersecure.codes/myapp/  # -ph: Show response headers only
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Type: text/html; charset=utf-8
+Date: Tue, 28 Sep 2021 02:31:36 GMT
+Referrer-Policy: strict-origin-when-cross-origin
+Server: nginx
+Strict-Transport-Security: max-age=30; includeSubDomains; preload
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+U ovom odeljku ste napravili još jedan korak ka zaštiti privatnosti vaših korisnika. Zatim ćete videti kako 
+da zaključate ranjivost vaše web lokacije na skriptovanje na više lokacija (XSS) i napade ubrizgavanjem 
+podataka.
+
+Dodavanje Content-Security-Policy (CSP) zaglavlja
+
+Još jedno ključno zaglavlje HTTP odgovora koje možete da dodate na svoju web lokaciju je Content-
+Security-Policy (CSP) zaglavlje, koje pomaže da se spreči skriptovanje na više lokacija (KSSS) i 
+napadi ubrizgavanjem podataka. Django ne podržava ovo izvorno, ali možete instalirati django-csp, 
+malo proširenje međuvera koje je razvila Mozilla:
+
+$ python -m pip install django-csp
+
+Da biste uključili zaglavlje sa njegovom podrazumevanom vrednošću, dodajte ovaj jedan red 
+project/settings.py ispod postojeće MIDDLEWARE definicije:
+
+# project/settings.py
+MIDDLEWARE += ["csp.middleware.CSPMiddleware"]
+
+Kako ovo možete staviti na test? Pa, možete uključiti vezu u jednu od svojih HTML stranica i videti da li 
+će pretraživač dozvoliti da se učita sa ostatkom stranice.
+
+Uredite šablon na myapp/templates/myapp/home.html da biste uključili vezu do datoteke 
+normalize.css, koja je CSS datoteka koja pomaže pregledačima da sve elemente prikazuju doslednije i u 
+skladu sa savremenim standardima:
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css"
+    >
+  </head>
+  <body>
+    <p><span id="changeme">Now this is some sweet HTML!</span></p>
+    <script src="/static/js/greenlight.js"></script>
+  </body>
+</html>
+
+
+
+Sada zatražite stranicu u pregledaču sa omogućenim alatima za programere. Videćete grešku poput 
+sledeće u konzoli:
+
+Uh Oh. Nedostaje vam moć normalizacije jer se vaš pretraživač ne učitava normalize.css. Evo zašto se 
+ne učitava:
+
+• Vaše project/settings.py uključuje CSPMiddleware u Django's MIDDLEWARE. Uključujući 
+CSPMiddleware postavlja zaglavlje na podrazumevanu Content-Security-Policy vrednost, a 
+to je default-src 'self', gde 'self' označava sopstveni domen vašeg sajta. U ovom vodiču, 
+to je supersecure.codes. 
+
+• Vaš pretraživač poštuje ovo pravilo i zabranjuje cdn.jsdelivr.net učitavanje. CSP je 
+podrazumevana politika odbijanja. 
+
+Morate se uključiti i izričito dozvoliti klijentovom pretraživaču da učita određene veze ugrađene u 
+odgovore sa vašeg sajta. Da biste ovo popravili, dodajte sledeću postavku u project/settings.py:
+
+# project/settings.py
+# Allow browsers to load normalize.css from cdn.jsdelivr.net
+CSP_STYLE_SRC = ["'self'", "cdn.jsdelivr.net"]
+
+Zatim pokušajte ponovo da zatražite stranicu svog sajta:
+
+$ GET -ph https://supersecure.codes/myapp/
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Security-Policy: default-src 'self'; style-src 'self' cdn.jsdelivr.net
+Content-Type: text/html; charset=utf-8
+Date: Tue, 28 Sep 2021 02:37:19 GMT
+Referrer-Policy: strict-origin-when-cross-origin
+Server: nginx
+Strict-Transport-Security: max-age=30; includeSubDomains; preload
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+Imajte na umu da style-src navodi 'self' cdn.jsdelivr.net kao deo vrednosti za Content-
+Security-Policy zaglavlje. To znači da pretraživač treba da dozvoli stilove sa samo dva domena:
+
+1. supersecure.codes( 'self') 
+2. cdn.jsdelivr.net 
+
+Direktiva style-src je jedna od mnogih direktiva koje mogu biti deo Content-Security-Policy. 
+Postoji mnogo drugih, kao što je img-src, koji navodi važeće izvore slika i favikona, i script-src, koji 
+definiše važeće izvore za JavaScript.
+
+Svaki od njih ima odgovarajuću postavku za django-csp. Na primer, img-src i script-src postavljaju 
+se CSP_IMG_SRC i CSP_SCRIPT_SRC, respektivno. Možete pogledati django-csp dokumente za 
+kompletnu listu.
+
+Evo poslednjeg saveta o CSP zaglavlju: Postavite ga ranije! Kada se kasnije stvari pokvare, lakše je 
+utvrditi zašto, jer možete lakše da izolujete funkciju ili vezu koju ste dodali, a koja se ne učitava jer 
+nemate ažuriranu odgovarajuću CSP direktivu.
+
+
+
+Poslednji koraci za primenu u proizvodnji
+
+Sada ćete proći kroz nekoliko poslednjih koraka koje možete preduzeti dok budete spremni da primenite 
+svoju aplikaciju.
+
+Prvo, uverite se da ste postavili DEBUG = False svoj projekat settings.py ako to već niste uradili. 
+Ovo osigurava da informacije o otklanjanju grešaka na strani servera ne procure u slučaju 5kk greške na 
+strani servera.
+
+Drugo, uredite SECURE_HSTS_SECONDS u svom projektu settings.py da biste povećali vreme isteka 
+zaglavlja Strict-Transport-Security sa 30 sekundi na preporučenih 30 dana, što je ekvivalentno 
+2.592.000 sekundi:
+
+# Add to project/settings.py
+SECURE_HSTS_SECONDS = 2_592_000  # 30 days
+
+Zatim ponovo pokrenite Gunicorn sa proizvodnom konfiguracionom datotekom. Dodajte sledeće sadržaje 
+u config/gunicorn/prod.py:
+
+"""Gunicorn *production* config file"""
+import multiprocessing
+
+# Django WSGI application path in pattern MODULE_NAME:VARIABLE_NAME
+wsgi_app = "project.wsgi:application"
+# The number of worker processes for handling requests
+workers = multiprocessing.cpu_count() * 2 + 1
+# The socket to bind
+bind = "0.0.0.0:8000"
+# Write access and error info to /var/log
+accesslog = "/var/log/gunicorn/access.log"
+errorlog = "/var/log/gunicorn/error.log"
+# Redirect stdout/stderr to log file
+capture_output = True
+# PID file so you can easily fetch process ID
+pidfile = "/var/run/gunicorn/prod.pid"
+# Daemonize the Gunicorn process (detach & enter background)
+daemon = True
+
+Evo, napravili ste nekoliko izmena:
+
+• Isključili ste reload funkciju koja se koristi u razvoju. 
+• Napravili ste broj radnika u funkciji broja CPU-a VM-a umesto da ga čvrsto kodirate. 
+• Dozvolili ste loglevel da podrazumevano postavite "info" umesto opširnijeg "debug". 
+
+Sada možete da zaustavite trenutni Gunicorn proces i započnete novi, zamenjujući razvojnu 
+konfiguracionu datoteku njenim produkcijskim kolegom:
+
+$ # Stop existing Gunicorn dev server if it is running
+$ sudo killall gunicorn
+
+$ # Restart Gunicorn with production config file
+$ gunicorn -c config/gunicorn/prod.py
+
+Nakon što izvršite ovu promenu, ne morate ponovo da pokrećete Nginx jer on samo prosleđuje zahteve 
+istom address:host i ne bi trebalo da bude vidljivih promena. Međutim, pokretanje Gunicorn-a sa 
+proizvodno orijentisanim podešavanjima je dugoročno zdravije kako se aplikacija povećava.
+
+
+
+Konačno, uverite se da ste u potpunosti napravili svoju Nginx datoteku. Evo datoteke u celosti, 
+uključujući sve komponente koje ste do sada dodali, kao i nekoliko dodatnih vrednosti:
+
+# File: /etc/nginx/sites-available/supersecure
+# This file inherits from the http directive of /etc/nginx/nginx.conf
+
+# Disable emitting nginx version in the "Server" response header field
+server_tokens             off;
+
+# Use site-specific access and error logs
+access_log                /var/log/nginx/supersecure.access.log;
+error_log                 /var/log/nginx/supersecure.error.log;
+
+# Return 444 status code & close connection if no Host header present
+server {
+  listen                  80 default_server;
+  return                  444;
+}
+
+# Redirect HTTP to HTTPS
+server {
+  server_name            .supersecure.codes;
+  listen                  80;
+  return                  307 https://$host$request_uri;
+}
+
+server {
+
+  # Pass on requests to Gunicorn listening at http://localhost:8000
+  location / {
+    proxy_pass            http://localhost:8000;
+    proxy_set_header      Host $host;
+    proxy_set_header      X-Forwarded-Proto $scheme;
+    proxy_set_header      X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_redirect        off;
+  }
+
+  # Serve static files directly
+  location /static {
+    autoindex             on;
+    alias                 /var/www/supersecure.codes/static/;
+  }
+
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/www.supersecure.codes/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/www.supersecure.codes/privkey.pem;
+  include /etc/letsencrypt/options-ssl-nginx.conf;
+  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+Kao osveženje, ulazna bezbednosna pravila vezana za vaš VM treba da imaju određeno podešavanje:
+
+Tip Protokol Port Range Izvor
+HTTPS TCP 443 0.0.0.0/0
+
+HTTP TCP 80 0.0.0.0/0
+
+Običaj Sve Sve security-group-id
+
+SSH TCP 22 my-laptop-ip-address/32
+
+
+
+Objedinjujući sve to, vaš konačni skup AWS bezbednosnih pravila sastoji se od četiri ulazna pravila i 
+jednog odlaznog pravila:
+
+Konačni skup pravila bezbednosne grupe 
+
+Uporedite gore navedeno sa svojim početnim skupom bezbednosnih pravila. Imajte na umu da ste 
+odbacili pristup preko TCP:8000, gde je isporučena razvojna verzija Django aplikacije, i otvorili pristup 
+Internetu preko HTTP-a i HTTPS-a na portovima 80 i 443, respektivno.
+
+Vaš sajt je sada spreman za prikazivanje.
+
+Sada kada ste stavili sve komponente zajedno, vaša aplikacija je dostupna preko Nginx-a preko HTTPS-a 
+na portu 443. HTTP zahtevi na portu 80 se preusmeravaju na HTTPS. Same komponente Django i 
+Gunicorn nisu izložene javnom Internetu, već se nalaze iza Nginx obrnutog proxy.
+
+Testiranje HTTPS bezbednosti vašeg sajta
+
+Vaš sajt je sada znatno bezbedniji nego kada ste započeli ovaj vodič, ali nemojte me verovati na reč. 
+Postoji nekoliko alata koji će vam dati objektivnu ocenu bezbednosnih funkcija vašeg sajta, fokusirajući 
+se na zaglavlja odgovora i HTTPS.
+
+Prva je aplikacija Security Headers, koja daje ocenu kvalitetu zaglavlja HTTP odgovora koji se vraćaju sa 
+vaše web lokacije. Ako ste ga pratili, vaš sajt bi trebalo da bude spreman da dobije ocenu A ili bolju.
+
+Drugi je SSL Labs, koji će izvršiti duboku analizu konfiguracije vašeg web servera u odnosu na 
+SSL/TLS. Unesite domen vašeg sajta i SSL Labs će vratiti ocenu na osnovu jačine različitih faktora koji 
+se odnose na SSL/TLS. Ako ste pozvali certbot i --rsa-key-size 4096 isključili TLS 1.0 i 1.1 u 
+korist 1.2 i 1.3, trebalo bi da budete dobro podešeni da dobijete ocenu A+ od SSL Labs-a.
+
+Kao proveru, takođe možete da zatražite HTTPS URL vašeg sajta iz komandne linije da biste videli 
+kompletan pregled promena koje ste dodali u ovom vodiču:
+
+$ GET https://supersecure.codes/myapp/
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Encoding: gzip
+Content-Security-Policy: style-src 'self' cdn.jsdelivr.net; default-src 'self'
+Content-Type: text/html; charset=utf-8
+Date: Tue, 28 Sep 2021 02:37:19 GMT
+Referrer-Policy: no-referrer-when-downgrade
+Server: nginx
+Strict-Transport-Security: max-age=2592000; includeSubDomains; preload
+Transfer-Encoding: chunked
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My secure app</title>
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css"
+    >
+  </head>
+  <body>
+
+
+
+    <p><span id="changeme">Now this is some sweet HTML!</span></p>
+    <script src="/static/js/greenlight.js"></script>
+  </body>
+</html>
+
+To je zaista sladak HTML.
+
+Zaključak
+
+Ako ste pratili ovaj vodič, vaša web lokacija je napredovala u odnosu na prethodnu kao nova samostalna 
+razvojna Django aplikacija. Videli ste kako se Django, Gunicorn i Nginx mogu udružiti da bi vam 
+pomogli da bezbedno opslužujete svoju web lokaciju.
+
+Sada imate ponovljiv skup koraka za primenu vaše Django web aplikacije spremne za proizvodnju.
+
+Dodatna literatura
+
+Sa bezbednošću sajta, realnost je da nikada niste 100% bezbedni. Uvek postoji više funkcija koje možete 
+da dodate da biste dodatno zaštitili svoju web lokaciju i proizveli bolje informacije o evidentiranju.
+
+Pogledajte sledeće veze za dodatne korake koje možete sami preduzeti:
+
+• Django : Kontrolna lista za primenu 
+• Mozilla : web bezbednost 
+• Gunicorn : postavljanje Gunicorn-a 
+• Nginx : Korišćenje Forwarded zaglavlja 
+• Adam DŽonson : Kako postići A+ za bezbednosna zaglavlja na vašoj Django web lokaciji
