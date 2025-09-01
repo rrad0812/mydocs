@@ -1,11 +1,26 @@
 
 # Sadržaj
 
-- `Django Admin Kuvar`, prošireno internet izdanje!
-- `Django Admin Trikovi`, neki od važnijih
-- `Jam.py Howto`, možda već zastareli, ali..
-- `Jam.py framework review`, moje mišljenje.
-- `Jam.py transcribed video lessons`.
+- GoLang
+  
+  - Http API Demo
+  - Learn Go for dev
+  - Uvod u Go with examples
+  - Uvod u go
+
+- Python
+
+  - Django Admin
+    - Kuvar
+    - Tips and tricks
+    - Trikovi
+  
+  - `Jam.py`
+    - Framework review
+    - Howto
+    - Tutorial - transcribed videos
+
+- Ubuntu
 
 Radosav.
-avg. 2025.
+avg - sept. 2025.
