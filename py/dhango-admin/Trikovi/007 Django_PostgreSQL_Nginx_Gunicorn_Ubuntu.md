@@ -26,7 +26,7 @@ Koraci za podešavanje Django-a, Nginx-a i Gunicorn-a su:
 - [Završetak početnog podešavanja projekta](#završetak-početnog-podešavanja-projekta)
 - [Testiranje gunicorn sposobnosti da služi projektu](#testiranje-gunicorn-sposobnosti-da-služi-projektu)
 - [Kreiranje sistemskih soketa i servisnih datoteka za Gunicorn](#kreiranje-sistemskih-soketa-i-servisnih-datoteka-za-gunicorn)
-- [Provera datoteke Gunicorn Socket](#provera-datoteke-gunicorn-socket)
+- [Provera datoteke gunicorn.socket](#provera-datoteke-gunicornsocket)
 - [Testiranje aktivacije soketa](#testiranje-aktivacije-soketa)
 - [Konfiguracija Nginx proksi servera za Gunicorn](#konfiguracija-nginx-proksi-servera-za-gunicorn)
 - [Rešavanje problema sa Nginx i Gunicorn](#rešavanje-problema-sa-nginx-i-gunicorn)

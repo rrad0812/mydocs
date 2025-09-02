@@ -1,4 +1,6 @@
-﻿Django aplikacije uz Gunicorn, Nginx i HTTPS
+﻿
+# Django aplikacije uz Gunicorn, Nginx i HTTPS
+
 Izgradnja Django aplikacije od razvoja do proizvodnje je zahtevan, ali isplativ proces. Ovaj vodič će vas 
 provesti kroz taj proces korak po korak, pružajući detaljan vodič koji počinje na prvi pogled sa 
 jednostavnom Django aplikacijom i dodaje Gunicorn, Nginx, registraciju domena i HTTP zaglavlja 
@@ -1473,6 +1475,7 @@ Uredite šablon na myapp/templates/myapp/home.html da biste uključili vezu do d
 normalize.css, koja je CSS datoteka koja pomaže pregledačima da sve elemente prikazuju doslednije i u 
 skladu sa savremenim standardima:
 
+```html
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
@@ -1487,8 +1490,7 @@ skladu sa savremenim standardima:
     <script src="/static/js/greenlight.js"></script>
   </body>
 </html>
-
-
+```
 
 Sada zatražite stranicu u pregledaču sa omogućenim alatima za programere. Videćete grešku poput 
 sledeće u konzoli:
@@ -1496,7 +1498,7 @@ sledeće u konzoli:
 Uh Oh. Nedostaje vam moć normalizacije jer se vaš pretraživač ne učitava normalize.css. Evo zašto se 
 ne učitava:
 
-• Vaše project/settings.py uključuje CSPMiddleware u Django's MIDDLEWARE. Uključujući 
+• Vaše `project/settings.py` uključuje CSPMiddleware u Djangov MIDDLEWARE. Uključujući 
 CSPMiddleware postavlja zaglavlje na podrazumevanu Content-Security-Policy vrednost, a 
 to je default-src 'self', gde 'self' označava sopstveni domen vašeg sajta. U ovom vodiču, 
 to je supersecure.codes. 
