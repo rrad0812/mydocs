@@ -29,7 +29,7 @@ informacije, što može značajno poboljšati efikasnost vaše aplikacije, poseb
 se radi sa velikim skupovima podataka. podesite razvojno okruženje sa Dokerom
 kako biste izgradili i implementirali RESTful
 
-Prilikom razvoja aplikacije pomoću Django-a, razumevanje i implementacija API koji pokreću Pajton, DŽango i DŽango
+Prilikom razvoja aplikacije pomoću Django-a, razumevanje i implementacija API koji pokreću Pajton, Django i Django
 
 pravilnog indeksiranja na vašoj bazi podataka može značajno poboljšati brzinu REST Framework.
 
@@ -50,7 +50,7 @@ Indeksiranje baze podataka je tehnika koja se koristi za optimizaciju performans
 api arhitektura avs devops
 
 baze podataka smanjenjem vremena potrebnog za preuzimanje podataka. To
-džango django rest framework
+Django django rest framework
 
 podrazumeva korišćenje indeksa baze podataka koji deluje kao putokaz za bazu
 podataka da efikasno pronađe redove bez skeniranja cele tabele. doker brzi api termos
@@ -250,7 +250,7 @@ Django aplikacije, kao i Postgres-a. Zanima vas kako je ovaj projekat
 razvijen? Pogledajte članak o Dokerizaciji Django-a pomoću Postgres-a,
 Gunicorn-a i Nginx-a .
 
-DŽango modeli
+Django modeli
 Obratite pažnju na modele koje smo definisali u product/models.py :
 
 1. ProductWithoutIndex : Ovaj model nema definisane indekse.
@@ -934,7 +934,7 @@ skalabilnih i visoko efikasnih Django aplikacija!
 
 Srećno indeksiranje.
 
- džango
+ Django
 
 Oluvole Madžijagbe
 Oluvole je softverski inženjer sa strašću za nove
@@ -970,7 +970,7 @@ otvorenog koda
 VODIČI
 10% profita od svakog našeg FastAPI
 
-Kompletan Pajton DŽango i celer Dubinski zaron u Flask
+Kompletan Pajton Django i celer Dubinski zaron u Flask
 kursa i našeg Flask kursa za veb
 razvoj biće donirano FastAPI i Flask
 

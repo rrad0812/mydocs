@@ -451,3 +451,4 @@ Neka bude jednostavno i birajte mudro.
 - Prilagođeni model korisnika od AbstractUser-a: Način na koji Django obrađuje
   autentifikaciju je savršen za vaš projekat, ali ipak želite da dodate
   dodatne atribute bez potrebe za kreiranjem posebnog modela.
+  

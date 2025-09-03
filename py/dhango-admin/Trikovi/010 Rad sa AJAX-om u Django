@@ -23,7 +23,7 @@ U ovom kursu ćete naučiti kako da
 ponovo učita celu stranicu. Ovo može biti korisno, na primer, za automatsko podesite razvojno okruženje sa Dokerom
 dovršavanje u traci za pretragu ili validaciju obrasca. Pravilno korišćeno, možete kako biste izgradili i implementirali RESTful
 
-poboljšati performanse vašeg sajta, smanjiti opterećenje servera i poboljšati API koji pokreću Pajton, DŽango i DŽango
+poboljšati performanse vašeg sajta, smanjiti opterećenje servera i poboljšati API koji pokreću Pajton, Django i Django
 
 celokupno korisničko iskustvo. REST Framework.
 
@@ -39,7 +39,7 @@ asinhronu komunikaciju sa serverom i kreiranje dinamičkih veb stranica. Iako se
 AJAX i XMLHttpRequest često koriste naizmenično, to su različite stvari.
 api arhitektura avs devops
 
-Da bi slao i primao podatke na i sa veb servera, AJAX koristi sledeće korake: džango django rest framework
+Da bi slao i primao podatke na i sa veb servera, AJAX koristi sledeće korake: Django django rest framework
 
 doker brzi api termos
 1. Napravite objekat XMLHttpRequest.
@@ -196,7 +196,7 @@ console.log(error);
 
 https://github.com/testdrivenio/django-ajaks-khr/blob/jkueri/static/main.js#L19-L41
 
-DŽango Vju
+Django Vju
 Što se tiče Django-a, iako postoji nekoliko načina za rukovanje AJAX zahtevima u
 prikazima, najjednostavniji je pomoću prikaza zasnovanog na funkcijama:
 
@@ -377,7 +377,7 @@ console.log(error);
 
 https://github.com/testdrivenio/django-ajaks-khr/blob/jkueri/static/main.js#L44-L61
 
-DŽango Vju
+Django Vju
 Na strani servera, prikaz treba da dobije podatke iz zahteva u JSON formatu, tako
 da ćete morati da koristite json modul da biste ga učitali.
 
@@ -507,7 +507,7 @@ console.log(error);
 
 https://github.com/testdrivenio/django-ajaks-khr/blob/jkueri/static/main.js#L64-L81
 
-DŽango Vju
+Django Vju
 Primer:
 
 import json
@@ -622,7 +622,7 @@ console.log(error);
 
 https://github.com/testdrivenio/django-ajaks-khr/blob/jkueri/static/main.js#L84-L100
 
-DŽango Vju
+Django Vju
 Prikaz:
 
 from django.http import HttpResponseBadRequest, JsonResponse
@@ -672,7 +672,7 @@ Primer projekta se može naći na GitHabu:
 
 2. Verzija jKueri-ja: https://github.com/testdrivenio/django-ajax-xhr/tree/jquery
 
- džango
+ Django
 
 Jasin Ruizi
 Jasin je samouki veb programer i bloger iz Alžira.
@@ -707,7 +707,7 @@ VODIČI Povratne informacije
 
 
 
-Kompletan Pajton DŽango i celer Dubinski zaron u Flask 10% profita od svakog našeg FastAPI
+Kompletan Pajton Django i celer Dubinski zaron u Flask 10% profita od svakog našeg FastAPI
 kursa i našeg Flask kursa za veb
 razvoj biće donirano FastAPI i Flask
 

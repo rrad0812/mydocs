@@ -26,7 +26,7 @@ podesite razvojno okruženje sa Dokerom
 Upiti u bazi podataka su obično usko grlo većine veb aplikacija. Razumevanje kako
 kako biste izgradili i implementirali RESTful
 
-pisati efikasne upite može vam pomoći da značajno ubrzate svoje aplikacije. API koji pokreću Pajton, DŽango i DŽango
+pisati efikasne upite može vam pomoći da značajno ubrzate svoje aplikacije. API koji pokreću Pajton, Django i Django
 Prilikom rada sa bazama podataka, pravilo je da je preuzimanje manjeg broja REST Framework.
 
 podataka generalno brže.
@@ -47,7 +47,7 @@ TEME TUTORIJALA
 Tokom celog članka, radićemo na veb aplikaciji za nekretnine. Možete klonirati
 projekat iz GitHub repozitorijuma i pratiti dalje, ili jednostavno pročitati članak. api arhitektura avs devops
 
-džango django rest framework
+Django django rest framework
 
 Da biste lokalno podesili projekat, pratite uputstva u datoteci README.md . doker brzi api termos
 
@@ -382,7 +382,7 @@ Za više saveta za optimizaciju Django-a, pogledajte:
 
 • Efikasno korišćenje Django REST Framework serijalizatora
 
- džango
+ Django
 
 Povratne informacije
 
@@ -418,7 +418,7 @@ otvorenog koda
 VODIČI
 10% profita od svakog našeg FastAPI
 
-Kompletan Pajton DŽango i celer Dubinski zaron u Flask
+Kompletan Pajton Django i celer Dubinski zaron u Flask
 kursa i našeg Flask kursa za veb
 razvoj biće donirano FastAPI i Flask
 
