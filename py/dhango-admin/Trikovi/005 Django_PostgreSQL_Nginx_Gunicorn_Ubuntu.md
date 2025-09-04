@@ -62,63 +62,61 @@ Podrazumevano, PostgreSQL koristi šemu autentifikacije pod nazivom "peer autent
 
 Tokom instalacije PostgreSQL-a, kreiran je korisnik operativnog sistema pod nazivom `postgres` koji odgovara `postgres` admin korisniku PostgreSQL-a. Potrebno je da koristite ovog korisnika za obavljanje administrativnih zadataka. Možete koristiti `sudo` i proslediti korisničko ime sa `-u` opcijom.
 
-- Prijavite se na interaktivnu PostgreSQL sesiju tako što ćete otkucati:
+Prijavite se na interaktivnu PostgreSQL sesiju tako što ćete otkucati:
 
-  ```sh
-  sudo -u postgres psql
-  ```
+```sh
+sudo -u postgres psql
+```
 
-  Dobićete PostgreSQL prompt gde možete podesiti naše zahteve.
+Dobićete PostgreSQL prompt gde možete podesiti naše zahteve.
 
-- Prvo, kreirajte bazu podataka za svoj projekat:
+Prvo, kreirajte bazu podataka za svoj projekat:
 
-  ```sh
-  CREATE DATABASE myproject;
-  ```
+```sh
+CREATE DATABASE myproject;
+```
 
-  > [!Note]
-  >
-  > Svaka PostgreSQL naredba mora da se završi tačkom-zarezom.
+> [!Note]
+>
+> Svaka PostgreSQL naredba mora da se završi tačkom-zarezom.
 
-- Zatim, kreirajte korisnika baze podataka za naš projekat. Obavezno izaberite bezbednu lozinku:
+Zatim, kreirajte korisnika baze podataka za naš projekat. Obavezno izaberite bezbednu lozinku:
 
-  ```sh
-  CREATE USER myprojectuser WITH PASSWORD 'password';
-  ```
+```sh
+CREATE USER myprojectuser WITH PASSWORD 'password';
+```
 
 Posle toga, izmenićete nekoliko parametara veze za korisnika koga ste upravo kreirali. Ovo će ubrzati rad sa bazom podataka tako da nećete morati da tražite i podešavate ispravne vrednosti svaki put kada se veza uspostavi.
 
-- Postavićete podrazumevano kodiranje znakova na UTF-8, što Django očekuje.
+Postavićete podrazumevano kodiranje znakova na UTF-8, što Django očekuje.
 
-  ```sh
-  ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
-  ```
+```sh
+ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
+```
 
-- Takođe podešavate podrazumevanu šemu izolacije transakcija na "read committed", što blokira
-  čitanja iz nepotvrđenih transakcija.
+Takođe podešavate podrazumevanu šemu izolacije transakcija na "read committed", što blokira čitanja iz nepotvrđenih transakcija.
 
-  ```sh
-  ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
-  ```
+```sh
+ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
+```
 
-- Na kraju, podešavate vremensku zonu. Podrazumevano, Django projekti će biti podešeni da koriste
-  UTC. Ovo su sve preporuke iz samog Django projekta :
+Na kraju, podešavate vremensku zonu. Podrazumevano, Django projekti će biti podešeni da koriste UTC. Ovo su sve preporuke iz samog Django projekta :
 
-  ```sh
-  ALTER ROLE myprojectuser SET timezone TO 'UTC';
-  ```
+```sh
+ALTER ROLE myprojectuser SET timezone TO 'UTC';
+```
 
-- Sada možete dati novom korisniku pristup za administriranje nove baze podataka:
+Sada možete dati novom korisniku pristup za administriranje nove baze podataka:
 
-  ```sh
-  GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
-  ```
+```sh
+GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;
+```
 
-- Kada završite, izađite iz PostgreSQL prompta tako što ćete otkucati:
+Kada završite, izađite iz PostgreSQL prompta tako što ćete otkucati:
 
-  ```sh
-  \q
-  ```
+```sh
+\q
+```
 
 PostgreSQL je sada podešen tako da se Django može povezati sa svojom bazom podataka i upravljati njome.
 
@@ -126,44 +124,43 @@ PostgreSQL je sada podešen tako da se Django može povezati sa svojom bazom pod
 
 Sada kada imate spremnu bazu podataka, možete početi sa dobijanjem ostalih zahteva za projekat. Instaliraćete Pajton zahteve u virtuelnom okruženju radi lakšeg upravljanja.
 
-- Prvo, kreirajte i promenite direktorijum u kome možete čuvati datoteke projekta:
+Prvo, kreirajte i promenite direktorijum u kome možete čuvati datoteke projekta:
 
-  ```sh
-  mkdir ~/myprojectdir
-  cd ~/myprojectdir
-  ```
+```sh
+mkdir ~/myprojectdir
+cd ~/myprojectdir
+```
 
-- Unutar direktorijuma projekta, kreirajte virtuelno okruženje u Pajtonu tako što ćete otkucati:
+Unutar direktorijuma projekta, kreirajte virtuelno okruženje u Pajtonu tako što ćete otkucati:
 
-  ```sh
-  python3 -m venv myprojectenv
-  ```
+```sh
+python3 -m venv myprojectenv
+```
 
-  Ovo će kreirati direktorijum pod nazivom `myprojectenv` unutar vašeg `myprojectdir` direktorijuma. Unutar njega će biti instalirana lokalna verzija Pajtona i lokalna verzija pipza upravljanje paketima. Ovu strukturu virtuelnog okruženja možete koristiti za instaliranje i konfigurisanje izolovanog Pajton okruženja za bilo koji projekat koji želite da kreirate.
+Ovo će kreirati direktorijum pod nazivom `myprojectenv` unutar vašeg `myprojectdir` direktorijuma. Unutar njega će biti instalirana lokalna verzija Pajtona i lokalna verzija pipza upravljanje paketima. Ovu strukturu virtuelnog okruženja možete koristiti za instaliranje i konfigurisanje izolovanog Pajton okruženja za bilo koji projekat koji želite da kreirate.
 
-- Pre instaliranja Pajton zahteva vašeg projekta, potrebno je da aktivirate virtuelno okruženje. To  
-  možete učiniti tako što ćete otkucati:
+Pre instaliranja Pajton zahteva vašeg projekta, potrebno je da aktivirate virtuelno okruženje. To možete učiniti tako što ćete otkucati:
 
-  ```sh
-  source myprojectenv/bin/activate
-  ```
+```sh
+source myprojectenv/bin/activate
+```
 
-  Vaša komanda bi trebalo da se promeni izgled komandne linije, kako bi naznačio da sada radite u virtuelnom okruženju Pajtona. Izgledaće otprilike ovako:
+Vaša komanda bi trebalo da se promeni izgled komandne linije, kako bi naznačio da sada radite u virtuelnom okruženju Pajtona. Izgledaće otprilike ovako:
 
-  ```sh
-  (myprojectenv)user@host:~/myprojectdir$
-  ```
+```sh
+(myprojectenv)user@host:~/myprojectdir$
+```
 
-- Sa aktivnim virtuelnim okruženjem, instalirajte `Django`, `Gunicorn` i `psycopg2` PostgreSQL
-  adapter sa lokalnom instancom `pip`:
+Sa aktivnim virtuelnim okruženjem, instalirajte `Django`, `Gunicorn` i `psycopg2` PostgreSQL adapter sa lokalnom instancom `pip`:
 
-  > [!Note]
-  >
-  > Kada je virtuelno okruženje aktivirano (kada vaš prompt ima `(myprojectenv)`), koristite `pip` umesto `pip3`, čak i ako koristite `Python3`. Kopija alata u virtuelnom okruženju se uvek zove `pip`, bez obzira na verziju Python-a.
+> [!Note]
+>
+> Kada je virtuelno okruženje aktivirano (kada vaš prompt ima `(myprojectenv)`), koristite `pip` umesto `pip3`, čak i ako koristite `Python3`. Kopija alata u  
+  virtuelnom okruženju se uvek zove `pip`, bez obzira na verziju Python-a.
 
-  ```sh
-  pip install django gunicorn psycopg2-binary
-  ```
+```sh
+pip install django gunicorn psycopg2-binary
+```
 
 Sada bi trebalo da imate sav softver potreban za pokretanje Django projekta.
 
@@ -175,19 +172,18 @@ Kada su vaše Python komponente instalirane, sada možete da kreirate stvarne Dj
 
 Pošto već imate direktorijum projekta, reći ćete Django-u da instalira datoteke ovde. On će kreirati direktorijum drugog nivoa sa stvarnim kodom i postaviti skriptu za upravljanje u ovaj direktorijum.
 
-- Ključ za ovo je da eksplicitno definišete direktorijum umesto da dozvolite Django-u da donosi
-  odluke u odnosu na naš trenutni direktorijum:
+Ključ za ovo je da eksplicitno definišete direktorijum umesto da dozvolite Django-u da donosi odluke u odnosu na naš trenutni direktorijum:
 
-  ```sh
-  django-admin startproject myproject ~/myprojectdir
-  ```
+```sh
+django-admin startproject myproject ~/myprojectdir
+```
 
-  U ovom trenutku, vaš direktorijum projekta ( u ovom primeru `~/myprojectdir` ) treba da ima sledeći sadržaj:
+U ovom trenutku, vaš direktorijum projekta ( u ovom primeru `~/myprojectdir` ) treba da ima sledeći sadržaj:
 
-  - `manage.py` - Django skripta za upravljanje projektima.
-  - `myproject/` - Paket projekta. Trebalo bi da sadrži datoteke `__init__.py`, `settings.py`,
-    `urlspy`, `asgi.py`, i `wsgi.py`.
-  - `myprojectenv/` - Direktorijum virtuelnog okruženja koji ste ranije kreirali.
+- `manage.py` - Django skripta za upravljanje projektima.
+- `myproject/` - Paket projekta. Trebalo bi da sadrži datoteke `__init__.py`, `settings.py`,
+  `urlspy`, `asgi.py`, i `wsgi.py`.
+- `myprojectenv/` - Direktorijum virtuelnog okruženja koji ste ranije kreirali.
 
 Prvo što treba da uradite je da podesite neke vrednosti od važnosti u novokreiranim datotekama projekta. Otvorite datoteku `settings.py` u uređivaču teksta:
 
@@ -645,8 +641,7 @@ sudo ufw allow 'Nginx Full'
 Sada bi trebalo da možete da odete na domen ili IP adresu vašeg servera da biste videli svoju aplikaciju.
 
 > [!Note]
-> Nakon konfigurisanja Nginx-a, sledeći korak bi trebalo da bude obezbeđivanje saobraćaja ka serveru
-  pomoću SSL/TLS-a. Ovo je važno jer se bez njega sve informacije, uključujući lozinke, šalju preko mreže u običnom tekstu.
+> Nakon konfigurisanja Nginx-a, sledeći korak bi trebalo da bude   obezbeđivanje saobraćaja ka serveru  pomoću SSL/TLS-a. Ovo je važno jer se bez njega sve informacije, uključujući lozinke, šalju preko mreže u običnom tekstu.
 
 Ako imate ime domena, najlakši način da dobijete SSL sertifikat za zaštitu vašeg saobraćaja je korišćenje `Let's Encrypt`-a.
 
@@ -753,35 +748,35 @@ Za dodatno rešavanje problema, evidencije mogu pomoći u sužavanju uzroka. Pro
 
 Sledeći dnevnici mogu biti korisni:
 
-- Proverite logove Nginx procesa tako što ćete otkucati:
+Proverite logove Nginx procesa tako što ćete otkucati:
 
-  ```sh
-  sudo journalctl -u nginx
-  ```
+```sh
+sudo journalctl -u nginx
+```
 
-- Proverite logove pristupa Nginx-u tako što ćete otkucati:
+Proverite logove pristupa Nginx-u tako što ćete otkucati:
 
-  ```sh
-  sudo less /var/log/nginx/access.log
-  ```
+```sh
+sudo less /var/log/nginx/access.log
+```
 
-- Proverite evidenciju grešaka Nginx-a tako što ćete otkucati:
-  
-  ```sh
-  sudo less /var/log/nginx/error.log
-  ```
+Proverite evidenciju grešaka Nginx-a tako što ćete otkucati:
 
-- Proverite logove aplikacije Gunicorn tako što ćete otkucati:
+```sh
+sudo less /var/log/nginx/error.log
+```
 
-  ```sh
-  sudo journalctl -u gunicorn
-  ```
+Proverite logove aplikacije Gunicorn tako što ćete otkucati:
 
-- Proverite logove Gunicorn soketa tako što ćete otkucati:
+```sh
+sudo journalctl -u gunicorn
+```
 
-  ```sh
-  sudo journalctl -u gunicorn.socket
-  ```
+Proverite logove Gunicorn soketa tako što ćete otkucati:
+
+```sh
+sudo journalctl -u gunicorn.socket
+```
 
 Kako ažurirate konfiguraciju ili aplikaciju, verovatno ćete morati ponovo pokrenuti procese da biste se prilagodili promenama.
 

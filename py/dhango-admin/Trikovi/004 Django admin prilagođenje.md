@@ -114,7 +114,7 @@ class Grade(models.Model):
 ```
 
 Ovi modeli predstavljaju učenike i kurseve koje pohađaju u školi. Course ima "name" i "year" u kojoj je ponuđen. "Person" ima "first_name" i "last_name" i
-može uzeti nulu ili više courses. Grade sadrži procentualni rezultat koji je Person dobio na Course.
+može uzeti nulu ili više kurseva. Grade sadrži procentualni rezultat koji je Person dobio na Course.
 
 Imena osnovnih tabela u bazi podataka su malo drugačija od ove, ali su povezana sa modelima prikazanim iznad.
 
@@ -166,7 +166,7 @@ Quit the server with CONTROL-C.
 Sada posetite <http://127.0.0.1:8000/admin> da vidite svoj admin interfejs. Od vas će biti zatraženo da se prijavite. Koristite akreditive koje ste kreirali
 pomoću `createsuperuser` komande za upravljanje.
 
-Početni ekran admin navodi sve registrovane modele baze podataka.
+Početni admin prikaz navodi sve registrovane modele baze podataka.
 
 Sada možete koristiti interfejs za kreiranje objekata u vašoj bazi podataka. Klikom na naziv modela prikazaće se ekran sa spiskom svih objekata u bazi
 podataka za taj model.
@@ -236,7 +236,7 @@ Kada dodate ili uredite jedan od tih objekata, to činite pomoću forme za prome
 U prethodnom primeru, indeks aplikacije je pokazao objekte Person, Course i Grade. Klikom na Person prikazuju se liste za Person objekte. Na Person list stranici,
 klik na Buffy Summers objekat vodi vas do forme za promene da biste uredili Buffy detalje.
 
-### Izmena liste pomoću list_display
+### Izmena listchange prikaza pomoću list_display
 
 Implementacija .__str__() je brz način da promenite reprezentaciju objekta Person iz besmislenog stringa u razumljive podatke. Pošto će se ova reprezentacija
 takođe pojaviti u padajućim menijima i višestrukim odabirima, definitivno želite da je učinite što lakšom za razumevanje.
@@ -301,8 +301,7 @@ def show_average(self, obj):
 show_average.short_description = "Average Grade"
 ```
 
-Django vas podrazumevano štiti od HTML-a u stringovima u slučaju da je string
-od korisničkog unosa. Da bi Django uključio HTML, morate koristiti format_html():
+Django vas podrazumevano štiti od HTML-a u stringovima u slučaju da je string od korisničkog unosa. Da bi Django uključio HTML, morate koristiti `format_html()`:
 
 ```py
 def show_average(self, obj):
@@ -318,7 +317,7 @@ show_average.short_description = "Average"
 
 Nažalost, Django još uvek nije dodao podršku za f-string format_html(), tako da ste zaglavili sa `str.format()` sintaksom.
 
-## Pružanje veza do stranica drugih objekata
+### Pružanje veza do stranica drugih objekata na changelist prikazu
 
 Sasvim je uobičajeno da objekti upućuju na druge objekte korišćenjem stranih ključeva. Možete pokazati list_display na metodu koja vraća HTML vezu. Unutar
 `core/admin.py`, izmenite "CourseAdmin" klasu na sledeći način:
@@ -370,8 +369,8 @@ aplikaciji.
 
 Evo dostupnih URL adresa:
 
-Strana     | URL ime Svrha                  |
------------|--------------------------------|-------------------------------------------------
+Strana     | URL ime                                    | Svrha
+-----------|--------------------------------------------|------------------------------------
 changelist | %(app)s\_%(model)s\_changelist | Stranica Lista objekata modela.
 add        | %(app)s\_%(model)s\_add        | Stranica Forme za kreiranje objekta modela.
 history    | %(app)s\_%(model)s\_history    | Stranica istorije promena objekta.(object_id)
@@ -391,10 +390,9 @@ modifikatore filtera kao što su `__exact` i `__startswith`.
 
 Možete pronaći sve detalje o tome šta možete da postignete pomoću `list_display` atributa u Django admin dokumentaciji.
 
-### Dodavanje filtera na ekran liste
+### Dodavanje filtera na listchange stranu
 
-Pored filtriranja podataka na listi promena preko URL adrese za pozivanje, možete da filtrirate i pomoću ugrađenog vidžeta. Dodajte `list_filter` atribut
-objektu "CourseAdminu" `core/admin.py`:
+Pored filtriranja podataka na listi promena preko URL adrese za pozivanje, možete da filtrirate i pomoću ugrađenog vidžeta. Dodajte `list_filter` atribut objektu "CourseAdminu" `core/admin.py`:
 
 ```py
 @admin.register(Course)
@@ -404,36 +402,36 @@ class CourseAdmin(admin.ModelAdmin):
     # ...
 ```
 
-Prikazaće `list_filter` novi odeljak na stranici sa listom veza. U ovom slučaju, veze filtriraju stranicu po godinama. Lista filtera se automatski popunjava
-vrednostima year koje koriste Course objekti u bazi podataka:
+Prikazaće `list_filter` novi odeljak na stranici sa listom veza. U ovom slučaju, veze filtriraju stranicu po godinama. Lista filtera se automatski popunjava vrednostima year koje koriste "Course" objekti u bazi podataka:
 
-Klikom na godinu sa desne strane promeniće se lista tako da uključuje samo Course objekte sa tom year vrednošću. Takođe možete da filtrirate na osnovu atributa povezanih objekata koristeći `__` sintaksu za pretragu polja. Na primer, možete da filtrirate GradeAdmin objekte prema course__year, prikazujući Grade objekte samo za određenu godinu kurseva.
+Klikom na godinu sa desne strane promeniće se lista tako da uključuje samo "Course" objekte sa tom "year" vrednošću. Takođe možete da filtrirate na osnovu atributa povezanih objekata koristeći `__` sintaksu za pretragu polja. Na primer, možete da filtrirate "GradeAdmin" objekte prema `course__year`, prikazujući Grade objekte samo za određenu godinu kurseva.
 
 Ako tražite veću kontrolu nad vašim filtriranjem, možete čak i da kreirate objekte filtera koji određuju atribute pretraživanja i odgovarajući QuerySet.
 
-Dodavanje pretrage na ekran liste
+### Dodavanje pretrage na listchange stranu
 
-Filteri nisu jedini način da se smanji količina podataka na ekranu. Django admin takođe podržava pretragu kroz search_fields opciju, koja dodaje okvir za pretragu. Postavljate ga pomoću tuple koji sadrži imena polja koja će se koristiti za konstruisanje upita za pretragu u bazi podataka.
+Filteri nisu jedini način da se smanji količina podataka na ekranu. Django admin takođe podržava pretragu kroz `search_fields opciju, koja dodaje okvir za pretragu. Postavljate ga pomoću tuple koji sadrži imena polja koja će se koristiti za konstruisanje upita za pretragu u bazi podataka.
 
-Sve što korisnik unese u polje za pretragu koristi se u OR klauzuli polja koja filtriraju QuerySet. Podrazumevano, svaki parametar pretrage je okružen % znakovima, što znači da ako tražite, tada će se u rezultatima pojaviti obekti modela sa unešenom reči. Možete biti precizniji tako što ćete navesti __ modifikator u polju za pretragu.
+Sve što korisnik unese u polje za pretragu koristi se u `OR` klauzuli polja koja filtriraju `QuerySet`. Podrazumevano, svaki parametar pretrage je okružen `%` znakovima, što znači da ako tražite, tada će se u rezultatima pojaviti obekti modela sa unešenom reči. Možete biti precizniji tako što ćete navesti `__` modifikator u polju za pretragu.
 
-Uredite PersonAdminu core/admin.py na sledeći način:
+Uredite "PersonAdmin" u `core/admin.py` na sledeći način:
 
+```py
 @admin.register(Person)
 
 class PersonAdmin(admin.ModelAdmin):
     search_fields = ("last_name__startswith", )
+```
 
-U gornjem kodu, pretraga se zasniva na prezimenu. Modifikator __startswith ograničava pretragu na prezimena koja počinju parametrom pretrage.
+U gornjem kodu, pretraga se zasniva na prezimenu. Modifikator `__startswith` ograničava pretragu na prezimena koja počinju parametrom pretrage.
 
-Kad god se vrši pretraga na stranici sa listom objekata, Django admin poziva metod vašeg admin.ModelAdmin objekta get_search_results(). Vraća QuerySet sa rezultatima pretrage. Možete fino podesiti pretrage tako što ćete preopteretiti metod i promeniti QuerySet. Više detalja možete pronaći u dokumentaciji.
+Kad god se vrši pretraga na stranici sa listom objekata, Django admin poziva metod vašeg `admin.ModelAdmin` objekta `get_search_results()`. Vraća `QuerySet` sa rezultatima pretrage. Možete fino podesiti pretrage tako što ćete preopteretiti metod i promeniti `QuerySet`. Više detalja možete pronaći u dokumentaciji.
 
-Promena načina na koji se uređuju modeli
+### Promena načina na koji se uređuju modeli
 
-Možete prilagoditi više od samo stranice sa listom objekata. Ekrani koji se koriste za dodavanje ili promenu objekta zasnovani su na ModelForm. Django
-automatski generiše obrazac na osnovu modela koji se uređuje.
+Možete prilagoditi više od samo stranice sa listom objekata. Ekrani koji se koriste za dodavanje ili promenu objekta zasnovani su na `ModelForm`. Django automatski generiše obrazac na osnovu modela koji se uređuje.
 
-Možete da kontrolišete koja polja su uključena, kao i njihov redosled, izmenom opcije fields. Izmenite svoj PersonAdmin objekat, dodajući fields
+Možete da kontrolišete koja polja su uključena, kao i njihov redosled, izmenom opcije fields. Izmenite svoj "PersonAdmin" objekat, dodajući fields
 atribut:
 
 ```py
@@ -443,18 +441,20 @@ class PersonAdmin(admin.ModelAdmin):
     # ...
 ```
 
-Stranice Add and Change za Person sada stavljaju first_name atribut ispred last_name atributa iako sam model navodi obrnuto.
+Stranice `AddView` i `ChangeView` za "Person" sada stavljaju "first_name" atribut ispred "last_name" atributa iako sam model navodi obrnuto.
 
-ModelAdmin.get_form() je odgovoran za kreiranje ModelForm za vaš objekat. Možete zameniti ovaj metod da biste promenili obrazac. Dodajte sledeći metod u PersonAdmin:
+`ModelAdmin.get_form()` je odgovoran za kreiranje ModelForm za vaš objekat. Možete zameniti ovaj metod da biste promenili obrazac. Dodajte sledeći kod u metod u PersonAdmin:
 
+```py
 def get_form(self, request, obj=None, **kwargs):
     form = super().get_form(request, obj,**kwargs)
     form.base_fields["first_name"].label = "First Name (Humans only!):"
     return form
+```
 
-Sada, kada se prikaže stranica za dodavanje ili promenu, oznaka polja first_name će biti prilagođena.
+Sada, kada se prikaže stranica za dodavanje ili promenu, oznaka polja "first_name" će biti prilagođena.
 
-Promena oznake možda neće biti dovoljna da spreči vampire da se registruju kao studenti. Ako vam se ne sviđa ono ModelForm što je Django administrator kreirao za vas, onda možete koristiti form atribut da registrujete prilagođeni obrazac. Napravite sledeće dodatke i izmene u core/admin.py:
+Promena oznake možda neće biti dovoljna da spreči vampire da se registruju kao studenti. Ako vam se ne sviđa ono `ModelForm` što je Django administrator kreirao za vas, onda možete koristiti form atribut da registrujete prilagođeni obrazac. Napravite sledeće dodatke i izmene u `core/admin.py`:
 
 ```py
 from django import forms
@@ -476,11 +476,11 @@ class PersonAdmin(admin.ModelAdmin):
 # ...
 ```
 
-Gornji kod nameće dodatnu proveru valjanosti na Person stranicama za dodavanje i promenu. ModelForm objekti imaju bogat mehanizam validacije. U ovom slučaju, first_name polje se proverava u odnosu na ime "Spike". ValidationError sprečava studente sa ovim imenom da se registruju.
+Gornji kod nameće dodatnu proveru valjanosti na "Person" stranicama za dodavanje i promenu. `ModelForm` objekti imaju bogat mehanizam validacije. U ovom slučaju, "first_name" polje se proverava u odnosu na ime "Spike". `ValidationError` sprečava studente sa ovim imenom da se registruju.
 
 Promenom ili zamenom ModelForm objekta možete u potpunosti da kontrolišete izgled i validaciju stranica koje koristite za dodavanje ili promenu stranica objekata.
 
-Zaobilaženje Django admin šablona
+### Zaobilaženje Django admin šablona
 
 Django programeri su implementirali admina koristeći mehanizam Django šablona. Ovo im je malo olakšalo posao, ali vam takođe koristi jer vam omogućava da zaobiđete šablone. Možete u potpunosti da prilagodite admina tako što ćete promeniti šablone koji se koriste za prikazivanje stranica.
 
@@ -550,11 +550,13 @@ Administratorski šabloni dolaze u dva direktorijuma:
 1. admin je za stranice objekata modela.
 2. registration je za promenu lozinke i prijavljivanje i odjavljivanje.
 
-Da biste prilagodili stranicu za odjavu, potrebno je da zamenite pravu datoteku. Relativna putanja koja vodi do datoteke mora biti ista kao ona koja se zamenjuje. Datoteka koja vas zanima je registration/logged_out.html. Počnite tako što ćete kreirati direktorijum u School projektu:
+Da biste prilagodili stranicu za odjavu, potrebno je da zamenite pravu datoteku. Relativna putanja koja vodi do datoteke mora biti ista kao ona koja se zamenjuje. Datoteka koja vas zanima je `registration/logged_out.html`. Počnite tako što ćete kreirati direktorijum u "School" projektu:
 
-$ mkdir -p templates/registration
+```sh
+mkdir -p templates/registration
+```
 
-Sada recite Djangu o vašem novom direktorijumu šablona unutar vaše School/settings.py datoteke. Potražite TEMPLATES direktivu i dodajte fasciklu na DIR listu:
+Sada recite Djangu o vašem novom direktorijumu šablona unutar vaše `School/settings.py` datoteke. Potražite `TEMPLATES` direktivu i dodajte direktorijum na `DIR` listu:
 
 `# School/settings.py`
 
@@ -579,7 +581,7 @@ TEMPLATES = [
 ]
 ```
 
-Mehanizam šablona pretražuje direktorijume u DIR opciji pre direktorijuma aplikacije, tako da će umesto toga biti učitano sve sa istim imenom kao admin šablon. Da biste videli ovo u akciji, kopirajte logged_out.html datoteku u svoj templates/registration direktorijum, a zatim je izmenite:
+Mehanizam šablona pretražuje direktorijume u DIR opciji pre direktorijuma aplikacije, tako da će umesto toga biti učitano sve sa istim imenom kao admin šablon. Da biste videli ovo u akciji, kopirajte `logged_out.html` datoteku u svoj `templates/registration` direktorijum, a zatim je izmenite:
 
 ```html
 {% extends "admin/base_site.html" %}
@@ -597,7 +599,7 @@ trans 'Home' %}</a></div>{% endblock %}
 {% endblock %}
 ```
 
-Sada ste prilagodili stranicu za odjavu. Ako kliknete na LOG OFF, videćete prilagođenu poruku.
+Sada ste prilagodili stranicu za odjavu. Ako kliknete na `LOG OFF`, videćete prilagođenu poruku.
 
 Django administratorski šabloni su duboko ugnežđeni i nisu baš intuitivni, ali imate potpunu kontrolu nad njihovom prezentacijom ako vam je potrebna. Neki paketi, uključujući Grappelli i Django Admin Bootstrap, u potpunosti su zamenili Django administratorske šablone da bi promenili njihov izgled.
 

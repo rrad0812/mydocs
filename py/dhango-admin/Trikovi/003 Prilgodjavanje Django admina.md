@@ -1,19 +1,14 @@
 ﻿
 # Prilagodjenje Django admina
 
-Django-ov automatski generisan admin sajt je jedna od najvećih prednosti ovog
-frejmvorka. Centralizovani admin interfejs vam omogućava da lako pregledate i
-manipulišete podacima vaših modela. Ovo vam može uštedeti mnogo vremena prilikom
-razvoja i upravljanja sadržajem.
+Django-ov automatski generisan admin sajt je jedna od najvećih prednosti ovog frejmvorka. Centralizovani admin interfejs vam omogućava da lako pregledate i
+manipulišete podacima vaših modela. Ovo vam može uštedeti mnogo vremena prilikom razvoja i upravljanja sadržajem.
 
-Iako je admin sajt veoma prilagodljiv, mnogi programeri nisu svesni njegovih
-punih mogućnosti. To dovodi do toga da programeri kreiraju prikaze i funkcije
+Iako je admin sajt veoma prilagodljiv, mnogi programeri nisu svesni njegovih punih mogućnosti. To dovodi do toga da programeri kreiraju prikaze i funkcije
 za stvari koje bi se mogle lako implementirati uz malo podešavanja admin sajta.
 
-U ovom članku ćemo pogledati kako da prilagodimo Django-ov administratorski sajt
-kroz praktične primere. Obradićemo ugrađene opcije prilagođavanja, kao i
-prilagođavanje putem paketa trećih strana kao što su "DjangoQL",
-"django-import-export" i "django-admin-interface".
+U ovom članku ćemo pogledati kako da prilagodimo Django-ov administratorski sajt kroz praktične primere. Obradićemo ugrađene opcije prilagođavanja, kao i
+prilagođavanje putem paketa trećih strana kao što su "DjangoQL", "django-import-export" i "django-admin-interface".
 
 ## Sadržaj
 
@@ -58,10 +53,8 @@ Do kraja ovog članka, moći ćete da:
 
 [Sadržaj](#sadržaj)
 
-Da bih demonstrirao različite opcije prilagođavanja admin sajta, pripremio sam
-jednostavnu veb aplikaciju. Veb aplikacija služi kao sistem za prodaju karata za
-događaje. Omogućava vam upravljanje mestima održavanja, koncertima, kategorijama
-koncerata i kartama.
+Da bih demonstrirao različite opcije prilagođavanja admin sajta, pripremio sam jednostavnu veb aplikaciju. Veb aplikacija služi kao sistem za prodaju karata za
+događaje. Omogućava vam upravljanje mestima održavanja, koncertima, kategorijama koncerata i kartama.
 
 Prvo, preuzmite izvorni kod iz repozitorijuma na GitHub-u:
 
@@ -96,25 +89,20 @@ Pokrenite razvojni server:
 (venv)$ python manage.py runserver
 ```
 
-Otvorite svoj omiljeni veb pregledač i idite na <http://localhost:8000/admin>.
-Pokušajte da koristite svoje superkorisničke akreditive za pristup admin stranici
-Django-a. Nakon toga, uverite se da je baza podataka popunjena sa nekoliko mesta
-održavanja, kategorija koncerata, koncerata i karata.
+Otvorite svoj omiljeni veb pregledač i idite na <http://localhost:8000/admin>. Pokušajte da koristite svoje superkorisničke akreditive za pristup admin stranici
+Django-a. Nakon toga, uverite se da je baza podataka popunjena sa nekoliko mesta održavanja, kategorija koncerata, koncerata i karata.
 
-Pre nego što nastavite, predlažem da proverite modele u `tickets/models.py`.
-Obratite pažnju na to koja polja model ima i kako su modeli povezani.
+Pre nego što nastavite, predlažem da proverite modele u `tickets/models.py`. Obratite pažnju na to koja polja model ima i kako su modeli povezani.
 
 ### Osnovno prilagođavanje admin sajta
 
-Admin sajt Django-a pruža neke osnovne opcije konfiguracije. Ove opcije vam
-omogućavaju da promenite
+Admin sajt Django-a pruža neke osnovne opcije konfiguracije. Ove opcije vam omogućavaju da promenite
 
 - naslov,
 - zaglavlje,
 - URL adresu sajta
 
-i još mnogo toga. Ovo `site_header` podešavanje može biti posebno korisno ako
-imate više okruženja i želite da ih lako razlikujete.
+i još mnogo toga. Ovo `site_header` podešavanje može biti posebno korisno ako imate više okruženja i želite da ih lako razlikujete.
 
 Podešavanja se obično menjaju u glavnoj datoteci `urls.py` admin.site vašeg projekta.
 
@@ -205,7 +193,7 @@ class ConcertAdmin(admin.ModelAdmin):
 
 Sačekajte da se server osveži i pogledajte stranicu sa spiskom koncerata u admin delu.
 
-Nova lista izgleda odlično, ali postoji problem. Dodavanjem mesta održavanja u `list_display`, uveli smo problem `N + 1 upita`. Pošto Django treba da preuzme ime mesta održavanja za svaki koncert posebno, izvršava se N + 1 upita.
+Nova lista izgleda odlično, ali postoji problem. Dodavanjem mesta održavanja u `list_display`, uveli smo problem `N + 1 upita`. Pošto Django treba da preuzme ime mesta održavanja za svaki koncert posebno, izvršava se `N + 1 upita`.
 
 Da bismo izbegli problem N + 1, možemo koristiti atribut `list_select_related`, koji funkcioniše slično metodi `select_related`:
 
@@ -239,8 +227,7 @@ class TicketAdmin(admin.ModelAdmin):
 
 [Sadržaj](#sadržaj)
 
-Podešavanje `list_display` se takođe može koristiti za dodavanje prilagođenih
-polja. Da biste dodali prilagođeno polje, morate definisati novu metodu unutar
+Podešavanje `list_display` se takođe može koristiti za dodavanje prilagođenih polja. Da biste dodali prilagođeno polje, morate definisati novu metodu unutar
 `ModelAdmin` klase.
 
 Dodajte polje "Rasprodato", koje je `True` ako nema dostupnih karata.
@@ -261,10 +248,8 @@ class ConcertAdmin(admin.ModelAdmin):
   display_sold_out.boolean = True
 ```
 
-Sa `short_description` podesili smo ime kolone i sa `boolean` rekli smo Djangu
-da ta kolona ima bulovsku vrednost. Na ovaj način, Django prikazuje ikonu
-krstića/kvačice umesto `False` i `True`. Takođe smo morali da dodamo našu
-"display_sold_out" metodu u `list_display`.
+Sa `short_description` podesili smo ime kolone i sa `boolean` rekli smo Djangu da ta kolona ima bulovsku vrednost. Na ovaj način, Django prikazuje ikonu
+krstića/kvačice umesto `False` i `True`. Takođe smo morali da dodamo našu "display_sold_out" metodu u `list_display`.
 
 Zatim, dodajmo prilagođeno polje pod nazivom "display_price":
 
@@ -285,11 +270,9 @@ class ConcertAdmin(admin.ModelAdmin):
   display_price.admin_order_field = "price"
 ```
 
-Sa `admin_order_field` rekli smo Djangu da ako korisnik klikne na zaglavlje kolone
-"display_price", sortiranje će biti izvedeno po koloni "price".
+Sa `admin_order_field` rekli smo Djangu da ako korisnik klikne na zaglavlje kolone "display_price", sortiranje će biti izvedeno po koloni "price".
 
-Ponekad može biti korisno dodati veze do povezanih objekata modela umesto samo
-prikazivanja njihovog imena. Da bismo demonstrirali kako se to radi, povezaćemo
+Ponekad može biti korisno dodati veze do povezanih objekata modela umesto samo prikazivanja njihovog imena. Da bismo demonstrirali kako se to radi, povezaćemo
 mesta održavanja na stranici sa listom koncerata.
 
 Pre nego što to uradimo, pogledajmo strukturu URL-a admin sajta Django:
@@ -336,8 +319,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 ```
 
-Sačekajte da se razvojni server osveži i idite na stranicu sa spiskom koncerata. Mesta održavanja bi
-sada trebalo da budu klikabilna i da vode do odgovarajućeg objekta u `VenueAdmin`.
+Sačekajte da se razvojni server osveži i idite na stranicu sa spiskom koncerata. Mesta održavanja bi sada trebalo da budu klikabilna i da vode do odgovarajućeg objekta u `VenueAdmin`.
 
 #### Filtriranje objekata ModelAdmina na changelist strani
 
@@ -355,16 +337,12 @@ class ConcertAdmin(admin.ModelAdmin):
 
 Da biste filtrirali po poljima povezanog objekta, koristite `__` operator.
 
-Prilikom izbora filtera, vodite računa da ne uključite polja sa previše vrednosti.
-Na primer, tickets_left je loš izbor filtera jer za svaki koncert ima različit
+Prilikom izbora filtera, vodite računa da ne uključite polja sa previše vrednosti. Na primer, tickets_left je loš izbor filtera jer za svaki koncert ima različit
 broj preostalih karata.
 
-Za napredniju funkcionalnost filtriranja, možete definisati i prilagođene filtere.
-Da biste definisali prilagođeni filter, morate navesti opcije ili tzv. `lookups`
-i `queryset` za svaki lookup.
+Za napredniju funkcionalnost filtriranja, možete definisati i prilagođene filtere. Da biste definisali prilagođeni filter, morate navesti opcije ili tzv. `lookups` i `queryset` za svaki lookup.
 
-Na primer, da biste filtrirali po tome da li je koncert rasprodat ili ne, kreirajte
-"SoldOutFilter" i uključite ga u "ConcertAdmin" u `list_filters`:
+Na primer, da biste filtrirali po tome da li je koncert rasprodat ili ne, kreirajte "SoldOutFilter" i uključite ga u "ConcertAdmin" u `list_filters`:
 
 `# tickets/admin.py`
 
@@ -400,12 +378,9 @@ Posetite svoju admin stranu i uverite se da filteri rade kako je očekivano.
 
 #### Pretraživanje objekata modela na changelist strani
 
-Django admin pruža osnovnu funkcionalnost pretrage. Može se omogućiti navođenjem koja polja
-modela treba da budu pretraživa putem `search_fields` atributa. Imajte na umu da Django ne
-podržava `fuzzy upite` podrazumevano.
+Django admin pruža osnovnu funkcionalnost pretrage. Može se omogućiti navođenjem koja polja modela treba da budu pretraživa putem `search_fields` atributa. Imajte na umu da Django ne podržava `fuzzy upite` podrazumevano.
 
-Hajde da omogućimo pretragu naših koncerata po njihovim imenima, mestima održavanja i
-adresama mesta održavanja.
+Hajde da omogućimo pretragu naših koncerata po njihovim imenima, mestima održavanja i adresama mesta održavanja.
 
 Dodajte atribut `search_fields` ConcertAdmin ovako:
 
@@ -421,13 +396,11 @@ Sačekajte da se server osveži i testirajte polje za pretragu.
 
 > [!Note]
 >
-> Da bi pretraga bila efikasna polja pretrge treba da su indeksirana. To važi i
-  za polja pretrage povezanih modela.
+> Da bi pretraga bila efikasna polja pretrge treba da su indeksirana. To važi i za polja pretrage povezanih modela.
 
 ### Rukovanje ugrađenim redovima modela
 
-Admin interfejs vam omogućava da uređujete modele na istoj stranici kao i roditeljski
-model putem ugrađenih redova ( `inlines` ). Django pruža dve vrste `inlines`:
+Admin interfejs vam omogućava da uređujete modele na istoj stranici kao i roditeljski model putem ugrađenih redova ( `inlines` ). Django pruža dve vrste `inlines`:
 
 - StackedInline i
 - TabularInline.
@@ -458,26 +431,19 @@ class VenueAdmin(admin.ModelAdmin):
   inlines = [ConcertInline]
 ```
 
-Posetite admin sajt i idite na stranicu sa detaljima nekog mesta održavanja.
-Pomerite se nadole i trebalo bi da se nalazi odeljak "Concerts".
+Posetite admin sajt i idite na stranicu sa detaljima nekog mesta održavanja. Pomerite se nadole i trebalo bi da se nalazi odeljak "Concerts".
 
-Za više informacija o ugrađenim redovima i načinu rukovanja odnosima "više-na-više",
-pogledajte dokumentaciju admin strane Django-a.
+Za više informacija o ugrađenim redovima i načinu rukovanja odnosima "više-na-više", pogledajte dokumentaciju admin strane Django-a.
 
 ### Prilagođene admin akcije
 
-Admin akcije Django-a vam omogućavaju da izvršite "akciju" na objektu ili grupi
-objekata. Akcija se može koristiti za izmenu atributa objekta, brisanje objekta,
-njegovo kopiranje i tako dalje. Akcije se prvenstveno koriste za često izvršavane
-"akcije" ili grupne izmene.
+Admin akcije Django-a vam omogućavaju da izvršite "akciju" na objektu ili grupi objekata. Akcija se može koristiti za izmenu atributa objekta, brisanje objekta,
+njegovo kopiranje i tako dalje. Akcije se prvenstveno koriste za često izvršavane "akcije" ili grupne izmene.
 
-Savršen primer je aktiviranje ili deaktiviranje tiketa. Pretpostavimo da imamo
-mnogo tiketa koje želimo da aktiviramo. Bilo bi prilično zamorno kliknuti na
-svaki od njih, promeniti im "is_active" svojstvo i sačuvati model. Umesto toga,
-možemo definisati akciju koja će upravo to uraditi.
+Savršen primer je aktiviranje ili deaktiviranje tiketa. Pretpostavimo da imamo mnogo tiketa koje želimo da aktiviramo. Bilo bi prilično zamorno kliknuti na
+svaki od njih, promeniti im "is_active" svojstvo i sačuvati model. Umesto toga, možemo definisati akciju koja će upravo to uraditi.
 
-Definišite "activate_tickets" i "deactivate_tickets" akcije i dodajte ih na
-"TicketAdmin" sledeći način:
+Definišite "activate_tickets" i "deactivate_tickets" akcije i dodajte ih na "TicketAdmin" sledeći način:
 
 `# tickets/admin.py`
 
@@ -495,21 +461,16 @@ class TicketAdmin(admin.ModelAdmin):
   actions = [activate_tickets, deactivate_tickets]
 ```
 
-Ponovo otvorite admin stranu, idite na prikaz liste zahteva za tikete i trebalo
-bi da vidite prilagođene akcije. Testirajte ih aktiviranjem i deaktiviranjem
+Ponovo otvorite admin stranu, idite na prikaz liste zahteva za tikete i trebalo bi da vidite prilagođene akcije. Testirajte ih aktiviranjem i deaktiviranjem
 više zahteva odjednom.
 
-Za više informacija o administratorskim akcijama u Django-u, pogledajte
-"Administratorske akcije".
+Za više informacija o administratorskim akcijama u Django-u, pogledajte "Administratorske akcije".
 
 ### Zamena Django admin forme
 
-Podrazumevano, Django automatski generiše ModelForm za vaš model. Taj obrazac se zatim
-koristi na stranici za dodavanje i izmene. Ako želite da prilagodite obrazac ili implementirate
-jedinstvenu validaciju podataka, moraćete da ga prepišete.
+Podrazumevano, Django automatski generiše ModelForm za vaš model. Taj obrazac se zatim koristi na stranici za dodavanje i izmene. Ako želite da prilagodite obrazac ili implementirate jedinstvenu validaciju podataka, moraćete da ga prepišete.
 
-Da bismo ovo demonstrirali, podelićemo polje customer_full_namena dva unosna polja i
-prikazati radio dugmad umesto padajućeg menija za načine plaćanja.
+Da bismo ovo demonstrirali, podelićemo polje customer_full_namena dva unosna polja i prikazati radio dugmad umesto padajućeg menija za načine plaćanja.
 
 Napravite datoteku forms.py u aplikaciji za karte :
 
@@ -559,13 +520,11 @@ Ovde smo:
 
 - dodali polja forme "first_name" i "last_name".
 
-- koristili `Meta` klasu da odredimo na koji model se ova forma odnosi i koja
-  polja treba uključiti.
+- koristili `Meta` klasu da odredimo na koji model se ova forma odnosi i koja polja treba uključiti.
 
 - u forminoj `__init__()`, popunili smo ga koristeći podatke instance modela.
 
-- definisali smo `save()`, spojili smo `first_name` i `last_name` i sačuvali ga
-  kao `customer_full_name`.
+- definisali smo `save()`, spojili smo `first_name` i `last_name` i sačuvali ga kao `customer_full_name`.
 
 Zatim, postavite `TicketAdmin` form:
 
@@ -583,14 +542,12 @@ Ne zaboravite na uvoz:
 from tickets.forms import TicketAdminForm
 ```
 
-Ponovo pokrenite razvojni server i idite na stranicu sa detaljima tiketa. Ako je
-sve prošlo kako treba, trebalo bi da vidite da su ime i prezime sada u odvojenim
+Ponovo pokrenite razvojni server i idite na stranicu sa detaljima tiketa. Ako je sve prošlo kako treba, trebalo bi da vidite da su ime i prezime sada u odvojenim
 poljima i da načini plaćanja koriste radio dugmad umesto padajućeg menija.
 
 ### Zamena Django admin šablona
 
-Admin sajt Django-a vam omogućava da prilagodite bilo koji njegov vizuelni aspekt
-zamenom šablona. Sve što treba da uradite je:
+Admin sajt Django-a vam omogućava da prilagodite bilo koji njegov vizuelni aspekt zamenom šablona. Sve što treba da uradite je:
 
 - Pogledate izvorni kod Django-a i kopirajte originalni šablon.
 
@@ -598,8 +555,7 @@ zamenom šablona. Sve što treba da uradite je:
 
 Većinu vremena ćete moći da se izvučete samo promenom dela originalnog šablona.
 
-Na primer, ako želimo da dodamo poruku iznad forme za prijavu, možemo naslediti
-`login.html`, a zatim promeniti `content_title` blok:
+Na primer, ako želimo da dodamo poruku iznad forme za prijavu, možemo naslediti `login.html`, a zatim promeniti `content_title` blok:
 
 `<!-- templates/admin/login.html -->`
 
@@ -619,9 +575,7 @@ Idite na stranicu za prijavu i trebalo bi da vidite žutu poruku.
 
 ### Napredna pretraga pomoću DjangoQL
 
-DjangoQL je moćan paket treće strane koji vam omogućava da izvršavate napredne upite bez
-oslanjanja na sirovi SQL. Ima sopstvenu sintaksu i automatsko dovršavanje, podržava logičke
-operatore i radi za bilo koji Django model.
+DjangoQL je moćan paket treće strane koji vam omogućava da izvršavate napredne upite bez oslanjanja na sirovi SQL. Ima sopstvenu sintaksu i automatsko dovršavanje, podržava logičke operatore i radi za bilo koji Django model.
 
 Počnite instaliranjem paketa:
 
@@ -640,8 +594,7 @@ INSTALLED_APPS = [
 ]
 ```
 
-Zatim, dodajte `DjangoQLSearchMixin` kao roditeljsku klasu svim `ModelAdmin`
-klasama gde želite da omogućite napredne mogućnosti pretraživanja.
+Zatim, dodajte `DjangoQLSearchMixin` kao roditeljsku klasu svim `ModelAdmin` klasama gde želite da omogućite napredne mogućnosti pretraživanja.
 
 Dodajmo to, na `TicketAdmin` primer:
 
@@ -658,8 +611,7 @@ Ne zaboravite na uvoz:
 from djangoql.admin import DjangoQLSearchMixin
 ```
 
-Sada možete koristiti isto polje za pretragu kao i ranije da biste izvršili
-napredne upite. Primeri:
+Sada možete koristiti isto polje za pretragu kao i ranije da biste izvršili napredne upite. Primeri:
 
 ```py
 is_active = True
@@ -689,10 +641,8 @@ Za više informacija o jeziku DjangoQL pogledajte "Referencu za jezik DjangoQL".
 
 ### Uvoz i izvoz podataka pomoću django-import-export
 
-U ovom odeljku ćemo pogledati kako da uvezemo i izvezemo podatke o objektima
-putem `django-import-export`, što je odličan paket za lak uvoz i izvoz podataka
-u različitim formatima, uključujući JSON, CSV i YAML. Paket takođe dolazi sa
-ugrađenom admin integracijom.
+U ovom odeljku ćemo pogledati kako da uvezemo i izvezemo podatke o objektima putem `django-import-export`, što je odličan paket za lak uvoz i izvoz podataka
+u različitim formatima, uključujući JSON, CSV i YAML. Paket takođe dolazi sa ugrađenom admin integracijom.
 
 Prvo, instalirajte ga:
 
@@ -717,8 +667,7 @@ Prikupite statičke datoteke:
 (env) python manage.py collectstatic
 ```
 
-Nakon toga, dodajte `ImportExportActionModelAdmin` kao roditeljsku klasu svim
-`ModelAdmin` klasama koje želite da budu uvezene/izvezene.
+Nakon toga, dodajte `ImportExportActionModelAdmin` kao roditeljsku klasu svim `ModelAdmin` klasama koje želite da budu uvezene/izvezene.
 
 Evo jednog primera za TicketAdmin:
 
@@ -729,8 +678,7 @@ class TicketAdmin(DjangoQLSearchMixin, ImportExportActionModelAdmin):
   # ...
 ```
 
-Morali smo da uklonimo `admin.ModelAdmin` osnovnu klasu, jer `ImportExportActionModelAdmin`
-već nasleđuje od nje. Uključivanje obe klase bi rezultiralo greškom `TypeError`.
+Morali smo da uklonimo `admin.ModelAdmin` osnovnu klasu, jer `ImportExportActionModelAdmin` već nasleđuje od nje. Uključivanje obe klase bi rezultiralo greškom `TypeError`.
 
 Ne zaboravite na uvoz:
 
@@ -740,21 +688,16 @@ from import_export.admin import ImportExportActionModelAdmin
 
 Ako želite da model bude samo za izvoz, koristite `ExportActionModelAdmin`.
 
-Ako sada odete na stranicu sa vašim tiketom, trebalo bi da vidite da je dodata akcia izvoza.
-Testirajte je tako što ćete izabrati nekoliko tiketa i željeni format. Zatim kliknite na "Go".
+Ako sada odete na stranicu sa vašim tiketom, trebalo bi da vidite da je dodata akcia izvoza. Testirajte je tako što ćete izabrati nekoliko tiketa i željeni format. Zatim kliknite na "Go".
 
 Zatim možete testirati funkcionalnost uvoza, uvozom upravo izvezene datoteke.
 
 ### Stilizovanje admin sajta pomoću django-admin-interface
 
-Prilagođavanje izgleda admin sajta putem zamene šablona može biti nezgodno. Možete
-slučajno pokvariti stvari, Django administratorski šabloni se mogu promeniti u
+Prilagođavanje izgleda admin sajta putem zamene šablona može biti nezgodno. Možete slučajno pokvariti stvari, Django administratorski šabloni se mogu promeniti u
 budućnosti, a održavanje će biti muka.
 
-Bolji pristup stilizaciji vašeg admin sajta je putem paketa `django-admin-interface`.
-Ovaj paket dolazi sa prelepim, unapred napravljenim temama admin interfejsa i
-omogućava vam da lako prilagodite različite aspekte vašeg admin sajta, uključujući
-promenu boja, naslova, favicon, logotipa i još mnogo toga.
+Bolji pristup stilizaciji vašeg admin sajta je putem paketa `django-admin-interface`. Ovaj paket dolazi sa prelepim, unapred napravljenim temama admin interfejsa i omogućava vam da lako prilagodite različite aspekte vašeg admin sajta, uključujući promenu boja, naslova, favicon, logotipa i još mnogo toga.
 
 Počnite tako što ćete ga instalirati putem pip-a:
 
@@ -795,14 +738,11 @@ Prikupite statičke datoteke:
 (env) python manage.py collectstatic --clear
 ```
 
-Pokrenite razvojni server i idite na <http://localhost:8000/secretadmin>.
-Primetićete da vaš Django admin sajt izgleda modernije i da će postojati odeljak
+Pokrenite razvojni server i idite na <http://localhost:8000/secretadmin>. Primetićete da vaš Django admin sajt izgleda modernije i da će postojati odeljak
 "Administratorski interfejs".
 
-Kliknite na "Administratorski interfejs > Teme" da biste videli sve trenutno
-instalirane teme. Podrazumevano, trebalo bi da postoji samo jedna tema pod
-nazivom „Django“. Ako želite, možete instalirati još tri teme putem fiksnih
-dodataka:
+Kliknite na "Administratorski interfejs > Teme" da biste videli sve trenutno instalirane teme. Podrazumevano, trebalo bi da postoji samo jedna tema pod
+nazivom „Django“. Ako želite, možete instalirati još tri teme putem fiksnih dodataka:
 
 ```sh
 (env)$ python manage.py loaddata admin_interface_theme_bootstrap.json
@@ -810,14 +750,11 @@ dodataka:
 (env)$ python manage.py loaddata admin_interface_theme_uswds.json
 ```
 
-Klik na postojeću temu vam omogućava da prilagodite sve prethodno pomenute
-aspekte.
+Klik na postojeću temu vam omogućava da prilagodite sve prethodno pomenute aspekte.
 
 ## Zaključak
 
-U ovom članku smo obradili mnoge koncepte prilagođavanja Django admin panela.
-Sada bi trebalo da budete u mogućnosti da primenite ove koncepte u praksi i 
-prilagodite Django admin sajt potrebama vašeg projekta.
+U ovom članku smo obradili mnoge koncepte prilagođavanja Django admin panela. Sada bi trebalo da budete u mogućnosti da primenite ove koncepte u praksi i prilagodite Django admin sajt potrebama vašeg projekta.
 
 Predlažem vam da pogledate i naše ostale članke vezane za Django administratora:
 
@@ -825,5 +762,4 @@ Predlažem vam da pogledate i naše ostale članke vezane za Django administrato
 - Podrška za više jezika u Django-u
 - Kreiranje prilagođenog korisničkog modela u Django-u
 
-Preuzmite konačni izvorni kod iz `django-admin-customization` GitHub 
-repozitorijuma.
+Preuzmite konačni izvorni kod iz `django-admin-customization` GitHub repozitorijuma.

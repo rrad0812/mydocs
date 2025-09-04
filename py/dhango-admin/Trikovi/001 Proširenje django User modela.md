@@ -1,14 +1,11 @@
 ﻿
 # Proširenje Django User modela
 
-Django-ov ugrađeni sistem za autentifikaciju je odličan. Uglavnom ga možemo
-koristiti odmah po pokretanju, što nam štedi mnogo truda u razvoju i testiranju.
-Odgovara većini slučajeva upotrebe i veoma je bezbedan. Ali ponekad je
-potrebno da izvršimo neka fina podešavanja kako bi se uklopio u našu veb
+Django-ov ugrađeni sistem za autentifikaciju je odličan. Uglavnom ga možemo koristiti odmah po pokretanju, što nam štedi mnogo truda u razvoju i testiranju.
+Odgovara većini slučajeva upotrebe i veoma je bezbedan. Ali ponekad je potrebno da izvršimo neka fina podešavanja kako bi se uklopio u našu veb
 aplikaciju.
 
-Obično želimo da sačuvamo još nekoliko podataka vezanih za našeg korisnika.
-Ako vaša veb aplikacija ima društvenu privlačnost, možda ćete želeti da
+Obično želimo da sačuvamo još nekoliko podataka vezanih za našeg korisnika. Ako vaša veb aplikacija ima društvenu privlačnost, možda ćete želeti da
 sačuvate kratku biografiju, lokaciju korisnika i druge slične stvari.
 
 U ovom tutorijalu ću predstaviti strategije koje možete koristiti da jednostavno proširite podrazumevani Django korisnički model, tako da ne morate sve implementirati od nule.
@@ -31,23 +28,19 @@ Trebalo bi da koristite proksi model da biste proširili postojeći korisnički 
 
 #### Šta je veza "jedan-na-jedan"
 
-To je običan Django model koji će imati sopstvenu tabelu baze podataka i
-održavaće odnos "jedan-na-jedan" sa postojećim korisničkim modelom putem
+To je običan Django model koji će imati sopstvenu tabelu baze podataka i održavaće odnos "jedan-na-jedan" sa postojećim korisničkim modelom putem
 `OneToOneField`.
 
 #### Kada treba da koristim vezu "jedan-na-jedan"
 
-Vezu "jedan-na-jedan" treba da koristite kada treba da sačuvate dodatne
-informacije o postojećem korisničkom modelu koje nisu povezane sa procesom
+Vezu "jedan-na-jedan" treba da koristite kada treba da sačuvate dodatne informacije o postojećem korisničkom modelu koje nisu povezane sa procesom
 autentifikacije. Obično to nazivamo korisničkim profilom.
 
 ### Opcija 3: Kreiranje prilagođenog User modela proširivanjem AbstractBaseUser-a
 
 #### Šta je prilagođeni model korisnika koji proširuje AbstractBaseUser
 
-To je potpuno novi model korisnika koji nasleđuje od `AbstractBaseUser`.
-Zahteva posebnu pažnju i ažuriranje nekih referenci kroz `settings.py`.
-Idealno bi bilo da se to uradi na početku projekta, jer će dramatično uticati na šemu baze podataka. Potrebno je posebna pažnja prilikom implementacije.
+To je potpuno novi model korisnika koji nasleđuje od `AbstractBaseUser`. Zahteva posebnu pažnju i ažuriranje nekih referenci kroz `settings.py`. Idealno bi bilo da se to uradi na početku projekta, jer će dramatično uticati na šemu baze podataka. Potrebno je posebna pažnja prilikom implementacije.
 
 #### Kada treba da koristim prilagođeni model korisnika koji proširuje AbstractBaseUser
 
@@ -68,9 +61,7 @@ Trebalo bi da ga koristite kada ste potpuno zadovoljni načinom na koji Django o
 
 ### Proširivanje User modela korišćenjem proksi modela
 
-Ovo je manje nametljiv način proširenja postojećeg modela korisnika. Sa tom
-strategijom nećete imati nikakvih nedostataka. Ali je u mnogim pogledima
-veoma ograničena.
+Ovo je manje nametljiv način proširenja postojećeg modela korisnika. Sa tom strategijom nećete imati nikakvih nedostataka. Ali je u mnogim pogledima veoma ograničena.
 
 Evo kako to radite:
 
@@ -89,28 +80,21 @@ class Person(User):
     ...
 ```
 
-U gornjem primeru definisali smo proksi model pod nazivom "Person". Django-
-u kažemo da je ovo proksi model dodavanjem sledećeg svojstva unutar `Meta`
+U gornjem primeru definisali smo proksi model pod nazivom "Person". Django- u kažemo da je ovo proksi model dodavanjem sledećeg svojstva unutar `Meta`
 klase: `proxy = True`.
 
-U ovom slučaju sam redefinisao podrazumevani redosled, dodelio prilagođenu
-funkciju "Manager" modelu i takođe definisao novu metodu "do_something".
+U ovom slučaju sam redefinisao podrazumevani redosled, dodelio prilagođenu funkciju "Manager" modelu i takođe definisao novu metodu "do_something".
 
-Vredi napomenuti da će `User.objects.all()` i `Person.objects.all()` vršiti
-upit na istoj tabeli baze podataka. Jedina razlika je u ponašanju koje definišemo za proksi model.
+Vredi napomenuti da će `User.objects.all()` i `Person.objects.all()` vršiti upit na istoj tabeli baze podataka. Jedina razlika je u ponašanju koje definišemo za proksi model.
 
 Ako je to sve što ti treba, samo napred. Neka bude jednostavno.
 
 ### Proširivanje User modela korišćenjem veze "jedan-na-jedan"
 
-Postoji velika verovatnoća da je to ono što želite. Lično, to je metod koji ja
-uglavnom koristim. Kreiraćemo novi Django model za čuvanje dodatnih
+Postoji velika verovatnoća da je to ono što želite. Lično, to je metod koji ja uglavnom koristim. Kreiraćemo novi Django model za čuvanje dodatnih
 informacija koje se odnose na korisnički model.
 
-Imajte na umu da korišćenje ove strategije rezultira dodatnim upitima ili
-spajanjima za preuzimanje povezanih podataka. U osnovi, svaki put kada
-pristupate povezanim podacima, Django će pokrenuti dodatni upit. Ali to se
-može izbeći u većini slučajeva. Vratiću se na to kasnije.
+Imajte na umu da korišćenje ove strategije rezultira dodatnim upitima ili spajanjima za preuzimanje povezanih podataka. U osnovi, svaki put kada pristupate povezanim podacima, Django će pokrenuti dodatni upit. Ali to se može izbeći u većini slučajeva. Vratiću se na to kasnije.
 
 Obično Django model nazivam kao "Profile":
 
@@ -179,8 +163,7 @@ def update_profile(request, user_id):
   user.save()
 ```
 
-Generalno govoreći, nikada nećete morati da pozivate metodu `save()` profila. Sve
-se radi preko modela `User`.
+Generalno govoreći, nikada nećete morati da pozivate metodu `save()` profila. Sve se radi preko modela `User`.
 
 Šta ako koristim Django Forms?
 
@@ -239,8 +222,7 @@ def update_profile(request):
 
 A dodatni upiti u bazu podataka o kojima smo govorili?
 
-O, da. O ovom problemu sam se bavio u drugom postu pod nazivom
-"Optimizacija upita baze podataka".
+O, da. O ovom problemu sam se bavio u drugom postu pod nazivom "Optimizacija upita baze podataka".
 
 Ali, ukratko: Django veze su lenje. To znači da će Django slati upite bazi podataka samo ako pristupite jednom od povezanih svojstava. Ponekad to izaziva neke neželjene efekte, poput pokretanja stotina ili hiljada upita. Ovaj problem se može ublažiti korišćenjem `select_related` metode.
 
@@ -303,19 +285,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 Želeo sam da ga zadržim što je moguće bližim postojećem User modelu. Pošto nasleđujemo od `AbstractBaseUser` moramo da sledimo neka pravila:
 
-- `USERNAME_FIELD`: String koji opisuje ime polja u modelu korisnika koje se koristi kao jedinstveni
-  identifikator. Polje mora biti jedinstveno (tj. mora biti `unique=True` podešeno u svojoj definiciji);
+- `USERNAME_FIELD`: String koji opisuje ime polja u modelu korisnika koje se koristi kao jedinstveni identifikator. Polje mora biti jedinstveno (tj. mora biti   
+  `unique=True` podešeno u svojoj definiciji);
 
-- `REQUIRED_FIELDS` : Lista imena polja koja će biti zatražena prilikom kreiranja korisnika putem
-  `createsuperuser` komande za upravljanje;
+- `REQUIRED_FIELDS` : Lista imena polja koja će biti zatražena prilikom kreiranja korisnika putem `createsuperuser` komande za upravljanje;
 
 - `is_active` : Bulovski atribut koji pokazuje da li se korisnik smatra "aktivnim";
 
-- `get_full_name()`: Duži formalni identifikator za korisnika. Uobičajeno tumačenje bi bilo puno ime
-  korisnika, ali može biti bilo koji string koji identifikuje korisnika.
+- `get_full_name()`: Duži formalni identifikator za korisnika. Uobičajeno tumačenje bi bilo puno ime korisnika, ali može biti bilo koji string koji identifikuje 
+  korisnika.
 
-- `get_short_name()`: Kratak, neformalni identifikator za korisnika. Uobičajeno tumačenje bi bilo
-  ime korisnika.
+- `get_short_name()`: Kratak, neformalni identifikator za korisnika. Uobičajeno tumačenje bi bilo ime korisnika.
 
 U redu, hajde da idemo dalje. Morao sam i da definišem svoj `UserManager`. To je zato što postojeći menadžer definiše metode `create_user` i `create_superuser`.
 
@@ -361,9 +341,7 @@ Sada poslednji potez. Moramo ažurirati naš `settings.py`. Tačnije
 AUTH_USER_MODEL = 'core.User'
 ```
 
-Na ovaj način govorimo Django-u da koristi naš prilagođeni model umesto
-podrazumevanog. U gornjem primeru, kreirao sam prilagođeni model unutar
-aplikacije pod nazivom `core`.
+Na ovaj način govorimo Django-u da koristi naš prilagođeni model umesto podrazumevanog. U gornjem primeru, kreirao sam prilagođeni model unutar aplikacije pod nazivom `core`.
 
 Kako treba da referenciram ovaj model?
 
@@ -379,8 +357,7 @@ class Course(models.Model):
   tutor = models.ForeignKey(User, on_delete=models.CASCADE)
 ```
 
-Ovo je sasvim u redu. Ali ako kreirate aplikaciju za višekratnu upotrebu koju
-želite da učinite dostupnom javnosti, toplo se preporučuje da koristite sledeću
+Ovo je sasvim u redu. Ali ako kreirate aplikaciju za višekratnu upotrebu koju želite da učinite dostupnom javnosti, toplo se preporučuje da koristite sledeću
 strategiju:
 
 ```py
@@ -419,8 +396,7 @@ Zatim moramo ažurirati naš `settings.py` koji definiše `AUTH_USER_MODEL` svoj
 AUTH_USER_MODEL = 'core.User'
 ```
 
-Slično kao i kod prethodne metode, ovo bi idealno trebalo uraditi na početku
-projekta i sa posebnom pažnjom. To će promeniti celu šemu baze podataka.
+Slično kao i kod prethodne metode, ovo bi idealno trebalo uraditi na početku projekta i sa posebnom pažnjom. To će promeniti celu šemu baze podataka.
 
 Takođe, poželjno je kreirati strane ključeve za model korisnika uvozom podešavanja
 
@@ -428,27 +404,19 @@ Takođe, poželjno je kreirati strane ključeve za model korisnika uvozom podeš
 from django.conf import settings 
 ```
 
-i pozivanjem na `settings.AUTH_USER_MODEL` umesto direktnog pozivanja na prilagođeni
-model korisnika.
+i pozivanjem na `settings.AUTH_USER_MODEL` umesto direktnog pozivanja na prilagođeni model korisnika.
 
 ## Zaključci
 
-U redu! Prošli smo kroz četiri različita načina za proširenje postojećeg
-User modela. Pokušao sam da vam dam što više detalja. Kao što sam već rekao, ne
-postoji najbolje rešenje. Zaista će zavisiti od toga šta treba da postignete. 
-Neka bude jednostavno i birajte mudro.
+U redu! Prošli smo kroz četiri različita načina za proširenje postojećeg User modela. Pokušao sam da vam dam što više detalja. Kao što sam već rekao, ne postoji najbolje rešenje. Zaista će zavisiti od toga šta treba da postignete. Neka bude jednostavno i birajte mudro.
 
-- Proksi model: Zadovoljni ste svim što Django korisnik pruža i ne morate da
-  čuvate dodatne informacije.
+- Proksi model: Zadovoljni ste svim što Django korisnik pruža i ne morate da čuvate dodatne informacije.
 
-- User profil: Zadovoljni ste načinom na koji Django obrađuje autentifikaciju i
-  potrebno je da dodate neke atribute koji nisu povezani sa autentifikacijom
+- User profil: Zadovoljni ste načinom na koji Django obrađuje autentifikaciju i potrebno je da dodate neke atribute koji nisu povezani sa autentifikacijom
   korisniku.
 
-- Prilagođeni model korisnika iz AbstractBaseUser-a: Način na koji Django
-  obrađuje autorizaciju ne odgovara vašem projektu.
+- Prilagođeni model korisnika iz AbstractBaseUser-a: Način na koji Django obrađuje autorizaciju ne odgovara vašem projektu.
 
-- Prilagođeni model korisnika od AbstractUser-a: Način na koji Django obrađuje
-  autentifikaciju je savršen za vaš projekat, ali ipak želite da dodate
+- Prilagođeni model korisnika od AbstractUser-a: Način na koji Django obrađuje autentifikaciju je savršen za vaš projekat, ali ipak želite da dodate
   dodatne atribute bez potrebe za kreiranjem posebnog modela.
   
