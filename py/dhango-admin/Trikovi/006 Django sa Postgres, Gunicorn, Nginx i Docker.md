@@ -456,19 +456,15 @@ exec "$@"
 ```
 
 Umesto toga, možete ih ručno pokrenuti, nakon što se kontejneri pokrenu, kao:
-Umesto toga, možete ih ručno pokrenuti, nakon što se kontejneri okreću, kao i to:
 
-```sh
 ```sh
 docker-compose exec web python manage.py flush --no-input
 docker-compose exec web python manage.py migrate
 ```
-```
 
 ## Gunicorn
 
-Za okruženje proizvodnje, dodajmo gunicorn, WSGI server za proizvodnju, na zahtev:
-Krećemo se, za proizvodna okruženja, dodajmo Gunicorn, proizvodni WSGI server:
+Krećemo se dalje, za proizvodna okruženja, dodajmo Gunicorn, proizvodni WSGI server:
 
 ```sh
 Django==4.2.3
