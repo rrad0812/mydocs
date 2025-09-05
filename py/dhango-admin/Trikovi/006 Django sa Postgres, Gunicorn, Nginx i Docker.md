@@ -1,10 +1,7 @@
 ﻿
 # Django sa Postgres, Gunicorn, Nginx i Docker
 
-Ovo je korak po korak vodič koji se detaljno opisuju kako da konfigurišete Django
-da se pokrene na Dockeru i Dockeru sa Postgresom. Za proizvodno okruženje dodaćemo
-Nginx i Gunicorn. Pogledajte takođe kako da poslužimo statičke i medijske datoteke
-Django putem Nginx-a.
+Ovo je korak po korak vodič koji se detaljno opisuju kako da konfigurišete Django da se pokrene na Dockeru i Dockeru sa Postgresom. Za proizvodno okruženje dodaćemo Nginx i Gunicorn. Pogledajte takođe kako da poslužimo statičke i medijske datoteke Django putem Nginx-a.
 
 U ovom tutorijalu ćete naučiti kako da postavite razvojno okruženje sa Docker-om.
 
@@ -99,13 +96,13 @@ build: ./app
 command: python manage.py runserver 0.0.0.0:8000
 
 volumes:
-- ./app/: /usr/src/app/
+  - ./app/: /usr/src/app/
 
 ports:
-- 8000:8000
+  - 8000:8000
 
 env_file:
-- ./.env.dev
+  - ./.env.dev
 ```
 
 Ažurirajmo `SECRET_KEY`, `DEBUG` i `ALLOWED_HOSTS`  varijabe u `settings.py`:
@@ -116,7 +113,6 @@ DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 ```
 
@@ -165,7 +161,8 @@ version: '3.8'
 
 services:
 web:
-build: ./app
+build: 
+  ./app
 command: 
   python manage.py runserver 0.0.0.0:8000
 
@@ -311,7 +308,7 @@ hello_django_dev=# \dt
 hello_django_dev=# \q
 ```
 
-Možete da proverite da je volume kreirano pokretanjem:
+Možete da proverite da je volume kreiran pokretanjem:
 
 ```sh
 docker volume inspect django-on-docker_postgres_data
@@ -366,7 +363,7 @@ chmod +x app/entrypoint.sh
 Zatim ažurirajte `Dockerfile` da kopirate preko `entrypoint.sh` datoteka i pokrenite ga kao Docker entrypoint komanda:
 
 ```sh
-# pull official python base image - 2
+# pull official python base image
 FROM python:3.11.4-slim-buster
 
 # set work directory - 2
@@ -397,6 +394,7 @@ ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
 ```
 
 Dodajte `DATABASE`  environment varijable u `.env.dev`:
+Add the DATABASE  environment variable to `.env.dev`:
 
 ```py
 DEBUG=1
@@ -418,11 +416,10 @@ Test it out again:
 2. Pokrenite kontejnere
 3. Probajte na <http://localhost:8000/>
 
-
-> [!Note]
+>[!Note]
 >
-> Prvo, uprkos dodavanju postgresa, još uvek možemo da kreiramo nezavisnu sliku Djanga
-  sve dok varijabla baze podataka nije postavljena na postgres. Da biste testirali, izgradite novu sliku, a zatim pokrenite novi kontejner:
+> Prvo, uprkos dodavanju postgresa, još uvek možemo da kreiramo nezavisnu sliku za Django sve dok varijabla baze podataka nije postavljena na postgres.Da
+> testirate, izgradite novu sliku, a zatim pokrenite novi kontejner:
 
 ```sh
 docker build -f ./app/Dockerfile -t hello_django:latest ./app
@@ -436,24 +433,20 @@ docker run -d \
 ```
 
 Trebali biste moći da vidite stranicu dobrodošlice na <http://localhost:8000>
+Trebali biste moći da vidite stranu dobrodošlice na <http://localhost:8006>
 
 Drugo, možda želite da komentarišete bazu podataka i migrirate naredbe u sharepoint.sh skriptu tako da ne rade na svakom početku kontejnera ili ponovo pokrenuti:
+Drugo, možda ćete želeti da komentarišete Flush i migrirate komande u ulaznoj enteypoint.sh skripte tako da ne rade na svakom početku i počnite:
 
 ```sh
 #!/bin/sh
 
-if [ "$DATABASE" = "postgres" ]
-
-then
-echo "Waiting for postgres..."
-
-while ! nc -z $SQL_HOST $SQL_PORT; do
-      sleep 0.1
-
-done
-
-echo "PostgreSQL started"
-
+if [ "$DATABASE" = "postgres" ] then
+  echo "Waiting for postgres..."
+  while ! nc -z $SQL_HOST $SQL_PORT; do
+    sleep 0.1
+  done
+  echo "PostgreSQL started"
 fi
 
 # python manage.py flush --no-input
@@ -463,15 +456,19 @@ exec "$@"
 ```
 
 Umesto toga, možete ih ručno pokrenuti, nakon što se kontejneri pokrenu, kao:
+Umesto toga, možete ih ručno pokrenuti, nakon što se kontejneri okreću, kao i to:
 
+```sh
 ```sh
 docker-compose exec web python manage.py flush --no-input
 docker-compose exec web python manage.py migrate
+```
 ```
 
 ## Gunicorn
 
 Za okruženje proizvodnje, dodajmo gunicorn, WSGI server za proizvodnju, na zahtev:
+Krećemo se, za proizvodna okruženja, dodajmo Gunicorn, proizvodni WSGI server:
 
 ```sh
 Django==4.2.3
@@ -479,7 +476,7 @@ gunicorn==21.2.0
 psycopg2-binary==2.9.6
 ```
 
-Since we still want to use Django's built-in server in development, create a new compose file called docker-compose.prod.yml for production:
+Pošto još uvek želimo da koristimo ugrađeni server Django u razvoju, kreiramo novu kompoziciju pod nazivom `docker-compose.prod.yml` za produkciju:
 
 ```sh
 version: '3.8'
@@ -491,33 +488,32 @@ build: ./app
 command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
 
 ports:
-- 8000:8000
+  - 8000:8000
 
 env_file:
-- ./.env.prod
+  - ./.env.prod
 
 depends_on:
-- db
+  - db
 
 db:
-image: postgres:15
+  image: postgres:15
 
 volumes:
-- postgres_data:/var/lib/postgresql/data/
+  - postgres_data:/var/lib/postgresql/data/
 
 env_file:
-- ./.env.prod.db
+  - ./.env.prod.db
 
 volumes:
+
 postgres_data:
+
 ```
 
-If you have multiple environments, you may want to look at using a docker-
-compose.override.yml configuration file. With this approach, you'd add your base config to a docker-compose.yml file and then use a docker-
-compose.override.yml file to override those config settings based on the
-environment.
+Ako imate više okruženja, možda ćete želeti da pogledate upotrebu `docker-compose.override.yml` konfiguracione datoteke. Ovom pristupom, dodali biste baznu konfiguraciju na `docker-compose.yml` datoteka i zatim koristite `docker-compose.override.yml` datoteku za nadjačavanje tih konfiguracionih postavki na osnovu enviromenta.
 
-Take note of the default command . We're running Gunicorn rather than the Django development server. We also removed the volume from the web  service since we don't need it in production. Finally, we're using separate environment variable files to define environment variables for both services that will be passed to the container at runtime.
+Zabeležite zadanu komandu. Vodimo Gunicorn, a ne na Django Development Server. Takođe smo uklonili volume sa veb servisa, jer nam to ne treba u proizvodnji.Konačno, koristimo odvojene promenljive datoteke za zaštitu enviromenta da biste definisali promenljive enviromenta za obe usluge koje će se preneti na kontejner na vreme izvođenja.
 
 `.env.prod:`
 
@@ -542,81 +538,71 @@ POSTGRES_PASSWORD=hello_django
 POSTGRES_DB=hello_django_prod
 ```
 
-Add the two files to the project root. You'll probably want to keep them out of version control, so add them to a .gitignore file.
+Dodajte dve datoteke u root projekta.Verovatno ćete želeti da ih držite van kontrole verzije, pa ih dodajte na `.gitignore` datoteku.
 
-Bring down the development containers (and the associated volumes with the -v flag):
+Srušite kontejnere za razvoj (i pridružene količine sa -v zastavom):
 
 ```sh
 docker-compose down -v
 ```
 
-Then, build the production images and spin up the containers:
+Zatim, izgradite proizvodne slike i okrenete posude:
 
 ```sh
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
-Verify that the hello_django_prod  database was created along with the default Django tables. Test out the admin page at http://localhost:8000/admin. The static files are not being loaded anymore. This is expected since Debug mode is off. We'll fix this shortly.
+Proverite da li je `hello_django_prod` baza podataka stvorena zajedno sa podrazumevanim django tabelama. Isprobajte stranu admin na <http://localhost:8000/admin>. Statičke datoteke se više ne učitavaju. To se očekuje od kada je režim uklanjanja pogrešaka isključen. To ćemo popraviti uskoro.
 
-Again, if the container fails to start, check for errors in the logs via 
+Opet, ako kontejner ne pokrene, proverite greške u dnevnicima sa
 
 ```sh
 docker-compose -f docker-compose.prod.yml logs -f .
 ```
 
-Production Dockerfile
+### Produkcioni dockerfile
 
-Did you notice that we're still running the database flush (which clears out the database) and migrate commands every time the container is run? This is fine in development, but let's create a new entrypoint file for production.
+Da li ste primetili da i dalje pokrećemo `flush` baze podataka (što očisti bazu podataka) i migriraju komande svaki put kada se kontejner pokrene?Ovo je u redu u razvoju, ali kreirajmo novu ulaznu datoteku za proizvodnju.
 
 `entrypoint.prod.sh:`
 
-```
+```sh
 #!/bin/sh
 
-if [ "$DATABASE" = "postgres" ]
-
-then
-echo "Waiting for postgres..."
-
-while ! nc -z $SQL_HOST $SQL_PORT; do
+if [ "$DATABASE" = "postgres" ] then
+  echo "Waiting for postgres..."
+  while ! nc -z $SQL_HOST $SQL_PORT; do
       sleep 0.1
-
-done
-
-echo "PostgreSQL started"
-
+  done
+  echo "PostgreSQL started"
 fi
 
 exec "$@"
 ```
 
-Update the file permissions locally:
+Ažurirajte dozvole za datoteku lokalno:
 
 ```sh
 chmod +x app/entrypoint.prod.sh
 ```
 
-To use this file, create a new Dockerfile called Dockerfile.prod for use with production builds:
+Da biste koristili ovu datoteku, napravite novi `Dockerfile` pod nazivom `Dockerfile.prod` za upotrebu sa proizvodnjom:
 
 ### BUILDER
 
 ```sh
 # pull official python base image
-
 FROM python:3.11.4-slim-buster as builder
 
 
 # set work directory
-
 WORKDIR /usr/src/app
 
 # set environment variables
-
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install system dependencies
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gcc
 
@@ -630,108 +616,68 @@ RUN flake8 --ignore=E501,F401 .
 
 # install python dependencies
 COPY ./requirements.txt .
-```
 
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r 
+```
 
-requirements.txt
+`requirements.txt`
 
-#########
-
-# FINAL #
-
-#########
+```sh
+### FINAL
 
 # pull official base image
-
 FROM python:3.11.4-slim-buster
 
 # create directory for the app user
-
 RUN mkdir -p /home/app
 
 # create the app user
-
 RUN addgroup --system app && adduser --system --group app
 
 # create the appropriate directories
-
 ENV HOME=/home/app
-
 ENV APP_HOME=/home/app/web
-
 RUN mkdir $APP_HOME
-
 WORKDIR $APP_HOME
 
 # install dependencies
-
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
 
 COPY --from=builder /usr/src/app/wheels /wheels
-
 COPY --from=builder /usr/src/app/requirements.txt .
 
 RUN pip install --upgrade pip
-
 RUN pip install --no-cache /wheels/*
 
 # copy entrypoint.prod.sh
-
 COPY ./entrypoint.prod.sh .
-
 RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.prod.sh
-
 RUN chmod +x  $APP_HOME/entrypoint.prod.sh
 
 # copy project
-
 COPY . $APP_HOME
 
 # chown all the files to the app user
-
 RUN chown -R app:app $APP_HOME
 
 # change to the app user
-
 USER app
 
 # run entrypoint.prod.sh
-
 ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+```
 
-Here, we used a Docker multi-stage build to reduce the final image size. Essentially,
-Feedback
+Evo, koristili smo doker multi-fazni da bismo smanjili konačnu veličinu slike. U osnovi, graditelj je privremena slika koja se koristi za izgradnju pajtonskih točkova.Točkovi se zatim kopiraju na konačnu proizvodnu sliku i slika građevinara se odbacuje.
 
+Mogli biste uzeti više faza izgradnje da dodate korak dalje i koristite jedan `DockerFile` umesto da kreirate dva `DockerFiles`. Razmislite o prednostima i nedostacima koristeći ovaj pristup preko dve različite datoteke.
 
+Da li ste primetili da smo stvorili korisnika koji nije root? Podrazumevano, Docker pokreće kontejnerske procese kao root unutar kontejnera. Ovo je loša praksa jer napadači mogu dobiti pristupu root-u docker host-a ako uspeju da se izbore iz kontejnera. Ako ste root u kontejneru, bićete root i na hostu.
 
-builder  is a temporary image that's used for building the Python wheels. The
+Ažurirajte veb uslugu u okviru `docker-compose.prod.yml` datoteka za izgradnju sa `dockerfile.prod`:
 
-wheels are then copied over to the final production image and the builder  image
-
-is discarded.
-
-You could take the multi-stage build approach a step further and use a single
-
-Dockerfile instead of creating two Dockerfiles. Think of the pros and cons of
-
-using this approach over two different files.
-
-Did you notice that we created a non-root user? By default, Docker runs container
-
-processes as root inside of a container. This is a bad practice since attackers can
-
-gain root access to the Docker host if they manage to break out of the container. If
-
-you're root in the container, you'll be root on the host.
-
-Update the web  service within the docker-compose.prod.yml file to build with
-
-Dockerfile.prod:
-
+```sh
 web:
 build:
-
 context: ./app
 
 dockerfile: Dockerfile.prod
@@ -739,95 +685,77 @@ dockerfile: Dockerfile.prod
 command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
 
 ports:
-- 8000:8000
+  - 8000:8000
 
 env_file:
-- ./.env.prod
+  - ./.env.prod
 
 depends_on:
-- db
+  - db
 
 Try it out:
 
 docker-compose -f docker-compose.prod.yml down -v
-
 docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+```
 
-docker-compose -f docker-compose.prod.yml exec web python manage.py 
+### Nginx
 
-migrate --noinput
+Sledeće, dodajmo Nginx u miks da deluje kao obrnuti proksi za Gunicorn za obradu zahteva klijenta, kao i da služe statičke datoteke.
 
-Nginx
-Next, let's add Nginx into the mix to act as a reverse proxy for Gunicorn to handle
+Dodajte uslugu na `docker-compose.prod.yml`:
 
-client requests as well as serve up static files.
-
-Add the service to docker-compose.prod.yml:
-
+```sh
 nginx:
 build: ./nginx
 
 ports:
-- 1337:80
+  - 1337:80
 
 depends_on:
-- web
+  - web
+```
 
-Then, in the local project root, create the following files and folders:
+Zatim, u lokalnom root projektu, kreirajte sledeće datoteke i mape:
 
+```sh
 └── nginx
     ├── Dockerfile
     └── nginx.conf
+```
 
-Dockerfile:
+`Dockerfile`:
 
-Feedback
-
-
-
+```sh
 FROM nginx:1.25
-
 RUN rm /etc/nginx/conf.d/default.conf
-
 COPY nginx.conf /etc/nginx/conf.d
+```
 
-nginx.conf:
+`nginx.conf:`
 
+```sh
 upstream hello_django {
-
     server web:8000;
-
 }
 
 server {
-
     listen 80;
-
     location / {
-
         proxy_pass http://hello_django;
-
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
         proxy_set_header Host $host;
-
         proxy_redirect off;
-
+    }
 }
+```
 
-}
+Zatim, ažurirajte veb servis u `docker-compose.prod.yml`, zamena portova sa izlaganjem:
 
-Review Using NGINX and NGINX Plus as an Application Gateway with
-
-uWSGI and Django for more info on configuring Nginx to work with Django.
-
-Then, update the web  service, in docker-compose.prod.yml, replacing ports  with
-
-expose :
-
+```sh
 web:
 build:
-
 context: ./app
 
 dockerfile: Dockerfile.prod
@@ -835,38 +763,32 @@ dockerfile: Dockerfile.prod
 command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
 
 expose:
-- 8000
+  - 8000
 
 env_file:
-- ./.env.prod
+  - ./.env.prod
 
 depends_on:
-- db
+  - db
+```
 
-Now, port 8000 is only exposed internally, to other Docker services. The port will no
+Sada je priključak 8000 izložen interno samo na druge usluge docker-a. Port se više neće objavljivati u host mašini.
 
-longer be published to the host machine.
+Za više na portovima vs izložite, pregledajte ovo pitanje preliva.
 
-For more on ports vs expose, review this Stack Overflow question.
+Ispitajte ga ponovo.
 
-Test it out again.
-
+```sh
 docker-compose -f docker-compose.prod.yml down -v
-
 docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+```
 
-docker-compose -f docker-compose.prod.yml exec web python manage.py 
+Osigurajte da se aplikacija postavlja i radi na <http://localhost:1337>.
 
-migrate --noinput
+Vaša struktura projekta treba da izgleda kao:
 
-Ensure the app is up and running at http://localhost:1337.
-
-Your project structure should now look like:
-
-Feedback
-
-
-
+```sh
 ├── .env.dev
 ├── .env.prod
 ├── .env.prod.db
@@ -889,44 +811,37 @@ Feedback
 └── nginx
     ├── Dockerfile
     └── nginx.conf
+```
 
 Bring the containers down once done:
 
+```sh
 docker-compose -f docker-compose.prod.yml down -v
+```
 
-Since Gunicorn is an application server, it will not serve up static files. So, how
+Pošto je Gunicorn, web aplikacija neće poslužiti statičke datoteke.Dakle, kako treba da se obrađuju statičke i medijske datoteke u ovoj konfiguraciji?
 
-should both static and media files be handled in this particular configuration?
+### Static Files
 
-Static Files
-Update settings.py:
+Ažurirajte `settings.py`:
 
+```sh
 STATIC_URL = "/static/"
-
 STATIC_ROOT = BASE_DIR / "staticfiles"
+```
 
-Development
+### Razvoj
 
-Now, any request to http://localhost:8000/static/*  will be served from the
+Svaki zahtev za <http://localhost:8000/static/*> biće serviran iz `staticfiles` direktorijuma.
 
-"staticfiles" directory.
+Da biste testirali, prvo ponovo izgradite slike i pokrećete nove kontejnere po uobičajenoj proceduri. Osigurajte da se statičke datoteke i dalje pravilno poslužuju na <http://localhost:8000/admin>.
 
-To test, first re-build the images and spin up the new containers per usual. Ensure
+### Produkcija
 
-static files are still being served correctly at http://localhost:8000/admin.
+Za proizvodnju dodajte volume na Veb i Nginx services u `docker-compose.prod.yml` tako da će svaki kontejner deliti onaj imenovan `staticfiles`:
 
-Production
-
-For production, add a volume to the web  and nginx  services in docker-
-
-compose.prod.yml so that each container will share a directory named "staticfiles":
-
-Feedback
-
-
-
+```sh
 version: '3.8'
-
 services:
 web:
 
@@ -938,25 +853,25 @@ dockerfile: Dockerfile.prod
 command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
 
 volumes:
-- static_volume:/home/app/web/staticfiles
+  - static_volume:/home/app/web/staticfiles
 
 expose:
-- 8000
+  - 8000
 
 env_file:
-- ./.env.prod
+  - ./.env.prod
 
 depends_on:
-- db
+  - db
 
 db:
-image: postgres:15
+  image: postgres:15
 
 volumes:
-- postgres_data:/var/lib/postgresql/data/
+  - postgres_data:/var/lib/postgresql/data/
 
 env_file:
-- ./.env.prod.db
+  - ./.env.prod.db
 
 nginx:
 build: ./nginx
@@ -973,216 +888,104 @@ depends_on:
 volumes:
 postgres_data:
 static_volume:
+```
 
-We need to also create the "/home/app/web/staticfiles" folder in Dockerfile.prod:
+We need to also create the `/home/app/web/staticfiles` folder in `Dockerfile.prod`:
 
-...
-
+```sh
 # create the appropriate directories
-
 ENV HOME=/home/app
-
 ENV APP_HOME=/home/app/web
-
 RUN mkdir $APP_HOME
-
 RUN mkdir $APP_HOME/staticfiles
-
 WORKDIR $APP_HOME
+```
 
-...
+Zašto je to potrebno?
 
-Why is this necessary?
+Docker sastavite normalno montira pod nazivom zapremine kao root. A pošto koristimo korisnika koji nije root, dobićemo grešku koja je uskraćivala dozvolu kada se `colectstatic` naredba pokrene ako direktorijum već ne postoji da biste to mogli da se oko toga možete da preuzmete:
 
-Docker Compose normally mounts named volumes as root. And since we're using a
+1. Kreirajte mapu u dockerfile (izvor)
+2. Promenite dozvole direktorijuma nakon što je montiran (izvor)
 
-non-root user, we'll get a permission denied error when the collectstatic
+Koristili smo bivše.
 
-command is run if the directory does not already exist
+Zatim ažurirajte Nginx konfiguraciju za usmerevanje statičkih datoteka u direktorijum `staticfiles`:
 
-To get around this, you can either:
-
-1. Create the folder in the Dockerfile (source)
-
-2. Change the permissions of the directory after it's mounted (source)
-
-We used the former.
-
-Next, update the Nginx configuration to route static file requests to the "staticfiles"
-
-folder:
-
-Feedback
-
-
-
+```sh
 upstream hello_django {
-
     server web:8000;
-
 }
 
 server {
-
     listen 80;
-
     location / {
-
         proxy_pass http://hello_django;
-
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
         proxy_set_header Host $host;
-
         proxy_redirect off;
-
-}
-
+    }
     location /static/ {
-
-alias /home/app/web/staticfiles/;
-
+        alias /home/app/web/staticfiles/;
+    }
 }
+```
 
-}
+Spin niz razvojne kontejnere:
 
-Spin down the development containers:
-
+```sh
 docker-compose down -v
+```
 
 Test:
 
+```sh
 docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+```
 
-docker-compose -f docker-compose.prod.yml exec web python manage.py 
+Again, requests to <http://localhost:1337/static/*>  will be served from the "staticfiles" directory.
 
-migrate --noinput
+Navigate to <http://localhost:1337/admin> and ensure the static assets load correctly.
 
-docker-compose -f docker-compose.prod.yml exec web python manage.py 
+You can also verify in the logs -- via `docker-compose -f docker-compose.prod.yml logs -f  --` that requests to the static files are served up successfully via Nginx:
 
-collectstatic --no-input --clear
-
-Again, requests to http://localhost:1337/static/*  will be served from the
-
-"staticfiles" directory.
-
-Navigate to http://localhost:1337/admin and ensure the static assets load correctly.
-
-You can also verify in the logs -- via docker-compose -f docker-compose.prod.yml
-
-logs -f  -- that requests to the static files are served up successfully via Nginx:
-
-Feedback
-
-
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /admin/ 
-
-HTTP/1.1" 302 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) 
-
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /admin/
-
-login/?next=/admin/ HTTP/1.1" 200 2214 "-" "Mozilla/5.0 (Macintosh; Intel 
-
-Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko)
-
-Chrome/92.0.4515.159 Safari/537.36" "-"
-
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /admin/HTTP/1.1" 302 0 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
+    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36""-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /admin/login/?next=/admin/ HTTP/1.1" 200 2214 "-" "Mozilla/5.0 (Macintosh; Intel
+    Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko)Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/css/base.css HTTP/1.1" 304 0 <http://localhost:1337/admin/login/?next=/admin/>    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0 <http://localhost:1337/admin/login/?next=/admin/> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36""-"
 nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
+admin/css/responsive.css HTTP/1.1" 304 0 <http://localhost:1337/admin/login/?next=/admin/> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
+    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/css/login.css HTTP/1.1" 304 0 <http://localhost:1337/admin/login/?next=/admin/>
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0 <http://localhost:1337/admin/login/?next=/admin/> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/css/fonts.css HTTP/1.1" 304 0 <http://localhost:1337/static/admin/css/base.css>
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/fonts/Roboto-Regular-webfont.woff HTTP/1.1" 304 0 <http://localhost:1337/static/admin/css/fonts.css> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
+nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/admin/fonts/Roboto-Light-webfont.woff HTTP/1.1" 304 0 <http://localhost:1337/static/admin/css/fonts.css> "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36" "-"
 
-admin/css/base.css HTTP/1.1" 304 0 "http://localhost:1337/admin/login/?
+Jednom donete kontejnere:
 
-next=/admin/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) 
-
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/css/nav_sidebar.css HTTP/1.1" 304 0 "http://localhost:1337/admin/
-
-login/?next=/admin/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
-
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/css/responsive.css HTTP/1.1" 304 0 "http://localhost:1337/admin/
-
-login/?next=/admin/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
-
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/css/login.css HTTP/1.1" 304 0 "http://localhost:1337/admin/login/?
-
-next=/admin/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
-
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/js/nav_sidebar.js HTTP/1.1" 304 0 "http://localhost:1337/admin/
-
-login/?next=/admin/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
-
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/css/fonts.css HTTP/1.1" 304 0 "http://localhost:1337/static/admin/
-
-css/base.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6)
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-"-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/fonts/Roboto-Regular-webfont.woff HTTP/1.1" 304 0 "http://
-
-localhost:1337/static/admin/css/fonts.css" "Mozilla/5.0 (Macintosh; Intel
-
-Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko)
-
-Chrome/92.0.4515.159 Safari/537.36" "-"
-
-nginx_1  | 192.168.144.1 - - [23/Aug/2021:20:11:00 +0000] "GET /static/
-
-admin/fonts/Roboto-Light-webfont.woff HTTP/1.1" 304 0 "http://
-
-localhost:1337/static/admin/css/fonts.css" "Mozilla/5.0 (Macintosh; Intel
-
-Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko)
-
-Chrome/92.0.4515.159 Safari/537.36" "-"
-
-Bring the containers once done:
-
+```sh
 docker-compose -f docker-compose.prod.yml down -v
+```
 
-Media Files
-To test out the handling of media files, start by creating a new Django app:
+### Media Files
 
+Da biste testirali rukovanje medijskim datotekama, počnite tako što ćete kreirati novu reklamu Django:
+
+```sh
 docker-compose up -d --build
-
 docker-compose exec web python manage.py startapp upload
+```
 
-Add the new app to the INSTALLED_APPS  list in settings.py:
+Dodajte novu aplikaciju na INSTALLED_APPS  navedenu u `settings.py`:
 
+```py
 INSTALLED_APPS = [
   "django.contrib.admin",
   "django.contrib.auth",
@@ -1192,9 +995,11 @@ INSTALLED_APPS = [
   "django.contrib.staticfiles",
   "upload",
 ]
+```
 
-app/upload/views.py:
+`app/upload/views.py`
 
+```py
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 
@@ -1210,9 +1015,11 @@ def image_upload(request):
     })
 
   return render(request, "upload.html")
+```
 
-Add a "templates", directory to the "app/upload" directory, and then add a new template called upload.html:
+Dodajte `templates` direktorijum u `app/upload` direktorijumu, i potom dodaj novi šablon pod imenom `upload.html`:
 
+```html
 {% block content %}
 
 <form action="{% url "upload" %}" method="post" enctype="multipart/form-
@@ -1225,56 +1032,45 @@ data">
     <p>File uploaded at: <a href="{{ image_url }}">{{ image_url }}</a></p>
     {% endif %}
   {% endblock %}
+```
 
-app/hello_django/urls.py:
+`app/hello_django/urls.py:`
 
+```py
 from django.contrib import admin
-
 from django.urls import path
-
 from django.conf import settings
-
 from django.conf.urls.static import static
-
 from upload.views import image_upload
 
 urlpatterns = [
-
-path("", image_upload, name="upload"),
-
-path("admin/", admin.site.urls),
-
+    path("", image_upload, name="upload"),
+    path("admin/", admin.site.urls),
 ]
 
 if bool(settings.DEBUG):
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
 
-urlpatterns += static(settings.MEDIA_URL,
-
-document_root=settings.MEDIA_ROOT)
-
-app/hello_django/settings.py:
-
-Feedback
-
-
+`app/hello_django/settings.py:`
 
 MEDIA_URL = "/media/"
-
 MEDIA_ROOT = BASE_DIR / "mediafiles"
 
-Development
+### Razvoj - 2
 
-Test:
+Testiranje:
 
+```sh
 docker-compose up -d --build
+```
 
-You should be able to upload an image at http://localhost:8000/, and then view the
+Trebali biste moći da učitate sliku na <http://localhost:8000/>, a zatim pogledajte
+sliku na <http://localhost:8000/media/IMAGE_FILE_NAME>.
 
-image at http://localhost:8000/media/IMAGE_FILE_NAME.
+### Produkcija - 2
 
-Production
-
-For production, add another volume to the web  and nginx  services:
+Za proizvodnju dodajte još jednu količinu na Veb i Ngink Services:
 
 ```sh
 version: '3.8'
@@ -1332,17 +1128,20 @@ media_volume:
 
 Create the "/home/app/web/mediafiles" folder in Dockerfile.prod:
 
-### create the appropriate directories
+### Stvorite odgovarajuće direktorijume
 
+```sh
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
 RUN mkdir $APP_HOME/mediafiles
 WORKDIR $APP_HOME
+```
 
-Update the Nginx config again:
+Ažurirajte Nginx config ponovo:
 
+```sh
 upstream hello_django {
     server web:8000;
 }
@@ -1362,30 +1161,33 @@ server {
         alias /home/app/web/mediafiles/;
     }
 }
+```
 
-Add the following to settings.py:
+Dodaj sledće u `settings.py`:
 
+```sh
 CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
+```
 
-Re-build:
+Ponovo izgradi:
 
+```sh
 docker-compose down -v
 docker-compose -f docker-compose.prod.yml up -d --build
-docker-compose -f docker-compose.prod.yml exec web python manage.py 
-  migrate --noinput
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+```
 
-docker-compose -f docker-compose.prod.yml exec web python manage.py 
-  collectstatic --no-input --clear
+Ispitajte ga jedan krajnji vreme:
 
-Test it out one final time:
+1. Pošaljite sliku na <http://localhost:1337/>.
+2. Zatim pogledajte sliku na <http://localhost:1337/media/IMAGE_FILE_NAME>.
 
-1. Upload an image at <http://localhost:1337/>.
-2. Then, view the image at <http://localhost:1337/media/IMAGE_FILE_NAME>.
+Ako vidite `413 Request Entity Too Large` greška, moraćete povećati maksimalnu dozvoljenu veličinu tela za zahtev klijenta na kontekstu servera ili lokacije unutar Nginx config-a.
 
-If you see an 413 Request Entity Too Large  error, you'll need to increase the maximum allowed size of the client request body in either the server or location context within the Nginx config.
+Primer:
 
-Example:
-
+```sh
 location / {
     proxy_pass http://hello_django;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -1393,25 +1195,24 @@ location / {
     proxy_redirect off;
     client_max_body_size 100M;
 }
+```
 
-Conclusion
+Zaključak
 
-In this tutorial, we walked through how to containerize a Django web application with Postgres for development. We also created a production-ready Docker Compose file that adds Gunicorn and Nginx into the mix to handle static and media files. You can now test out a production setup locally.
+U ovom tutorialu smo prošetali kako da kontekturizujemo veb aplikaciju Django sa postgresom za razvoj. Takođe smo stvorili i docer compose spremnu proizvodnju koji dodaje Gunicorn i Nginx u da se bave statičkim i medijskim datotekama. Sada možete da testirate proizvod za proizvodnju lokalno.
 
-In terms of actual deployment to a production environment, you'll probably want to use a:
+U pogledu stvarnog raspoređivanja u proizvodno okruženje, verovatno ćete želeti da koristite:
 
-1. Fully managed database service -- like RDS or Cloud SQL -- rather than
-   managing your own Postgres instance within a container.
+Potpuno upravljani servis baze podataka - poput RDS-a ili oblaka SQL - umesto da upravljate sopstvenim primerom postgresa unutar kontejnera koji nije root
+korisnik za usluge DB i Nginx.
 
-2. Non-root user for the db  and nginx  services
+Django na Docker seriji:
 
-Django on Docker Series:
+1. Docer Django sa postgresom, Guniorn i Nginx (Ovaj vodič!)
+2. Osiguravanje kontejnerske aplikacije Django sa šifriranjem
+3. Primena Django na AWS sa Docker-om i šifriranjem
 
-1. Dockerizing Django with Postgres, Gunicorn, and Nginx (this tutorial!)
-2. Securing a Containerized Django Application with Let's Encrypt
-3. Deploying Django to AWS with Docker and Let's Encrypt
-
-RECOMMENDED TUTORIALS
+Preporučeni tutorijali:
 
 Securing a Deploying Django to Asynchronous Tasks
 Containerized Django AWS with Docker and with Django and Celery
