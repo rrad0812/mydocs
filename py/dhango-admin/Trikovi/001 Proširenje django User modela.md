@@ -285,14 +285,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 Želeo sam da ga zadržim što je moguće bližim postojećem User modelu. Pošto nasleđujemo od `AbstractBaseUser` moramo da sledimo neka pravila:
 
-- `USERNAME_FIELD`: String koji opisuje ime polja u modelu korisnika koje se koristi kao jedinstveni identifikator. Polje mora biti jedinstveno (tj. mora biti   
+- `USERNAME_FIELD`: String koji opisuje ime polja u modelu korisnika koje se koristi kao jedinstveni identifikator. Polje mora biti jedinstveno (tj. mora biti
   `unique=True` podešeno u svojoj definiciji);
 
 - `REQUIRED_FIELDS` : Lista imena polja koja će biti zatražena prilikom kreiranja korisnika putem `createsuperuser` komande za upravljanje;
 
 - `is_active` : Bulovski atribut koji pokazuje da li se korisnik smatra "aktivnim";
 
-- `get_full_name()`: Duži formalni identifikator za korisnika. Uobičajeno tumačenje bi bilo puno ime korisnika, ali može biti bilo koji string koji identifikuje 
+- `get_full_name()`: Duži formalni identifikator za korisnika. Uobičajeno tumačenje bi bilo puno ime korisnika, ali može biti bilo koji string koji identifikuje
   korisnika.
 
 - `get_short_name()`: Kratak, neformalni identifikator za korisnika. Uobičajeno tumačenje bi bilo ime korisnika.

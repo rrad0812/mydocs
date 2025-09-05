@@ -276,9 +276,9 @@ psql (15.3)
 Type "help" for help.
 hello_django_dev=# \l
                              List of databases
-------------------|--------------|----------|------------|------------|------------------
+-------------------------------------------------------------------------------------
        Name       |    Owner     | Encoding |  Collate   |   Ctype    | Access privileges
-------------------|--------------|----------|------------|------------|------------------
+------------------|--------------|----------|------------|------------|--------------
  hello_django_dev | hello_django | UTF8     | en_US.utf8 | en_US.utf8 |
  postgres         | hello_django | UTF8     | en_US.utf8 | en_US.utf8 |
  template0        | hello_django | UTF8     | en_US.utf8 | en_US.utf8 | =c/ hello_django              
@@ -286,14 +286,16 @@ hello_django_dev=# \l
 (4 rows)
 
 hello_django_dev=# \c hello_django_dev
+```
 
-You are now connected to database "hello_django_dev" as user "hello_django".
+Sada ste konektovani na bazu podaataka "hello_django_dev" kao korisnik "hello_django".
 
+```sh
 hello_django_dev=# \dt
                      List of relations
 ------------------------------------------------------------
- Schema |            Name            | Type  |    Owner
---------|----------------------------|-------|--------------
+ Schema | Name                       | Type  | Owner
+--------+----------------------------+-------+--------------
  public | auth_group                 | table | hello_django
  public | auth_group_permissions     | table | hello_django
  public | auth_permission            | table | hello_django
@@ -304,12 +306,12 @@ hello_django_dev=# \dt
  public | django_content_type        | table | hello_django
  public | django_migrations          | table | hello_django
  public | django_session             | table | hello_django
-(10 rows)
+ (10 rows)
 
 hello_django_dev=# \q
 ```
 
-Можете да проверите да је volume такође креирана покретањем:
+Možete da proverite da je volume kreirano pokretanjem:
 
 ```sh
 docker volume inspect django-on-docker_postgres_data
@@ -394,7 +396,7 @@ COPY . .
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
 ```
 
-Add the DATABASE  environment variable to .env.dev:
+Dodajte `DATABASE`  environment varijable u `.env.dev`:
 
 ```py
 DEBUG=1
@@ -412,13 +414,15 @@ DATABASE=postgres
 
 Test it out again:
 
-1. Re-build the images
-2. Run the containers
-3. Try <http://localhost:8000/>
+1. Ponovo izgradite slike
+2. Pokrenite kontejnere
+3. Probajte na <http://localhost:8000/>
 
-Notes
 
-First, despite adding Postgres, we can still create an independent Docker image for Django as long as the DATABASE  environment variable is not set to postgres . To test, build a new image and then run a new container:
+> [!Note]
+>
+> Prvo, uprkos dodavanju postgresa, još uvek možemo da kreiramo nezavisnu sliku Djanga
+  sve dok varijabla baze podataka nije postavljena na postgres. Da biste testirali, izgradite novu sliku, a zatim pokrenite novi kontejner:
 
 ```sh
 docker build -f ./app/Dockerfile -t hello_django:latest ./app
@@ -431,9 +435,9 @@ docker run -d \
     hello_django python /usr/src/app/manage.py runserver 0.0.0.0:8000
 ```
 
-You should be able to view the welcome page at <http://localhost:8006>
+Trebali biste moći da vidite stranicu dobrodošlice na <http://localhost:8000>
 
-Second, you may want to comment out the database flush and migrate commands in the entrypoint.sh script so they don't run on every container start or re-start:
+Drugo, možda želite da komentarišete bazu podataka i migrirate naredbe u sharepoint.sh skriptu tako da ne rade na svakom početku kontejnera ili ponovo pokrenuti:
 
 ```sh
 #!/bin/sh
@@ -458,14 +462,16 @@ fi
 exec "$@"
 ```
 
-Instead, you can run them manually, after the containers spin up, like so:
+Umesto toga, možete ih ručno pokrenuti, nakon što se kontejneri pokrenu, kao:
 
+```sh
 docker-compose exec web python manage.py flush --no-input
 docker-compose exec web python manage.py migrate
+```
 
 ## Gunicorn
 
-Moving along, for production environments, let's add Gunicorn, a production-grade WSGI server, to the requirements file:
+Za okruženje proizvodnje, dodajmo gunicorn, WSGI server za proizvodnju, na zahtev:
 
 ```sh
 Django==4.2.3
