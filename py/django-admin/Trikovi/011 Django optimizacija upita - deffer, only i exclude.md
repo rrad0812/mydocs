@@ -1,17 +1,5 @@
-﻿English
-
-Poslednje ažuriranje 14. marta 2025.
-
-Django optimizacija upita - odlaganje,
-samo i isključivanje
-
-Nik Tomazić
-
-Istaknuti kurs
- Tviter  Redit  Hakerske vesti  Fejsbuk
-
-Razvoj vođen testiranjem
-pomoću Django-a, Django
+﻿
+# Django optimizacija upita - defer, only i exclude
 
 Ovaj članak razmatra razlike između metoda defer() , only() i u Django
 REST Framework-a i
