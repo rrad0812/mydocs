@@ -120,7 +120,7 @@ Korisnik će:
 - Uneti broj godina staža.
 - Kliknuti na dugme.
 
-Dobiti rezultat + grafikon zavisnosti penzije od prosečne plate.
+Za rezultat ćemo dobiti veličinu penzije + grafikon zavisnosti penzije od prosečne plate.
 
 Evo koda:
 
@@ -443,7 +443,7 @@ Sada dobijamo moderan Bootstrap izgled, dugmiće za preuzimanje rezultata u CSV 
 
 Dodao sam CSV/Excel izvoz i ubacio Bootstrap stilizaciju – aplikacija sad izgleda modernije i korisnik može da preuzme rezultate.
 
-### PythonAnywhere (besplatan plan)
+### PythonAnywhere.com (besplatan plan)
 
 Jednostavan, namenjen baš za Django aplikacije. Besplatni domen je
 
