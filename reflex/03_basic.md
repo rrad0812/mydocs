@@ -1,6 +1,8 @@
 
 # Refleks osnove
 
+[Instalacija](02_install.md) [Sadržaj](00_sadrzaj.md) []04_.md)
+
 Ova stranica daje uvod u najčešće koncepte koje ćete koristiti za izgradnju refleks aplikacija.
 
 Naučićete kako da:
@@ -108,7 +110,7 @@ class MyState(rx.State):
 
 ## Reference state vars u komponentama
 
-Da biste referencali state `var` u komponenti, možete ga prozvati kao `children` ili `prop`. Komponenta će se automatski ažurirati kada se `state var` promene.
+Da biste referencali `state var` u komponenti, možete ga prozvati kao `children` ili `prop`. Komponenta će se automatski ažurirati kada se `state var` promene.
 
 `Vars` se pozivaju putem atributa state klase. Na primer, da biste referencali "count" `var` u komponenti "MyState", koristite "MyState.count".
 
@@ -134,9 +136,9 @@ def counter():
 
 Do sada smo definisali state vars, ali nismo pokazali kako da ih promenimo.Sve promene state rukuje se funkcijama u state klasi, koja se nazivaju `event handlers`.
 
-> **Event handlers su jedini način da se promeni state u Refleksu.**
+> **Event handlers su jedini način da se promeni "state" u Refleksu.**
 
-Komponente imaju posebne props, kao što su `on_click`, nazvani `event trigers` koji se mogu koristiti za interaktivne komponente. 
+Komponente imaju posebne props, kao što su `on_click`, nazvani `event trigers` koji se mogu koristiti za interaktivne komponente.
 
 ## Event trigers
 
@@ -160,13 +162,13 @@ def counter_increment():
     )
 ```
 
-Kada se aktivira okidač događaja, poziva se rukovaoc događajem, koji ažurira stanje. UI se automatski preispituje da odražava novi state.
+Kada se aktivira okidač događaja, poziva se rukovaoc događajem, koji ažurira stanje. UI se automatski preispituje da odražava novo stanje.
 
-## What is the @rx.event decorator?
+## Šta je dekorator @rx.event?
 
-### Event handlers with arguments
+### Rukovaoci događaja sa argumentima
 
-Event handlers can also take in arguments. For example, the increment event handler can take an argument to increment the count by a specific amount.
+Rukovodioci događaja takođe mogu da preuzmu argumente. Na primer, obrada  dogadjaja povećanja može da preuzme argument da poveća broj u određenom iznosom.
 
 ```py
 class CounterState2(rx.State):
@@ -190,7 +192,7 @@ def counter_variable():
     )
 ```
 
-The on_click event trigger doesn't pass any arguments here, but some event triggers do. For example, the on_blur event trigger passes the text of an input as an argument to the event handler.
+Okidač događaja `on_click` ovde ne donosi nikakve argumente, ali neki pokretači događaja to rade. Na primer, okidač događaja `on_blur` prosledjuje tekst kao argument na rukovodilac događaja.
 
 ```py
 class TextState(rx.State):
@@ -210,21 +212,23 @@ def text_input():
     )
 ```
 
-Make sure that the event handler has the same number of arguments as the event trigger, or an error will be raised.
+Proverite da li rukovalac događaja ima isti broj argumenata kao i okidač događaja ili će se pojaviti greška.
 
-## Compile-time vs. runtime (IMPORTANT)
+## COMPILE-TIME vs. RUNTIME (VAŽNO)
 
-Before we dive deeper into state, it's important to understand the difference between compile-time and runtime in Reflex.
+Pre nego što zaronimo dublje u stanja, važno je razumeti razliku između vremena kompilacije i izvršavanja u Refleksu.
 
-When you run your app, the frontend gets compiled to Javascript code that runs in the browser (compile-time). The backend stays in Python and runs on the server during the lifetime of the app (runtime).
+Kada pokrenete svoju aplikaciju, frontend je kompajliran od JavaScript koda koji radi u pregledaču (compile-time). Backend ostaje na Pajtonu i radi na serveru tokom života aplikacije (run-time).
 
-When can you not use pure Python?
-We cannot compile arbitrary Python code, only the components that you define. What this means importantly is that you cannot use arbitrary Python operations and functions on state vars in components.
+## Kada ne možete da koristite čisti Pithon?
 
-However, since any event handlers in your state are on the backend, you can use any Python code or library within your state.
+Ne možemo da kompajliramo proizvoljni Pajton kod, samo onaj koji definišemo u komponentama. Važno je da ne možete da koristite proizvoljne operacije i funkcije u Pajtonu na `state vars` u komponentama.
 
-Examples that work
-Within an event handler, use any Python code or library.
+Međutim, budući da su bilo koji rukovaoci događaja u vašoj `state` klasi  na backendu, možete koristiti bilo koji Pajton kod ili biblioteku u svojoj `state` klasi.
+
+### Primeri koji rade
+
+Unutar rukovaoca događaja koristite bilo koji pajton kod ili biblioteku.
 
 ```py
 def check_even(num: int):
@@ -251,7 +255,7 @@ def count_and_check():
     )
 ```
 
-Use any Python function within components, as long as it is defined at compile time (i.e. does not reference any state var)
+Koristite bilo koju funkciju Pajtona u komponentama, sve dok je definisana u compile-time (tj. ne referencira nijednu state var)
 
 ```sh
 0true
@@ -273,8 +277,9 @@ def show_numbers():
     )
 ```
 
-Examples that don't work
-You cannot do an if statement on vars in components, since the value is not known at compile time.
+### Primeri koji ne rade
+
+Ne možete da uradite `if` izjavu na vars u komponentama, jer vrednost nije poznata u `compile-time`.
 
 ```py
 class BadState(rx.State):
@@ -299,7 +304,7 @@ def count_if_even():
     )
 ```
 
-You cannot do a for loop over a list of vars.
+Ne možete pokrenuti `for` petlju na listi vars.
 
 ```py
 class BadState(rx.State):
@@ -312,7 +317,7 @@ def loop_over_list():
     )
 ```
 
-You cannot do arbitrary Python operations on state vars in components.
+Ne možete da uradite proizvodne operacije Pajtonu na state vars u komponentama.
 
 ```py
 class BadTextState(rx.State):
@@ -325,10 +330,11 @@ def format_text():
     )
 ```
 
-In the next sections, we will show how to handle these cases.
+U narednim odeljcima pokazaćemo kako se baviti ovim slučajevima.
 
-Conditional rendering
-As mentioned above, you cannot use Python if/else statements with state vars in components. Instead, use the rx.cond function to conditionally render components.
+## Uslovno prikazivanje
+
+Kao što je gore pomenuto, ne možete da koristite Pajton `is/else` izjave na state vars u komponentama. Umesto toga, koristite `rx.cond` funkciju da uslovno renderujete komponente.
 
 ```py
 class LoginState(rx.State):
@@ -351,10 +357,9 @@ def show_login():
     )
 ```
 
-Rendering lists
-To iterate over a var that is a list, use the rx.foreach function to render a list of components.
+### Renderovanje liste
 
-Pass the list var and a function that returns a component as arguments to rx.foreach.
+Da biste iterirali var koja je lista, koristite funkciju `rx.foreach`. Prenesite var listu i funkciju koja vraća komponentu, kao argumente u `rx.foreach`.
 
 ```py
 class ListState(rx.State):
@@ -373,11 +378,11 @@ def show_fruits():
 
 The function that renders each item takes in a Var, since this will get compiled up front.
 
-## Var Operations
+## Var operacije
 
-You can't use arbitrary Python operations on state vars in components, but Reflex has var operations that you can use to manipulate state vars.
+Ne možete koristiti proizvoljne operacije na state vars u komponentama, ali Refleks ima var operacije koje možete koristiti za manipulisanje state vars.
 
-For example, to check if a var is even, you can use the % and == var operations.
+Na primer, da biste proverili da li je var parna, možete koristiti `%` i `==` var operacije.
 
 ```py
 class CountEvenState(rx.State):
@@ -402,9 +407,9 @@ def count_if_even():
     )
 ```
 
-## App and Pages
+## Aplikacija i strane
 
-Reflex apps are created by instantiating the rx.App class. Pages are linked to specific URL routes, and are created by defining a function that returns a component.
+Refleks aplikacije se kreiraju instantirajući `rx.app` klasu. Stranice su povezane sa specifičnim rutama za URL i stvaraju se definisanjem funkcije koja vraća komponentu.
 
 ```py
 def index():
@@ -414,9 +419,11 @@ rx.app = rx.App()
 app.add_page(index, route="/")
 ```
 
-## Next Steps
+## Sledeći koraci
 
-Now that you have a basic understanding of how Reflex works, the next step is to start coding your own apps. Try one of the following tutorials:
+Sada kada imate osnovno razumevanje načina na koji Refleks radi, sledeći korak je početak kodiranja sopstvenih aplikacija. Probajte i sledeće tutorijala:
 
-- Dashboard Tutorial
-- Chatapp Tutorial
+- Dashboard Tutorijal
+- Chatapp Tutorijal
+
+[Instalacija](02_install.md) [Sadržaj](00_sadrzaj.md) []04_.md)
