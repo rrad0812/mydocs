@@ -1,4 +1,7 @@
+
 # Tutorial: Data Dashboard
+
+[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md) [](06_.md)
 
 Tokom ovog tutorijala izgradićete malu kontrolnu tablu za podatke, gde možete da unesete podatke i to će se pružiti u tabeli i grafikonu.Ovaj vodič ne preuzima bilo kakvo postojeće znanje Refleksa, ali preporučujemo da prvo proveramo vodič za brze osnove.
 
@@ -1188,3 +1191,5 @@ Pored gore navedenog imamo
 - `Event hendlere` koji vam omogućavaju da vaš aplikaciju učinite interaktivnom i odgovorite na
   korisničke akcije
 - Dodat je stil u aplikaciju kako bi izgledala bolje.
+
+[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md) [](06_.md)

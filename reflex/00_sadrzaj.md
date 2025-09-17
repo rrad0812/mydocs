@@ -10,3 +10,5 @@
 ## [Osnove](03_basic.md)
 
 ## [Struktura projekta](04_project_structure.md)
+
+## [DataDashboard tutorijal](05_datadashboard.md)

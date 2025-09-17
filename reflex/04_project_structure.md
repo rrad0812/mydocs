@@ -1,7 +1,7 @@
 
 # Struktura projekta
 
-[Osnove](03_basic.md) [Sadržaj](00_sadrzaj.md) [](05_.md)
+[Osnove](03_basic.md) [Sadržaj](00_sadrzaj.md) [DataDashboard Tutorijal](05_datadashboard.md)
 
 ## Struktura direktorijuma
 
@@ -63,4 +63,4 @@ config = rx.Config(
 
 Komentarisaćemo ćemo strukturu projekata i konfiguracije detaljnije u naprednoj dokumentaciji strukture projekta.
 
-[Osnove](03_basic.md) [Sadržaj](00_sadrzaj.md) [](05_.md)
+[Osnove](03_basic.md) [Sadržaj](00_sadrzaj.md) [DataDashboard Tutorijal](05_datadashboard.md)
