@@ -10,11 +10,11 @@ Ovaj vodič je podeljen na nekoliko odeljka:
 - **Pregled**: Osnove reflekskog UI (komponente i rekvizite)
 - **Pokazivanje dinamičnih podataka**: Kako se koristi država da se  
   prikaže podaci koji će se promeniti u vašoj aplikaciji.
-- **Dodajte podatke na svoju aplikaciju**: pomoću obrasca da biste 
+- **Dodajte podatke na svoju aplikaciju**: pomoću obrasca da biste
   omogućili da korisnik dodaje podatke u vašu aplikaciju i uvesti rukovatelje događajima.
-- **Izveštavanje podataka na grafikonu**: Kako se koristi rezervne 
+- **Izveštavanje podataka na grafikonu**: Kako se koristi rezervne
   komponente refleksa.
-- **Završno čišćenje i zaključak**: Kako dalje prilagoditi svoju 
+- **Završno čišćenje i zaključak**: Kako dalje prilagoditi svoju
   aplikaciju i dodajte neko dodatno stiling na to.
 
 **Šta gradite?**
@@ -190,17 +190,17 @@ Biraćemo šablon `0` kada pokrećemo `reflex init` da biste dobili prazan obraz
 
 ## Pregled
 
-Sad kad smo postavljeni, hajde da uzmemo pregled Refleksa!
+Sad kad smo postavljeni, hajde da malo pregledamo Refleksa!
 
 ### Pregled starterskog koda
 
-Unutar našeg dashboard_tutorial direktorijuma, upravo smo se `cd`, nalazi se i `rxconfig.py` datoteka koja sadrži konfiguraciju za našu Refleks aplikaciju. 
+Unutar našeg `dashboard_tutorial` direktorijuma, unutra smo sa `cd`, nalazi se i `rxconfig.py` datoteka koja sadrži konfiguraciju za našu Refleks aplikaciju.
 
 Postoji i direktorijum `assets` u koji se mogu postaviti statičke datoteke poput slika i stilova, da bi se referencirali u vašoj aplikaciji.
 
-Ono što je najvažnije, postoji i direktorijum koja se takođe zove Dashboard_Tutorial, koji sadrži sav kod za vašu aplikaciju. Unutar ovog direktorijuma nalazi se datoteka po imenu `Dashboard_Tutorial.py`. Da biste započeli ovaj vodič, izbrisaćemo sve kodove u ovoj datoteci tako da možemo početi ispočetka i objasniti svaki korak dok idemo napred.
+Ono što je najvažnije, postoji i direktorijum koja se takođe zove `dashboard_tutorial`, koji sadrži sav kod za vašu aplikaciju. Unutar ovog direktorijuma nalazi se datoteka po imenu `dashboard_tutorial.py`. Da biste započeli ovaj vodič, izbrisaćemo sav kod u ovoj datoteci tako da možemo početi ispočetka i objasniti svaki korak dok idemo napred.
 
-Prvo što moramo da uradimo je uvoz Refleks-a. Jednom kada to učinimo, možemo da stvorimo komponentu, koja je deo korisničkog interfejsa. Komponente se koriste za prikazivanje, upravljanje i ažuriranje UI elemenata u vašoj aplikaciji.
+Prvo što moramo da uradimo je uvoz Refleks-a. Jednom kada to učinimo, možemo da stvaramo komponentu, koja je deo korisničkog interfejsa. Komponente se koriste za prikazivanje, upravljanje i ažuriranje UI elemenata u vašoj aplikaciji.
 
 Pogledajmo primer ispod. Ovde imamo funkciju pod nazivom `index` koji vraća tekstualnu komponentu (ugrađena Refleks UI komponenta) koja prikazuje tekst "Hello World!".
 
@@ -216,11 +216,7 @@ app = rx.App()
 app.add_page(index)
 ```
 
-Ovaj kod će renderisati stranu sa tekstom "Hello World!" kada pokrenemo aplikaciju:
-
-```sh
-Hello World!
-```
+Ovaj kod će renderisati stranu sa tekstom "Hello World!" kada pokrenemo aplikaciju.
 
 Za ostatak tutorijala kod:
 
@@ -229,11 +225,11 @@ app = rx.App()
 app.add_page 
 ```
 
-će se podrazumevati i da nije prikazan u isečcima koda.
+će se podrazumevati i ako nije prikazan u isečcima koda.
 
 ### Kreiranje tabele
 
-Kreirajmo novu komponentu koja će prikazati tabelu. Koristićemo komponentu `rx.table` da to uradimo.Komponenta rx.table ima `root`, koji uzima `header` i `body`, koje zauzvrat uzima u komponente `row`. Komponenta `row` uzima `cell` komponente koje su stvarni podaci koji će se prikazati u tabeli.
+Kreirajmo novu komponentu koja će prikazati tabelu. Koristićemo komponentu `rx.table` da to uradimo. Komponenta `rx.table` ima `root`, koji uzima `header` i `body`, koje zauzvrat uzima u komponente `row`. Komponenta `row` uzima `cell` komponente u kojoj su stvarni podaci koji će se prikazati u tabeli.
 
 ```py
 def index() -> rx.Component:
@@ -262,7 +258,7 @@ def index() -> rx.Component:
 
 Komponente u Refleksu imaju `props`, koje se mogu koristiti za prilagođavanje komponenti i prenose se kao argumenti ključnih reči na funkciju komponente.
 
-rx.table.root komponenta ima `variant` i `size` props, koji prilagođavaju tabelu kao što se vidi  u daljem tekstu.
+`rx.table.root` komponenta ima `variant` i `size` props, koji prilagođavaju tabelu kao što se vidi  u daljem tekstu.
 
 ```py
 def index() -> rx.Component:
@@ -293,13 +289,13 @@ def index() -> rx.Component:
 
 ### Prikazivanje dinamičkih podataka (State)
 
-Do ove tačke sve podatke koje se prikazujemo u aplikaciji je statički. Ovo nije baš korisno za kontrolnu tablu za podatke. Moramo biti u mogućnosti da pokažemo dinamičke podatke koji se mogu dodati i ažurirati.
+Do ove tačke sve podatke koje se prikazujemo u aplikaciji su statički. Ovo nije baš korisno za kontrolnu tablu za podatke. Moramo biti u mogućnosti da pokažemo dinamičke podatke koji se mogu dodati i ažurirati.
 
 Ovde ulazi klasa `state`. `State` je pajton klasa koja čuva promenljive koje se mogu promeniti kada se aplikacija pokrene, kao i funkcije koje mogu promeniti te promenljive.
 
-Da biste definisali `State` klasu, potklasirajte `rx.state` i definišite polja koja čuvaju stanje vaše aplikacije. State promenljive ( vars ) treba da imaju napomenu tipa i mogu se inicijalizovati podrazumevanom vrednošću.
+Da biste definisali `State` klasu, potklasirajte `rx.state` i definišite polja koja čuvaju stanje vaše aplikacije. State promenljive ( vars ) treba da imaju `napomenu tipa` i mogu se inicijalizovati podrazumevanom vrednošću.
 
-U donjem primeru definišemo `state` klasu pod nazivom "State" koje ima promenljivu koja se zove "users" koja je lista lista stringova. Svaka lista u listi "users" predstavlja korisnike i sadrži njihovo ime, e-poštu i pol.
+U donjem primeru definišemo `State` klasu koje ima promenljivu koja se zove "users" koja je lista lista stringova. Svaka lista u listi "users" predstavlja korisnike i sadrži njihovo "name", "e-mail" i "pol".
 
 ```py
 class State(rx.State):
@@ -309,12 +305,11 @@ class State(rx.State):
     ]
 ```
 
-Da bi se iteriralo preko state var koji je lista, koristimo funkciju `rx.foreach` da renderujemo listu komponenti. `rx.foreach` uzima iterable (listu, tuple ili dict) i funkciju koja renderuje svaku  stavku u iterable-u.
+Da bi se iteriralo preko state varijabli, koje su ovde tipa liste, koristimo funkciju `rx.foreach` da renderujemo listu komponenti. `rx.foreach` uzima iterable (listu, tuple ili dict) i funkciju koja renderuje svaku  iterable stavku.
 
 > [!Note]
 >
-> Zašto ne možemo samo da prodjemo samo sa for petljom?
-> Pogledajte dokumentaciju da biste saznali zašto.
+> Zašto ne možemo samo da prodjemo sa for petljom?
 
 Ovde je render funkcija "show_user" koja uzima u jednog korisnika i vraća `tabelu.row` komponentu koja prikazuje ime korisnika, e-poštu i pol.
 
@@ -350,19 +345,19 @@ def index() -> rx.Component:
     )
 ```
 
-Kao što vidite, izlaz gore izgleda isto kao i pre, osim sada, podaci više nisu statički i mogu se menjati iz korisničkog ulaza u aplikaciju.
+Kao što vidite, izlaz izgleda isto kao i pre, osim što sada podaci više nisu statički i mogu se menjati iz korisničkog ulaza u aplikaciju.
 
-### Korišćenje odgovarajuće strukture klase za naše podatke
+### Korišćenje odgovarajuće strukture klase za podatke
 
-Do sada su naši podaci definisani na listi lista, gde se podacima pristupa indeksom tj users[0], users[1]. Ovo nije baš održivo, jer će naša aplikacija postajati sve veća.
+Do sada su naši podaci definisani kao lista listi stringova, gde se podacima pristupa indeksom tj users[0], users[1]. Ovo nije baš održivo, jer će naša aplikacija postajati sve veća.
 
-Bolji način strukturiranja naših podataka u Refleksu je da koristite klasu da bi predstavljali korisnika. Na ovaj način možemo pristupiti podacima koji koriste atribute, tj. "user.name", "user.email".
+Bolji način strukturiranja naših podataka u Refleksu je da koristite klasu da bi predstavljali "users". Na ovaj način možemo pristupiti podacima koristeći atribute klase, tj. "user.name", "user.email".
 
 U Refleksu kada kreiramo ove klase da bismo prikazali naše podatke, klasa mora naslediti od `rx.Base` klase.
 
-`rx.Base` je takođe neophodna ako želimo da imamo state var koji je iterable sa različitim tipovima. Na primer, ako bismo želeli da imamo `age` kao `int`, morali bismo da koristimo rx.Base jer to nismo mogli da uradimo sa state var definisanim kao `list[list[str]]`.
+`rx.Base` je takođe neophodna ako želimo da imamo state varijable koje su iterable sa različitim tipovima. Na primer, ako bismo želeli da imamo `age` kao `int`, morali bismo da koristimo `rx.Base` jer to nismo mogli da uradimo sa state varijable definisanim kao `list[list[str]]`.
 
-Render funkcija "show_user" se takođe ažurira da bi pristupila podacima imenovanim atributima, umesto indeksiranja.
+Render funkcija "show_user" se takođe ažurira da bi pristupila podacima preko atributa, umesto indeksiranja.
 
 ```py
 class User(rx.Base):
@@ -414,16 +409,18 @@ Zatim dodajemo formu na aplikaciju, tako da možemo dodati nove korisnike na tab
 
 ### Korišćenje forme za dodavanje podataka
 
-Izgrađujemo obrazac koji koristi `rx.form`, koji uzima nekoliko komponenti kao što su `rx.input` i `rx.select`, koji predstavljaju polja u formi, koji vam omogućavaju da dodate informacije.
+Kreiramo obrazac koji koristi `rx.form`, koji uzima nekoliko komponenti kao što su `rx.input` i `rx.select`, koji predstavljaju polja u formi, koji vam omogućavaju da dodate informacije.
 
-`rx.input` komponenta uzima u nekoliko props-ova. `placeholder` je tekst koji je prikazan u polju za unos kada je prazno. `name` Prop je ime ulaznog polja, koje se prenosi u rečniku kada se obrazac submituje. `required` prop je `boolean` koji određuje da li je polje obavezno za unos.
+`rx.input` komponenta uzima u nekoliko props-ova. `placeholder` je tekst koji je prikazan u polju za unos kada je prazno. `name` prop je ime ulaznog polja, koje se prenosi u rečniku kada se obrazac submituje. `required` prop je `boolean` koji određuje da li je polje obavezno za unos.
 
 `rx.select` komponenta uzima listu opcija koje su prikazane u padajućem meniju. Ostali props ovde su identični `rx.input` komponenti.
 
 ```py
 rx.form(
     rx.input(
-        placeholder="User Name", name="name", required=True
+        placeholder="User Name", 
+        name="name", 
+        required=True
     ),
     rx.input(
         placeholder="user@reflex.dev",
@@ -437,7 +434,7 @@ rx.form(
 )
 ```
 
-This form is all very compact as you can see from the example, so we need to add some styling to make it look better. We can do this by adding a vstack component around the form fields. The vstack component stacks the form fields vertically. Check out the layout docs for more information on how to layout your app.
+Ova forma je vrlo kompaktna što možete videti iz primera, tako da moramo da dodamo malo stila da bi izgledalo bolje. To možemo učiniti dodavanjem komponente `vstac` oko polja forme. Komponenta `vstack` postavlja elemente forme vertikalno.
 
 ```py
 rx.form(
@@ -460,22 +457,19 @@ rx.form(
 )
 ```
 
-Now you have probably realised that we have all the form fields, but we have no way to submit the form. We can add a submit button to the form by adding a rx.button component to the vstack component. The rx.button component takes in the text that is displayed on the button and the type prop which is the type of button. The type prop is set to submit so that the form is submitted when the button is clicked.
+Sada ste verovatno shvatili da imamo sva polja forme, ali nemamo načina da podnesemo formu. Postavite dugme za slanje u forme dodavanjem `rx.button` komponente u `vstack` komponentu. `rx.button` komponenta uzima  tekst koji je prikazan na dugmetu i prop `type=submit`. Prop `type` je postavljen da forma podnese kada se kliknete na dugme.
 
-In addition to this we need a way to update the users state variable when the form is submitted. All state changes are handled through functions in the state class, called event handlers.
+Pored ovoga, potreban nam je način da ažuriramo `state` promenljivu `users` kada se obrazac podnese. Sve promene `state` rukuje se funkcijama u `state` klasi, koje se nazivaju `event henlerima`.
 
-Components have special props called event triggers, such as on_submit, that can be used to make components interactive. Event triggers connect components to event handlers, which update the state. Different event triggers expect the event handler that you hook them up to, to take in different arguments (and some do not take in any arguments).
+Komponente imaju specijalne props nazvane `event trigeri`, kao što su `on_submit`, koji se mogu koristiti za interaktivne komponente. `Event trigeri` povezuju komponente i `event hendlere`, koje ažuriraju `state`.Različiti `event trigeri` očekuju da od `event hendleri` da će im proslediti različite argumente (a neki ne uzimaju argumente).
 
-The on_submit event trigger of rx.form is hooked up to the add_user event handler that is defined in the State class. This event trigger expects to pass a dict, containing the form data, to the event handler that it is hooked up to. The add_user event handler takes in the form data as a dictionary and appends it to the users state variable.
+Triger u `rx.form`, `on_submit` zakačen je na event hendler `add_user` koji je definisan u `state` klasi. Ovaj event triger očekuje da će proslediti vrednosti polja forme, ka event hendleru "add_user". Podaci obrasca se pruzimaju kao rečnik, i dodaje u promenljivu "users" klase `state`.
 
 ```py
 class State(rx.State):
-
     ...
-
     def add_user(self, form_data: dict):
         self.users.append(User(**form_data))
-
 
 def form():
     return rx.form(
@@ -501,9 +495,9 @@ def form():
     )
 ```
 
-Finally we must add the new form() component we have defined to the index() function so that the form is rendered on the page.
+Konačno moramo dodati novu form komponentu koju smo definisali na `index()` funkciju tako da se obrazac donese na stranici.
 
-Below is the full code for the app so far. If you try this form out you will see that you can add new users to the table by filling out the form and clicking the submit button. The form data will also appear as a toast (a small window in the corner of the page) on the screen when submitted.
+Ispod je do sada kompletan kod za aplikaciju. Ako isprobate ovu formu, videćete da možete dodati nove korisnike na tabelu popunjavanjem forme i klikom na dugme za slanje. Podaci iz forme će se takođe pojaviti kao tost (mali prozor u uglu stranice) na ekranu kada je dostavljen.
 
 ```py
 class State(rx.State):
@@ -574,11 +568,11 @@ def index() -> rx.Component:
     )
 ```
 
-Putting the Form in an Overlay
+### Postavljanje obrasca u overlay
 
-In Reflex, we like to make the user interaction as intuitive as possible. Placing the form we just constructed in an overlay creates a focused interaction by dimming the background, and ensures a cleaner layout when you have multiple action points such as editing and deleting as well.
+U Refleksu, volimo da korisnička interakcija bude što intuitivnija.Postavljanje forme koju smo upravo izgradili u overlay stvara fokusiranu interakciju zatamljavanjem pozadine i osigurava čistiji izgled kada imate više akcionih tačaka kao što su i uređivanje i brisanje.
 
-We will place the form inside of a rx.dialog component (also called a modal). The rx.dialog.root contains all the parts of a dialog, and the rx.dialog.trigger wraps the control that will open the dialog. In our case the trigger will be an rx.button that says "Add User" as shown below.
+Forma će postaviti unutar komponente `rx.dialog` (takođe naziva se modal). `rx.dialog.root` sadrži sve delove dijaloga i `rx.dialog.trigger` omotava kontrolu koja će otvoriti dijalog. U našem slučaju triger će biti `rx.button` koji kaže "Dodavanje korisnika" kao što je prikazano u nastavku.
 
 ```py
 rx.dialog.trigger(
@@ -589,7 +583,7 @@ rx.dialog.trigger(
 )
 ```
 
-After the trigger we have the rx.dialog.content which contains everything within our dialog, including a title, a description and our form. The first way to close the dialog is without submitting the form and the second way is to close the dialog by submitting the form as shown below. This requires two rx.dialog.close components within the dialog.
+Nakon trigera imamo `rx.dialog.content` koji sadrži sve u našem dijalogu, uključujući naslov, opis i našu formu. Prvi put za zatvaranje dijaloga bez slanja forme i drugog put je da zatvorite dijalog podnošenjem forme kao što je prikazano u nastavku. Ovo zahteva dva `rx.dialog.close` komponente u okviru dijaloga.
 
 ```py
 rx.dialog.close(
@@ -604,7 +598,7 @@ rx.dialog.close(
 )
 ```
 
-The total code for the dialog with the form in it is below.
+Ukupni kod za dijalog sa formom u njemu je u nastavku.
 
 ```py
 rx.dialog.root(
@@ -664,7 +658,7 @@ rx.dialog.root(
 )
 ```
 
-At this point we have an app that allows you to add users to a table by filling out a form. The form is placed in a dialog that can be opened by clicking the "Add User" button. We change the name of the component from form to add_customer_button and update this in our index component. The full app so far and code are below.
+U ovom trenutku imamo aplikaciju koja vam omogućava da dodate korisnike na tabelu popunjavanjem forme. Forma se postavlja u dijalog koji se može otvoriti klikom na dugme "Dodaj korisnika". Mi promenimo ime komponente iz forme da biste dodaj_customer_button i ažurirali to u našoj komponenti index. Do sada je puna aplikacija i kod je ispod.
 
 ```py
 class User(rx.Base):
@@ -775,12 +769,13 @@ def index() -> rx.Component:
     )
 ```
 
-Plotting Data in a Graph
+### Crtanje podataka u grafikonu
 
-The last part of this tutorial is to plot the user data in a graph. We will use Reflex's built-in graphing library recharts to plot the number of users of each gender.
+Poslednji deo ovog vodiča je da se korisnički podaci ugrade u grafikon. Koristićemo ugrađenu grafičku biblioteku Refleksa `Recharts`.
 
-Transforming the data for the graph
-The graphing components in Reflex expect to take in a list of dictionaries. Each dictionary represents a data point on the graph and contains the x and y values. We will create a new event handler in the state called transform_data to transform the user data into the format that the graphing components expect. We must also create a new state variable called users_for_graph to store the transformed data, which will be used to render the graph.
+#### Transformacija podataka za graf
+
+Komponente grafikona u Refleksu očekuju da će preuzeti listu rečnika. Svaki rečnik predstavlja podatke o podacima na grafikonu i sadrži vrednosti X i Y. Napravićemo novi event hendler u klasi `state` pod nazivom "transform_data" da transformišete korisničke podatke u format koji očekuju grafičke komponente. Moramo takođe stvoriti novu `state` promenljivu pod nazivom "users_for_graph" za čuvanje transformisanih podataka koji će se koristiti za pružanje grafikona.
 
 ```py
 from collections import Counter
@@ -807,14 +802,15 @@ class State(rx.State):
         ]
 ```
 
-As we can see above the transform_data event handler uses the Counter class from the collections module to count the number of users of each gender. We then create a list of dictionaries from this which we set to the state var users_for_graph.
+Kao što vidimo iznad transform_data event hendler koristi `Counter` klasu iz modula `collections` da broji broj korisnika svakog pola. Zatim kreiramo lisu rečnika iz ovoga koje smo postavili na "users" state "users_for_graph".
 
-Finally we can see that whenever we add a new user through submitting the form and running the add_user event handler, we call the transform_data event handler to update the users_for_graph state variable.
+Napokon možemo videti da kad god dodamo novog korisnika podnesemo formu i pokrenemo "add_user" event hendler, pozivamo transform_data da bismo ažurirali users_for_graph `state` promenljiva.
 
-Rendering the graph
-We use the rx.recharts.bar_chart component to render the graph. We pass through the state variable for our graphing data as data=State.users_for_graph. We also pass in a rx.recharts.bar component which represents the bars on the graph. The rx.recharts.bar component takes in the data_key prop which is the key in the data dictionary that represents the y value of the bar. The stroke and fill props are used to set the color of the bars.
+### Izavanje grafikona
 
-The rx.recharts.bar_chart component also takes in rx.recharts.x_axis and rx.recharts.y_axis components which represent the x and y axes of the graph. The data_key prop of the rx.recharts.x_axis component is set to the key in the data dictionary that represents the x value of the bar. Finally we add width and height props to set the size of the graph.
+Koristimo komponentu `rx.recharts.bar_chart` da izdamo grafikon. Prolazimo kroz `state` promenljivu za naše grafičke podatke kao `data = State.users_for_graph`.Takođe prolazimo u komponentu `rx.recharts.bar` koja predstavlja trake na grafikonu. Komponenta `rx.recharts.bar` uzima `data_key` prop koji je ključ u rečniku podataka koji predstavlja i vrednost bara. `Stroke` i prop `fill` koriste se za postavljanje boje traka.
+
+Komponenta `rx.recharts.bar_component` takođe uzima `rx.recharts.x_axis` i `rx.recharts.y_axis` komponente koje predstavljaju X i Y ose grafikona. `data_key` komponenta `rx.recharts.x_axis` postavljen je na ključ u rečniku podataka koji predstavlja X vrednost trake. Napokon dodajemo širinu i visine props-a da podesimo veličinu grafikona.
 
 ```py
 def graph():
@@ -832,7 +828,7 @@ def graph():
     )
 ```
 
-Finally we add this graph() component to our index() component so that the graph is rendered on the page. The code for the full app with the graph included is below. If you try this out you will see that the graph updates whenever you add a new user to the table.
+Konačno dodajemo ovu "graph()" komponentu na našu "index()" komponentu tako da se graf prikazuje na strani. Uključen je kod za celokupnu aplikaciju sa uključenim grafikonom. Ako isprobate to, videćete da se graf ažurira kad god dodate novog korisnika na tabelu.
 
 ```py
 from collections import Counter
@@ -969,19 +965,19 @@ def index() -> rx.Component:
     )
 ```
 
-One thing you may have noticed about your app is that the graph does not appear initially when you run the app, and that you must add a user to the table for it to first appear. This occurs because the transform_data event handler is only called when a user is added to the table. In the next section we will explore a solution to this.
+Jedna stvar koju ste možda primetili o vašoj aplikaciji jeste da se grafikon ne pojavljuje u početku kada pokrenete aplikaciju i da morate da dodate korisnika na tabelu da se prvi put pojavi.To se događa zato što se event hendler "transform_data" poziva samo kada se korisnik doda u tabelu.U sledećem odeljku istražićemo rešenje i za to.
 
-### Final Cleanup
+### Finalni kod
 
-Revisiting app.add_page
+#### Revizija app.add_page
 
-At the beginning of this tutorial we mentioned that the app.add_page function is required for every Reflex app. This function is used to add a component to a page.
+Na početku ovog tutorial spomenuo smo da je objekat aplikacije potreban za svaku Refleks aplikaciju. Ova funkcija se koristi za dodavanje komponente na stranicu.
 
-The app.add_page currently looks like this app.add_page(index). We could change the route that the page renders on by setting the route prop such as route="/custom-route", this would change the route to http://localhost:3000/custom-route for this page.
+`App.add_page` trenutno izgleda kao ova `app.add_page (index)`. Mogli bismo promeniti rutu da se na stranici redovno postavljajući rutu kao što je "/prilagođena ruta", to bi promenilo rutu na <http://localhost:3000/prilagođena_ruta> za ovu stranicu.
 
-We can also set a title to be shown in the browser tab and a description as shown in search results.
+Takođe možemo da postavimo naslov koji će se prikazati na kartici pregledača i opisu kao što je prikazano u rezultatima pretrage.
 
-To solve the problem we had above about our graph not loading when the page loads, we can use on_load inside of app.add_page to call the transform_data event handler when the page loads. This would look like on_load=State.transform_data. Below see what our app.add_page would look like with some of the changes above added.
+Da bismo rešili problem koji smo imali gore u našem grafikonu, da se ne učitava kada se stranica učitava, možemo da koristimo `on_load` unutar aplikacije da biste nazvali "transformr_data" event hendler za event kada se stranica učitava. Ovo bi izgledalo kao `onload = state.transform_data`.Ispod pogledajte kako bi izgledala naša `app.add_page`, sa nekim od gore navedenih promena.
 
 ```py
 app.add_page(
@@ -992,17 +988,17 @@ app.add_page(
 )
 ```
 
-Revisiting app=rx.App()
+#### Revizija app = rx.app()
 
-At the beginning of the tutorial we also mentioned that we defined our app using app=rx.App(). We can also pass in some props to the rx.App component to customize the app.
+Na početku tutoriala spominjali smo i da smo definisali našu aplikaciju koristeći `app = rx.app()`.Takođe možemo da prođemo sa nekim propsima u komponentu rx.app da prilagodimo aplikaciju.
 
-The most important one is theme which allows you to customize the look and feel of the app. The theme prop takes in an rx.theme component which has several props that can be set.
+Najvažnija je tema koja vam omogućava da prilagodite izgled i osećaj aplikacije. Prop `theme` je uzima `rx.theme` komponentu koja ima nekoliko propsova koji se mogu postaviti.
 
-The radius prop sets the global radius value for the app that is inherited by all components that have a radius prop. It can be overwritten locally for a specific component by manually setting the radius prop.
+`Radius` prop postavlja vrednost globalne promenljive `radius` za aplikaciju koju je nasledjuju sve komponente koje imaju props `radius`. Može se prepisati lokalno za određenu komponentu, ručnim postavljanjem vrednosti props `radius` komponente.
 
-The accent_color prop sets the accent color of the app. Check out other options for the accent color here.
+`accent_color` prop postavlja boju aplikacije.
 
-To see other props that can be set at the app level check out this documentation
+Da biste videli ostale props koji se mogu podesiti na nivou aplikacije pogledajte dokumentaciju.
 
 ```py
 app = rx.App(
@@ -1010,15 +1006,15 @@ app = rx.App(
 )
 ```
 
-Unfortunately in this tutorial here we cannot actually apply this to the live example on the page, but if you copy and paste the code below into a reflex app locally you can see it in action.
+Nažalost, u ovom tutorialu, to zapravo ne možemo primeniti na primeru uživo na stranici, ali ako kopirate i zalepite kod ispod u Refleks aplikaciju lokalno, možete je videti u akciji.
 
-## Conclusion
+## Zaključak
 
-Finally let's make some final styling updates to our app. We will add some hover styling to the table rows and center the table inside the show_user with style=\{"_hover": {"bg": rx.color("gray", 3)}}, align="center".
+Napokon da napravimo neke konačne stilske ispravke na našu aplikaciju. Dodaćemo neki lebdeći stil na redove tabele i sredinu tabele u "show_user" sa stilom = \ {"_ Hover": {"BG": rk.color ("siva", 3)}}, align = "Centar".
 
-In addition, we will add some width="100%" and align="center" to the index() component to center the items on the page and ensure they stretch the full width of the page.
+Pored toga, dodaćemo nešto širine = "100%" i Align = "Center" na "index()" komponentu da centrira stavke na stranici i osiguramo da se proteže punu širinu strane.
 
-Check out the full code and interactive app below:
+Pogledajte potpuni kod i interaktivnu aplikaciju ispod:
 
 ```py
 import reflex as rx
@@ -1179,15 +1175,16 @@ app.add_page(
 )
 ```
 
-And that is it for your first dashboard tutorial. In this tutorial we have created
+I to je to za vaš prvi tutorijal kontrolne table. U ovom tutorialu smo stvorili:
 
-- a table to display user data
-- a form to add new users to the table
-- a dialog to showcase the form
-- a graph to visualize the user data
+- Tabelu za prikazivanje podataka korisnika
+- Formu za dodavanje novih korisnika na tabelu
+- Dijalog za prikazivanje forme
+- Grafikon za vizualizaciju korisničkih podataka
 
-In addition to the above we have we have
+Pored gore navedenog imamo
 
-- explored state to allow you to show dynamic data that changes over time
-- explored events to allow you to make your app interactive and respond to user actions
-- added styling to the app to make it look better
+- Klasu `state` da vam omogući da pokažete dinamičke podatke koji se vremenom menjaju
+- `Event hendlere` koji vam omogućavaju da vaš aplikaciju učinite interaktivnom i odgovorite na
+  korisničke akcije
+- Dodat je stil u aplikaciju kako bi izgledala bolje.
