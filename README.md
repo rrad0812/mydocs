@@ -12,8 +12,8 @@
 
   - Django Admin
     - Kuvar
-    - Tips and tricks
     - Trikovi
+    - Penzije
   
   - `Jam.py`
     - Framework review
