@@ -20,6 +20,8 @@
     - Tutorial - transcribed videos
 
   - Reflex
+  - SQLAlchemy
+  - IoC i DI u pajtonu
   
 - Ubuntu
 
