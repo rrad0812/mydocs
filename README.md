@@ -1,12 +1,10 @@
 
 # Sadržaj
 
-- SQLAlchemy
 - Baze podataka
 - Django Admin
   - Kuvar
   - Trikovi
-  - Penzije
 - Docker
 - GoLang
   - Http API Demo
@@ -19,6 +17,7 @@
   - Tutorial - transcribed videos
 - Python misc
 - Reflex  
+- SQLAlchemy
 - Ubuntu
 
 Radosav.
