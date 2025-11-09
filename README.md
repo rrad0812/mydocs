@@ -21,4 +21,4 @@
 - Ubuntu
 
 Radosav.
-avg - sept. 2025.
+avg - nov. 2025.
