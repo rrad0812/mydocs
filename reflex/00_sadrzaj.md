@@ -12,3 +12,5 @@
 ## [Struktura projekta](04_project_structure.md)
 
 ## [DataDashboard tutorijal](05_datadashboard.md)
+
+## [AI Chat app tutorijal](06_AI_Chat_app.md)

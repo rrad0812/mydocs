@@ -1,7 +1,7 @@
 
-# Tutorial: Data Dashboard
+# Tutorijal: Data Dashboard
 
-[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md)
+[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md) [AI Chat app](06_AI_Chat_app.md)
 
 Tokom ovog tutorijala izgradićete malu kontrolnu tablu za podatke, gde možete da unesete podatke i to će se prikazati u tabeli i grafikonu.Ovaj vodič ne pretpostavlja bilo kakvo postojeće znanje Refleksa, ali preporučujemo da prvo proverite vodič "Osnove Reflexa".
 
@@ -1195,4 +1195,4 @@ Pored gore navedenog imamo
   korisničke akcije
 - Dodat je stil u aplikaciju kako bi izgledala bolje.
 
-[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md)
+[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md) [AI Chat app](06_AI_Chat_app.md)
