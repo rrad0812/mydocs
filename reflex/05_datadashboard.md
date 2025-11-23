@@ -1,24 +1,20 @@
 
 # Tutorial: Data Dashboard
 
-[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md) [](06_.md)
+[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md)
 
-Tokom ovog tutorijala izgradićete malu kontrolnu tablu za podatke, gde možete da unesete podatke i to će se pružiti u tabeli i grafikonu.Ovaj vodič ne preuzima bilo kakvo postojeće znanje Refleksa, ali preporučujemo da prvo proveramo vodič za brze osnove.
+Tokom ovog tutorijala izgradićete malu kontrolnu tablu za podatke, gde možete da unesete podatke i to će se prikazati u tabeli i grafikonu.Ovaj vodič ne pretpostavlja bilo kakvo postojeće znanje Refleksa, ali preporučujemo da prvo proverite vodič "Osnove Reflexa".
 
 Tehnike koje ćete naučiti u vodiču su od suštinskog značaja za izgradnju bilo koje Refleks aplikacije i u potpunosti razumeti da će vam pružiti duboko razumevanje Refleksa.
 
 Ovaj vodič je podeljen na nekoliko odeljka:
 
 - **Podešavanje za tutorial**: Polazište za praćenje vodiča
-- **Pregled**: Osnove reflekskog UI (komponente i rekvizite)
-- **Pokazivanje dinamičnih podataka**: Kako se koristi država da se  
-  prikaže podaci koji će se promeniti u vašoj aplikaciji.
-- **Dodajte podatke na svoju aplikaciju**: pomoću obrasca da biste
-  omogućili da korisnik dodaje podatke u vašu aplikaciju i uvesti rukovatelje događajima.
-- **Izveštavanje podataka na grafikonu**: Kako se koristi rezervne
-  komponente refleksa.
-- **Završno čišćenje i zaključak**: Kako dalje prilagoditi svoju
-  aplikaciju i dodajte neko dodatno stiling na to.
+- **Pregled**: Osnove refleks UI (komponente i rekvizite)
+- **Pokazivanje dinamičnih podataka**: Kako se koristi stanja da se prikažu podaci u aplikaciji.
+- **Dodajte podatke na svoju aplikaciju**: pomoću obrasca i uveđenje rukovaoce događajima.
+- **Izveštavanje podataka na grafikonu**: Kako se koristi komponente refleksa.
+- **Završno čišćenje i zaključak**: Kako dalje prilagoditi svoju aplikaciju i dodati stil na to.
 
 **Šta gradite?**
 
@@ -187,13 +183,13 @@ Ne brinite ako ne razumete gornji kod, u ovom tutorialu ćemo vas prošetati kro
 
 ## Podešavanje za tutorial
 
-Pogledajte dokumente u instalaciju da biste dobili Refleks postavljen na svoju mašinu. Sledite ih da biste kreirali direktorijum koja se zove Dashboard_Tutorial, u koji ćete sa u i pip instalirati Refleks.
+Pogledajte dokumente u instalaciju da biste dobili Refleks postavljen na svoju mašinu. Sledite ih da biste kreirali direktorijum koja se zove "Dashboard_Tutorial", u koji ćete sa pip-om instalirati Refleks.
 
-Biraćemo šablon `0` kada pokrećemo `reflex init` da biste dobili prazan obrazac. Na kraju pokrenite `reflex run` da biste pokrenuli aplikaciju i potvrdili da je sve ispravno postavljeno.
+Biraćemo šablon `0` kada pokrećemo `reflex init` da biste dobili prazan templejt. Na kraju pokrenite `reflex run` da biste pokrenuli aplikaciju i potvrdili da je sve ispravno postavljeno.
 
 ## Pregled
 
-Sad kad smo postavljeni, hajde da malo pregledamo Refleksa!
+Sad kad smo postavljeni, hajde da malo pregledamo Refleks!
 
 ### Pregled starterskog koda
 
@@ -205,9 +201,13 @@ Ono što je najvažnije, postoji i direktorijum koja se takođe zove `dashboard_
 
 Prvo što moramo da uradimo je uvoz Refleks-a. Jednom kada to učinimo, možemo da stvaramo komponentu, koja je deo korisničkog interfejsa. Komponente se koriste za prikazivanje, upravljanje i ažuriranje UI elemenata u vašoj aplikaciji.
 
-Pogledajmo primer ispod. Ovde imamo funkciju pod nazivom `index` koji vraća tekstualnu komponentu (ugrađena Refleks UI komponenta) koja prikazuje tekst "Hello World!".
+Pogledajmo primer ispod.
 
-Zatim definišemo našu aplikaciju koristeći app = rx.App () i dodajemo komponentu koju smo upravo definisali (index) na stranicu pomoću `app.add_page(index)`. Ime funkcije (u ovom primeru `index`) koji definiše komponentu, mora biti ono što prosledjujemo u `add_page`. Definicija aplikacije i dodavanje komponente na stranicu potrebna je za svaku `Refleks` aplikaciju.
+Ovde imamo funkciju pod nazivom `index` koja vraća `text` komponentu (ugrađena Refleks UI komponenta) koja prikazuje tekst "Hello World!".
+
+Zatim definišemo našu aplikaciju koristeći `app = rx.App()` i dodajemo komponentu koju smo upravo definisali (index) na stranicu pomoću `app.add_page(index)`. Ime funkcije (u ovom primeru `index`) koji definiše komponentu, mora biti ono što prosledjujemo u `add_page`.
+
+Definicija aplikacije i dodavanje komponente na stranicu potrebna je za svaku `Refleks` aplikaciju.
 
 ```py
 import reflex as rx
@@ -221,18 +221,21 @@ app.add_page(index)
 
 Ovaj kod će renderisati stranu sa tekstom "Hello World!" kada pokrenemo aplikaciju.
 
-Za ostatak tutorijala kod:
-
-```py
-app = rx.App()
-app.add_page 
-```
-
-će se podrazumevati i ako nije prikazan u isečcima koda.
+> [!Note]  
+> Za ostatak tutorijala kod:
+>
+> ```py
+> app = rx.App()
+> app.add_page
+> ```
+>
+> će se podrazumevati i ako nije prikazan u isečcima koda.
 
 ### Kreiranje tabele
 
-Kreirajmo novu komponentu koja će prikazati tabelu. Koristićemo komponentu `rx.table` da to uradimo. Komponenta `rx.table` ima `root`, koji uzima `header` i `body`, koje zauzvrat uzima u komponente `row`. Komponenta `row` uzima `cell` komponente u kojoj su stvarni podaci koji će se prikazati u tabeli.
+Kreirajmo novu komponentu koja će prikazati tabelu.
+
+Koristićemo komponentu `rx.table` da to uradimo. Komponenta `rx.table` ima `root`, koji uzima `header` i `body`, koje zauzvrat uzima u komponente `row`. Komponenta `row` uzima `cell` komponente u kojoj su stvarni podaci koji će se prikazati u tabeli.
 
 ```py
 def index() -> rx.Component:
@@ -294,11 +297,15 @@ def index() -> rx.Component:
 
 Do ove tačke sve podatke koje se prikazujemo u aplikaciji su statički. Ovo nije baš korisno za kontrolnu tablu za podatke. Moramo biti u mogućnosti da pokažemo dinamičke podatke koji se mogu dodati i ažurirati.
 
-Ovde ulazi klasa `state`. `State` je pajton klasa koja čuva promenljive koje se mogu promeniti kada se aplikacija pokrene, kao i funkcije koje mogu promeniti te promenljive.
+Ovde ulazi klasa `state`.
 
-Da biste definisali `State` klasu, potklasirajte `rx.state` i definišite polja koja čuvaju stanje vaše aplikacije. State promenljive ( vars ) treba da imaju `napomenu tipa` i mogu se inicijalizovati podrazumevanom vrednošću.
+> [!Note]  
+> `State` je pajton klasa koja čuva promenljive koje se mogu promeniti kada se aplikacija pokrene,
+  kao i funkcije koje mogu promeniti te promenljive.
 
-U donjem primeru definišemo `State` klasu koje ima promenljivu koja se zove "users" koja je lista lista stringova. Svaka lista u listi "users" predstavlja korisnike i sadrži njihovo "name", "e-mail" i "pol".
+Da biste definisali `State` klasu, nasledite klasu `rx.state` i definišite polja koja čuvaju stanje vaše aplikacije. State promenljive ( `vars` ) treba da imaju `napomenu tipa` i mogu se inicijalizovati podrazumevanom vrednošću.
+
+U donjem primeru definišemo `State` klasu koje ima promenljivu koja se zove "users" koja je lista lista stringova. Svaka lista u listi "users" predstavlja korisnika i sadrži njegovo "name", "e-mail" i "pol".
 
 ```py
 class State(rx.State):
@@ -308,13 +315,9 @@ class State(rx.State):
     ]
 ```
 
-Da bi se iteriralo preko state varijabli, koje su ovde tipa liste, koristimo funkciju `rx.foreach` da renderujemo listu komponenti. `rx.foreach` uzima iterable (listu, tuple ili dict) i funkciju koja renderuje svaku  iterable stavku.
+Da bi se iteriralo preko `state vars`, koje su ovde tipa liste, koristimo funkciju `rx.foreach` da renderujemo listu komponenti. `rx.foreach` uzima iterable (listu, tuple ili dict) i funkciju koja renderuje svaku  iterable stavku.
 
-> [!Note]
->
-> Zašto ne možemo samo da prodjemo sa for petljom?
-
-Ovde je render funkcija "show_user" koja uzima u jednog korisnika i vraća `tabelu.row` komponentu koja prikazuje ime korisnika, e-poštu i pol.
+Ovde je render funkcija "show_user" koja uzima jednog korisnika i vraća `tabelu.row` komponentu koja prikazuje ime korisnika, e-poštu i pol.
 
 ```py
 class State(rx.State):
@@ -358,9 +361,9 @@ Bolji način strukturiranja naših podataka u Refleksu je da koristite klasu da 
 
 U Refleksu kada kreiramo ove klase da bismo prikazali naše podatke, klasa mora naslediti od `rx.Base` klase.
 
-`rx.Base` je takođe neophodna ako želimo da imamo state varijable koje su iterable sa različitim tipovima. Na primer, ako bismo želeli da imamo `age` kao `int`, morali bismo da koristimo `rx.Base` jer to nismo mogli da uradimo sa state varijable definisanim kao `list[list[str]]`.
+`rx.Base` je takođe neophodna ako želimo da imamo `state vars` koje su iterable sa različitim tipovima. Na primer, ako bismo želeli da imamo `age` kao `int`, morali bismo da koristimo `rx.Base` jer to nismo mogli da uradimo sa state varijable definisanim kao `list[list[str]]`.
 
-Render funkcija "show_user" se takođe ažurira da bi pristupila podacima preko atributa, umesto indeksiranja.
+Render funkcija "show_user" se takođe ažurira da bi pristupila podacima preko atributa, umesto preko indeksa.
 
 ```py
 class User(rx.Base):
@@ -805,11 +808,11 @@ class State(rx.State):
         ]
 ```
 
-Kao što vidimo iznad transform_data event hendler koristi `Counter` klasu iz modula `collections` da broji broj korisnika svakog pola. Zatim kreiramo lisu rečnika iz ovoga koje smo postavili na "users" state "users_for_graph".
+Kao što vidimo iznad "transform_data" event hendler koristi `Counter` klasu iz modula `collections` da broji broj korisnika svakog pola. Zatim kreiramo lisu rečnika iz ovoga koje smo postavili na "users" state "users_for_graph".
 
-Napokon možemo videti da kad god dodamo novog korisnika podnesemo formu i pokrenemo "add_user" event hendler, pozivamo transform_data da bismo ažurirali users_for_graph `state` promenljiva.
+Napokon možemo videti da kad god dodamo novog korisnika podnesemo formu i pokrenemo "add_user" event hendler, pozivamo "transform_data" da bismo ažurirali "users_for_graph" `state` promenljiva.
 
-### Izavanje grafikona
+### Izdavanje grafikona
 
 Koristimo komponentu `rx.recharts.bar_chart` da izdamo grafikon. Prolazimo kroz `state` promenljivu za naše grafičke podatke kao `data = State.users_for_graph`.Takođe prolazimo u komponentu `rx.recharts.bar` koja predstavlja trake na grafikonu. Komponenta `rx.recharts.bar` uzima `data_key` prop koji je ključ u rečniku podataka koji predstavlja i vrednost bara. `Stroke` i prop `fill` koriste se za postavljanje boje traka.
 
@@ -1192,4 +1195,4 @@ Pored gore navedenog imamo
   korisničke akcije
 - Dodat je stil u aplikaciju kako bi izgledala bolje.
 
-[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md) [](06_.md)
+[Struktura projekta](04_project_structure.md) [Sadržaj](00_sadrzaj.md)

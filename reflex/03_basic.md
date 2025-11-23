@@ -1,20 +1,20 @@
 
 # Refleks osnove
 
-[Instalacija](02_install.md) [Sadržaj](00_sadrzaj.md) [](04_project_structure.md)
+[Instalacija](02_install.md) [Sadržaj](00_sadrzaj.md) [Struktura projekta](04_project_structure.md)
 
 Ova stranica daje uvod u najčešće koncepte koje ćete koristiti za izgradnju refleks aplikacija.
 
 Naučićete kako da:
 
+- Instalirate refleks pomoću pip-a
 - Kreirate i ugnezdite komponente
 - Prilagodite i stilizujete komponente
 - Razlikujete između vremena kompilacije i vremena izvođenja
 - Prikažete podatke koji se menjaju tokom vremena
 - Odgovorite na događaje i ažurirate ekran
 - Renderujete uslovni i kreirate liste
-- Kreirajte stranice i krećete se između njih
-- Instalirate refleks pomoću pip-a.
+- Kreirajte stranice i krećete se između njih.
 
 ```sh
 pip install reflex
@@ -26,7 +26,7 @@ Uvezite refleks biblioteku da biste započeli.
 import reflex as rx
 ```
 
-## Kreiranje i gneždjenje komponenti
+## Kreiranje i gnezdenje komponenti
 
 Komponente su građevinski blokovi za korisnički interfejs vaše aplikacije (UI). One su vizuelni elementi koji čine vašu aplikaciju, poput dugmadi, teksta i slika. Refleks ima širok izbor ugrađenih komponenti da biste brzo započeli.
 
@@ -39,7 +39,7 @@ def my_button():
 
 Komponente se mogu ugnezditi jedna u drugu da bi stvorili složeni UI.
 
-Da bi se komponente gnezdile kao deca, prosledite ih kao pozicioni argument roditeljskoj komponenti. U donjem primeru, `rx.text` i `my_button` komponente su deca komponente `rx.box`.
+Da bi se komponente gnezdile kao deca, prosledite ih kao `pozicioni` argument roditeljskoj komponenti. U donjem primeru, `rx.text` i `my_button` komponente su deca komponente `rx.box`.
 
 ```py
 def my_page():
@@ -81,38 +81,45 @@ def round_button():
     )
 ```
 
-> **Koristite `snake_case` CSS property imena imovine kao `prop` ime**.
-
-Pogledajte vodič za stajling za više informacija o načinima stilizovanja komponenti.
+> [!Note]  
+> Koristite `snake_case` CSS property imena imovine kao `prop` ime.  
+>
+> [!Note]  
+> Pogledajte vodič za stajling za više informacija o načinima stilizovanja komponenti.
 
 Ukratko, komponente su napravljene od `children` komponenti i `props` propertija.
 
-### Children
+- **Children**
 
-- Tekst ili druge refleks komponente ugnežđene unutar komponente.
-- Prosledjuju se kao **positional arguments**.
-
-### Props
-
-- Atributi koji utiču na ponašanje i izgled komponente.
-- Prosledjuju se kao **keyword arguments**.
+  - Tekst ili druge refleks komponente ugnežđene unutar komponente.
+  - Prosledjuju se kao **positional arguments**.
+  
+- **Props**
+  
+  - Atributi koji utiču na ponašanje i izgled komponente.
+  - Prosledjuju se kao **keyword arguments**.
 
 ## Prikazivanje podataka koji se menjaju tokom vremena
 
-Aplikacije moraju da čuvaju i prikazuju podatke koji se menjaju tokom vremena. Refleks je to obezbedio kroz `state` klasu, što je Pajton klasa koja čuva promenljive koje se mogu promeniti kada se aplikacija pokrene, kao i funkcije koje mogu promeniti te promenljive.
+Aplikacije moraju da čuvaju i prikazuju podatke koji se menjaju tokom vremena.
 
-Da biste definisali `state` klasu, izvedite iz `rx.State` klase i definišite polja koja čuvaju stanje vaše aplikacije. `State` promenljive ( `vars` ) treba da imaju `napomenu tipa` i mogu se inicijalizovati podrazumevanom vrednošću.
+Refleks je to obezbedio kroz `State` klasu:
+
+- što je Pajton klasa koja čuva promenljive koje se mogu promeniti kada se aplikacija pokrene,
+- kao i funkcije koje mogu promeniti te promenljive.
+
+Da biste definisali `State` klasu, nasledite je iz `rx.State` klase i definišite polja koja čuvaju stanje vaše aplikacije. `State` promenljive ( `vars` ) treba da imaju `napomenu tipa` i mogu se inicijalizovati podrazumevanom vrednošću.
 
 ```py
 class MyState(rx.State):
     count: int = 0
 ```
 
-## Reference state vars u komponentama
+## Reference "state vars" u komponentama
 
-Da biste referencali `state var` u komponenti, možete ga prozvati kao `children` ili `prop`. Komponenta će se automatski ažurirati kada se `state var` promene.
+Da biste referencali `state var` u komponenti, možete je prozvati kao `children` ili `prop`. Komponenta će se automatski ažurirati kada se `state var` promeni.
 
-`Vars` se pozivaju putem atributa state klase. Na primer, da biste referencali "count" `var` u komponenti "MyState", koristite "MyState.count".
+`Vars` se pozivaju putem atributa state klase. Na primer, da biste referencali `var` "count" u komponenti "MyState", koristite "MyState.count".
 
 ```py
 class MyState(rx.State):
@@ -134,15 +141,16 @@ def counter():
 
 ## Odgovaranje na događaje i ažuriranje ekrana
 
-Do sada smo definisali state vars, ali nismo pokazali kako da ih promenimo.Sve promene state rukuje se funkcijama u state klasi, koja se nazivaju `event handlers`.
+Do sada smo definisali `state vars`, ali nismo pokazali kako da ih promenimo. Sve promene `state vars`  rukuje se funkcijama u `state` klasi, koje se nazivaju `event handlers`.
 
-> **Event handlers su jedini način da se promeni "state" u Refleksu.**
+> [!Note]  
+> **Event handlers** su jedini način da se promeni `state` u Refleksu.
 
-Komponente imaju posebne props, kao što su `on_click`, nazvani `event trigers` koji se mogu koristiti za interaktivne komponente.
+Komponente imaju posebne `props`, kao što su `on_click`, nazvani `event trigers` koji se mogu koristiti za interaktivne komponente.
 
 ## Event trigers
 
-Povežite komponente na rukovodioce događaja, koje ažuriraju state.
+Povežite komponente na `rukovaoce događaja`, koje ažuriraju `state`.
 
 ```py
 class CounterState(rx.State):
@@ -162,13 +170,13 @@ def counter_increment():
     )
 ```
 
-Kada se aktivira okidač događaja, poziva se rukovaoc događajem, koji ažurira stanje. UI se automatski preispituje da odražava novo stanje.
+Kada se aktivira `event triger` - u ovom slučaju "on_click", poziva se `event hendler` - u ovom slučaju "increment", koji ažurira `var state` - u ovom slučaju "count". UI se automatski preispituje da bi odražavao novo stanje.
 
-## Šta je dekorator @rx.event?
+## Dekorator @rx.event
 
 ### Rukovaoci događaja sa argumentima
 
-Rukovodioci događaja takođe mogu da preuzmu argumente. Na primer, obrada  dogadjaja povećanja može da preuzme argument da poveća broj u određenom iznosom.
+Rukovodioci događaja takođe mogu da preuzmu argumente. Na primer, obrada  dogadjaja "increment"  može da preuzme argument da poveća broj u određenom iznosu.
 
 ```py
 class CounterState2(rx.State):
@@ -192,7 +200,7 @@ def counter_variable():
     )
 ```
 
-Okidač događaja `on_click` ovde ne donosi nikakve argumente, ali neki pokretači događaja to rade. Na primer, okidač događaja `on_blur` prosledjuje tekst kao argument na rukovodilac događaja.
+`Event triger` `on_click` ovde ne donosi nikakve argumente, ali neki `event trigeri` to rade. Na primer, okidač događaja `on_blur` prosledjuje tekst kao argument na rukovalac događaja.
 
 ```py
 class TextState(rx.State):
@@ -212,21 +220,27 @@ def text_input():
     )
 ```
 
-Proverite da li rukovalac događaja ima isti broj argumenata kao i okidač događaja ili će se pojaviti greška.
+> [!Note]  
+> Proverite da li rukovalac događaja ima isti broj argumenata kao i okidač događaja ili će se
+  pojaviti greška.
 
 ## COMPILE-TIME vs. RUNTIME (VAŽNO)
 
 Pre nego što zaronimo dublje u stanja, važno je razumeti razliku između vremena kompilacije i izvršavanja u Refleksu.
 
-Kada pokrenete svoju aplikaciju, frontend je kompajliran od JavaScript koda koji radi u pregledaču (compile-time). Backend ostaje na Pajtonu i radi na serveru tokom života aplikacije (run-time).
+Kada pokrenete svoju aplikaciju, frontend je kompajliran u JavaScript kod koji radi u pregledaču (compile-time). Backend ostaje na Pajtonu i radi na serveru tokom života aplikacije (run-time).
 
-## Kada ne možete da koristite čisti Pithon?
+### Kada ne možete da koristite čisti Pithon?
 
-Ne možemo da kompajliramo proizvoljni Pajton kod, samo onaj koji definišemo u komponentama. Važno je da ne možete da koristite proizvoljne operacije i funkcije u Pajtonu na `state vars` u komponentama.
+Ne možemo da kompajliramo proizvoljni Pajton kod, samo onaj koji definišemo u komponentama.
 
-Međutim, budući da su bilo koji rukovaoci događaja u vašoj `state` klasi  na backendu, možete koristiti bilo koji Pajton kod ili biblioteku u svojoj `state` klasi.
+> [!Note]  
+> Važno je da ne možete da koristite proizvoljne operacije i funkcije u Pajtonu na `state vars` u
+  komponentama.
 
-### Primeri koji rade
+Međutim, budući da su bilo koji rukovaoci događaja u `state` klasi  na backendu, možete koristiti bilo koji Pajton kod ili biblioteku u `state` klasi.
+
+**Primeri koji rade:**
 
 Unutar rukovaoca događaja koristite bilo koji pajton kod ili biblioteku.
 
@@ -255,7 +269,9 @@ def count_and_check():
     )
 ```
 
-Koristite bilo koju funkciju Pajtona u komponentama, sve dok je definisana u compile-time (tj. ne referencira nijednu state var)
+> [!Note]  
+> Koristite bilo koju funkciju Pajtona u komponentama, sve dok je definisana u compile-time (tj. ne
+  referencira nijednu state var)
 
 ```sh
 0true
@@ -277,7 +293,7 @@ def show_numbers():
     )
 ```
 
-### Primeri koji ne rade
+**Primeri koji ne rade:**
 
 Ne možete da uradite `if` izjavu na vars u komponentama, jer vrednost nije poznata u `compile-time`.
 
@@ -290,9 +306,7 @@ def count_if_even():
         rx.heading("Count: "),
         # This will raise a compile error, as BadState.count is a var and not known at compile time.
         rx.text(
-            BadState.count
-            if BadState.count % 2 == 0
-            else "Odd"
+            "Even" if BadState.count % 2 == 0 else "Odd"
         ),
         # Using an if statement with a var as a prop will NOT work either.
         rx.text(
@@ -317,7 +331,7 @@ def loop_over_list():
     )
 ```
 
-Ne možete da uradite proizvodne operacije Pajtonu na state vars u komponentama.
+Ne možete da uradite produkcione operacije Pajtonu na state vars u komponentama.
 
 ```py
 class BadTextState(rx.State):
@@ -332,9 +346,9 @@ def format_text():
 
 U narednim odeljcima pokazaćemo kako se baviti ovim slučajevima.
 
-## Uslovno prikazivanje
+### Uslovno prikazivanje
 
-Kao što je gore pomenuto, ne možete da koristite Pajton `is/else` izjave na state vars u komponentama. Umesto toga, koristite `rx.cond` funkciju da uslovno renderujete komponente.
+Kao što je gore pomenuto, ne možete da koristite Pajton `if/else` izjave na state vars u komponentama. Umesto toga, koristite `rx.cond` funkciju da uslovno renderujete komponente.
 
 ```py
 class LoginState(rx.State):
@@ -378,7 +392,7 @@ def show_fruits():
 
 The function that renders each item takes in a Var, since this will get compiled up front.
 
-## Var operacije
+### Var operacije
 
 Ne možete koristiti proizvoljne operacije na state vars u komponentama, ali Refleks ima var operacije koje možete koristiti za manipulisanje state vars.
 
