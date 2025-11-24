@@ -1,7 +1,7 @@
 
 # Uvod
 
-[Sadržaj](00_sadrzaj.md) [Instalacija](02_install.md)
+[Sadržaj](00_sadrzaj.md)
 
 Refleks je otvoren okvir za brzo izradu prelepih, interaktivnih veb aplikacija u čistom Pajtonu.
 
@@ -23,6 +23,8 @@ Refleks je otvoren okvir za brzo izradu prelepih, interaktivnih veb aplikacija u
 ### Primer aplikacije - Brojanje
 
 Evo, prelazimo na jednostavnu aplikaciju brojača koja omogućava korisniku da broji na gore ili dole.
+
+![alt text](images/brojanje.png)
 
 Evo potpunog objašnjenja koda za ovaj primer:
 
@@ -178,4 +180,4 @@ Stvorili smo jednostavnu, ali potpuno interaktivnu veb aplikaciju u čistom Pajt
 
 Ako nastavite sa našom dokumentacijom, naučićete kako graditi sjajne aplikacije sa Refleksom.
 
-[Sadržaj](00_sadrzaj.md) [Instalacija](02_install.md)
+[Sadržaj](00_sadrzaj.md)

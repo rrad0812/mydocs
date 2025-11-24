@@ -1,7 +1,7 @@
 
 # Refleks osnove
 
-[Instalacija](02_install.md) [Sadržaj](00_sadrzaj.md) [Struktura projekta](04_project_structure.md)
+[Sadržaj](00_sadrzaj.md)
 
 Ova stranica daje uvod u najčešće koncepte koje ćete koristiti za izgradnju refleks aplikacija.
 
@@ -440,4 +440,4 @@ Sada kada imate osnovno razumevanje načina na koji Refleks radi, sledeći korak
 - Dashboard Tutorijal
 - Chatapp Tutorijal
 
-[Instalacija](02_install.md) [Sadržaj](00_sadrzaj.md) [Struktura projekta](04_project_structure.md)
+[Sadržaj](00_sadrzaj.md)

@@ -1,6 +1,8 @@
 
 # Kako funkcioniše Reflex
 
+[Sadržaj](00_sadrzaj.md)
+
 Koristićemo sledeću osnovnu aplikaciju koja prikazuje slike profila sa Githaba kao primer da objasnimo različite delove arhitekture.
 
 ![alt text](images/kako_funkc_reflex.png)
@@ -233,3 +235,5 @@ U našem slučaju, ažuriranje stanja može izgledati otprilike ovako:
 ```
 
 Novo stanje čuvamo u našem menadžeru stanja, a zatim šaljemo ažuriranje stanja frontendu. Frontend zatim ažurira korisnički interfejs kako bi odražavao novo stanje. U našem primeru, prikazuje se nova slika profila na Githabu.
+
+[Sadržaj](00_sadrzaj.md)

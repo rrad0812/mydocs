@@ -1,7 +1,7 @@
 
 # Tutorijal - Aplikacija AI Chat
 
-[Data Dashboard](05_datadashboard.md) [Sadržaj](00_sadrzaj.md)
+[Sadržaj](00_sadrzaj.md)
 
 Ovaj vodič će vas provesti kroz pravljenje AI aplikacije za ćaskanje sa Reflex-om. Ova aplikacija je prilično složena, ali ne brinite - podelićemo je na male korake.
 
@@ -674,4 +674,4 @@ button_style = dict(
 
 Sa našim hosting servisom, možete implementirati ovu aplikaciju jednom komandom za par minuta. Pogledajte naš Hosting Quick Start.
 
-[Data Dashboard](05_datadashboard.md) [Sadržaj](00_sadrzaj.md)
+[Sadržaj](00_sadrzaj.md)

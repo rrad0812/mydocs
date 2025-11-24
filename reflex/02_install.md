@@ -1,7 +1,7 @@
 
 # Instalacija
 
-[Uvod](01_uvod.md) [Sadržaj](00_sadrzaj.md) [Osnove](03_basic.md)
+[Sadržaj](00_sadrzaj.md)
 
 > [!Note]  
 > Reflex zahteva Python 3.10+.
@@ -79,4 +79,4 @@ Toplo preporučujemo da kreirate `virtuelno okruženje` za vaš projekat.
   
   Refleks će na vruće ponovno uvesti bilo koju promenu koda u realnom vremenu prilikom rada u režimu razvoja. Izmena vašeg koda prikazaće se na <http://localhost:3000> automatski.
   
-[Uvod](01_uvod.md) [Sadržaj](00_sadrzaj.md) [Osnove](03_basic.md)
+[Sadržaj](00_sadrzaj.md)
