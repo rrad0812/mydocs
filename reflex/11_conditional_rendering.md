@@ -1,13 +1,11 @@
 
-# Conditional Rendering
+# Uslovni rendering
 
 [Sadržaj](00_sadrzaj.md)
 
-Recall from the basics that we cannot use Python if/else statements when referencing state vars in Reflex. Instead, use the `rx.cond` component to conditionally render components or set props based on the value of a state var.
+Ako se prisetimo osnova Reflex-a, ne možemo koristiti Python `if/else` naredbe when referenciramo `state vars` u Reflex-u. Umesto toga, koristimo `rx.cond` komponentu za uslovni rendering komponenti ili postavimo props na osnovu vrednosti `state var`-a.
 
-Check out the API reference for cond docs.
-
-Below is a simple example showing how to toggle between two text components by checking the value of the state var show.
+Ispod je jednostavan primer koji pokazuje kako da prelazite između dve tekstualne komponente proverom vrednosti prikaza var stanja "show".
 
 ```py
 class CondSimpleState(rx.State):
@@ -28,11 +26,11 @@ def cond_simple_example():
     )
 ```
 
-If show is "True" then the first component is rendered (in this case the blue text). Otherwise the second component is rendered (in this case the red text).
+Ako je prikazano `True` tada se prva komponenta renderuje (u ovom slučaju plavi tekst). Inače druga komponenta se renderuje (u ovom slučaju crveni tekst).
 
-## Conditional Props
+## Uslovni props
 
-You can also set props conditionally using `rx.cond`. In this example, we set the color prop of a text component based on the value of the state var show.
+Takođe možete postaviti props uslovno koristeći `rx.cond`. U ovom primeru postavljamo "color_sheme" prop `slider` komponente na osnovu `state var` "value".
 
 ```py
 class PropCondState(rx.State):
@@ -47,18 +45,20 @@ def cond_prop():
     return rx.slider(
         default_value=[50],
         on_value_commit=PropCondState.set_end,
-        color_scheme=rx.cond(PropCondState.value > 50, "green", "pink"),
+        color_scheme=rx.cond(
+            PropCondState.value > 50, 
+            "green", "pink"),
         width="100%",
     )
 ```
 
-## Var Operations
+## Var operacije
 
-You can use var operations with the cond component for more complex conditions. See the full cond reference for more details.
+Možete koristiti var operacije sa `cond` komponentom za složeije odnose.
 
-## Multiple Conditional Statements
+## Višestruke uslovne izjave
 
-The `rx.match` component in Reflex provides a powerful alternative `torx.cond` for handling multiple conditional statements and structural pattern matching. This component allows you to handle multiple conditions and their associated components in a cleaner and more readable way compared to nested `rx.cond` structures.
+`rx.match` komponenta u Reflex-u pruža moćnu alternativu ugneždjenim `rx.cond` za rukovanje višestrukim uslovnim izjavama i podudaranje strukturnih obrazaca. Ova komponenta vam omogućava da rukujete sa više uslova i njihovih povezanih komponenti na čišći i čitljiviji način u poređenju sa ugnežđenim `rx.cond` strukturama.
 
 ```py
 from typing import List

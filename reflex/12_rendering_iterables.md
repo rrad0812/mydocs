@@ -1,11 +1,11 @@
 
-# Rendering Iterables
+# Renderovanje iterabilnih objekata
 
 [Sadržaj](00_sadrzaj.md)
 
-Recall again from the basics that we cannot use Python for loops when referencing state vars in Reflex. Instead, use the `rx.foreach` component to render components from a collection of data.
+Rekli smo da ne možemo koristiti Python `for loops` kada referenciramo referenciramo `state vars` u Reflexu. Umesto toga, koristimo `rx.foreach` komponentu za renderovanje komponenti sa kolekcijama podataka.
 
-For dynamic content that should automatically scroll to show the newest items, consider using the auto scroll component together with `rx.foreach`.
+Za dinamički sadržaj koji bi trebao da skroluje automatski da prikaže najnovije stavke, koristimo auto scroll komponentu zajdno sa `rx.foreach`.
 
 ```py
 class IterState(rx.State):
@@ -24,7 +24,7 @@ def dynamic_buttons():
     )
 ```
 
-Here's the same example using a lambda function.
+Ovde je isti primer sa `lambda` funkcijom.
 
 ```py
 def dynamic_buttons():
@@ -36,7 +36,7 @@ def dynamic_buttons():
     )
 ```
 
-You can also use lambda functions directly with components without defining a separate function.
+Možete koristiti `lambda` funnkciju direktno sa komponentama be definisanja posebnih funkcija.
 
 ```py
 def dynamic_buttons():
@@ -50,16 +50,16 @@ def dynamic_buttons():
     )
 ```
 
-In this first simple example we iterate through a list of colors and render a dynamic number of buttons.
+U ovom prvom jednostavnom primeru prolazimo kroz listu boja i prikazujemo dinamički broj dugmadi.
 
-The first argument of the rx.foreach function is the state var that you want to iterate through. The second argument is a function that takes in an item from the data and returns a component. In this case, the colored_box function takes in a color and returns a button with that color.
+Prvi argument funkcije `rx.foreach` je var stanja kroz koji želite da iterirate. Drugi argument je funkcija koja uzima stavku iz podataka i vraća komponentu. U ovom slučaju, `colored_box` funkcija uzima boju i vraća dugme sa tom bojom.
 
 ## For vs Foreach
 
-- **Regular for loop** use when iterating over `constants`.
-- **Foreach loop** use when iterating over `state vars`.
+- Uobičajeno **for** petlju koristite kada iterirate preko `konstanti`.
+- Koristite petlju **foreach** kada iterirate preko `state vars`.
 
-The above example could have been written using a regular Python for loop, since the data is constant.
+Gornji primer je mogao biti napisan korišćenjem obične Python for petlje, pošto su podaci konstantni.
 
 ```py
 colors = ["red", "green", "blue"]
@@ -70,7 +70,7 @@ def dynamic_buttons_for():
     )
 ```
 
-However, as soon as you need the data to be dynamic, you must use `rx.foreach`.
+Međutim, čim vam je potrebno da podaci budu dinamični, morate ih koristiti `rx.foreach`.
 
 ```py
 class DynamicIterState(rx.State):
@@ -94,9 +94,9 @@ def dynamic_buttons_foreach():
     )
 ```
 
-## Render Function
+## Render funkcija
 
-The function to render each item can be defined either as a separate function or as a lambda function. In the example below, we define the function "colored_box" separately and pass it to the `rx.foreach` function.
+Funkcija za prikazivanje svake stavke može se definisati ili kao posebna funkcija ili kao lambda funkcija. U primeru ispod, mi definišemo funkciju "colored_box" odvojeno i prosledimo je u`rx.foreach` funkciju.
 
 ```py
 class IterState2(rx.State):
@@ -115,11 +115,11 @@ def dynamic_buttons2():
     )
 ```
 
-Notice that the type annotation for the color parameter in the "colored_box" function is `rx.Var[str]` (rather than just str). This is because the `rx.foreach` function passes the item as a `Var object`, which is a wrapper around the actual value. This is what allows us to compile the frontend without knowing the actual value of the state var (which is only known at runtime).
+Primetite da je naznaka tipa za parametar "color" u funkciji "colored_box". `rx.Var[str]` (a ne samo `str`). To je zato što `rx.foreach` funkcija passes stavku kao `Var object`, što je omotač oko aktuelne vrednosti. To je ono što nam omogućava da kompajliramo frontend bez poznavanja stvarne vrednosti var stanja (koja je poznata samo u vreme izvođenja).
 
-## Enumerating Iterables
+## Enumeracija iterabilnih objekata
 
-The function can also take an index as a second argument, meaning that we can enumerate through data as shown in the example below.
+Funkcija takođe može uzeti indeks kao drugi argument, što znači da možemo da nabrajamo niz podataka kao što je prikazano u primeru ispod.
 
 ```py
 class IterIndexState(rx.State):
@@ -141,7 +141,7 @@ def enumerate_foreach():
     )
 ```
 
-Here's the same example using a lambda function.
+Ovde je isti priimer korišćenjem `lambda` funkcije.
 
 ```py
 def enumerate_foreach():
@@ -155,9 +155,13 @@ def enumerate_foreach():
     )
 ```
 
-## Iterating Dictionaries
+## Iteracija rečnika
 
-We can iterate through a `dict` using a `foreach`. When the `dict` is passed through to the function that renders each item, it is presented as a list of key-value pairs [("sky", "blue"), ("balloon", "red"), ("grass", "green")].
+Možemo iterirati kroz `dict` koristeći `foreach`. Kada je `dict` prosleđen funkciji koja renderuje svaka item, to je prezentovano kao lista `key-value` parova kao:
+
+```py
+[("sky", "blue"), ("balloon", "red"), ("grass", "green")].
+```
 
 ```py
 class SimpleDictIterState(rx.State):
@@ -181,9 +185,9 @@ def dict_foreach():
     )
 ```
 
-## Nested examples
+## Ugneždjeni primeri
 
-`rx.foreach` can be used with nested `state vars`. Here we use nested `foreach` components to render the nested state vars. The rx.foreach(project["technologies"], get_badge) inside of the project_item function, renders the `dict` values which are of type `list`. The "rx.box(rx.foreach(NestedStateFE.projects, project_item))" inside of the "projects_example" function renders each dict inside of the overall `state var` projects.
+`rx.foreach` može biti korišćen sa umetnutim `state vars`. Ovde mi koristimo umetnute `foreach` komponente da renderujemo umetnute `state vars`. "rx.foreach(project["technologies"], get_badge)" unutar "project_item" funkcije, renderuje `dict` vrednosti koje su tipa liste `list`. "rx.box(rx.foreach(NestedStateFE.projects, project_item))" unutar "projects_example" funkcije renderuje svaki `dict` unutar svih `state var` projekata.
 
 ```py
 class NestedStateFE(rx.State):
@@ -213,9 +217,9 @@ def projects_example() -> rx.Component:
     return rx.box(rx.foreach(NestedStateFE.projects, project_item))
 ```
 
-If you want an example where not all of the values in the dict are the same type then check out the example on var operations using `foreach`.
+Ako želite primer gde nisu sve vrednosti u `dict`-u istog tipa, pogledajte primer var operacija koristeći `foreach`.
 
-Here is a further example of how to use `foreach` with a nested data structure.
+Ovde je sledeći primer kako koristiti `foreach` sa umetnutim strukturama podataka.
 
 ```py
 class NestedDictIterState(rx.State):
@@ -246,11 +250,11 @@ def nested_dict_foreach():
     )
 ```
 
-## Foreach with Cond
+## Foreach sa cond
 
-We can also use `foreach` with the cond component.
+Takođe možemo koristiti `foreach` sa `cond` komponentom.
 
-In this example we define the function "render_item". This function takes in an item, uses the cond to check if the item "is_packed". If it is packed it returns the "item_name" with a ✔ next to it, and if not then it just returns the "item_name". We use the `foreach` to iterate over all of the items in the "to_do_list" using the "render_item" function.
+U ovom primeru definišemo funkciju "render_item". Ova funkcija uzima "item", koristi `cond` da proveri da li je "item" "is_packed". Ako je "is_packed" ona vraća "item_name" sa ✔, a ako nije vraća "item_name". Koristimo `foreach` za iteriranje preko svih "items" u "to_do_list" koristeći "render_item" funkciju.
 
 Sammy's Packing List
 

@@ -3,13 +3,13 @@
 
 [Sadržaj](00_sadrzaj.md)
 
-Props modify the behavior and appearance of a component. They are passed in as keyword arguments to a component.
+Props menjaju ponašanje i izgled komponente. Oni se prosleđuju kao argumenti ključne reči komponenti.
 
-## Component Props
+## Props komponenti
 
-There are props that are shared between all components, but each component can also define its own props.
+Postoje props koji se dele između svih komponenti, ali svaka komponenta takođe može da definiše sopstvene rekvizite.
 
-For example, the rx.image component has a src prop that specifies the URL of the image to display and an alt prop that specifies the alternate text for the image.
+Na primer, `rx.image` komponenta ima `src` prop koji specificira URL slike za prikaz i `alt` prop koji specificira alternativni tekst za sliku.
 
 ```py
 rx.image(
@@ -18,11 +18,11 @@ rx.image(
 )
 ```
 
-Check the docs for the component you are using to see what props are available and how they affect the component (see the rx.image reference page for example).
+Vidi `rx.image` referencnu stranu za primer.
 
-### Common Props
+### Zajednički props
 
-Components support many standard HTML properties as props. For example: the HTML id property is exposed directly as the prop id. The HTML className property is exposed as the prop class_name (note the Pythonic snake_casing!).
+Komponente podržavaju mnoge standardne HTML svojstva kao props. Na primer: HTML `id` imovine je izložena direktno kao prop `id`. HTML `className` imovina je izložen kao prop `class_name`.
 
 ```py
 rx.box(
@@ -35,11 +35,11 @@ rx.box(
 )
 ```
 
-In the example above, the class_name prop of the rx.box component is assigned a list of class names. This means the rx.box component will be styled with the CSS classes class-name-1 and class-name-2.
+U gornjem primeru, `class_name` prop `rx.box` komponente je dodeljena lista naziva klasa. Ovo znači da `rx.box` komponenta će biti stilizovana sa CSS klasama "class-name-1" i "class-name-2".
 
-### Style Props
+### Stil props
 
-In addition to component-specific props, most built-in components support a full range of style props. You can use any CSS property to style a component.
+Pored props specifičnih za komponente, većina ugrađenih komponenti podržava čitav niz stilskih props. Možete koristiti bilo koje CSS svojstvo za stilizovanje komponente.
 
 ```py
 rx.button(
@@ -53,19 +53,19 @@ rx.button(
 )
 ```
 
-See the styling docs to learn more about customizing the appearance of your app.
+### Povezivanje props sa state
 
-### Binding Props to State
+Reflex aplikacije definišu `State` klase koje drže varijable koje se mogu promeniti u vremenu.
 
-Optional: Learn all about State first.
+Stanje može biti izmenjeno:
 
-Reflex apps define State classes that hold variables that can change over time.
+- kao odgovor na stvari kao što je unos korisnika,
+- kao što je klik na dugme ili
+- kao odgovor na događaje kao što je učitavanje stranice.
 
-State may be modified in response to things like user input like clicking a button, or in response to events like loading a page.
+`State vars` može biti vezan za komponente, tako da korisnički interfejs uvek odražava trenutno stanje aplikacije.
 
-State vars can be bound to component props, so that the UI always reflects the current state of the app.
-
-Try clicking the badge below to change its color.
+Pokušajte da kliknete na dugme ispod da promenite njenu boju.
 
 ```py
 class PropExampleState(rx.State):
@@ -87,8 +87,8 @@ def index():
     )
 ```
 
-In this example, the color_scheme prop is bound to the color state var.
+U ovom primeru "color_scheme" prop je povezan sa "color" `state var`.
 
-When the flip_color event handler is called, the color var is updated, and the `color_scheme` prop is updated to match.
+Kada "flip_color" event handler se pozove, "color" var je ažuriran, i `color_scheme` prop je ažuraran da odgovara.
 
 [Sadržaj](00_sadrzaj.md)
