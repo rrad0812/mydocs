@@ -66,7 +66,7 @@
   ssh-keygen -t rsa -b 4096 -C "rrad0812@gmail.com"
   ```
 
-  Pri generisanju obavezno unesi passpharse. Za pristup serveru iskopiraj
+  Pri generisanju obavezno unesi `passpharse`. Za pristup serveru iskopiraj
   javni ključ. Za GitHub iskopiraj javni ključ.
 
 - Instalacija PostgreSQL servera na Ubuntu server
@@ -77,7 +77,6 @@
 
   # Proveri status servisa servera:
   systemctl status postgresql
-
 
   # Proveri interfejs i port na kome server sluša:
   ss -nlt
@@ -114,7 +113,9 @@
   
   # Pozovi klijenta
   psql
-  
+  ```
+
+  ```sql
   # Kreiraj novog korisnika
   CREATE USER user-name WITH PASSWORD 'user-password';
   
@@ -130,10 +131,11 @@
   
   # Proveri da li je baza podataka kreirana
   \l
-  
+  ```
+
+  ```sh
   # Konfiguriši mogućnost daljinskog pristupa
-  # Ažuriraj datoteku postgresql.conf, tako da podrazumevani pristup samo sa 
-  # localhost-a
+  # Ažuriraj datoteku postgresql.conf, tako da podrazumevani pristup samo sa localhost-a
   sudo nano /etc/postgresql/14/main/postgresql.conf
   listen_addresses = 'localhost'
   
@@ -152,9 +154,11 @@
   local all all peer
   host all all 127.0.0.1/32 scram-sha-
   host all all ::1/128 scram-sha-
+  ```
+
+  Za info vidi <https://www.postgresql.org/docs/current/auth-pg-hba-conf.html>.
   
-  Za info vidi https://www.postgresql.org/docs/current/auth-pg-hba-conf.html.
-  
+  ```sh
   # Ponovo pokreni server baze podataka da bi primenio promene:
   sudo systemctl restart postgresql
 
@@ -180,9 +184,11 @@
   # Dodaj na kraj crontab-a (m, h, dom, mon, dow, command)
   0 0 * * * pg_dump -U postgres dbname > 
   ~/backups/dbname-$(date +\%d.\%m.\%y).bak
+  ```
 
-  # Za info vidi https://www-linode-com.translate.goog/docs/guides/schedule-tasks-with-cron
+  Za info vidi <https://www-linode-com.translate.goog/docs/guides/schedule-tasks-with-cron>
 
+  ```sh
   # Proveri rezervnu kopiju
   # Promeni na postgres korisnika
   su – postgres
