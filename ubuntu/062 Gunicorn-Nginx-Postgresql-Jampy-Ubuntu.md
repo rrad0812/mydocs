@@ -1,26 +1,11 @@
 # Jampy, Postgres, Gunicorn i Nginx na Ubuntu
 
-- Ažurirano 3. decembra 2025. god.
-
-## Šta ćemo naučiti
-
-Do kraja ovog sveobuhvatnog tutorijala, imaćete:
-
-- **Instalacija Ubuntu produkcionog servera**
-- **Instalacija PostgrSQL baze podataka**
-- **Implementacija Jampy spremna za produkciju** : Podesite robusnu Jampy aplikaciju sa PostgreSQL-om, Nginx-om i Gunicorn-om na Ubuntu-u.
-- **Napredna optimizacija performansi** : Konfigurišite Gunicorn sa optimalnim radnim procesima,
-implementirajte Nginx strategije keširanja i podesite PostgreSQL za visokoperformansne operacije baze podataka.
-- **Najbolje bezbednosne prakse** : Implementirajte SSL/TLS enkripciju, konfigurišite pravila
-zaštitnog zida i primenite Jampy bezbednosna podešavanja za proizvodna okruženja
-- **Praćenje i rešavanje problema** : Podesite sveobuhvatne tehnike evidentiranja, praćenja
-performansi i otklanjanja grešaka za proizvodna okruženja
-- **Arhitektura skalabilnosti** : Razumeti kako da skalirate svoju Jampy aplikaciju horizontalno i vertikalno za scenarije sa velikim prometom
+- Ažurirano 3. decembra 2025. god,
+- Radosav
 
 ## Instalacija produkcionog Ubuntu servera
 
-- Instaliraj `Ubuntu server` na virtuelnu ili fizičku mašinu Ubuntu 64 OS, sa
-  najmanje 2GB Ram-a i 1 procesor-om.
+- Instaliraj `Ubuntu server` na virtuelnu ili fizičku mašinu Ubuntu 64 OS, sa najmanje 2GB Ram-a i 1 procesor-om.
 
 - Pri instalaciji obavezno čekiraj `OpenSSH` server.
 
@@ -85,8 +70,7 @@ performansi i otklanjanja grešaka za proizvodna okruženja
   ssh-keygen -t rsa -b 4096 -C "rrad0812@gmail.com"
   ```
 
-  Pri generisanju obavezno unesi `passpharse`. Za pristup serveru iskopiraj
-  javni ključ. Za GitHub iskopiraj javni ključ.
+  Pri generisanju obavezno unesi `passpharse`. Za pristup serveru iskopiraj javni ključ. Za GitHub iskopiraj javni ključ.
 
 ## Instaliranje paketa iz Ubuntu repozitorijuma
 
@@ -108,7 +92,7 @@ sudo apt install python3-venv python3-pip python3-dev postgresql postgresql-cont
 - Nove role i baze možete kreirati iz komandne linije pomoću alatki `createuser` i `createdb`, koje se obično pokreću pod Linux korisnikom `postgres`.
 - `psql` je primarni terminal za rad sa PostgreSQL-om; koristi se za povezivanje na određenu bazu kao određeni korisnik i izvršavanje SQL upita.
 - Iako je `peer` autentifikacija podrazumevana, PostgreSQL možete podesiti da zahteva lozinke za lokalne ili udaljene veze — kreiranjem role sa `password` i ažuriranjem `pg_hba.conf`.
-- Vodič obuhvata važne administrativne teme:
+- Vodič obuhvata i važne administrativne teme:
   - podešavanje performansi servera,
   - strategije bekapa i vraćanja,
   - metode za rešavanje uobičajenih problema.
@@ -267,11 +251,11 @@ sa svog uobičajenog naloga, pokrenućete:
   CREATE ROLE sammy WITH LOGIN PASSWORD 'your_strong_password' CREATEDB;
   ```
 
-  Ovo daje podskup superuser privilegija, konkretno omogućava korisniku da kreira nove baze. Dok
-odgovor "yes" na pitanje o superuser statusu u interaktivnom pomoćniku takođe daje ovu dozvolu, SUPERUSER je mnogo šira i rizičnija rola.
+  Ovo daje podskup superuser privilegija, konkretno omogućava korisniku da kreira nove baze. Dok odgovor "yes" na pitanje o superuser statusu u interaktivnom pomoćniku
+takođe daje ovu dozvolu, SUPERUSER je mnogo šira i rizičnija rola.
 
-  Nakon toga, izmenićete nekoliko parametara veze za korisnika koga ste upravo kreirali. Ovo će
-ubrzati rad baze podataka tako da nećete morati da tražite i podešavate ispravne vrednosti svaki put kada se veza uspostavi:
+  Nakon toga, izmenićete nekoliko parametara veze za korisnika koga ste upravo kreirali. Ovo će ubrzati rad baze podataka tako da nećete morati da tražite i podešavate 
+ispravne vrednosti svaki put kada se veza uspostavi:
 
   - Postavićete podrazumevano kodiranje znakova na `UTF8`, što "Jampy" očekuje.
   - Takođe podešavate podrazumevanu šemu izolacije transakcija na `read committed`, što blokira čitanja iz nepotvrđenih transakcija.
@@ -371,10 +355,10 @@ Alatka `pg_dump` pravi bekap jedne baze. Ne bekapuje globalne objekte poput rola
 
 Izlaz `pg_dump` možete kontrolisati pomoću više opcija komandne linije:
 
-- **-F c (format: custom)** : Preporučen format za većinu bekapa. Proizvodi kompresovanu binarnu arhivu (nečitljivu za čoveka) koja omogućava paralelno vraćanje i ređanje/izuzimanje objekata tokom vraćanja.
-- **-F p (format: plain)** : Podrazumevani format. Izbacuje veliki ".sql" fajl. Glavni nedostatak je da se mora vratiti ođednom i da ne podržava paralelno vraćanje.
-- **-s (samo šema)** : Bekapuje samo strukturu baze (tabele, poglede, indekse) bez podataka.
-- **-a (samo podaci)** : Bekapuje samo podatke, pod pretpostavkom da šema već postoji na odredištu.
+- **-F c** (format: custom) : Preporučen format za većinu bekapa. Proizvodi kompresovanu binarnu arhivu (nečitljivu za čoveka) koja omogućava paralelno vraćanje i ređanje/izuzimanje objekata tokom vraćanja.
+- **-F p** (format: plain) : Podrazumevani format. Izbacuje veliki ".sql" fajl. Glavni nedostatak je da se mora vratiti ođednom i da ne podržava paralelno vraćanje.
+- **-s** (samo šema) : Bekapuje samo strukturu baze (tabele, poglede, indekse) bez podataka.
+- **-a** (samo podaci) : Bekapuje samo podatke, pod pretpostavkom da šema već postoji na odredištu.
 - **--exclude-table=TABLE_NAME** : Isključuje konkretnu tabelu iz bekapa. Korisno za preskakanje velikih, privremenih ili manje bitnih tabela.
 - **-f FILENAME**: Navodi izlazni fajl.
 - **-U USER** : Navodi PostgreSQL korisnika pod kojim se konektuje.
@@ -401,7 +385,7 @@ pg_restore -U postgres -d postgres --create --clean -j 4 mydatabase.dump
 
 Ovde je:
 
-- **-d postgres** : Povezuje se na postgres bazu radi izdavanja create komande.
+- **-d postgres** : Povezuje se na "postgres" bazu radi izdavanja create komande.
 
 - **--create** : Kaže `pg_restore` da kreira ciljnu bazu (npr. mydatabase) pre vraćanja u nju.
 
@@ -1749,7 +1733,7 @@ Kako vaša Jampy aplikacija raste, moraćete da se skalirate van jednog servera 
   sudo apt install pgbouncer
   ```
 
-  Konfiguriši /etc/pgbouncer/pgbouncer.ini:
+  Konfiguriši "/etc/pgbouncer/pgbouncer.ini":
   
   ```sh
   [databases]
@@ -1771,16 +1755,15 @@ Keširanje je ključno za visoko-performansne Jampy aplikacije. Smanjuje optere�
 
 #### Redis keširanje
 
-Redis je skladište podataka u memoriji koje je savršeno za keširanje u Jampyu jer je brzo, podržava složene strukture podataka i može da podnese visoku konkurentnost:
+Redis je skladište podataka u memoriji koje je savršeno za keširanje u Jampy jer je brzo, podržava složene strukture podataka i može da podnese visoku konkurentnost:
 
 ```sh
 sudo apt install redis-server
-pip install redis Jampy-redis
 ```
 
 Ažuriranje Jampy podešavanja:
 
-> [!Note]
+> [!Note]  
 > Potrebno je proučiti i napisati ovaj deo.
 
 #### Nginx keširanje
