@@ -1207,7 +1207,7 @@ sudo systemctl restart nginx
 Konačno, potrebno je da otvorite svoj zaštitni zid ( `ufw` ) za normalan saobraćaj na portu 80. Pošto vam više nije potreban pristup razvojnom serveru, možete ukloniti pravilo za otvaranje i porta 8080:
 
 ```sh
-sudo ufw delete allow 8000
+sudo ufw delete allow 8080
 sudo ufw allow 'Nginx Full'
 ```
 
