@@ -93,8 +93,7 @@ command     | Description
 `git remote`| List the names of remote repositories configured for your local repository
 `git remote -v` | Display the URLs of the remote repositories associated with your local repository, showing both the fetch and push URLs
 `git remote add <name> <url>` | Add a new remote repository with the specified name and URL to your local repository configuration.
-`git remote remove <name>`| Deletes the specified remote repository connection from your local git configuration
-`git remote rm <name>`    | Deletes the specified remote repository connection from your local git configuration
+`git remote remove <name>`, `git remote rm <name>`    | Deletes the specified remote repository connection from your local git configuration
 `git remote rename <old_name> <new_name>` | Changes the name of an existing remote repository connection in your local git configuration
 `git remote set-url <name> <newurl>` | Changes the URL of an existing remote repository connection in your local git configuration
 `git fetch <remote>` | Retrieves the latest changes from the specified remote repository, updating your local copy of the remote branches without merging them into your local branches.
