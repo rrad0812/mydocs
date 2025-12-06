@@ -3,7 +3,7 @@
 
 ## Preface
 
-Welcome to the Git Cheat Sheet, an extensive guide crafted to empower both novice and seasoned developers with the knowledge needed to effectively utilize Git, the most popular version control system in the software industry. This cheat sheet is designed to be your go-to resource, whether you're managing a solo project or collaborating within a large team. By providing clear explanations and practical examples, it aims to demystify Git's complexities and transform them into intuitive, actionable insights.
+Welcome to the **Git Cheat Sheet**, an extensive guide crafted to empower both novice and seasoned developers with the knowledge needed to effectively utilize Git, the most popular version control system in the software industry. This cheat sheet is designed to be your go-to resource, whether you're managing a solo project or collaborating within a large team. By providing clear explanations and practical examples, it aims to demystify Git's complexities and transform them into intuitive, actionable insights.
 
 Throughout this guide, you will explore a wide array of Git commands and concepts that form the backbone of software version control. From fundamental operations like initializing repositories and committing changes, to more advanced techniques such as branching, merging, and rebasing, this cheat sheet covers it all. You'll also delve into specialized topics like squashing commits, bisecting to debug, handling submodules, and implementing subtrees, ensuring you're well-prepared to tackle any challenge that arises in your development process.
 
@@ -31,12 +31,11 @@ The `working directory` and the `staging area` are fundamental concepts in Git t
 
 On the other hand, the `staging area`, also known as the `index`, serves as an intermediary space between the working directory and the repository. It acts as a checkpoint where you can selectively organize changes before they are committed to the repository's history. This allows you to prepare a set of changes that are logically related, ensuring that each commit is meaningful and coherent.
 
-The commands below will facilitate the management of changes between the working
-directory and the staging area. They enable you to add files to the staging area, remove them, or modify the existing ones, giving you control over what will be included in the next commit. By using these commands, you can ensure that only the intended updates are committed, making your project's history clear and organized. This process is essential for maintaining a clean and understandable history, as it allows you to track the evolution of your project with precision and clarity.
+The commands below will facilitate the management of changes between the working directory and the staging area. They enable you to add files to the staging area, remove them, or modify the existing ones, giving you control over what will be included in the next commit. By using these commands, you can ensure that only the intended updates are committed, making your project's history clear and organized. This process is essential for maintaining a clean and understandable history, as it allows you to track the evolution of your project with precision and clarity.
 
  Commands | Description
 ----------|-------------------------------------------------------------------------
-git checkout . | The `git checkout .`  command discards all changes in the `working directory`, reverting files to their last committed state.This command is useful for quickly undoing local modifications and restoring the working directory to a clean state.
+`git checkout` | The `git checkout` command discards all changes in the `working directory`, reverting files to their last committed state.This command is useful for quickly undoing local modifications and restoring the working directory to a clean state.
 `git reset -p` | The `git reset -p`  command allows you to interactively reset changes in the working directory. It provides a way to selectively undo modifications, giving you fine-grained control over which changes to keep or discard.
 `git add <file>` | The `git add <file>`  command adds a specific file to the staging area in Git. This prepares the file for inclusion in the next commit, allowing you to selectively choose which changes to include in your version history.
 `git add -p` | Allows you to interactively stage changes from your working directory by breaking them into chunks (hunks), enabling you to review and selectively add parts of the changes to the index before committing.
@@ -71,8 +70,7 @@ In this section we'll introduce commands that allow you to create, switch, list,
 
 ## Merging
 
-The `git merge` command is used to combine the changes from one branch into another
-branch. It integrates the histories of both branches, creating a new commit that includes the changes from both sources. This process allows multiple lines of development to be brought together, facilitating collaboration and ensuring that all updates are incorporated into the main project. During a merge, conflicts may arise if changes overlap, requiring manual resolution to ensure a coherent final result.
+The `git merge` command is used to combine the changes from one branch into another branch. It integrates the histories of both branches, creating a new commit that includes the changes from both sources. This process allows multiple lines of development to be brought together, facilitating collaboration and ensuring that all updates are incorporated into the main project. During a merge, conflicts may arise if changes overlap, requiring manual resolution to ensure a coherent final result.
 
  Commands | Description
 ----------|------------------------------------------------------------------------
@@ -124,7 +122,7 @@ Amending Git commits allows you to modify the most recent commit, typically to c
 
 ## Stashing
 
-Git stashing is a feature that allows you to temporarily save changes in your working directory that are not yet ready to be committed. By using the git stash command, you can set aside these changes and revert your working directory to a clean state, enabling you to switch branches or perform other tasks without losing progress. Later, you can reapply the stashed changes with git stash apply or git stash pop, allowing you to continue where you left off. This functionality is especially useful for managing work in progress when you need to address an urgent issue or experiment with a different code path.
+Git stashing is a feature that allows you to temporarily save changes in your working directory that are not yet ready to be committed. By using the `git stash command`, you can set aside these changes and revert your working directory to a clean state, enabling you to switch branches or perform other tasks without losing progress. Later, you can reapply the stashed changes with git stash apply or git stash pop, allowing you to continue where you left off. This functionality is especially useful for managing work in progress when you need to address an urgent issue or experiment with a different code path.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -202,7 +200,7 @@ Git diffs are a feature in Git that allows you to see the differences between va
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git diff | Shows the differences between various states in your repository, such as between your working directory and the index (staging area), between the index and the last commit, or between two commits. It displays line-by-line changes in files, helping you review modifications before committing or merging.
+`git diff` | Shows the differences between various states in your repository, such as between your working directory and the index (staging area), between the index and the last commit, or between two commits. It displays line-by-line changes in files, helping you review modifications before committing or merging.
 `git diff --stat` | Shows a summary of changes between your working directory and the index (staging area), helping you see what files have been modified and how many lines have been added or removed.
 `git diff --stat <commit>` | View Changes Between a Commit and the Working Directory
 `git diff --stat <commit1> <commit2>` | Provides a summary of changes between two commits, showing which files were altered and the extent of changes between them.
@@ -285,20 +283,15 @@ Git rebasing re-applies your changes on top of another branch's history, creatin
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git rebase <branch>` | The git rebase command is used to re-apply commits on top of another base tip. It allows you to move or combine a sequence of commits to a new base commit. This is commonly used to: 1. Keep a linear project history. 2. Integrate changes from one branch into another. 3. Update a feature branch with the latest changes from the main branch. The basic usage is git rebase , which will rebase the current branch onto the specified branch.
-`git rebase --interactive <branch>` | Starts an interactive rebase session, allowing you to modify commits starting from up to the current HEAD. This lets you reorder, squash, edit, or delete commits, providing a way to clean up and refine commit history before pushing changes. Shorter version: git rebase -i <branch>
+`git rebase <branch>` | The git rebase command is used to re-apply commits on top of another base tip. It allows you to move or combine a sequence of commits to a new base commit. This is commonly used to: 1. Keep a linear project history. 2. Integrate changes from one branch into another. 3. Update a feature branch with the latest changes from the main branch. The basic usage is `git rebase`, which will rebase the current branch onto the specified branch.
+`git rebase --interactive <branch>` | Starts an interactive rebase session, allowing you to modify commits starting from up to the current HEAD. This lets you reorder, squash, edit, or delete commits, providing a way to clean up and refine commit history before pushing changes. Shorter version: `git rebase -i <branch>`.
 `git rebase --continue` | Continues the rebase process after resolving conflicts.
 `git rebase --abort` | Aborts the rebase process and returns to the original branch.
 `git fetch --rebase` | Fetches from the remote repository and rebases local changes.
 
 ## Cherry-Picking
 
-Git cherry-picking is a process that allows you to apply the changes introduced by a specific
-commit from one branch into another branch. This is particularly useful when you want to
-selectively incorporate individual changes from different branches without merging the entire
-branch. By using the git cherry-pick command, you can isolate and integrate only the desired
-commits, ensuring that specific modifications are included in your current branch while
-avoiding potential conflicts and unwanted changes from other parts of the branch.
+Git cherry-picking is a process that allows you to apply the changes introduced by a specific commit from one branch into another branch. This is particularly useful when you want to selectively incorporate individual changes from different branches without merging the entire branch. By using the git cherry-pick command, you can isolate and integrate only the desired commits, ensuring that specific modifications are included in your current branch while avoiding potential conflicts and unwanted changes from other parts of the branch.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -309,13 +302,7 @@ avoiding potential conflicts and unwanted changes from other parts of the branch
 
 ## Patching
 
-Git patching is a method used to apply changes from one repository to another or from one
-branch to another within the same repository. It involves creating patch files, which are text
-files representing differences between commits or branches. These patch files can then be
-applied to a repository using commands like git apply or git am, allowing changes to be
-transferred and integrated without directly merging branches. Patching is particularly useful
-for sharing specific changes or updates across different codebases, ensuring that only the
-intended modifications are applied.
+Git patching is a method used to apply changes from one repository to another or from one branch to another within the same repository. It involves creating patch files, which are text files representing differences between commits or branches. These patch files can then be applied to a repository using commands like git apply or git am, allowing changes to be transferred and integrated without directly merging branches. Patching is particularly useful for sharing specific changes or updates across different codebases, ensuring that only the intended modifications are applied.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -329,26 +316,19 @@ intended modifications are applied.
 
 ## Relative dates
 
-Git relative dates allow users to refer to specific points in the repository's history using
-human-readable time expressions. For instance, commands like main@{1.week.ago} or
-@{3.days.ago} enable you to access the state of a branch or view changes made since a
-certain time period relative to the current date. This feature simplifies navigating the
-repository's timeline by using intuitive terms like "yesterday," "2 weeks ago," or specific
-dates, making it easier to track and manage the evolution of the codebase without needing
-to remember exact commit hashes or timestamps.
+Git relative dates allow users to refer to specific points in the repository's history using human-readable time expressions. For instance, commands like `main@{1.week.ago}` or `@{3.days.ago}` enable you to access the state of a branch or view changes made since a certain time period relative to the current date. This feature simplifies navigating the repository's timeline by using intuitive terms like "yesterday," "2 weeks ago," or specific dates, making it easier to track and manage the evolution of the codebase without needing to remember exact commit hashes or timestamps.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git show main@{1.week.ago}` | See the state of your main branch one week ago: 
-`git diff @{3.days.ago}` | See what changes you've made in the last 3 days:
-`git checkout main@{2.weeks.ago}` | Check out your repository as it was 2 weeks ago:
+`git show main@{1.week.ago}` | See the state of your main branch one week ago
+`git diff @{3.days.ago}` | See what changes you've made in the last 3 days
+`git checkout main@{2.weeks.ago}` | Check out your repository as it was 2 weeks ago
 `git log @{1.month.ago}..HEAD` | See the log of commits from 1 month ago until now
 `@{2024-06-01}`, `@{yesterday}`, `@{"1 week 2 days ago"}` | Other usage examples.
 
 ## Blaming
 
-Git blaming is a feature in Git that identifies the last modification made to each line of a file,
-attributing changes to specific commits and authors. This is done using the git blame command, which provides a detailed annotation of the file, showing who made changes and when they were made. This tool is particularly useful for tracking the history of a file, understanding the evolution of the code, and identifying the source of bugs or changes. By pinpointing the exact commit and author responsible for each line, developers can gain insights into the development process and facilitate better collaboration and accountability within a team.
+Git blaming is a feature in Git that identifies the last modification made to each line of a file, attributing changes to specific commits and authors. This is done using the `git blame` command, which provides a detailed annotation of the file, showing who made changes and when they were made. This tool is particularly useful for tracking the history of a file, understanding the evolution of the code, and identifying the source of bugs or changes. By pinpointing the exact commit and author responsible for each line, developers can gain insights into the development process and facilitate better collaboration and accountability within a team.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -357,34 +337,21 @@ attributing changes to specific commits and authors. This is done using the git 
 `git blame <file> <commit>` | Shows the blame information up to the specified commit.
 `git blame <file> -C -C` | Shows which revisions and authors last modified each line of a file, with copying detection. The -C  option detects lines moved or copied within the same file. Using it once ( -C ) detects lines moved or copied within the same file. Using the -C option twice ( -C -C ) makes git inspect unmodified files as candidates for the source of copy. This means it will try to find the origin of copied lines not just in the same file but in other files as well.
 `git blame <file> --reverse` | Works backwards, showing who last altered each line in the specified file.
-`git blame <file> --first-parent` | 
-Shows who most recently modified each line in a file, following only the first parent commit
-for merge changes.
+`git blame <file> --first-parent` | Shows who most recently modified each line in a file, following only the first parent commit for merge changes.
 
 ## Archiving
 
-Git archiving is a feature that allows you to create archive files, such as .tar or .zip,
-containing the contents of a specific commit, branch, or tag. This is useful for packaging a
-snapshot of your repository at a specific point in time, enabling you to distribute or backup
-the repository's state without including the entire Git history. The git archive command is
-typically used for this purpose, providing a convenient way to export the current state of the
-project into a portable format.
+Git archiving is a feature that allows you to create archive files, such as .tar or .zip, containing the contents of a specific commit, branch, or tag. This is useful for packaging a snapshot of your repository at a specific point in time, enabling you to distribute or backup the repository's state without including the entire Git history. The git archive command is typically used for this purpose, providing a convenient way to export the current state of the project into a portable format.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
 `git archive <format> <tree-ish>` | creates an archive file (e.g., a .tar or .zip file) containing the contents of the specified tree-ish (like a commit, branch, or tag) in the given format. For example:
-` git archive --format=tar HEAD`  | creates a .tar archive of the current commit (HEAD).
+`git archive --format=tar HEAD`  | creates a .tar archive of the current commit (HEAD).
 `git archive --format=zip v1.0` | creates a .zip archive of the files in the v1.0 tag. This command is useful for packaging a snapshot of your repository at a specific point in time.
 
 ## Tracking
 
-Git tracking refers to the process of monitoring and managing the files in a repository. The
-command `git ls-files` lists all files that are being tracked by Git, providing a clear view of the
-files that are currently under version control. On the other hand, git ls-tree displays the
-contents of a tree object for a specified branch, showing the structure and files at that point
-in the repository. Together, these commands help developers understand which files are
-included in the repository and how they are organized, ensuring efficient tracking and
-management of the project's codebase.
+Git tracking refers to the process of monitoring and managing the files in a repository. The command `git ls-files` lists all files that are being tracked by Git, providing a clear view of the files that are currently under version control. On the other hand, git ls-tree displays the contents of a tree object for a specified branch, showing the structure and files at that point in the repository. Together, these commands help developers understand which files are included in the repository and how they are organized, ensuring efficient tracking and management of the project's codebase.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -437,13 +404,7 @@ Cleaning up in Git involves removing unnecessary files, references, and branches
 
 ## Subtree
 
-Git subtree is a mechanism for managing and integrating subprojects into a main repository.
-Unlike submodules, which treat the subproject as a separate entity with its own repository,
-subtrees allow you to include the contents of another repository directly within a subdirectory
-of your main repository. This approach simplifies the workflow by eliminating the need for
-multiple repositories and enabling seamless integration, merging, and pulling of updates
-from the subproject. Subtrees provide a flexible and convenient way to manage
-dependencies and collaborate on projects that require incorporating external codebases.
+Git subtree is a mechanism for managing and integrating subprojects into a main repository. Unlike submodules, which treat the subproject as a separate entity with its own repository, subtrees allow you to include the contents of another repository directly within a subdirectory of your main repository. This approach simplifies the workflow by eliminating the need for multiple repositories and enabling seamless integration, merging, and pulling of updates from the subproject. Subtrees provide a flexible and convenient way to manage dependencies and collaborate on projects that require incorporating external codebases.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -453,7 +414,7 @@ dependencies and collaborate on projects that require incorporating external cod
 
 ## Searching
 
-git grep is a powerful search command in Git that allows users to search for specific strings or patterns within the files of a repository. It searches through the working directory and the index, providing a quick and efficient way to locate occurrences of a specified pattern across multiple files. This command is particularly useful for developers looking to find instances of code, comments, or text within a project, enabling them to navigate and understand large codebases with ease. With various options and flags, git grep can perform targeted searches, making it an essential tool for code analysis and maintenance.
+`git grep` is a powerful search command in Git that allows users to search for specific strings or patterns within the files of a repository. It searches through the working directory and the index, providing a quick and efficient way to locate occurrences of a specified pattern across multiple files. This command is particularly useful for developers looking to find instances of code, comments, or text within a project, enabling them to navigate and understand large codebases with ease. With various options and flags, git grep can perform targeted searches, making it an essential tool for code analysis and maintenance.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -462,7 +423,7 @@ git grep is a powerful search command in Git that allows users to search for spe
 
 ## Bisecting
 
-Git bisecting is a powerful debugging tool that helps identify the specific commit thatintroduced a bug or issue in a project. By performing a binary search through the commit history, git bisect efficiently narrows down the range of potential problem commits. The process involves marking a known good commit and a known bad commit, and then repeatedly testing intermediate commits to determine whether they are good or bad. This iterative approach quickly isolates the faulty commit, allowing developers to pinpoint the exact change that caused the problem, thereby facilitating faster and more accurate debugging.
+`Git bisecting` is a powerful debugging tool that helps identify the specific commit thatintroduced a bug or issue in a project. By performing a binary search through the commit history, `git bisect` efficiently narrows down the range of potential problem commits. The process involves marking a known good commit and a known bad commit, and then repeatedly testing intermediate commits to determine whether they are good or bad. This iterative approach quickly isolates the faulty commit, allowing developers to pinpoint the exact change that caused the problem, thereby facilitating faster and more accurate debugging.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -474,9 +435,7 @@ Git bisecting is a powerful debugging tool that helps identify the specific comm
 
 ## Attributes
 
-Git attributes are settings that define how Git should handle specific files or paths within a
-repository. These attributes are defined in a file named .gitattributes, and they can control
-various behaviors such as text encoding, line-ending normalization, merge strategies, and diff algorithms. By setting attributes, you can ensure consistent behavior across different environments and collaborators, making it easier to manage files with special requirements or complexities. For example, you can mark certain files as binary to prevent Git from attempting to merge them, or specify custom diff drivers for more meaningful comparisons.
+Git attributes are settings that define how Git should handle specific files or paths within a repository. These attributes are defined in a file named gitattributes, and they can control various behaviors such as text encoding, line-ending normalization, merge strategies, and diff algorithms. By setting attributes, you can ensure consistent behavior across different environments and collaborators, making it easier to manage files with special requirements or complexities. For example, you can mark certain files as binary to prevent Git from attempting to merge them, or specify custom diff drivers for more meaningful comparisons.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
@@ -484,7 +443,7 @@ various behaviors such as text encoding, line-ending normalization, merge strate
 
 ## Checkout
 
-git checkout is a versatile command in Git used to switch between different branches, tags, or commits within a repository. By updating the working directory and index to match the specified branch or commit, it allows you to view or work with the state of the repository at that point. Additionally, git checkout can be used to create new branches, restore specific files from a commit, or even start a new branch with no history using the --orphan option. This command is essential for navigating and managing different versions of a project's
+git checkout is a versatile command in Git used to switch between different ranches, tags, or commits within a repository. By updating the working directory and index to match the specified branch or commit, it allows you to view or work with the state of the repository at that point. Additionally, git checkout can be used to create new branches, restore specific files from a commit, or even start a new branch with no history using the --orphan option. This command is essential for navigating and managing different versions of a project's
 codebase.
 
  Commands | Description
@@ -496,25 +455,18 @@ codebase.
 
 ## Reflog
 
-Git reflog is a powerful tool that records all changes made to the tips of branches and the
-HEAD reference in a Git repository. This includes actions such as commits, checkouts,
-merges, and resets. By maintaining a history of these changes, reflog allows users to track
-recent modifications and recover lost commits, even if they are not part of the current branch
-history. It provides a way to navigate through the repository's state changes, making it an
-invaluable resource for debugging and undoing mistakes.
+Git reflog is a powerful tool that records all changes made to the tips of branches and the HEAD reference in a Git repository. This includes actions such as commits, checkouts, merges, and resets. By maintaining a history of these changes, reflog allows users to track recent modifications and recover lost commits, even if they are not part of the current branch history. It provides a way to navigate through the repository's state changes, making it an invaluable resource for debugging and undoing mistakes.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git reflog` | Displays a log of all the changes to the HEAD reference and branch tips, including commits, checkouts, merges, and resets, allowing you to recover lost commits or track recent changes
-to the repository's state
+`git reflog` | Displays a log of all the changes to the HEAD reference and branch tips, including commits, checkouts, merges, and resets, allowing you to recover lost commits or track recent changes to the repository's state
 `git reflog show <ref>` | Displays the reflog for the specified reference (), showing a log of changes to that reference, including updates to HEAD or branch tips, along with associated commit messages and timestamps.
 
 ## Handling Untracked Files
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git clean` | Remove untracked files and directories from the working directory. By default, it only shows what would be removed without actually deleting anything. To perform the actual cleanup,
-you need to use additional flags
+`git clean` | Remove untracked files and directories from the working directory. By default, it only shows what would be removed without actually deleting anything. To perform the actual cleanup, you need to use additional flags
 `git clean -f`  | Removes untracked files.
 `git clean -fd` | Removes untracked files and directories.
 `git clean -fx` | Removes untracked files, including those ignored by .gitignore.
@@ -524,38 +476,31 @@ you need to use additional flags
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git push --force` | Forces a push of your local branch to the remote repository, even if it results in a non-fast-forward merge. This overwrites the remote branch with your local changes. This can be
-necessary when you have rewritten history (e.g., with a rebase) and need to update the remote branch to match your local branch, but it can also potentially overwrite others' changes, so it should be used with caution.
+`git push --force` | Forces a push of your local branch to the remote repository, even if it results in a non-fast-forward merge. This overwrites the remote branch with your local changes. This can be necessary when you have rewritten history (e.g., with a rebase) and need to update the remote branch to match your local branch, but it can also potentially overwrite others' changes, so it should be used with caution.
 
 ## Fetching and Pulling
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
 `git fetch --all` | Retrieves updates from all remote repositories configured for your local repository, fetching changes from all branches and tags without modifying your local branches
-`git pull --rebase` | Fetches changes from the remote repository and rebases your local commits on top of the updated remote branch, rather than merging them. This keeps the commit history linear and
-avoids unnecessary merge commits.
+`git pull --rebase` | Fetches changes from the remote repository and rebases your local commits on top of the updated remote branch, rather than merging them. This keeps the commit history linear and avoids unnecessary merge commits.
 
 ## Handling Merge Conflicts
 
-Handling merge conflicts in Git is an essential skill for collaborating on projects with multiple
-contributors. Merge conflicts occur when changes in different branches or commits overlap or contradict each other, preventing an automatic merge. Resolving these conflicts involves reviewing and manually reconciling the differences to ensure that the final code integrates contributions from all parties accurately. In practice, effectively managing merge conflicts helps maintain code integrity and facilitates smooth collaboration by ensuring that everyone's changes are correctly incorporated into the project's history.
+Handling merge conflicts in Git is an essential skill for collaborating on projects with multiple contributors. Merge conflicts occur when changes in different branches or commits overlap or contradict each other, preventing an automatic merge. Resolving these conflicts involves reviewing and manually reconciling the differences to ensure that the final code integrates contributions from all parties accurately. In practice, effectively managing merge conflicts helps maintain code integrity and facilitates smooth collaboration by ensuring that everyone's changes are correctly incorporated into the project's history.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
 `git mergetool` | launches a merge tool to help you resolve conflicts that arise during a merge or rebase. It opens a graphical interface or a text-based tool configured in your Git settings, allowing you to manually resolve conflicts and finalize the merge.
-`git rerere` | rerere stands for "reuse recorded resolution" and is a feature that helps automatically resolve conflicts in future merges or rebases by reusing conflict resolutions you've previously recorded. Once enabled, Git records how you resolved conflicts, and if the same conflicts
-arise again, it can apply the same resolutions automatically.
+`git rerere` | rerere stands for "reuse recorded resolution" and is a feature that helps automatically resolve conflicts in future merges or rebases by reusing conflict resolutions you've previously recorded. Once enabled, Git records how you resolved conflicts, and if the same conflicts arise again, it can apply the same resolutions automatically.
 
 ## Working trees
 
-Working trees in Git allow you to have multiple working directories associated with a single
-repository. This is particularly useful for working on multiple branches simultaneously without
-the need to constantly switch branches in the same directory. By using working trees, you can easily manage different features, bug fixes, or experiments in isolated environments, improving workflow efficiency and reducing the risk of conflicts.
+Working trees in Git allow you to have multiple working directories associated with a single repository. This is particularly useful for working on multiple branches simultaneously without the need to constantly switch branches in the same directory. By using working trees, you can easily manage different features, bug fixes, or experiments in isolated environments, improving workflow efficiency and reducing the risk of conflicts.
 
  Commands | Description
 ----------|-----------------------------------------------------------------------
-`git worktree add ../new-branch feature-branch` | Creates a new working tree in a directory named "new-branch" based on the "feature-
-branch".
+`git worktree add ../new-branch feature-branch` | Creates a new working tree in a directory named "new-branch" based on the "feature-branch".
 `git worktree list` | Lists all working trees associated with the current repository, showing their paths and the branches they are checked out to.
 `git worktree remove <path>` | Removes the specified working tree at the given
 `git worktree prune` | Removes references to nonexistent working trees, cleaning up the working tree list.
