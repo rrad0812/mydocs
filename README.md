@@ -6,6 +6,7 @@
   - Kuvar
   - Trikovi
 - Docker
+- Git
 - GoLang
   - Http API Demo
   - Learn Go for dev
@@ -21,4 +22,4 @@
 - Ubuntu
 
 Radosav.
-avg - nov. 2025.
+avg - dec. 2025.
