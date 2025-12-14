@@ -1,7 +1,7 @@
 
 # Poglavlje 5 - Prijava korisnika
 
-U 3. poglavlju ste naučili kako da kreirate obrazac za prijavu korisnika, a u 4. poglavlju ste naučili kako da radite sa bazom podataka. Ovo poglavlje će vas naučiti kako da kombinujete teme iz ta dva poglavlja da biste kreirali jednostavan sistem za prijavu korisnika.
+U 3. poglavlju ste naučili kako da kreirate formu za prijavu korisnika, a u 4. poglavlju ste naučili kako da radite sa bazom podataka. Ovo poglavlje će vas naučiti kako da kombinujete teme iz ta dva poglavlja da biste kreirali jednostavan sistem za prijavu korisnika.
 
 Linkovi ka GitHubu za ovo poglavlje su: [Browse](https://github.com/miguelgrinberg/microblog/tree/v0.5), [Zip](https://github.com/miguelgrinberg/microblog/archive/v0.5.zip), [Diff](https://github.com/miguelgrinberg/microblog/compare/v0.4...v0.5).
 
@@ -95,7 +95,7 @@ Ekstenzija `Flask-Login` radi sa korisničkim modelom aplikacije i očekuje da o
 
 Mogu lako da implementiram ove četiri, ali pošto su implementacije prilično generičke, `Flask-Login` pruža klasu mixin koja se zove `UserMixin` koja uključuje bezbedne implementacije koje su prikladne za većinu klasa korisničkih modela. Evo kako se klasa mixin dodaje modelu:
 
-> `app/models.py` : Klasa za mešanje korisnika u `Flask-Login`
+> `app/models.py` : Klasa `UserMixin` korisnika u `Flask-Login`
 
 ```py
 #...
@@ -153,19 +153,19 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 ```
 
-Prva dva reda u `login()` funkciji se bave čudnom situacijom. Zamislite da imate korisnika koji je prijavljen i da korisnik ode na `/login` URL adresu vaše aplikacije. Očigledno je da je to greška, tako da ne želim da to dozvolim. Promenljiva `current_user` dolazi iz `Flask-Login`-a i može se koristiti u bilo kom trenutku tokom obrade zahteva za dobijanje objekta korisnika koji predstavlja klijenta tog zahteva. Vrednost ove promenljive može biti objekat korisnika iz baze podataka (koji Flask-Login čita kroz povratni poziv učitavača korisnika koji sam naveo gore) ili poseban anonimni objekat korisnika ako se korisnik još nije prijavio. Sećate se onih svojstava koja je `Flask-Login` zahtevao u objektu korisnika? Jedno od njih je bilo `is_authenticated`, što je korisno da se proveri da li je korisnik prijavljen ili ne. Kada je korisnik već prijavljen, ja samo preusmerim na indeksnu stranicu.
+Prva dva reda u `login()` funkciji se bave čudnom situacijom. Zamislite da imate korisnika koji je prijavljen i da korisnik ode na `/login` URL adresu vaše aplikacije. Očigledno je da je to greška, tako da ne želim da to dozvolim. Promenljiva `current_user` dolazi iz `Flask-Login`-a i može se koristiti u bilo kom trenutku tokom obrade zahteva za dobijanje objekta korisnika koji predstavlja klijenta tog zahteva. Vrednost ove promenljive može biti objekat korisnika iz baze podataka (koji `Flask-Login` čita kroz povratni poziv učitavača korisnika koji sam naveo gore) ili poseban anonimni objekat korisnika ako se korisnik još nije prijavio. Sećate se onih svojstava koja je `Flask-Login` zahtevao u objektu korisnika? Jedno od njih je bilo `is_authenticated`, što je korisno da se proveri da li je korisnik prijavljen ili ne. Kada je korisnik već prijavljen, ja samo preusmerim na indeksnu stranicu.
 
-Umesto poziva flash()koji sam ranije koristio, sada mogu stvarno da prijavim korisnika. Prvi korak je učitavanje korisnika iz baze podataka. Korisničko ime je došlo sa slanjem obrasca, tako da mogu da upitam bazu podataka sa njim da bih pronašao korisnika. U tu svrhu koristim klauzulu where(), da bih pronašao korisnike sa datim korisničkim imenom. Pošto znam da će biti samo jedan ili nula rezultata, izvršavam upit pozivanjem db.session.scalar(), koja će vratiti objekat korisnika ako postoji, ili Noneako ne postoji. U poglavlju 4 videli ste da kada pozovete all()metodu, upit se izvršava i dobijate listu svih rezultata koji odgovaraju tom upitu. Metoda first()je još jedan često korišćen način za izvršavanje upita, kada vam je potreban samo jedan rezultat.
+Umesto poziva `flash()` koji sam ranije koristio, sada mogu stvarno da prijavim korisnika. Prvi korak je učitavanje korisnika iz baze podataka. Korisničko ime je došlo sa slanjem forme, tako da mogu da upitam bazu podataka sa njim da bih pronašao korisnika. U tu svrhu koristim klauzulu `where()`, da bih pronašao korisnike sa datim korisničkim imenom. Pošto znam da će biti samo jedan ili nula rezultata, izvršavam upit pozivanjem `db.session.scalar()`, koja će vratiti objekat korisnika ako postoji, ili `None` ako ne postoji. U poglavlju 4 videli ste da kada pozovete `all()` metodu, upit se izvršava i dobijate listu svih rezultata koji odgovaraju tom upitu. Metoda `first()` je još jedan često korišćen način za izvršavanje upita, kada vam je potreban samo jedan rezultat.
 
-Ako dobijem podudaranje za korisničko ime koje je navedeno, mogu sledeće da proverim da li je lozinka koja je takođe došla uz obrazac važeća. To se radi pozivanjem metode koju `check_password()` sam gore definisao. Ovo će uzeti heš lozinke sačuvan kod korisnika i utvrditi da li se lozinka uneta u obrazac podudara sa hešem ili ne. Dakle, sada imam dva moguća uslova greške: korisničko ime može biti nevažeće ili lozinka može biti netačna za korisnika. U oba ova slučaja, prikazujem poruku i preusmeravam nazad na prompt za prijavu kako bi korisnik mogao ponovo da pokuša.
+Ako dobijem podudaranje za korisničko ime koje je navedeno, mogu sledeće da proverim da li je lozinka koja je takođe došla uz formu važeća. To se radi pozivanjem metode `check_password()` koju sam gore definisao. Ovo će uzeti heš lozinke sačuvan kod korisnika i utvrditi da li se lozinka uneta u formu podudara sa hešom ili ne. Dakle, sada imam dva moguća uslova greške: korisničko ime može biti nevažeće ili lozinka može biti netačna za korisnika. U oba ova slučaja, prikazujem poruku i preusmeravam nazad na prompt za prijavu kako bi korisnik mogao ponovo da pokuša.
 
-Ako su i korisničko ime i lozinka ispravni, onda pozivam funkciju login_user(), koja dolazi iz Flask-Login-a. Ova funkcija će registrovati korisnika kao prijavljenog, što znači da će sve buduće stranice na koje korisnik kreće imati current_userpromenljivu podešenu na tog korisnika.
+Ako su i korisničko ime i lozinka ispravni, onda pozivam funkciju `login_user()`, koja dolazi iz `Flask-Login`-a. Ova funkcija će registrovati korisnika kao prijavljenog, što znači da će sve buduće stranice na koje korisnik kreće imati `current_user` promenljivu podešenu na tog korisnika.
 
 Da bih završio proces prijave, samo preusmerim novoprijavljenog korisnika na indeksnu stranicu.
 
 ## Odjavljivanje korisnika
 
-Znam da ću takođe morati da ponudim korisnicima opciju da se odjave iz aplikacije. To se može uraditi pomoću logout_user()funkcije Flask-Login. Evo funkcije za prikaz odjave:
+Znam da ću takođe morati da ponudim korisnicima opciju da se odjave iz aplikacije. To se može uraditi pomoću `logout_user()` funkcije `Flask-Login`. Evo funkcije za prikaz odjave:
 
 > `app/routes.py` : Funkcija pogleda za odjavu
 
@@ -196,13 +196,13 @@ Da bih ovaj link predstavio korisnicima, mogu da podesim da se link za prijavu u
 </div>
 ```
 
-Svojstvo is_anonymousje jedan od atributa koje Flask-Login dodaje korisničkim objektima kroz UserMixinklasu. current_user.is_anonymousIzraz će biti aktivan Truesamo kada korisnik nije prijavljen.
+Svojstvo `is_anonymous` je jedan od atributa koje `Flask-Login` dodaje korisničkim objektima kroz `UserMixin` klasu. `current_user.is_anonymous` izraz će biti `True` samo kada korisnik nije prijavljen.
 
 ## Zahtevanje od korisnika da se prijave
 
-Flask-Login pruža veoma korisnu funkciju koja primorava korisnike da se prijave pre nego što mogu da vide određene stranice aplikacije. Ako korisnik koji nije prijavljen pokuša da vidi zaštićenu stranicu, Flask-Login će automatski preusmeriti korisnika na obrazac za prijavu i vratiti ga na stranicu koju je želeo da vidi tek nakon što je proces prijave završen.
+`Flask-Login` pruža veoma korisnu funkciju koja primorava korisnike da se prijave pre nego što mogu da vide određene stranice aplikacije. Ako korisnik koji nije prijavljen pokuša da vidi zaštićenu stranicu, `Flask-Login` će automatski preusmeriti korisnika na formu za prijavu i vratiti ga na stranicu koju je želeo da vidi tek nakon što je proces prijave završen.
 
-Da bi ova funkcija bila implementirana, Flask-Login mora da zna koja je funkcija pregleda koja obrađuje prijave. Ovo se može dodati u app/__init__.py :
+Da bi ova funkcija bila implementirana, Flask-Login mora da zna koja je funkcija pogleda koja obrađuje prijave. Ovo se može dodati u `app/__init__.py` :
 
 ```py
 #...
@@ -210,9 +210,9 @@ login = LoginManager(app)
 login.login_view = 'login'
 ```
 
-Gore navedena vrednost 'login'je naziv funkcije (ili krajnje tačke) za prikaz za prijavu. Drugim rečima, naziv koji biste koristili u pozivu url_for()da biste dobili URL adresu.
+Gore navedena vrednost `'login'`je naziv funkcije (ili krajnje tačke) pogleda za prijavu. Drugim rečima, naziv koji biste koristili u pozivu `url_for()` da biste dobili URL adresu.
 
-Flask-Login štiti funkciju pregleda od anonimnih korisnika pomoću dekoratora pod nazivom @login_required. Kada dodate ovaj dekorator funkciji pregleda ispod @app.routedekoratora iz Flask-a, funkcija postaje zaštićena i neće dozvoliti pristup korisnicima koji nisu autentifikovani. Evo kako se dekorator može primeniti na funkciju pregleda indeksa aplikacije:
+`Flask-Login` štiti funkciju pogleda od anonimnih korisnika pomoću dekoratora pod nazivom `@login_required`. Kada dodate ovaj dekorator funkciji pogleda ispod `@app.route` dekoratora iz Flask-a, funkcija postaje zaštićena i neće dozvoliti pristup korisnicima koji nisu autentifikovani. Evo kako se dekorator može primeniti na funkciju pogleda indeksa aplikacije:
 
 > `app/routes.py` : `@login_required dekorator`
 
@@ -226,9 +226,9 @@ def index():
     #...
 ```
 
-Preostaje da se implementira preusmeravanje nazad sa uspešne prijave na stranicu kojoj je korisnik želeo da pristupi. Kada korisnik koji nije prijavljen pristupi funkciji pregleda zaštićenoj dekoratorom @login_required, dekorator će preusmeriti na stranicu za prijavu, ali će u ovo preusmeravanje uključiti neke dodatne informacije kako bi se aplikacija zatim mogla vratiti na originalnu stranicu. Ako korisnik ode na /index, na primer, @login_requireddekorator će presresti zahtev i odgovoriti preusmeravanjem na /login, ali će dodati argument stringa upita ovom URL-u, čineći kompletan URL preusmeravanja /login?next=/index. nextArgument stringa upita je podešen na originalni URL, tako da aplikacija može to koristiti za preusmeravanje nazad nakon prijave.
+Preostaje da se implementira preusmeravanje nazad sa uspešne prijave na stranicu kojoj je korisnik želeo da pristupi. Kada korisnik koji nije prijavljen pristupi funkciji pregleda zaštićenoj dekoratorom `@login_required`, dekorator će preusmeriti na stranicu za prijavu, ali će u ovo preusmeravanje uključiti neke dodatne informacije kako bi se aplikacija zatim mogla vratiti na originalnu stranicu. Ako korisnik ode na `/index`, na primer, `@login_required` dekorator će presresti zahtev i odgovoriti preusmeravanjem na `/login`, ali će dodati argument stringa upita ovom URL-u, čineći kompletan URL preusmeravanja `/login?next=/index`. Argument `next` stringa upita je podešen na originalni URL, tako da aplikacija može to koristiti za preusmeravanje nazad nakon prijave.
 
-Evo isečka koda koji pokazuje kako se čita i obrađuje nextargument upitnog niza. Promene su u četiri reda ispod login_user()poziva.
+Evo isečka koda koji pokazuje kako se čita i obrađuje `next` argument upitnog niza. Promene su u četiri reda ispod `login_user()` poziva.
 
 > `app/routes.py` : Preusmeri na sledeću stranicu
 
@@ -253,13 +253,13 @@ def login():
     #...
 ```
 
-Odmah nakon što se korisnik prijavi pozivanjem funkcije Flask-Login, dobija se login_user()vrednost argumenta upitnog stringa. Flask pruža promenljivu koja sadrži sve informacije koje je klijent poslao sa zahtevom. Konkretno, atribut prikazuje sadržaj upitnog stringa u prijateljskom rečničkom formatu. Zapravo postoje tri moguća slučaja koja treba uzeti u obzir da bi se utvrdilo gde preusmeriti korisnika nakon uspešnog prijavljivanja:nextrequestrequest.args
+Odmah nakon što se korisnik prijavi pozivanjem funkcije `Flask-Login` `login_user()`, dobija se  vrednost `next` argumenta upitnog stringa. Flask pruža `request` promenljivu koja sadrži sve informacije koje je klijent poslao sa zahtevom. Konkretno, `request.args` atribut prikazuje sadržaj upitnog stringa u prijateljskom rečničkom formatu. Zapravo postoje tri moguća slučaja koja treba uzeti u obzir da bi se utvrdilo gde preusmeriti korisnika nakon uspešnog prijavljivanja:
 
-- Ako URL za prijavu nema nextargument, korisnik se preusmerava na indeksnu stranicu.
-- Ako URL za prijavu sadrži nextargument koji je podešen na relativnu putanju (ili drugim rečima, URL bez dela domena), korisnik se preusmerava na taj URL.
-- Ako URL za prijavu sadrži nextargument koji je podešen na punu URL adresu koja uključuje ime domena, onda se ta URL adresa ignoriše i korisnik se preusmerava na indeksnu stranicu.
+- Ako URL za prijavu nema `next` argument, korisnik se preusmerava na indeksnu stranicu.
+- Ako URL za prijavu sadrži `next` argument koji je podešen na relativnu putanju (ili drugim rečima, URL bez dela domena), korisnik se preusmerava na taj URL.
+- Ako URL za prijavu sadrži `next` argument koji je podešen na punu URL adresu koja uključuje ime domena, onda se ta URL adresa ignoriše i korisnik se preusmerava na indeksnu stranicu.
 
-Prvi i drugi slučaj se sami po sebi razumeju. Treći slučaj je tu da bi aplikacija bila bezbednija. Napadač bi mogao da ubaci URL adresu zlonamerne veb stranice u argument next, tako da aplikacija preusmerava samo kada je URL adresa relativna, što osigurava da preusmeravanje ostaje unutar iste veb stranice kao i aplikacija. Da bih utvrdio da li je URL adresa apsolutna ili relativna, analiziram je pomoću Pajtonove urlsplit()funkcije, a zatim proveravam da li netlocje komponenta podešena ili ne.
+Prvi i drugi slučaj se sami po sebi razumeju. Treći slučaj je tu da bi aplikacija bila bezbednija. Napadač bi mogao da ubaci URL adresu zlonamerne veb stranice u argument `next`, tako da aplikacija preusmerava samo kada je URL adresa relativna, što osigurava da preusmeravanje ostaje unutar iste veb stranice kao i aplikacija. Da bih utvrdio da li je URL adresa apsolutna ili relativna, analiziram je pomoću Pajtonove `urlsplit()` funkcije, a zatim proveravam da li je komponenta `netloc` podešena ili ne.
 
 ## Prikaz prijavljenog korisnika u šablonima
 
@@ -278,7 +278,7 @@ Sećate li se da sam još u drugom poglavlju kreirao lažnog korisnika da mi pom
 {% endblock %}
 ```
 
-I mogu ukloniti userargument šablona u funkciji pregleda:
+I mogu ukloniti `user` argument šablona u funkciji pogleda:
 
 > `app/routes.py` : Više ne prosleđuj korisnika šablonu
 
@@ -291,7 +291,7 @@ def index():
     return render_template("index.html", title='Home Page', posts=posts)
 ```
 
-Ovo je dobar trenutak da testirate kako funkcioniše funkcionalnost prijavljivanja i odjavljivanja. Pošto još uvek nema registracije korisnika, jedini način da se korisnik doda u bazu podataka jeste da se to uradi preko Pajton ljuske, pa pokrenite flask shelli unesite sledeće komande da biste registrovali korisnika:
+Ovo je dobar trenutak da testirate kako funkcioniše funkcionalnost prijavljivanja i odjavljivanja. Pošto još uvek nema registracije korisnika, jedini način da se korisnik doda u bazu podataka jeste da se to uradi preko Pajton ljuske, pa pokrenite `flask shell` i unesite sledeće komande da biste registrovali korisnika:
 
 ```py
 >>> u = User(username='susan', email='susan@example.com')
@@ -300,11 +300,11 @@ Ovo je dobar trenutak da testirate kako funkcioniše funkcionalnost prijavljivan
 >>> db.session.commit()
 ```
 
-Ako sada pokrenete aplikaciju i odete na URL-ove aplikacije / ili /index, bićete odmah preusmereni na stranicu za prijavu, a nakon što se prijavite koristeći akreditive korisnika koga ste dodali u svoju bazu podataka, bićete vraćeni na originalnu stranicu, na kojoj ćete videti personalizovani pozdrav i lažne objave na blogu. Ako zatim kliknete na vezu za odjavu u gornjoj navigacionoj traci, bićete vraćeni na indeksnu stranicu kao anonimni korisnik i odmah ćete biti ponovo preusmereni na stranicu za prijavu pomoću Flask-Login-a.
+Ako sada pokrenete aplikaciju i odete na URL-ove aplikacije `/` ili `/index`, bićete odmah preusmereni na stranicu za prijavu, a nakon što se prijavite koristeći akreditive korisnika koga ste dodali u svoju bazu podataka, bićete vraćeni na originalnu stranicu, na kojoj ćete videti personalizovani pozdrav i lažne objave na blogu. Ako zatim kliknete na vezu za odjavu u gornjoj navigacionoj traci, bićete vraćeni na indeksnu stranicu kao anonimni korisnik i odmah ćete biti ponovo preusmereni na stranicu za prijavu pomoću `Flask-Login`-a.
 
 ### Registracija korisnika
 
-Poslednji deo funkcionalnosti koji ću napraviti u ovom poglavlju je obrazac za registraciju, tako da se korisnici mogu registrovati putem veb obrasca. Počnimo kreiranjem klase veb obrasca u app/forms.py :
+Poslednji deo funkcionalnosti koji ću napraviti u ovom poglavlju je forma za registraciju, tako da se korisnici mogu registrovati putem veb forme. Počnimo kreiranjem klase veb forme u `app/forms`.py :
 
 > `app/forms.py` : Forma za registraciju korisnika
 
@@ -337,7 +337,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
 ```
 
-Postoji nekoliko zanimljivih stvari u ovom novom obrascu vezanih za validaciju. Prvo, za emailpolje sam dodao drugi validator posle DataRequired, nazvan Email. Ovo je još jedan validator zaliha koji dolazi sa WTForms-om i koji će osigurati da ono što korisnik unese u ovo polje odgovara strukturi imejl adrese.
+Postoji nekoliko zanimljivih stvari u ovoj novoj formi vezanih za validaciju. Prvo, za `email` polje sam dodao drugi validator posle `DataRequired`, nazvan `Email`. Ovo je još jedan validator koji dolazi sa `WTForms`-om i koji će osigurati da ono što korisnik unese u ovo polje odgovara strukturi imejl adrese.
 
 Validator `Email()` iz WTForms zahteva instaliranje eksterne zavisnosti:
 
@@ -345,13 +345,13 @@ Validator `Email()` iz WTForms zahteva instaliranje eksterne zavisnosti:
 (venv) $ pip install email-validator
 ```
 
-Pošto je ovo formular za registraciju, uobičajeno je da se od korisnika traži da dva puta unese lozinku kako bi se smanjio rizik od greške u kucanju. Iz tog razloga, ja imam polja passwordi password2. Drugo polje za lozinku koristi još jedan validator akcija pod nazivom EqualTo, koji će se uveriti da je njegova vrednost identična onoj za prvo polje za lozinku.
+Pošto je ovo formular za registraciju, uobičajeno je da se od korisnika traži da dva puta unese lozinku kako bi se smanjio rizik od greške u kucanju. Iz tog razloga, ja imam polja `password` i `password2`. Drugo polje za lozinku koristi još jedan validator akcija pod nazivom `EqualTo`, koji će se uveriti da je njegova vrednost identična onoj za prvo polje za lozinku.
 
-Kada dodate bilo koje metode koje odgovaraju obrascu validate_<field_name>, WTForms ih uzima kao prilagođene validatore i poziva ih pored standardnih validatora. Dodao sam dve takve metode ovoj klasi za polja usernamei email. U ovom slučaju želim da budem siguran da korisničko ime i adresa e-pošte koje je korisnik uneo već nisu u bazi podataka, pa ove dve metode izdaju upite u bazu podataka očekujući da neće biti rezultata. U slučaju da rezultat postoji, greška validacije se pokreće pokretanjem izuzetka tipa ValidationError. Poruka uključena kao argument u izuzetku biće poruka koja će biti prikazana pored polja da bi je korisnik video.
+Kada dodate bilo koje metode koje odgovaraju obrascu `validate_<field_name>`, WTForms ih uzima kao prilagođene validatore i poziva ih pored standardnih validatora. Dodao sam dve takve metode ovoj klasi za polja `username` i `email`. U ovom slučaju želim da budem siguran da korisničko ime i adresa e-pošte koje je korisnik uneo već nisu u bazi podataka, pa ove dve metode izdaju upite u bazu podataka očekujući da neće biti rezultata. U slučaju da rezultat postoji, greška validacije se pokreće pokretanjem izuzetka tipa `ValidationError`. Poruka uključena kao argument u izuzetku biće poruka koja će biti prikazana pored polja da bi je korisnik video.
 
-Obratite pažnju na to kako se izdaju dva upita za validaciju. Ovi upiti nikada neće pronaći više od jednog rezultata, pa umesto da ih pokrećem sa db.session.scalars()koristim db.session.scalar()u jednini, koja vraća Noneako nema rezultata, ili u suprotnom prvi rezultat.
+Obratite pažnju na to kako se izdaju dva upita za validaciju. Ovi upiti nikada neće pronaći više od jednog rezultata, pa umesto da ih pokrećem sa `db.session.scalars()` koristim `db.session.scalar()` u jednini, koja vraća `None` ako nema rezultata, ili u suprotnom prvi rezultat.
 
-Da bih prikazao ovaj obrazac na veb stranici, potreban mi je HTML šablon, koji ću sačuvati u datoteci app/templates/register.html. Ovaj šablon je konstruisan slično kao onaj za obrazac za prijavu:
+Da bih prikazao ovu formu na veb stranici, potreban mi je HTML šablon, koji ću sačuvati u datoteci `app/templates/register.html`. Ovaj šablon je konstruisan slično kao onaj za formu za prijavu:
 
 > `app/templates/register.html` : Šablon za registraciju
 
@@ -426,7 +426,7 @@ def register():
     return render_template('register.html', title='Register', form=form)
 ```
 
-I ova funkcija pogleda bi trebalo da bude uglavnom sama po sebi razumljiva. Prvo proveravam da li je korisnik koji poziva ovu rutu prijavljen. Forma se obrađuje na isti način kao i ona za prijavu. Logika koja se obavlja unutar if `validate_on_submit()` uslovnog izraza kreira novog korisnika sa korisničkim imenom, imejlom i lozinkom koji su navedeni, upisuje ga u bazu podataka, a zatim preusmerava na prompt za prijavu kako bi se korisnik mogao prijaviti.
+I ova funkcija pogleda bi trebalo da bude uglavnom sama po sebi razumljiva. Prvo proveravam da li je korisnik koji poziva ovu rutu prijavljen. Forma se obrađuje na isti način kao i ona za prijavu. Logika koja se obavlja unutar `if validate_on_submit()` uslovnog izraza kreira novog korisnika sa korisničkim imenom, imejlom i lozinkom koji su navedeni, upisuje ga u bazu podataka, a zatim preusmerava na prompt za prijavu kako bi se korisnik mogao prijaviti.
 
 ### Forma za registraciju
 
