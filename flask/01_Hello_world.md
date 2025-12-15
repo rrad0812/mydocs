@@ -1,3 +1,4 @@
+
 # Poglavlje 1 - Zdravo svete
 
 U ovom prvom poglavlju, naučićete kako da podesite Flask projekat. Do kraja ovog poglavlja imaćete jednostavnu Flask veb aplikaciju koja radi na vašem računaru!
@@ -10,6 +11,7 @@ Linkovi ka GitHubu za ovo poglavlje su: [Browse](https://github.com/miguelgrinbe
 ## Instaliranje Pajtona
 
 Ako nemate instaliran Pajton na računaru, instalirajte ga sada. Ako vaš operativni sistem ne pruža Pajton paket, možete preuzeti instalater sa zvanične veb stranice Pajtona. Ako koristite Majkrosoft Vindous zajedno sa WSL-om ili Cygwin-om, imajte na umu da nećete koristiti nativnu verziju Pajtona za Vindous, već verziju prilagođenu Juniksu koju treba da preuzmete iz Ubuntua (ako koristite WSL) ili iz Cygwin-a.
+
 Da biste bili sigurni da je vaša instalacija Pajtona funkcionalna, možete otvoriti prozor terminala i otkucati `python3`, ili ako to ne funkcioniše, samo `python`. Evo šta biste trebali očekivati:
 
 ```sh
@@ -58,7 +60,7 @@ Nakon što se komanda završi, imaćete direktorijum pod nazivom `venv` gde se �
 Sada morate da kažete sistemu da želite da koristite ovo virtuelno okruženje, a to radite tako što ga aktivirate. Da biste aktivirali svoje novo virtuelno okruženje, koristite sledeću komandu:
 
 ```sh
-sourcevenv/bin/activate
+source venv/bin/activate
 (venv) $ _
 ```
 
@@ -127,7 +129,7 @@ Gore navedeni skript kreira objekat aplikacije kao instancu klase `Flask` uvezen
 
 Flask koristi lokaciju modula koji je ovde prosleđen kao početnu tačku kada treba da učita povezane resurse kao što su datoteke šablona, o čemu ću govoriti u 2. poglavlju. U sve praktične svrhe, prosleđivanje `__name__` će skoro uvek konfigurisati Flask na ispravan način. Aplikacija zatim uvozi `routes` modul, koji još ne postoji.
 
-Jedan aspekt koji u početku može delovati zbunjujuće jeste da postoje dva entiteta sa imenom `app`. Paket `app` je definisan direktorijumom aplikacije i skriptom `__init__.py` i na njega se referencira u `from app import routes` izrazu. Promenljiva app je definisana kao instanca klase `Flask` u skripti `__init__.py`, što je čini članom paketa `app`.
+Jedan aspekt koji u početku može delovati zbunjujuće jeste da postoje dva entiteta sa imenom `app`. Paket `app` je definisan direktorijumom aplikacije i skriptom `__init__.py` i na njega se referencira u `from app import routes` izrazu. Promenljiva `app` je definisana kao instanca klase `Flask` u skripti `__init__.py`, što je čini članom paketa `app`.
 
 Još jedna osobenost je to što `routes` se modul uvozi na dnu, a ne na vrhu skripte, kao što se uvek radi. Donji uvoz je dobro poznato rešenje koje izbegava kružni uvoz, čest problem sa Flask aplikacijama. Videćete da `routes` modul treba da uveze `app` promenljivu definisanu u ovoj skripti, tako da stavljanje jednog od recipročnih uvoza na dno izbegava grešku koja nastaje usled međusobnih referenci između ove dve datoteke.
 
@@ -135,7 +137,7 @@ Još jedna osobenost je to što `routes` se modul uvozi na dnu, a ne na vrhu skr
 
 Evo prve funkcije pogleda za ovu aplikaciju, koju treba da napišete u novom modulu pod nazivom `app/routes.py` :
 
-> `app/routes.py` : Ruta početne stranice
+> `app/routes.py` : Rute aplikacije
 
 ```py
 from app import app
@@ -164,7 +166,7 @@ Samo da biste bili sigurni da sve radite ispravno, ispod možete videti dijagram
 
 ```sh
 microblog/
- venv/
+  venv/
   app/
     __init__.py
     routes.py
@@ -213,7 +215,7 @@ Da li ste imali problema sa pokretanjem aplikacije Flask? Na većini računara p
 (venv) $ flask run --port 5001
 ```
 
-Pre nego što završim ovo poglavlje, pokazaću vam još jednu stvar. Pošto se promenljive okruženja ne pamte u svim terminalnim sesijama, može vam biti dosadno da uvek morate da podešavate `FLASK_APP` promenljivu okruženja kada otvorite novi prozor terminala da biste radili na svojoj Flask aplikaciji. Ali srećom, Flask vam omogućava da registrujete promenljive okruženja koje želite da se automatski koriste kada pokrenete komandu `flask`. Da biste koristili ovu opciju, morate da instalirate paket `python-dotenv` :
+Pre nego što završim ovo poglavlje, pokazaću vam još jednu stvar. Pošto se promenljive okruženja ne pamte u terminalnim sesijama, može vam biti dosadno da uvek morate da podešavate `FLASK_APP` promenljivu okruženja kada otvorite novi prozor terminala da biste radili na svojoj Flask aplikaciji. Ali srećom, Flask vam omogućava da registrujete promenljive okruženja koje želite da se automatski koriste kada pokrenete komandu `flask`. Da biste koristili ovu opciju, morate da instalirate paket `python-dotenv` :
 
 ```sh
 (venv) $ pip install python-dotenv
@@ -221,7 +223,7 @@ Pre nego što završim ovo poglavlje, pokazaću vam još jednu stvar. Pošto se 
 
 Sada možete samo da napišete ime i vrednost promenljive okruženja u datoteku pod nazivom `.flaskenv` koja se nalazi u direktorijumu najvišeg nivoa projekta:
 
-> `.flaskenv` : Promenljive okruženja za komandu flask
+> `.flaskenv` : Promenljive okruženja za komandu `flask`
 
 ```sh
 FLASK_APP=microblog.py

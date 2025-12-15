@@ -1,3 +1,4 @@
+
 # Poglavlje 2 - Šabloni
 
 Nakon završetka Poglavlja 1, trebalo bi da imate jednostavnu, ali funkcionalnu veb aplikaciju koja ima sledeću strukturu datoteka:
@@ -29,7 +30,7 @@ Kreiranje lažnih objekata je korisna tehnika koja vam omogućava da se koncentr
 
 Funkcija pogleda u aplikaciji vraća jednostavan string. Ono što sada želim da uradim jeste da proširim taj vraćeni string u kompletnu HTML stranicu, možda nešto poput ovoga:
 
-> `app/routes.py` : Vraća kompletnu HTML stranicu iz funkcije view
+> `app/routes.py` : Vraća kompletnu HTML stranicu iz funkcije pogleda
 
 ```py
 from app import app
@@ -53,7 +54,7 @@ Ako niste upoznati sa HTML-om, preporučujem vam da pročitate HTML Markup na Vi
 
 Ažurirajte funkciju pogleda kao što je prikazano gore i ponovo pokrenite aplikaciju da biste videli kako izgleda u vašem pregledaču.
 
-Nadam se da se slažete sa mnom da rešenje koje je gore korišćeno za isporuku HTML-a pregledaču nije dobro. Razmislite koliko će složen kod u ovoj funkciji prikaza postati kada dodate blog postove od korisnika, koji će se stalno menjati. Aplikacija će takođe imati više funkcija prikaza koje će biti povezane sa drugim URL-ovima, pa zamislite da jednog dana odlučim da promenim raspored ove aplikacije i da moram da ažuriram HTML u svakoj funkciji prikaza. Ovo očigledno nije opcija koja će se skalirati kako aplikacija raste.
+Nadam se da se slažete sa mnom da rešenje koje je gore korišćeno za isporuku HTML-a pregledaču nije dobro. Razmislite koliko će složen kod u ovoj funkciji pogleda postati kada dodate blog postove od korisnika, koji će se stalno menjati. Aplikacija će takođe imati više funkcija pogleda koje će biti povezane sa drugim URL-ovima, pa zamislite da jednog dana odlučim da promenim raspored ove aplikacije i da moram da ažuriram HTML u svakoj funkciji pogleda. Ovo očigledno nije opcija koja će se skalirati kako aplikacija raste.
 
 Kada biste mogli da odvojite logiku vaše aplikacije od rasporeda ili prezentacije vaših veb stranica, onda bi stvari bile mnogo bolje organizovane, zar ne? Čak biste mogli da angažujete veb dizajnera da kreira odličan veb sajt dok vi kodirate logiku aplikacije u Pajtonu.
 
@@ -81,7 +82,7 @@ Ispod možete videti vaš prvi šablon, koji je po funkcionalnosti sličan HTML 
 
 Ovo je standardna, kratka HTML stranica. Jedina zanimljiva stvar na ovoj stranici je to što postoji nekoliko rezervisanih mesta za dinamički sadržaj, zatvorenih u `{{...}}` rezervisana mesta. Ova rezervisana mesta predstavljaju delove stranice koji su promenljivi i biće poznati tek tokom izvršavanja.
 
-Sada kada je prezentacija stranice prebačena na HTML šablon, funkcija pogleda može se pojednostaviti:
+Sada kada je prezentacija stranice prebačena u HTML šablon, funkcija pogleda može se pojednostaviti:
 
 > `app/routes.py` : Koristite funkciju `render_template()`
 
@@ -157,7 +158,7 @@ def index():
 
 Da bih predstavio korisničke objave, koristim listu, gde je svaki element rečnik koji ima `author` i `body` polja. Kada budem mogao da implementiram korisnike i blog objave zapravo, pokušaću da sačuvam ova imena polja koliko god je to moguće, kako bi sav rad koji obavljam na dizajniranju i testiranju šablona početne stranice koristeći ove lažne objekte i dalje bio validan kada uvedem stvarne korisnike i objave.
 
-Na strani šablona moram da rešim novi problem. Lista objava može imati bilo koji broj elemenata, na funkciji prikaza je da odluči koliko će objava biti prikazano na stranici. Šablon ne može da pravi nikakve pretpostavke o tome koliko objava postoji, tako da mora biti spreman da prikaže onoliko objava koliko prikaz pošalje na generički način.
+Na strani šablona moram da rešim novi problem. Lista objava može imati bilo koji broj elemenata, na funkciji pogleda je da odluči koliko će objava biti prikazano na stranici. Šablon ne može da pravi nikakve pretpostavke o tome koliko objava postoji, tako da mora biti spreman da prikaže onoliko objava koliko prikaz pošalje na generički način.
 
 Za ovu vrstu problema, Nindža nudi `for` kontrolnu strukturu:
 
