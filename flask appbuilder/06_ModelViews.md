@@ -246,8 +246,10 @@ The icons for the menu on this example are from font-awesome, Checkout fontAweso
 
 With this very few lines of code (and could be fewer), you now have a web application with detailed security for each CRUD primitives and Menu options, authentication, and form field validation. Yet you can extensively change many details, add your own triggers before or after CRUD primitives, develop your own web views and integrate them.
 
-Some images:
-_images/login_db.png _images/group_list.png _images/contact_list.png
+Some images:  
+![.](_images/login_db.png)
+![.](_images/group_list.png)
+![.](_images/contact_list.png)
 
 ## Exposed methods
 

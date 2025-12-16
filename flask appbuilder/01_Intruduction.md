@@ -19,7 +19,7 @@ This package has some CSS and JS batteries included:
 Includes:
 
 - Database
-  - SQLAlchemy, multiple database support: sqlite, MySQL, ORACLE, MSSQL, 
+  - SQLAlchemy, multiple database support: sqlite, MySQL, ORACLE, MSSQL,
   - Multiple database connections support (Vertical partitioning).
   - Easy mixin audit to models (created/changed by user, and timestamps).
 - Security
