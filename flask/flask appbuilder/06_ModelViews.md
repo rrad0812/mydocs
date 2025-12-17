@@ -237,9 +237,7 @@ FAB will create all possible permissions and add them to the AUTH_ROLE_ADMIN con
 
 ### Example and Live Demo¶
 
-You can find this example at: <https://github.com/dpgaspar/Flask-AppBuilder/tree/master/examples/quickhowto>
-
-Live quickhowto Demo (login with guest/welcome).
+You can find this example at: <https://github.com/dpgaspar/Flask-AppBuilder/tree/master/examples/quickhowto>. Live quickhowto Demo (login with guest/welcome).
 
 **Note**
 The icons for the menu on this example are from font-awesome, Checkout fontAwesome Icons names. Font-Awesome is already included and you can use any icon you like on menus and actions.
@@ -397,11 +395,11 @@ In case of error (returns HTTP 500):
 
 ## Extra Views
 
-F.A.B. as some extra views like ModelView but with different behaviours. You can radically change the way a ModelView looks like using various approaches like changing CRUD templates or widgets, CSS, inserting or injecting your own HTML etc, take a look at Templates, Advanced Configuration, Customizing.
+F.A.B. as some extra views like `ModelView` but with different behaviours. You can radically change the way a `ModelView` looks like using various approaches like changing CRUD templates or widgets, CSS, inserting or injecting your own HTML etc, take a look at Templates, Advanced Configuration, Customizing.
 
-Yet the framework brings 3 extra subclasses from BaseCRUDView (ModelView is a subclass of BaseCRUDView, this means that it implements complete CRUD based on models as well as JSON exposure). This views implement alternative CRUD GUI.
+Yet the framework brings 3 extra subclasses from `BaseCRUDView` (`ModelView` is a subclass of `BaseCRUDView`, this means that it implements complete CRUD based on models as well as JSON exposure). This views implement alternative CRUD GUI.
 
-For rendering multiple views (subclasses of BaseModelView) on the same page use MultipleView. Using our previous example you could render the Group list and Contact list on the same page, to do it add the following view after the definition of GroupModelView and ContactModelView:
+For rendering multiple views (subclasses of `BaseModelView`) on the same page use `MultipleView`. Using our previous example you could render the `Group` list and `Contact` list on the same page, to do it add the following view after the definition of `GroupModelView` and `ContactModelView`:
 
 First remember to import:
 
@@ -427,9 +425,9 @@ appbuilder.add_view(
 )
 ```
 
-You can render as many views on the same page as you want, this includes Chart type views also, take a look at Chart Views to learn about Chart views.
+You can render as many views on the same page as you want, this includes `Chart` type views also, take a look at `Chart Views` to learn about `Chart` views.
 
-Another interesting alternative view is the MasterDetailView as the name implies it implements a master detail GUI, it will render a menu version of a chosen model and then relate with a previous defined BaseModelView subclass of you choice. Again using the Contact application example:
+Another interesting alternative view is the `MasterDetailView` as the name implies it implements a master detail GUI, it will render a menu version of a chosen model and then relate with a previous defined BaseModelView subclass of you choice. Again using the Contact application example:
 
 ```py
 class GroupMasterView(MasterDetailView):
