@@ -1,5 +1,5 @@
 
-# Flask App Development 101
+# Flask App Development
 
 ## Kick-starting Your Own Web App Adventure
 
@@ -146,11 +146,11 @@ In this post, our project will have two modules: Hello and Goodbye.
 
   **Notes**
   - Each module has a function to say Hello and Goodbye.
-  - Both of the use Blueprint. The advantage of defining a blueprint is that we can
-    completely separate the URL config for our modules. As you see both of them have the same route “/say” but this makes no conflict since they are registering themselves with different blueprints.
+  - Both of the use Blueprint. The advantage of defining a blueprint is that we can completely separate the URL config for our modules. As you see both of them have the same route
+    “/say” but this makes no conflict since they are registering themselves with different blueprints.
   
-- The next step is that we need to register our modules when creating the
-  application. Here is the added part in the `create_app()` function in our application factory (`__init__.py`)
+- The next step is that we need to register our modules when creating the application. Here is the added part in the `create_app()` function in our application factory (`__init__.
+  py`)
 
   ```py
   from flask import Flask
@@ -180,7 +180,7 @@ In this post, our project will have two modules: Hello and Goodbye.
 
 The last step for this post is to define the config for our application. Configs variable can help us to prepare our app for different setups and also let others customize it if needed.
 
-To define config, we create a new Python file name config.py in the best_app directory
+To define config, we create a new Python file name `config.py` in the best_app directory
 
 ```py
 class CoolConfig(object):
@@ -226,13 +226,8 @@ Now, if you call <http://localhost:5000/hello/say>, you will see the message “
 **Note**:  
 As an alternative approach, You can also use a `.env` file to load the environment variables.
 
-Congrats! We initiated our Flask app!
-
-In the future, I will do my best to explain further steps such as Database configuration, models, and dockerizing the Flask app. Let’s see!
-
-This is the link to the source code on my GitHub: <https://github.com/Pooya-Oladazimi/flask-cool-app>
-
-This post was originally published on my blog: <https://www.polaz.net/flask-app-development-101-kickstarting-your-own-web-app-adventure/>
+<https://github.com/Pooya-Oladazimi/flask-cool-app>  
+<https://www.polaz.net/flask-app-development-101-kickstarting-your-own-web-app-adventure/>
 
 ## Flask App Postgres Database Initialization
 
@@ -286,8 +281,8 @@ In the `config.py` script, we have to introduce two new variables:
 
 - `SQLALCHEMY_DATABASE_URI`: This is the database connection setting. The format is:
   `postgresql://DATABASE_USER:PASSWORD@DATABASE_HOST_NAME:DATABASE_PORT/DATABASE_NAME`
-- `SQLALCHEMY_TRACK_MODIFICATIONS`: SQLAlchemy tracks modifications to database
-  objects and emits signals to notify the application of changes. Enabling this may have performance overhead for large applications. Choose carefully.
+- `SQLALCHEMY_TRACK_MODIFICATIONS`: SQLAlchemy tracks modifications to database objects and emits signals to notify the application of changes. Enabling this may have performance
+  overhead for large applications. Choose carefully.
 
 This is the `config.py`:
 
@@ -440,11 +435,11 @@ class Car(db.Model):
 
 The section is almost exactly like the UserModel. Except:
 
-- We have a new constraint here: `ForeignKey`. This is the `user id` that indicated who bought this
-  car. The `ondelete` policy tells the database what should happen when a user is deleted. Here we tell it to do nothing. But we can also change to other policies such as `cascade` that also deletes all the cars related to the user that got deleted.
+- We have a new constraint here: `ForeignKey`. This is the `user id` that indicated who bought this car. The `ondelete` policy tells the database what should happen when a user is
+  deleted. Here we tell it to do nothing. But we can also change to other policies such as `cascade` that also deletes all the cars related to the user that got deleted.
 
-- We also implement a `to_dict function`. This function transforms a SQLAlchemy object into a
-  dictionary. Why? because SQLAlchemy objects are not JSON serializable. Therefore, we run into problems if we want to return a list of cars to the application client in JSON format. Besides, we can control what to expose from this table.
+- We also implement a `to_dict function`. This function transforms a SQLAlchemy object into a dictionary. Why? because SQLAlchemy objects are not JSON serializable. Therefore, we
+  run into problems if we want to return a list of cars to the application client in JSON format. Besides, we can control what to expose from this table.
 
 - After this, we implement two functions to buy a car and return the list of all purchased cars by a
   user.
@@ -515,11 +510,8 @@ The last step is to create our tables. Run this in the command line (venv enable
 
 - Every time you change your schema, you need to run the migrate and upgrade commands.
 
-And that’s it! Our database is ready to use! You can find the source code here: <https://github.com/Pooya-Oladazimi/flask-cool-app>.
-
-Hope it will be useful for you!
-
-This post was originally published on my blog: <https://www.polaz.net/flask-app-postgres-database-initialization-step-by-step-guide-with-models/>
+<https://github.com/Pooya-Oladazimi/flask-cool-app>.
+<https://www.polaz.net/flask-app-postgres-database-initialization-step-by-step-guide-with-models/>
 
 ## Dockerizing Flask App with Postgres
 
@@ -539,12 +531,10 @@ The first step is to create a `Docker file` for our application. A docker file a
 
 Create a new file name `Dockerfile` in your application’s root directory. Then follow the steps in this section to implement it.
 
-- First, we set our base image (python:3.9-slim). We also update the Debian package manager and
-  install gcc package. (Some of the Python extensions require gcc)
+- First, we set our base image (python:3.9-slim). We also update the Debian package manager and install gcc package. (Some of the Python extensions require gcc)
 
   **Note**:  
-  `-y` option is essential since Debian asks for consent before installing a package. This option says 
-  yes to that automatically.
+  `-y` option is essential since Debian asks for consent before installing a package. This option says yes to that automatically.
   
   ```sh
   FROM python:3.9-slim
@@ -553,8 +543,8 @@ Create a new file name `Dockerfile` in your application’s root directory. Then
   RUN apt-get install -y gcc
   ```
 
-- The next step is to define some environment variables and the working directory. The working
-  directory is the path that your docker file commands execute in. We also set our container username to use later.
+- The next step is to define some environment variables and the working directory. The working directory is the path that your docker file commands execute in. We also set our
+  container username to use later.
 
   ```sh
   ENV USERNAME=cool-app
@@ -573,8 +563,7 @@ Create a new file name `Dockerfile` in your application’s root directory. Then
   COPY service_entrypoint.sh .
   ```
 
-- The next step is to create the container user (with the username we defined before) and gives it 
-  the needed permissions.
+- The next step is to create the container user (with the username we defined before) and gives it the needed permissions.
 
   **Note**: It is not recommended to run your app in the container as the root user. Always create an application user.
   
@@ -598,8 +587,8 @@ Create a new file name `Dockerfile` in your application’s root directory. Then
 
   - We upgrade the pip first to the latest version
   - Then we install our packages
-  - We also add our Flask application as an environment variable. FLASK_APP is an environment 
-    variable used in Flask to specify the name of the Python module that contains the Flask application.
+  - We also add our Flask application as an environment variable. FLASK_APP is an environment variable used in Flask to specify the name of the Python module that contains the
+    Flask application.
   - Finally, we make our service_entrypoint (that we defined before) executable.
 
   ```sh
@@ -614,8 +603,7 @@ In the end:
 
 - We open port 5000 in our container. This is the port that we run our Flask app on.
 - We initiate our migration scripts using the init command for Flask.
-- Finally, we run the service_entrypoint.sh script that completes our app running. (check the next 
-  section)
+- Finally, we run the `service_entrypoint.sh` script that completes our app running. (check the next section)
 
   ```sh
   EXPOSE 5000
@@ -628,15 +616,11 @@ Our Dockerfile is ready now!
 
 ### Service Entrypoint
 
-Sometimes, our Dockerfile cannot run our service. The reason is that sometimes our service demands some initialization configuration that is not available when we are building our container.
-Get Pooya Oladazimi’s stories in your inbox
+Sometimes, our Dockerfile cannot run our service. The reason is that sometimes our service demands some initialization configuration that is not available when we are building our container. In these situations, we usually use a bash script so-called Entrypoint to do the job for us.
 
-Join Medium for free to get updates from this writer.
+Do you remember the `service_entrypoint.sh` file that you created earlier? Put this script inside it:
 
-In these situations, we usually use a bash script so-called Entrypoint to do the job for us.
-
-Do you remember the service_entrypoint.sh file that you created earlier? Put this script inside it:
-
+```sh
 #!/bin/bash
 
 sleep 10
@@ -645,25 +629,30 @@ flask db upgrade
 waitress-serve --port 5000 --call 'best_app:create_app'
 
 tail -f /dev/null
+```
 
 What does it do?
 
-    It creates the needed database tables based on our Flask models and migrations
-    Then, it serves our app with the waitress package. Waitress is a Python Web Server Gateway Interface that we use for deploying our application in production mode. https://docs.pylonsproject.org/projects/waitress/en/stable/index.html
+- It creates the needed database tables based on our Flask models and migrations.
+- Then, it serves our app with the waitress package. Waitress is a Python Web Server Gateway Interface that we use for deploying our application in production mode. <https://docs.pylonsproject.org/projects/waitress/en/stable/index.html>.
 
-Note1: You can use other Python Web Server Gateway Interfaces also.
+**Note1**:  
+You can use other Python Web Server Gateway Interfaces also.
 
-Note2: Never run your Flask app with the Flask built-in dev server.
+**Note2**:  
+Never run your Flask app with the Flask built-in dev server.
 
-Note3: The last line “tail -f /dev/null” is essential to keep the service running. If you miss it, the docker engine brings down the container after finishing the script successfully.
-Docker Compose
+**Note3**: The last line `tail -f /dev/null` is essential to keep the service running. If you miss it, the docker engine brings down the container after finishing the script successfully.
 
-The last step in dockerizing our app is to write the docker-compose file. This is the way we run our Flask app and the Postgres database in one virtual network as two separate services.
+### Docker Compose
 
-To do this, create a new YAML file in your project directory named docker-compose.yml
+The last step in dockerizing our app is to write the `docker-compose` file. This is the way we run our Flask app and the Postgres database in one virtual network as two separate services.
 
-First, we add the Postgres Service:
+To do this, create a new YAML file in your project directory named `docker-compose.yml`.
 
+- First, we add the Postgres Service:
+
+```sh
 version: '3.0'
 services:
   db:
@@ -682,14 +671,20 @@ services:
       timeout: 10s
       retries: 10
       start_period: 10s
+```
 
-    The service name is db. This name is important since we need it later.
-    We map the Postgres default port 5432 to the localhost 5123. This part is optional. You need it if you want to check the Postgres container from your host server.
-    Very Important: We bind the Postgres data directory to the pData directory in our root directory. (Docker creates this automatically). This way we persistent our database. Without this, you will lose the data if you bring down the container.
-    We also need a health check. We will use it in the next section for writing the Flask app part. The reason is our Flask app requires the database to be up and ready in order to run.
+- The service name is db. This name is important since we need it later.
+  We map the Postgres default port 5432 to the localhost 5123. This part is optional. You need it if you want to check the Postgres container from your host server.  
 
-Next and last, we write the Flask app service part in the docker-compose:
+  **Very Important**:  
+  We bind the Postgres data directory to the pData directory in our root directory. (Docker creates this automatically). This way we persistent our database. Without this, you will lose the data if you bring down the container.
 
+- We also need a `health check`. We will use it in the next section for writing
+  the Flask app part. The reason is our Flask app requires the database to be up and ready in order to run.
+
+At and last, we write the Flask app service part in the docker-compose:
+
+```sh
 best_app:
     container_name: best-app
     build:
@@ -702,16 +697,23 @@ best_app:
         condition: service_healthy    
     links: 
         - db
+```
 
-    Our container name is best-app
-    We map port 5000 of our container (the one we used for running Waitress) to the host 8008 (you can choose other ports also)
-    We state that our service depends on the db service. This will check based on the health check condition we set for the Postgres container
-    We also link our service to the service db. This way our service can connect to Postgres.
+- Our container name is `best-app`.
 
-Hint: You can define a named network and run both services on that instead of using a link
+- We map port 5000 of our container (the one we used for running Waitress) to the
+  host 8008 (you can choose other ports also)
+- We state that our service depends on the db service. This will check based on the
+  health check condition we set for the Postgres container
+- We also link our service to the service db. This way our service can connect to
+  Postgres.
+
+  **Hint**:  
+  You can define a named network and run both services on that instead of using a link.
 
 Now that our docker-composer is ready, we need one more last step to run our service.
-Last step and run
+
+### Last step and run
 
 The last step is to change the Postgres connection setting in our Flask app config.
 
@@ -719,16 +721,15 @@ We were using localhost as the host for Postgres. We need to change that to db (
 
 Why? Because localhost would be our Flask app container which does not host any Postgres.
 
+```py
 SQLALCHEMY_DATABASE_URI = "postgresql://cool_user:1234@db:5432/cool_db"
+```
 
-Everything is ready and we can run our dockerize service. To do this, navigate to your app root directory (where docker-compose.yml is) and run:
+Everything is ready and we can run our dockerize service. To do this, navigate to your app root directory (where `docker-compose.yml` is) and run:
 
+```sh
 sudo docker-compose up --build
+```
 
-Congrats! Our services are up and running!
-
-You can find the source code for this writing here: https://github.com/Pooya-Oladazimi/flask-cool-app/tree/master
-
-This post was originally published on my blog: https://www.polaz.net/dockerizing-flask-app-with-postgres-a-step-by-step-guide/
-
-The End.
+<https://github.com/Pooya-Oladazimi/flask-cool-app/tree/master>  
+<https://www.polaz.net/dockerizing-flask-app-with-postgres-a-step-by-step-guide/>
