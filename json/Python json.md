@@ -107,7 +107,7 @@ The `json.dumps()` returns the JSON string representation of the Python dict. Le
 import json
 
 def SendJsonResponse(resultDict):
-    print("Convert Python dictionary into JSON formatted String")
+    print("Convert Python dictionary into JSON formatted string")
     developer_str = json.dumps(resultDict)
     print(developer_str)
 
@@ -125,16 +125,16 @@ SendJsonResponse(developer_Dict)
 **Output**:
 
 ```json
-Writing JSON data into a Python String
+Convert Python dictionary into JSON formatted string
 {"name": "Jane Doe", "salary": 9000, "skills": ["Python", "Machine Learning",  
 "Web Development"], "email": "jane.doe@pynative.com"}
 ```
 
 ### Mapping between JSON and Python entities while Encoding
 
-To encode Python objects into JSON equivalent json module uses the following conversion table. The json.dump() and json.dumps() the method performs the translations when encoding.
+To encode Python objects into JSON equivalent `json` module uses the following conversion table. The `json.dump()` and `json.dumps()` the method performs the translations when encoding.
 
-Now let’s see how to convert all Python primitive types such as a dict, list, set, tuple, str, numbers into JSON formatted data. Please refer to the following table to know the mapping between JSON and Python data types.
+Now let’s see how to convert all Python primitive types such as a `dict`, `list`, `set`, `tuple`, `str`, `numbers` into JSON formatted data. Please refer to the following table to know the mapping between JSON and Python data types.
 
 **Python JSON**:
 
@@ -190,7 +190,7 @@ Done converting Python primitive types into JSON
 
 ### `json.dump()` to encode and write JSON data to a file
 
-We can use it in the following cases.
+We can use it in the following cases:
 
 - To write the JSON response in a file: Most of the time, when you execute a GET
   request, you receive a response in JSON format, and you can store JSON response in a file for future use or for an underlying system to use.
@@ -227,11 +227,11 @@ Done writing JSON data into developerDetail.json file
 ### Write Indented and pretty printed JSON data into a file
 
 If the user wants to read a JSON file so it must be readable and well organized, so whoever consumes this will have a better understanding of a structure of a data. The dump() method provides the following arguments to `pretty-print` JSON data.
-
+  
 - The `indent` parameter specifies the spaces that are used at the beginning of a
-  line.
+    line.
 - The `separator` argument of a `json.dump` method you can specify any separator
-  between key and value.
+    between key and value.
 - The `sort_keys` to sort JSON data by keys.
 
 Let’s see how to write `pretty-printed` JSON data into a file.
@@ -289,7 +289,11 @@ print("Done writing compact JSON data into json file")
 ```json
 Started writing compact JSON data into a file
 Done writing compact JSON data into .json file
+```
+
 File content:
+
+```json
 {"name":"jane doe","salary":9000,"skills":["Raspberry pi","Machine Learning",  
 "Web Development"],"companies":["Google","Facebook","IBM"],  
 "email":"JaneDoe@pynative.com"}
@@ -341,7 +345,7 @@ print("Done")
 Writing JSON data into file by skipping non-basic types
 Done
 ```
-
+  
 ![skipping non-basic types](_images/skipping%20non-basic%20types.png)
 
 As you can see in the JSON output the `PersonalInfo` object is skipped.
@@ -361,14 +365,13 @@ print("JSON character encoding by setting ensure_ascii=False")
 print(json.dumps(unicode_string, ensure_ascii=False))
 ```
 
-**Output**:
-unicode String is  ø
-JSON character encoding by setting ensure_ascii=False
-"ø"
+**Output**:  
+unicode String is `ø`  
+JSON character encoding by setting `ensure_ascii=False` -> `ø`
 
 ## Python JSON Parsing using json.load() and loads()
 
-This article demonstrates how to use Python’s `json.load()` and `json.loads()` methods to read JSON data from file and String. Using the `json.load()` and `json.loads()` method, you can turn JSON encoded/formatted data into Python Types this process is known as JSON decoding. Python built-in module `json` provides the following two methods to decode JSON data.
+This article demonstrates how to use Python’s `json.load()` and `json.loads()` methods to read JSON data from file and String. Using the `json.load()` and `json.loads()` method, you can turn JSON encoded/formatted data into Python types. This process is known as JSON decoding. Python built-in module `json` provides the following two methods to decode JSON data.
 
 To parse JSON from URL or file, use `json.load()`. For parse string with JSON content, use `json.loads()`.
 
@@ -2078,17 +2081,20 @@ The response of the GET request contains information we called it as a payload. 
 
 We can access payload data using the following three methods of a requests module.
 
-- response.content used to access payload data in raw bytes format.
-- response.text: used to access payload data in String format.
-- response.json() used to access payload data in the JSON serialized format.
+- `response.content` used to access payload data in raw bytes format.
+- `response.text`: used to access payload data in String format.
+- `response.json()` used to access payload data in the JSON serialized format.
 
 ### The JSON Response Content
 
-The requests module provides a builtin JSON decoder, we can use it when we are dealing with JSON data. Just execute response.json(), and that’s it. response.json() returns a JSON response in Python dictionary format so we can access JSON using key-value pairs.
-You can get a 204 error In case the JSON decoding fails. The response.json() raises an exception in the following scenario.
-    • The response doesn’t contain any data.
-    • The response contains invalid JSON
-You must check response.raise_for_status() or response.status_code before parsing JSON because the successful call to response.json() does not indicate the success of the request.
+The `requests` module provides a builtin JSON decoder, we can use it when we are dealing with JSON data. Just execute `response.json()`, and that’s it. `response.json()` returns a JSON response in Python dictionary format so we can access JSON using key-value pairs.
+
+You can get a `204` error In case the JSON decoding fails. The `response.json()` raises an exception in the following scenario.
+
+- The response doesn’t contain any data.
+- The response contains invalid JSON
+
+You must check `response.raise_for_status()` or `response.status_code` before parsing JSON because the successful call to `response.json()` does not indicate the success of the request.
 In the case of HTTP 500 error, some servers may return a JSON object in a failed response (e.g., error details with HTTP 500). So you should execute response.json() after checking response.raise_for_status() or check response.status_code.
 Let’s see the example of how to use response.json() and parse JSON content.
 In this example, I am using httpbin.org to execute a GET call. httpbin.org  is a web service that allows test requests and responds with data about the request. You can use this service to test your code.
@@ -2297,13 +2303,13 @@ You are here because you received a TypeError: Object of type datetime is not JS
 
 ### Subclass JSONEncoder to serialize DateTime into JSON
 
-Python json module provides a json.JSONEncoder Class. We can extend it If we want more customized output. i.e., To serialize the DateTime instance into JSON, we need to subclass JSONEncoder so we can implement our custom serialization.
+Python `json` module provides a `json.JSONEncoder` class. We can extend it If we want more customized output. i.e., to serialize the `DateTime` instance into JSON, we need to subclass `JSONEncoder` so we can implement our custom serialization.
 
-When we say subclass json.JSONEncoder that means we need to override the default() method of a JSONEncoder Class, where we can convert DateTime value into ISO format so it can be serialized. ISO format produces a serialized version of datetime.
+When we say subclass `json.JSONEncoder` that means we need to override the `default()` method of a `JSONEncoder` class, where we can convert `DateTime` value into ISO format so it can be serialized. ISO format produces a serialized version of datetime.
 
-As per ISO 8601, It converts DateTime in YYYY-MM-DDTHH:MM:SS format, which is easy to encode and decode. we can use a isoformat() method to convert DateTime value into ISO format.
+As per ISO 8601, It converts `DateTime` in `YYYY-MM-DDTHH:MM:SS` format, which is easy to encode and decode. we can use a `isoformat()` method to convert DateTime value into ISO format.
 
-The json.dump() and json.dumps() method of the JSON module has a cls kwarg. Using this argument, you can pass a custom JSON Encoder, which tells json.dump() or json.dumps() method how to encode your DateTime into JSON formatted data.
+The `json.dump()` and `json.dumps()` method of the JSON module has a `cls` kwarg. Using this argument, you can pass a custom JSON Encoder, which tells `json.dump()` or `json.dumps()` method how to encode your `DateTime` into JSON formatted data.
 
 I have an employee dict, which contains employee details and his/her joining date. Let’s see how to encode employee details into JSON.
 
@@ -2323,10 +2329,10 @@ employee = {
 
 # subclass JSONEncoder
 class DateTimeEncoder(JSONEncoder):
-        #Override the default method
-        def default(self, obj):
-            if isinstance(obj, (datetime.date, datetime.datetime)):
-                return obj.isoformat()
+    #Override the default method
+    def default(self, obj):
+        if isinstance(obj, (datetime.date, datetime.datetime)):
+            return obj.isoformat()
 
 print("Printing to check how it will look like")
 print(DateTimeEncoder().encode(employee))
@@ -2353,10 +2359,14 @@ Encode DateTime Object into JSON using custom JSONEncoder
 ### Deserialization of a dateTime in Python
 
 Also, at the time of parsing JSON from file or string, we need to convert isoformat() string back into a dateTime object.
-The object_hook parameter of a json.load() or json.loads() method is used to define the custom JSON decoder. The object_hook is the optional function that will be called with the result of any object literal decoded.
-The Python built-in json module can only handle Python primitives types that have a direct JSON equivalent (e.g., dictionary, lists, strings, Numbers, None, etc.).
-But when you want to convert JSON data into a custom Python type, we need to implement our custom decoder function and pass it as object_hook to load() method so we can get custom Python type in return.
-In our custom method, we need to convert a dateTime string into a Python dateTime object using the python-dateutil module. Install it using pip install python-dateutil. Let’s see the example now.
+
+The `object_hook` parameter of a `json.load()` or `json.loads()` method is used to define the custom JSON decoder. The `object_hook` is the optional function that will be called with the result of any object literal decoded.
+
+The Python built-in `json` module can only handle Python primitives types that have a direct JSON equivalent (e.g., `dictionary`, `lists`, `strings`, `Numbers`, `None`, etc.).
+
+But when you want to convert JSON data into a custom Python type, we need to implement our custom decoder function and pass it as `object_hook` to `load()` method so we can get custom Python type in return.
+
+In our custom method, we need to convert a `dateTime` string into a Python `dateTime` object using the `python-dateutil` module. Install it using `pip install python-dateutil`. Let’s see the example now.
 
 ```py
 import json
@@ -2364,9 +2374,9 @@ import dateutil.parser
 
 # custom Decoder
 def DecodeDateTime(empDict):
-   if 'joindate' in empDict:
-      empDict["joindate"] = dateutil.parser.parse(empDict["joindate"])
-      return empDict
+    if 'joindate' in empDict:
+        empDict["joindate"] = dateutil.parser.parse(empDict["joindate"])
+        return empDict
 
 jsonData = """{"id": 456, "name": "William Smith", "saley": 8000, "joindate": "2020-01-08T15:29:52.040435"}"""
 
@@ -2381,11 +2391,18 @@ print(decodedJSON)
 {'id': 456, 'name': 'William Smith', 'saley': 8000, 'joindate': datetime.datetime(2020, 1, 8, 15, 29, 52, 40435)}
 ```
 
-Note: If you are using Python 3.7+, then you don’t need to use the python-dateutil module. Instead, you can do conversion directly like this.
+**Note**: If you are using Python 3.7+, then you don’t need to use the `python-dateutil` module. Instead, you can do conversion directly like this.
+
+```py
 newdate = datetime.fromisoformat('2020-01-08T15:29:52.040435')
-Serialize datetime by converting it into String
-You can convert dateTime value into its String representation and encode it directly, here you don’t need to write any encoder. We need to set the default parameter of a json.dump() or json.dumps() to str like this json.dumps(obj, default=str).
+```
+
+### Serialize datetime by converting it into String
+
+You can convert `dateTime` value into its String representation and encode it directly, here you don’t need to write any encoder. We need to set the default parameter of a `json.dump()` or `json.dumps()` to `str` like this `json.dumps(obj, default=str)`.
 Let’s see the example.
+
+```py
 import json
 import datetime
 
@@ -2397,12 +2414,22 @@ employee = {
 }
 print("JSON Data")
 print(json.dumps(employee, default=str))
+```
+
 **Output**:
+
+```json
 JSON Data
 {"id": 456, "name": "William Smith", "salary": 8000, "joindate": "2020-01-08 18:39:30.161488"}
-Write a custom method to serialize datetime into JSON
+```
+
+### Write a custom method to serialize datetime into JSON
+
 Instead of subclassing JSONEncoder, we can create a custom method that will convert dateTime into JSON.
+
 The default parameter of a json.dump() or json.dumps() method is used to override the behavior of a Python JSONEncoder. We need to create a custom method and pass it to the default parameter of a json.dump() or json.dumps() method
+
+```py
 import json
 import datetime
 
@@ -2419,12 +2446,18 @@ def default(obj):
 
 print("Employee JSON Data")
 print(json.dumps(employee, default=default))
+```
+
 **Output**:
+
+```json
 Employee JSON Data
 {"id": 456, "name": "William Smith", "saley": 8000, "joindate": "2020-01-08T15:29:52.040435"}
-Using a DjangoJSONEncoder
+```
 
-If you are using a Django you can take the advantage of native DjangoJSONEncoder serializer to serialize dateTime.
+### Using a DjangoJSONEncoder
+
+If you are using a Django you can take the advantage of native `DjangoJSONEncoder` serializer to serialize dateTime.
 
 ```py
 import json
@@ -2442,9 +2475,9 @@ print("JSON Data")
 print(json.dumps(employee, cls=DjangoJSONEncoder))
 ```
 
-### Use Bson module to serialize and Dserialize dateTime to and from JSON
+### Use `bson` module to serialize and deserialize `dateTime` to and from JSON
 
-The bson module has json_util class, which we can use directly to serialize and dateTime into JSON without doing any explicit conversion.
+The `bson` module has `json_util` class, which we can use directly to serialize `dateTime` into JSON without doing any explicit conversion.
 
 Let see the example.
 
@@ -2469,24 +2502,26 @@ jsonData = """{"id": 456, "name": "William Smith", "saley": 8000, "joindate": "2
 decodedJson = json.loads(jsonData, object_hook=json_util.object_hook)
 ```
 
-## Python JSON Serialize Set
+## Python JSON Serialize `Set`
 
-You are here because when you try to dump or encode Python set into JSON, you received an error,  TypeError: Object of type set is not JSON serializable.
+You are here because when you try to dump or encode Python `Set` into JSON, you received an error,  `TypeError: Object of type set is not JSON serializable`.
 
-The built-in json module of Python can only handle Python primitives types that have a direct JSON equivalent. i.e., The fundamental problem is that the JSON encoder json.dump() and json.dumps() only knows how to serialize the basic types by default (e.g., dictionary, lists, strings, numbers, None, etc.). To solve this, we need to build a custom encoder to make set JSON serializable.
+The built-in `json` module of Python can only handle Python primitives types that have a direct JSON equivalent. The fundamental problem is that the JSON encoder `json.dump()` and `json.dumps()` only knows how to serialize the basic types by default (e.g., `dictionary`, `lists`, `strings`, `numbers`, `None`, etc.). To solve this, we need to build a custom encoder to make `set` JSON serializable.
 
-In this article, we will see how to JSON Serialize Set. There are multiple ways to accomplish this.
+In this article, we will see how to JSON Serialize `Set`. There are multiple ways to accomplish this.
 
-### Use the jsonpickle module to make Python set JSON serializable
+### Use the `jsonpickle` module to make Python set JSON serializable
 
-jsonpickle is a Python library designed to work with complex Python Objects. You can use jsonpickle for serialization complex Python objects into JSON. Also, and deserialization from JSON to complex Python objects. jsonpickle allows more complex data structures to be serialized to JSON. jsonpickle is highly configurable and extendable.
+`jsonpickle` is a Python library designed to work with complex Python Objects. You can use `jsonpickle` for serialization complex Python objects into JSON. Also, and `deserialization` from JSON to complex Python objects. `jsonpickle` allows more complex data structures to be serialized to JSON. `jsonpickle` is highly configurable and extendable.
 
 Steps:
 
-- Install jsonpickle using pip. pip install jsonpickle
-- Execute jsonpickle.encode(object) to serialize custom Python Object.
+- Install `jsonpickle` using pip: `pip install jsonpickle`.
+- Execute `jsonpickle.encode(object)` to serialize custom Python Object.
 
-You can refer to Jsonpickle Documentation for more detail. Let’s see the jsonpickle example to make a set JSON serializable.
+You can refer to jsonpickle documentation for more detail.
+
+Let’s see the jsonpickle example to make a set JSON serializable.
 
 ```py
 import json
@@ -2519,21 +2554,21 @@ Decode JSON into set using jsonpickle
 {65, 45, 85, 25, 95}
 ```
 
-### Use custom JSON Encoder to make Python set JSON serializable
+### Use custom JSON Encoder to make Python `Set` JSON serializable
 
-Let’ see how to write custom encoder to JSON serializable Python set. Python json module provides a JSONEncoder to encode python types into JSON. We can extend by implementing its default() method that can JSON serializable set.
+Let’ see how to write custom encoder to JSON serializable Python set. Python `json` module provides a `JSONEncoder` to encode python types into JSON. We can extend by implementing its `default()` method that can JSON serializable set.
 
-In default() method we will convert set into list using list(setObj)
+In `default()` method we will convert set into list using `list(setObj)`.
 
-The json.dump() and json.dumps() methods of the json module has a cls kwarg. Using this argument, you can pass a custom JSON Encoder, which tells dump or dumps method how to encode set into JSON formatted data.
+The `json.dump()` and `json.dumps()` methods of the json module has a `cls` kwarg. Using this argument, you can pass a custom JSON Encoder, which tells dump or dumps method how to encode set into JSON formatted data.
 
-JSONEncoder class has a default() method which will be used when we execute JSONEncoder.encode(object). This method converts only basic types into JSON.
+`JSONEncoder` class has a `default()` method which will be used when we execute `JSONEncoder.encode(object)`. This method converts only basic types into JSON.
 
-Your custom JSONEncoder subclass will override the default() method to serialize additional types.
+Your custom `JSONEncoder` subclass will override the `default()` method to serialize additional types.
 
-Specify it with the cls kwarg in json.dumps() method; otherwise, default JSONEncoder is used.
+Specify it with the `cls` kwarg in `json.dumps()` method; otherwise, default JSONEncoder is used.
 
-Example: json.dumps(cls=CustomEncoder).
+Example: `json.dumps(cls=CustomEncoder)`.
 
 ```py
 import json
@@ -2541,15 +2576,15 @@ from json import JSONEncoder
 
 # subclass JSONEncoder
 class setEncoder(JSONEncoder):
-        def default(self, obj):
-            return list(obj)
+    def default(self, obj):
+        return list(obj)
 
 sampleSet = {25, 45, 65, 85}
 
 print("Encode Set and Printing to check how it will look like")
 print(setEncoder().encode(sampleSet))
 
-print("Encode Set nto JSON formatted Data using custom JSONEncoder")
+print("Encode Set into JSON formatted Data using custom JSONEncoder")
 jsonData = json.dumps(sampleSet, indent=4, cls=setEncoder)
 print(jsonData)
 
@@ -2564,33 +2599,41 @@ print(setObj)
 ```json
 Encode Set and Printing to check how it will look like
 [65, 25, 85, 45]
-Encode Set nto JSON formatted Data using custom JSONEncoder
+
+Encode Set into JSON formatted data using custom JSONEncoder
 [
     65,
     25,
     85,
     45
 ]
+
 Decode JSON formatted Data
 [65, 25, 85, 45]
 ```
 
-## Python Serialize NumPy ndarray into JSON
+## Python Serialize NumPy `ndarray` into JSON
 
-You are here because when you try to encode/serialize NumPy array into a JSON format, you received a TypeError: Object of type ndarray is not JSON serializable. In this article, I will show you how to make NumPy array JSON serializable so that you can convert any NumPy array into JSON formatted data.
-As you know The built-in json module of Python can only handle primitives types that have a direct JSON equivalent (e.g., dictionary, lists, strings, Numbers, None, etc.). To serialize the multidimensional array into JSON, We need to write a custom JSON Encoder.
-Further Reading:
-    • Solve Python JSON Exercise to practice Python JSON skills
+You are here because when you try to encode/serialize NumPy array into a JSON format, you received a `TypeError: Object of type ndarray is not JSON serializable`. In this article, I will show you how to make NumPy array JSON serializable so that you can convert any NumPy array into JSON formatted data.
+
+As you know The built-in `json` module of Python can only handle primitives types that have a direct JSON equivalent (e.g., `dictionary`, `lists`, `strings`, `Numbers`, `None`, etc.). To serialize the multidimensional array into JSON, We need to write a custom JSON Encoder.
 
 ![Serialize numpy ndarray](_images/serialize%20numpy%20ndarray%20into%20json.png)
 
-Custom JSON Encoder to Serialize NumPy ndarray
-Python json module has a JSONEncoder class, we can extend it to get more customized output. i.e., you will have to subclass JSONEncoder so you can implement custom NumPy JSON serialization.
-When we extend the JSONEncoder class, we will extend its JSON encoding scope by overriding the default() method which will be used when we execute JSONEncoder.encode(numpyArray).
-Use the cls kwarg of the json.dump() and json.dumps() method to call our custom JSON Encoder, which will convert NumPy array into JSON formatted data.
-Example: json.dumps(cls=NumPyArrayEncoder)
-To serialize Numpy array into JSON we need to convert it into a list structure using a tolist() function. Let’s see the demo.
-Encode and Decode NumPy array to and from JSON
+### Custom JSON Encoder to Serialize NumPy ndarray
+
+Python `json` module has a `JSONEncoder` class, we can extend it to get more customized output. i.e., you will have to subclass `JSONEncoder` so you can implement custom NumPy JSON serialization.
+
+When we extend the `JSONEncoder` class, we will extend its JSON encoding scope by overriding the `default()` method which will be used when we execute `JSONEncoder.encode(numpyArray)`.
+
+Use the `cls` kwarg of the `json.dump()` and `json.dumps()` method to call our custom JSON Encoder, which will convert NumPy array into JSON formatted data.
+
+Example: `json.dumps(cls=NumPyArrayEncoder)`
+
+To serialize Numpy array into JSON we need to convert it into a list structure using a `tolist()` function. Let’s see the demo.
+
+**Encode and Decode NumPy array to and from JSON**:
+
 In this example, we try to serialize the NumPy Array into JSON String.
 
 ```py
@@ -2634,14 +2677,17 @@ NumPy Array
  [77 88 99]]
 ```
 
-Note: We used numpy.asarray() to convert data into NumPy array
+Note: We used `numpy.asarray()` to convert data into NumPy array
 
-### Encode NumPy array into JSON and write it in a file
+**Encode NumPy array into JSON and write it in a file**:
 
 In most scenarios, we need to store JSON serialized NumPy array into a file so we can use it in different systems.
+
 In this example, we will do the following:
-    • Convert two NumPy arrays into JSON and write it into a JSON file
-    • Read the JSON file, which contains JSON serialized NumPy array and convert it into actual NumPy Array.
+
+- Convert two NumPy arrays into JSON and write it into a JSON file
+- Read the JSON file, which contains JSON serialized NumPy array and convert it into actual NumPy
+  Array.
 
 ```py
 import numpy
@@ -2685,10 +2731,12 @@ serialize NumPy array into JSON and write into a file
 Done writing serialized NumPy array into file
 Started Reading JSON file
 Converting JSON encoded data into Numpy array
+
 NumPy Array One
 [[11 22 33]
  [44 55 66]
  [77 88 99]]
+
 NumPy Array Two
 [[ 51  61  91]
  [121 118 127]]
@@ -2696,7 +2744,7 @@ NumPy Array Two
 
 ![encode numpay and write to file](_images/encode%20numpa%20into%20json%20write%20to%20file.png)
 
-### Encode all NumPy types correctly into JSON
+**Encode all NumPy types correctly into JSON**:
 
 ```py
 import json
@@ -2751,9 +2799,11 @@ numPy arange
 [ 0  1  2  3  4  5  6  7  8  9 10 11]
 ```
 
-### Use panads to_json method to serialize NumPy ndarray into JSON
+**Use panads to_json method to serialize NumPy ndarray into JSON**:
 
-If you use pandas for data manipulation, you can use to_json function on Series. The pandas.Series.to_json convert the object to a JSON string. we can pass NumPy array to it to get the JSON representation.
+If you use `pandas` for data manipulation, you can use `to_json` function on Series. The pandas.`Series.to_json` convert the object to a JSON string. we can pass NumPy array to it to get the JSON representation.
+
+```py
 import pandas as pd
 import numpy
 
@@ -2764,20 +2814,27 @@ df = df.to_json(orient='index')
 
 print("Json Encoded Array")
 print(df)
+```
+
 **Output**:
+
+```json
 Json Encoded Array
 {"row 1":{"col 1":51,"col 2":61,"col 3":91},"row 2":{"col 1":121,"col 2":118,"col 3":127}}
+```
 
 ## PythoCheck if key exists in JSON and iterate the JSON array
 
 In this article, we will see how to perform the following JSON operations using Python.
-    • Check if the key exists or not in JSON
-    • Check if there is a value for a key, and return a default value if the key is missing
-    • Iterate JSON array
+
+- Check if the key exists or not in JSON
+- Check if there is a value for a key, and return a default value if the key is missing
+- Iterate JSON array
+
 Let’s see each one by one.
-Further Reading:
-    • Solve Python JSON Exercise to practice Python JSON skills
-Check if the key exists or not in JSON
+
+### Check if the key exists or not in JSON
+
 Let’s assume you received the following student, JSON. And you wanted to check if the percentage key is present or not in JSON data. if it is present directly to access its value instead of iterating the entire JSON.
 
 ```json
@@ -2820,7 +2877,8 @@ Key exist in JSON data
 john wick marks is:  75
 ```
 
-Note: We used json.loads() method to convert JSON encoded data into a Python dictionary. After turning JSON data into a dictionary, we can check if a key exists or not.
+**Note**:  
+We used `json.loads()` method to convert JSON encoded data into a Python dictionary. After turning JSON data into a dictionary, we can check if a key exists or not.
 
 ### Check if there is a value for a key in JSON
 
@@ -2875,12 +2933,21 @@ if not (student.get('subject') is None):
 else:
     print("using a default value for a given key")
     print(student.get('subject', 'Science'))
-**Output**
+```
+
+**Output**:
+
+```json
 value is not present for given JSON key
 using a default value for a given key
 Science
-Python Find if the nested key exists in JSON
+```
+
+### Python Find if the nested key exists in JSON
+
 Most of the time, JSON contains so many nested keys. Let’s see how to access nested key-value pairs from JSON directly. Let’s assume you have the following JSON data. and you want to check and access the value of nested key marks.
+
+```json
 { 
    "class":{ 
       "student":{ 
@@ -2892,61 +2959,75 @@ Most of the time, JSON contains so many nested keys. Let’s see how to access n
       }
    }
 }
+```
 
-Example 1: Access nested key directly
-If you know that you always have the parent key present, then you can access the nested JSON key directly. In this case, we always have ‘class‘ and ‘student‘ keys so we can access nested key marks directly.
-import json
+- **Example 1: Access nested key directly**
+  If you know that you always have the parent key present, then you can access the nested JSON key directly. In this case, we always have ‘class‘ and ‘student‘ keys so we can access nested key marks directly.
 
-sampleJson = """{ 
-   "class":{ 
-      "student":{ 
-         "name":"jhon",
-         "marks":{ 
-            "physics":70,
-            "mathematics":80
-         }
-      }
-   }
-}"""
+  ```py
+  import json
+  
+  sampleJson = """{ 
+     "class":{ 
+        "student":{ 
+           "name":"jhon",
+           "marks":{ 
+              "physics":70,
+              "mathematics":80
+           }
+        }
+     }
+  }"""
+  
+  print("Checking if nested JSON key exists or not")
+  sampleDict = json.loads(sampleJson)
+  if 'marks' in sampleDict['class']['student']:
+      print("Student Marks are")
+      print("Printing nested JSON key directly")
+      print(sampleDict['class']['student']['marks'])
+  ```
 
-print("Checking if nested JSON key exists or not")
-sampleDict = json.loads(sampleJson)
-if 'marks' in sampleDict['class']['student']:
-    print("Student Marks are")
-    print("Printing nested JSON key directly")
-    print(sampleDict['class']['student']['marks'])
-**Output**
-Checking if nested JSON key exists or not
-Student Marks are
-Printing nested JSON key directly
-{'physics': 70, 'mathematics': 80}
-Example 2: Access nested key using nested if statement
-If you are not sure whether you always have the parent key present, in such cases, we need to access nested JSON using nested if statement, to avoid any exceptions.
+  **Output**:
 
-import json
+  ```json
+  Checking if nested JSON key exists or not
+  Student Marks are
+  Printing nested JSON key directly
+  {'physics': 70, 'mathematics': 80}
+  ```
 
-sampleJson = """{ 
-   "class":{ 
-      "student":{ 
-         "name":"jhon",
-         "marks":{ 
-            "physics": 70,
-            "mathematics": 80
-         }
-      }
-   }
-}"""
+- **Example 2: Access nested key using nested if statement**
+  If you are not sure whether you always have the parent key present, in such cases, we need to access nested JSON using nested if statement, to avoid any exceptions.
+  
+  ```py
+  import json
+  
+  sampleJson = """{ 
+     "class":{ 
+        "student":{ 
+           "name":"jhon",
+           "marks":{ 
+              "physics": 70,
+              "mathematics": 80
+           }
+        }
+     }
+  }"""
+  
+  print("Checking if nested JSON key exists or not")
+  sampleDict = json.loads(sampleJson)
+  if 'class' in sampleDict:
+      if 'student' in sampleDict['class']:
+          if 'marks' in sampleDict['class']['student']:
+              print("Printing nested JSON key-value")
+              print(sampleDict['class']['student']['marks'])
+  ```
 
-print("Checking if nested JSON key exists or not")
-sampleDict = json.loads(sampleJson)
-if 'class' in sampleDict:
-    if 'student' in sampleDict['class']:
-        if 'marks' in sampleDict['class']['student']:
-            print("Printing nested JSON key-value")
-            print(sampleDict['class']['student']['marks'])
-Iterate JSON Array
+### Iterate JSON Array
 
 Many times nested JSON key contains a value in the form of an array or dictionary. In this case, if you need all values, we can iterate the nested JSON array. Let’s see the example.
+
+```py
 import json
 
 sampleJson = """{ 
@@ -2961,6 +3042,7 @@ sampleJson = """{
       }
    }
 }"""
+
 sampleDict = json.loads(sampleJson)
 if 'class' in sampleDict:
     if 'student' in sampleDict['class']:
@@ -2968,32 +3050,44 @@ if 'class' in sampleDict:
             print("Iterating JSON array")
             for sub in sampleDict['class']['student']['subjects']:
                 print(sub)
+```
 
 **Output**:
+
+```json
 Iterating JSON array
 sub1
 sub2
 sub3
 sub4
+```
 
 ## Python Parse multiple JSON objects from file
 
-You are here because when you try to load and parse a JSON file with multiple JSON objects in Python, you received an error. json.decoder.JSONDecodeError: Extra data error. The reason is that the json.load() method can only handle a single JSON object.
-Further Reading:
-    • Solve Python JSON Exercise to practice Python JSON skills
+You are here because when you try to load and parse a JSON file with multiple JSON objects in Python, you received an error. `json.decoder.JSONDecodeError: Extra data error`. The reason is that the `json.load()` method can only handle a single JSON object.
+
 The file is invalid if it contains more than one JSON object. When you try to load and parse a JSON file with multiple JSON objects, each line contains valid JSON, but as a whole, it is not a valid JSON as there is no top-level list or object definition. We can call JSON a valid JSON only when there is a top-level list or object definition.
+
 For example, you wanted to read the following JSON file, filter some data, and store it into a new JSON file.
 
+```json
 {"id": 1, "name": "Ault", "class": 8, "email": "ault@pynative.com"}
 {"id": 2, "name": "john", "class": 8, "email": "jhon@pynative.com"}
 {"id": 3, "name": "josh", "class": 8, "email": "josh@pynative.com"}
 {"id": 4, "name": "emma", "class": 8, "email": "emma@pynative.com"}
+```
+
 If your file contains a list of JSON objects, and you want to decode one object one-at-a-time, we can do it. To Load and parse a JSON file with multiple JSON objects we need to follow below steps:
-    • Create an empty list called jsonList
-    • Read the file line by line because each line contains valid JSON. i.e., read one JSON object at a time.
-    • Convert each JSON object into Python dict using a json.loads()
-    • Save this dictionary into a list called result jsonList.
+
+- Create an empty list called `jsonList`
+- Read the file line by line because each line contains valid JSON. i.e., read one JSON object at a
+  time.
+- Convert each JSON object into Python dict using a `json.loads()`
+- Save this dictionary into a list called result `jsonList`.
+
 Let’ see the example now.
+
+```py
 import json
 
 studentsList = []
@@ -3006,6 +3100,7 @@ with open('students.txt') as f:
 print("Printing each JSON Decoded Object")
 for student in studentsList:
     print(student["id"], student["name"], student["class"], student["email"])
+```
 
 **Output**:
 
