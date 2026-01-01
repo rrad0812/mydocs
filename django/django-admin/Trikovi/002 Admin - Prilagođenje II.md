@@ -5,7 +5,7 @@ Django okvir dolazi sa moćnim administrativnim alatom koji se zove admin. Može
 
 U ovom vodiču ćete naučiti kako da:
 
-- Dodate atribut u changelist objekata modela
+- Dodate atribut u `changelist` objekata modela
 - Dodate vezu između objekata modela
 - Dodate filtere na listu objekata modela
 - Dodate search na listu objekata modela
@@ -15,8 +15,6 @@ U ovom vodiču ćete naučiti kako da:
 ## Preduslovi
 
 Da biste izvukli maksimum iz ovog vodiča, biće vam potrebno malo poznavanja Djanga, posebno objekata modela. Pošto Django nije deo standardne Python biblioteke, najbolje je da takođe imate neko znanje o pip i pyenv ( ili ekvivalentnom alatu za virtuelno okruženje ).
-
-Možda ćete biti zainteresovani i za jedan od mnogih dostupnih Django tutorijala.
 
 Isečci koda u ovom vodiču su testirani u odnosu na Django 3.0.7. Svi koncepti su prethodili u Djangu 2.0, tako da bi trebalo da rade u bilo kojoj verziji koju koristite, ali mogu postojati manje razlike.
 

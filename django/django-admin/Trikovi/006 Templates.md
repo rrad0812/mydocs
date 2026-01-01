@@ -556,11 +556,10 @@ Oznaka `{% autoescape %}` uzima samo jedan parametar on ili off, uključujući i
 
 Ako `my_text` sadrži `Hello <b>world</b>`, prikazani sadržaj bi imao dve verzije stringa:
 
-- `autoescape on` menja HTML posebne znakove tako da se pogleduju onakvima kakvi su u stringu. 
+- `autoescape on` menja HTML posebne znakove tako da se pogleduju onakvima kakvi su u stringu.
 - Nasuprot tome, sa `autoescape off`, podebljana oznaka se prosleđuje u pretraživač.
 
-Svim jezicima koji koriste specijalne znakove potreban je način direktnog korišćenja istih specijalnih znakova. Ako želite da koristite znakove koji označavaju oznaku, možete ih umotati u 
-`{% verbatim %}` oznaku:
+Svim jezicima koji koriste specijalne znakove potreban je način direktnog korišćenja istih specijalnih znakova. Ako želite da koristite znakove koji označavaju oznaku, možete ih umotati u `{% verbatim %}` oznaku:
 
 ```html
 {% verbatim %}
@@ -663,7 +662,7 @@ Pored korišćenja filtera za pristup delovima liste, možete ih koristiti za do
 
 Koristite dvotačku (:) da biste prosledili parametre filteru. Spajanje goodies liste sa zarezom kao parametrom vraća jedan string koji sadrži listu razdvojenu zarezima: "popcorn, peanuts, cola".
 
-Da biste pronašli dužinu liste, koristite length filter. Ovo može biti posebno korisno kada se kombinuje sa drugim filterima. Filter pluralize dodaje znak "s" na kraj reči kada se radi sa više stavki. Pokušajte da dodate sledeći red templates/listing.html neposredno ispod <h2>Movies</h2> naslova:
+Da biste pronašli dužinu liste, koristite length filter. Ovo može biti posebno korisno kada se kombinuje sa drugim filterima. Filter pluralize dodaje znak "s" na kraj reči kada se radi sa više stavki. Pokušajte da dodate sledeći red templates/listing.html neposredno ispod `<h2>Movies</h2>` naslova:
 
 ```html
 <!-- templates/listing.html -->

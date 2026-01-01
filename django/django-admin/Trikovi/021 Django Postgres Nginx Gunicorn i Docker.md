@@ -77,11 +77,9 @@ COPY . .
 Dakle, počeli smo sa `slim-buster` slikom na bazi Docker-a za Python 3.11.4. Zatim smo postavili radni direktorij zajedno sa dve promenljive okoline:
 
 1. PYTHONDONTWRITEBYTECODE
-
    Sprečava Pajton da piše `pyc` datoteke na disk (ekvivalentno `python -B` opciji)
 
 2. PYTHONUNBUFFERED
-
    Sprečava pajton od buferisanja `stdout`-a i `stderr`-a. (equivalent to `python -u` option)
 
 Konačno, ažurirali smo `pip`, kopirali smo datoteku `requirements.txt`, instalirali smo zavisnosti i kopirali sve.
