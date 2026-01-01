@@ -1,8 +1,7 @@
 ﻿
 # Prilagodite Django Admin
 
-Django okvir dolazi sa moćnim administrativnim alatom koji se zove admin. Možete ga koristiti  za brzo dodavanje, brisanje ili uređivanje bilo kog modela baze
-podataka iz web interfejsa. Ali sa malo dodatnog koda, možete da prilagodite Django administratora da podigne svoje administratorske mogućnosti na sledeći nivo.
+Django okvir dolazi sa moćnim administrativnim alatom koji se zove admin. Možete ga koristiti  za brzo dodavanje, brisanje ili uređivanje bilo kog modela baze podataka iz web interfejsa. Ali sa malo dodatnog koda, možete da prilagodite Django administratora da podigne svoje administratorske mogućnosti na sledeći nivo.
 
 U ovom vodiču ćete naučiti kako da:
 
@@ -15,8 +14,7 @@ U ovom vodiču ćete naučiti kako da:
 
 ## Preduslovi
 
-Da biste izvukli maksimum iz ovog vodiča, biće vam potrebno malo poznavanja Djanga, posebno objekata modela. Pošto Django nije deo standardne Python biblioteke,
-najbolje je da takođe imate neko znanje o pip i pyenv ( ili ekvivalentnom alatu za virtuelno okruženje ).
+Da biste izvukli maksimum iz ovog vodiča, biće vam potrebno malo poznavanja Djanga, posebno objekata modela. Pošto Django nije deo standardne Python biblioteke, najbolje je da takođe imate neko znanje o pip i pyenv ( ili ekvivalentnom alatu za virtuelno okruženje ).
 
 Možda ćete biti zainteresovani i za jedan od mnogih dostupnih Django tutorijala.
 
@@ -24,8 +22,7 @@ Isečci koda u ovom vodiču su testirani u odnosu na Django 3.0.7. Svi koncepti 
 
 ## Podešavanje Django admina
 
-Django admin obezbeđuje web-bazirani interfejs za kreiranje i upravljanje objektima modela baze podataka. Da biste ga videli u akciji, prvo će vam trebati
-Django projekat i neki objektni modeli.
+Django admin obezbeđuje web-bazirani interfejs za kreiranje i upravljanje objektima modela baze podataka. Da biste ga videli u akciji, prvo će vam trebati Django projekat i neki objektni modeli.
 
 Instalirajte Django unutar čistog virtuelnog okruženja:
 
@@ -113,13 +110,11 @@ class Grade(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
 ```
 
-Ovi modeli predstavljaju učenike i kurseve koje pohađaju u školi. Course ima "name" i "year" u kojoj je ponuđen. "Person" ima "first_name" i "last_name" i
-može uzeti nulu ili više kurseva. Grade sadrži procentualni rezultat koji je Person dobio na Course.
+Ovi modeli predstavljaju učenike i kurseve koje pohađaju u školi. Course ima "name" i "year" u kojoj je ponuđen. "Person" ima "first_name" i "last_name" i može uzeti nulu ili više kurseva. Grade sadrži procentualni rezultat koji je Person dobio na Course.
 
 Imena osnovnih tabela u bazi podataka su malo drugačija od ove, ali su povezana sa modelima prikazanim iznad.
 
-Svaki model koji želite da Django predstavlja u admin interfejsu mora biti registrovan. Ovo radite u `admin.py` datoteci. Modeli iz `core/models.py` su
-registrovani u odgovarajućoj `core/admin.py` datoteci:
+Svaki model koji želite da Django predstavlja u admin interfejsu mora biti registrovan. Ovo radite u `admin.py` datoteci. Modeli iz `core/models.py` su registrovani u odgovarajućoj `core/admin.py` datoteci:
 
 ```py
 from django.contrib import admin
@@ -163,19 +158,15 @@ Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
 ```
 
-Sada posetite <http://127.0.0.1:8000/admin> da vidite svoj admin interfejs. Od vas će biti zatraženo da se prijavite. Koristite akreditive koje ste kreirali
-pomoću `createsuperuser` komande za upravljanje.
+Sada posetite <http://127.0.0.1:8000/admin> da vidite svoj admin interfejs. Od vas će biti zatraženo da se prijavite. Koristite akreditive koje ste kreirali pomoću `createsuperuser` komande za upravljanje.
 
 Početni admin prikaz navodi sve registrovane modele baze podataka.
 
-Sada možete koristiti interfejs za kreiranje objekata u vašoj bazi podataka. Klikom na naziv modela prikazaće se ekran sa spiskom svih objekata u bazi
-podataka za taj model.
+Sada možete koristiti interfejs za kreiranje objekata u vašoj bazi podataka. Klikom na naziv modela prikazaće se ekran sa spiskom svih objekata u bazi podataka za taj model.
 
-Lista počinje prazna, kao vaša baza podataka. Klikom na Add Person možete da kreirate osobu u bazi podataka. Kada sačuvate, bićete vraćeni na listu Person
-objekata.
+Lista počinje prazna, kao vaša baza podataka. Klikom na Add Person možete da kreirate osobu u bazi podataka. Kada sačuvate, bićete vraćeni na listu Person objekata.
 
-Dobra vest je da imate objekat. Loše vesti, Person object (1) govore id o objektu i ništa više. Podrazumevano, Django administrator prikazuje svaki
-objekat tako što poziva str(). Ovaj ekran možete učiniti malo korisnijim dodavanjem `__str__()` metode u "Person" klasu u `core/models.py`:
+Dobra vest je da imate objekat. Loše vesti, Person object (1) govore id o objektu i ništa više. Podrazumevano, Django administrator prikazuje svaki objekat tako što poziva str(). Ovaj ekran možete učiniti malo korisnijim dodavanjem `__str__()` metode u "Person" klasu u `core/models.py`:
 
 ```py
 class Person(models.Model):
@@ -205,22 +196,17 @@ class Grade(models.Model):
         return f"{self.grade}, {self.person}, {self.course}"
 ```
 
-Želite da imate neke podatke u svojoj bazi podataka da biste videli pun efekat vaših prilagođavanja. Možete se malo zabaviti i kreirati sopstvene podatke sada,
-ili možete preskočiti posao i koristiti uređaj. Proširite okvir ispod da naučite kako da učitate podatke pomoću uređaja.
+Želite da imate neke podatke u svojoj bazi podataka da biste videli pun efekat vaših prilagođavanja. Možete se malo zabaviti i kreirati sopstvene podatke sada, ili možete preskočiti posao i koristiti uređaj. Proširite okvir ispod da naučite kako da učitate podatke pomoću uređaja.
 
 Sada kada imate neke podatke sa kojima možete da radite, spremni ste da počnete da prilagođavate Django admin interfejs.
 
 ## Prilagođavanje Django admina
 
-Pametni ljudi koji su kreirali Django okvir ne samo da su napravili admin, već su to uradili na takav način da ga možete prilagoditi za svoje projekte. Kada
-ste ranije registrovali PersonAdmin objekat, on je nasledio od admin.ModelAdmin. Većina prilagođavanja koje možete da uradite sa Django adminom se vrši
-modifikovanjem ModelAdmin, a vi ga sigurno možete modifikovati!
+Pametni ljudi koji su kreirali Django okvir ne samo da su napravili admin, već su to uradili na takav način da ga možete prilagoditi za svoje projekte. Kada ste ranije registrovali PersonAdmin objekat, on je nasledio od admin.ModelAdmin. Većina prilagođavanja koje možete da uradite sa Django adminom se vrši modifikovanjem ModelAdmin, a vi ga sigurno možete modifikovati!
 
-ModelAdmin ima preko trideset atributa i skoro pedeset metoda. Možete koristiti svaki od njih da fino podesite prezentaciju admina i kontrolišete interfejse
-vaših objekata. Svaka od ovih opcija je detaljno opisana u dokumentaciji.
+ModelAdmin ima preko trideset atributa i skoro pedeset metoda. Možete koristiti svaki od njih da fino podesite prezentaciju admina i kontrolišete interfejse vaših objekata. Svaka od ovih opcija je detaljno opisana u dokumentaciji.
 
-Povrh svega, admin je napravljen pomoću Django interfejsa šablona. Mehanizam Django šablona vam omogućava da zamenite postojeće šablone, a pošto je admin
-samo još jedan skup šablona, to znači da možete potpuno promeniti njegov HTML.
+Povrh svega, admin je napravljen pomoću Django interfejsa šablona. Mehanizam Django šablona vam omogućava da zamenite postojeće šablone, a pošto je admin samo još jedan skup šablona, to znači da možete potpuno promeniti njegov HTML.
 
 Iako je to van okvira ovog uputstva, možete čak i da kreirate više admin sajtova. To može izgledati kao preterano, ali vam omogućava da postanete fensi i definišete različite sajtove za korisnike sa različitim dozvolama.
 
@@ -233,16 +219,13 @@ Django admin je podeljen na tri glavne oblasti:
 Indeks aplikacije navodi vaše registrovane modele. Lista objekata modela se automatski kreira za svaki registrovani model i navodi objekte za taj model.
 Kada dodate ili uredite jedan od tih objekata, to činite pomoću forme za promenu objekta modela.
 
-U prethodnom primeru, indeks aplikacije je pokazao objekte Person, Course i Grade. Klikom na Person prikazuju se liste za Person objekte. Na Person list stranici,
-klik na Buffy Summers objekat vodi vas do forme za promene da biste uredili Buffy detalje.
+U prethodnom primeru, indeks aplikacije je pokazao objekte Person, Course i Grade. Klikom na Person prikazuju se liste za Person objekte. Na Person list stranici, klik na Buffy Summers objekat vodi vas do forme za promene da biste uredili Buffy detalje.
 
 ### Izmena listchange prikaza pomoću list_display
 
-Implementacija .__str__() je brz način da promenite reprezentaciju objekta Person iz besmislenog stringa u razumljive podatke. Pošto će se ova reprezentacija
-takođe pojaviti u padajućim menijima i višestrukim odabirima, definitivno želite da je učinite što lakšom za razumevanje.
+Implementacija .__str__() je brz način da promenite reprezentaciju objekta Person iz besmislenog stringa u razumljive podatke. Pošto će se ova reprezentacija takođe pojaviti u padajućim menijima i višestrukim odabirima, definitivno želite da je učinite što lakšom za razumevanje.
 
-Stranice sa listama možete da prilagodite na mnogo više načina od obične izmene prikaza stringova objekta. Atribut list_display objekta admin.ModelAdmin određuje
-koje se kolone prikazuju na listi promena. Ova vrednost je skup atributa objekta koji se modeluje. Na primer, u core/admin.py, izmenite PersonAdmin na sledeći način:
+Stranice sa listama možete da prilagodite na mnogo više načina od obične izmene prikaza stringova objekta. Atribut list_display objekta admin.ModelAdmin određuje koje se kolone prikazuju na listi promena. Ova vrednost je skup atributa objekta koji se modeluje. Na primer, u core/admin.py, izmenite PersonAdmin na sledeći način:
 
 ```py
 @admin.register(Person)
@@ -264,8 +247,7 @@ class Person(models.Model):
     # ...
 ```
 
-Dodavanje ordering atributa će podrazumevano postaviti da svi upiti na Person modelu budu poređani po last_name a potom po first_name. Django će poštovati
-ovaj podrazumevani redosled u adminu i prilikom preuzimanja objekata.
+Dodavanje ordering atributa će podrazumevano postaviti da svi upiti na Person modelu budu poređani po last_name a potom po first_name. Django će poštovati ovaj podrazumevani redosled u adminu i prilikom preuzimanja objekata.
 
 Tuple list_display može referencirati bilo koji atribut objekta koji se navodi. Takođe može da referencira metod u admin.ModelAdmin. Izmeni PersonAdmin ponovo:
 
@@ -282,12 +264,10 @@ class PersonAdmin(admin.ModelAdmin):
 
 U gornjem kodu dodajete kolonu adminu koja prikazuje prosek ocena svakog učenika. show_average() se poziva jednom za svaki objekat prikazan na listi.
 
-Parametar obj je objekat za red koji se prikazuje. U ovom slučaju, koristite ga za ispitivanje odgovarajućih Grade objekata za učenika, sa prosečnim odgovorom
-preko Grade.grade. Rezultate možete videti ovde:
+Parametar obj je objekat za red koji se prikazuje. U ovom slučaju, koristite ga za ispitivanje odgovarajućih Grade objekata za učenika, sa prosečnim odgovorom preko Grade.grade. Rezultate možete videti ovde:
 
 Imajte na umu da prosečnu ocenu zaista treba izračunati u Person objektu modela. Verovatno ćete želeti podatke negde drugde, ne samo u Django administratoru.
-Ako ste imali takav metod, mogli biste ga dodati atributu list_display. Primer ovde pokazuje šta možete da uradite u ModelAdmin objektu, ali to verovatno nije
-najbolji izbor za vaš kod.
+Ako ste imali takav metod, mogli biste ga dodati atributu list_display. Primer ovde pokazuje šta možete da uradite u ModelAdmin objektu, ali to verovatno nije najbolji izbor za vaš kod.
 
 Podrazumevano se sortiraju samo one kolone koje su atributi objekta. show_average() nije. To je zato što sortiranje vrši osnovni QuerySet, a ne prikazani rezultati. U nekim slučajevima postoje načini za sortiranje ovih kolona , ali to je van okvira ovog uputstva.
 
@@ -319,8 +299,7 @@ Nažalost, Django još uvek nije dodao podršku za f-string format_html(), tako 
 
 ### Pružanje veza do stranica drugih objekata na changelist prikazu
 
-Sasvim je uobičajeno da objekti upućuju na druge objekte korišćenjem stranih ključeva. Možete pokazati list_display na metodu koja vraća HTML vezu. Unutar
-`core/admin.py`, izmenite "CourseAdmin" klasu na sledeći način:
+Sasvim je uobičajeno da objekti upućuju na druge objekte korišćenjem stranih ključeva. Možete pokazati list_display na metodu koja vraća HTML vezu. Unutar `core/admin.py`, izmenite "CourseAdmin" klasu na sledeći način:
 
 ```py
 from django.urls import reverse
@@ -348,8 +327,7 @@ Ovaj kod uzrokuje da Course lista promena ima tri kolone:
 2. Godina u kojoj je kurs ponuđen
 3. Link koji prikazuje broj studenata na kursu
 
-Kada kliknete na 2 učenika, Django vas vodi na Person stranicu sa listom promena sa primenjenim filterom. Filtrirana stranica prikazuje samo one učenike u
-Psych 101, Buffy i Villow. Xander nije stigao na univerzitet.
+Kada kliknete na 2 učenika, Django vas vodi na Person stranicu sa listom promena sa primenjenim filterom. Filtrirana stranica prikazuje samo one učenike u Psych 101, Buffy i Villow. Xander nije stigao na univerzitet.
 
 Primer koda koristi reverse() za traženje URL adrese u Django adminu. Možete potražiti bilo koju stranicu admina koristeći sledeću konvenciju imenovanja:
 
@@ -364,18 +342,17 @@ Ova struktura imena se razlaže na sledeći način:
 - mdel objekat modela.
 - page tip Django admin stranice.
 
-Za `view_students_link()` gornji primer, koristite `admin:core_person_changelist` da biste dobili referencu na stranicu sa listom promena objekta Person u core
-aplikaciji.
+Za `view_students_link()` gornji primer, koristite `admin:core_person_changelist` da biste dobili referencu na stranicu sa listom promena objekta Person u core aplikaciji.
 
 Evo dostupnih URL adresa:
 
-Strana     | URL ime                                    | Svrha
------------|--------------------------------------------|------------------------------------
-changelist | %(app)s\_%(model)s\_changelist | Stranica Lista objekata modela.
-add        | %(app)s\_%(model)s\_add        | Stranica Forme za kreiranje objekta modela.
-history    | %(app)s\_%(model)s\_history    | Stranica istorije promena objekta.(object_id)
-delete     | %(app)s\_%(model)s\_delete     | Stranica za brisanje objekta modela.(object_id)
-change     | %(app)s\_%(model)s\_change     | Stranica za uređivanje objekta modela.(object_id)
+ Strana     | URL ime                        | Svrha
+ -----------|--------------------------------|------------------------------------
+ changelist | %(app)s\_%(model)s\_changelist | Stranica Lista objekata modela.
+ add        | %(app)s\_%(model)s\_add        | Stranica Forme za kreiranje objekta modela.
+ history    | %(app)s\_%(model)s\_history    | Stranica istorije promena objekta.(object_id)
+ delete     | %(app)s\_%(model)s\_delete     | Stranica za brisanje objekta modela.(object_id)
+ change     | %(app)s\_%(model)s\_change     | Stranica za uređivanje objekta modela.(object_id)
 
 Možete da filtrirate stranicu sa listom dodavanjem stringa upita u URL. Ovaj string upita menja QuerySet korišćeni za popunjavanje stranice. U gornjem primeru, string upita
 
@@ -385,8 +362,7 @@ Možete da filtrirate stranicu sa listom dodavanjem stringa upita u URL. Ovaj st
 
 filtrira Person listu samo na one objekte koji imaju odgovarajuću vrednost u "Person.course".
 
-Ovi filteri podržavaju pretragu po poljima QuerySet pomoću dvostrukih donjih crta ( `__` ). Možete pristupiti atributima povezanih objekata kao i koristiti
-modifikatore filtera kao što su `__exact` i `__startswith`.
+Ovi filteri podržavaju pretragu po poljima QuerySet pomoću dvostrukih donjih crta ( `__` ). Možete pristupiti atributima povezanih objekata kao i koristiti modifikatore filtera kao što su `__exact` i `__startswith`.
 
 Možete pronaći sve detalje o tome šta možete da postignete pomoću `list_display` atributa u Django admin dokumentaciji.
 
