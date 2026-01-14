@@ -1,7 +1,7 @@
 
 # 3 Types
 
-[prev](02_constants.md) [content](00_contents.md) [next](04_.md)
+[prev][f1] [content][f0] [next][f2]
 
 All variables have a type. Free Pascal supports the same basic types as Turbo Pascal, with some extra types from Delphi as well as some of its own.
 
@@ -19,7 +19,7 @@ With the exception of floating point value types, all base types are `ordinal` t
 
 - **Ordinal types** are countable and ordered, i. e. it is, in principle, possible to start counting them one by one, in a specified order. This property allows the operation of functions as `Inc`, `Ord`, `Dec` on ordinal types to be defined.
 - **Ordinal values** have a smallest possible value. Trying to apply the `Pred` function on the smallest possible value will generate a `range check error` if range checking is enabled `{R+}`.
-- **Ordinal values* have a largest possible value. Trying to apply the `Succ` function on the largest possible value will generate a `range check error` if range checking is enabled `{R+}`.
+- **Ordinal values** have a largest possible value. Trying to apply the `Succ` function on the largest possible value will generate a `range check error` if range checking is enabled `{R+}`.
 
 **Remark**:  
 `Int64` and `QWord` are considered ordinal types on 64-bit CPUs. On 32-bit types they have some of the characteristics of ordinals, but they cannot be used e. g. in `for` loops.
@@ -87,8 +87,10 @@ In newer Delphi versions, the longint type is platform and CPU dependent. This i
 
 As a pascal compiler, Free Pascal does automatic type conversion and upgrading in expressions where different kinds of integer types are used:
 
-- Every platform has a “native” integer size, depending on whether the platform is 8-bit, 16-bit, 32-bit or 64-bit. E. g. on AVR this is 8-bit.
-- Every integer smaller than the “native” size is promoted to a signed version of the “native” size. Integers equal to the “native” size keep their signedness.
+- Every platform has a “native” integer size, depending on whether the platform is 8-bit, 16-bit,
+  32-bit or 64-bit. E. g. on AVR this is 8-bit.
+- Every integer smaller than the “native” size is promoted to a signed version of the “native”
+  size. Integers equal to the “native” size keep their signedness.
 - The result of binary arithmetic operators (+, -, *, etc.) is determined in the following way:
   - If at least one of the operands is larger than the native integer size, the result is chosen to be the smallest type that encompasses the ranges of the types of both operands. This means that mixing an unsigned with a smaller or equal in size signed will produce a signed type that is larger than both of them.
   - If both operands have the same signedness, the result is the same type as them. The only exception is subtracting (-): in the case of unsigned - unsigned subtracting produces a signed result in FPC (as in Delphi, but not in TP7).
@@ -1170,8 +1172,8 @@ The layout and size of a record is influenced by five aspects:
 
 - The size of its fields.
   The alignment requirements of the types of the fields, which are platform-dependent. Note that the alignment requirements of a type inside a record may be different from those of a separate variable of that type. Additionally, the location of a field inside a record may also influence its type’s alignment requirements.
-- The currently active {$ALIGN N} or {$PACKRECORDS N} setting (these settings
-  override each other, so the last one specified is the active one; note that these directives to not accept exactly the same arguments, see the programmer’s manual for more information).
+- The currently active `{$ALIGN N}` or `{$PACKRECORDS N}` setting (these settings override each
+  other, so the last one specified is the active one; note that these directives to not accept exactly the same arguments, see the programmer’s manual for more information).
 - The currently active `{$CODEALIGN RECORDMIN=X}` setting.
 - The currently active `{$CODEALIGN RECORDMAX=X}` setting.
 
@@ -1180,11 +1182,11 @@ The layout and size of variant parts in records is determined by replacing them 
 Field F2’s offset in a record is equal to the sum of the previous field F1’s offset and F1’s size, rounded up to a multiple of F2’s required alignment. This required alignment is calculated as follows:
 
 - The required alignment is set to the default alignment of the field’s type,
-  possibly adjusted based on the fact that this type occurs in a record and on the field’s location in the record.
-- If the required alignment is smaller than the currently active {$CODEALIGN
-    RECORDMIN=X} setting, it is changed to this X value.
-- If the currently active {$ALIGN N} or {$PACKRECORDS N} setting is
-  a numerical value: if the required alignment is larger than N, it is changed to N. I. e., if N is 1, all fields will be placed right after each other.
+  Possibly adjusted based on the fact that this type occurs in a record and on the field’s location in the record.
+- If the required alignment is smaller than the currently active `{$CODEALIGN  RECORDMIN=X}`
+  setting, it is changed to this X value.
+- If the currently active `{$ALIGN N}` or {`$PACKRECORDS N}` setting is a numerical value: if the
+  required alignment is larger than N, it is changed to N. I. e., if N is 1, all fields will be placed right after each other.
 - RESET or DEFAULT: the resulting required alignment is target dependent.
 - C: the required alignment is adjusted according to the rules specified in the
   official ABI for the current platform.
@@ -1193,12 +1195,11 @@ Field F2’s offset in a record is equal to the sum of the previous field F1’s
 
 The size of a record is equal to the sum of the record’s last field’s offset and this field’s size, rounded up to a multiple of the record’s required alignment. The record’s required alignment is calculated as follows:
 
-- The required alignment is set to the alignment of the record’s field with the  
-  largest alignment, as determined while laying out the record.
-- If the current {$ALIGN N} or {$PACKRECORDS N} setting is different from C and
-  the required alignment is larger than than the currently active {$CODEALIGN RECORDMAX=X}, the required alignment is changed to X.
-- If the current {$ALIGN N} or {$PACKRECORDS N} setting is equal to C, the
-  required alignment is determined by following the official ABI rules.
+- The required alignment is set to the alignment of the record’s field with the largest alignment,
+  as determined while laying out the record.
+- If the current `{$ALIGN N}` or `{$PACKRECORDS N}` setting is different from C and the required
+  alignment is larger than than the currently active {$CODEALIGN RECORDMAX=X}, the required alignment is changed to X.
+- If the current `{$ALIGN N}` or `{$PACKRECORDS N}` setting is equal to C, the required alignment is determined by following the official ABI rules.
 
 #### 3.3.3.2 Remarks and examples
 
@@ -1327,9 +1328,12 @@ The difference is that the former declaration allocates memory for the pointer o
 
 ```pascal
 program PointerArray;  
-var i : Longint;  
-    p : ^Longint;  
-    pp : array[0..100] of Longint;  
+
+var 
+  i : Longint;  
+  p : ^Longint;  
+  pp : array[0..100] of Longint;  
+
 begin  
   for i := 0 to 100 do pp[i] := i; { Fill array }  
   p := @pp[0];                     { Let p point to pp }  
@@ -1359,8 +1363,10 @@ will increase P by 4, because 4 is the size of a longint. If the pointer is unty
 Normal arithmetic operators on pointers can also be used, that is, the following are valid pointer arithmetic operations:
 
 ```pascal
-var  p1,p2 : ^Longint;  
-     L : Longint;  
+var  
+  p1,p2 : ^Longint;  
+  L : Longint;  
+
 begin  
   P1 := @P2;  
   P2 := @L;  
@@ -1413,18 +1419,18 @@ For a description of formal parameter lists, see chapter 14, page 740. The two f
 
 ```pascal
 Type TOneArg = Procedure (Var X : integer);  
-     TNoArg = Function : Real;  
-var proc : TOneArg;  
-    func : TNoArg;
+  TNoArg = Function : Real;  
+var 
+  proc : TOneArg;  
+  func : TNoArg;
 ```
 
 One can assign the following values to a procedural type variable:
 
 - Nil, for both normal procedure pointers and method pointers.
-- A variable reference of a procedural type, i. e. another variable of the same
-  type.
-- A global procedure or function address, with matching function or procedure
-  header and calling convention.
+- A variable reference of a procedural type, i. e. another variable of the same type.
+- A global procedure or function address, with matching function or procedure header and calling
+  convention.
 - A method address.
 
 Given these declarations, the following assignments are valid:
@@ -1522,7 +1528,7 @@ The two following examples are valid type declarations for method procedural var
 
 ```pascal
 Type TOneArg = Procedure (Var X : integer) of object;  
-     TNoArg = Function : Real of object;  
+  TNoArg = Function : Real of object;  
 var  
   oproc : TOneArg;  
   ofunc : TNoArg;
@@ -1859,4 +1865,8 @@ Variables of managed types will also be finalized: this means, in general, that 
 **Remark**:  
 Note that no assumption should be made about the exact time of this finalization. All that is guaranteed that they are finalized when they go out of scope.
 
-[prev](02_constants.md) [content](00_contents.md) [next](04_.md)
+[prev][f1] [content][f0] [next][f2]
+
+[f2]: 04_variables.md
+[f0]: 00_contents.md
+[f1]: 02_constants.md

@@ -1,5 +1,7 @@
 # 5 Objects
 
+[prev][f1] [content][f0] [next][f2]
+
 ## 5.1 Declaration
 
 Free Pascal supports object oriented programming. In fact, most of the compiler is written using objects. Here we present some technical questions regarding object oriented programming in Free Pascal.
@@ -73,7 +75,7 @@ Error: Cannot create a descendant of the sealed class "TMyClass"
 
 An abstract class is a class that cannot be used directly. Instead, a descendent class must always be used. However, for Delphi compatibility, the compiler ignores this directive.
 
-5.3 Fields
+## 5.3 Fields
 
 Object Fields are like record fields. They are accessed in the same way as a record field would be accessed: by using a qualified identifier. Given the following declaration:
 
@@ -129,7 +131,7 @@ In this example, between the begin and end, it is as if AnObject was prepended t
 
 ## 5.4 Class or Static fields
 
-An object can contain class or static fields: these fields are global to the object type, and act like global variables, but are known only in the scope of the object. The difference between static and class variables is purely the mode in which they work: The static keyword will always work, the class keyword will need {$MODE DELPHI} or {$MODE OBJFPC}.
+An object can contain class or static fields: these fields are global to the object type, and act like global variables, but are known only in the scope of the object. The difference between static and class variables is purely the mode in which they work: The static keyword will always work, the class keyword will need `{$MODE DELPHI}` or `{$MODE OBJFPC}`.
 
 They can be referenced from within the objects methods, but can also be referenced from outside the object by providing the fully qualified name.
 
@@ -405,7 +407,7 @@ type
   end;  
 
   class procedure TTest.Testproc2;  
-  begin  
+  begin  `
     cv1:=2;  
     // f:=1;  
   end;  
@@ -433,3 +435,9 @@ Uncommenting one of the commented statements and trying to compile the resulting
 ocv.pp(32,6) Error: Only class methods, class properties and  
   class variables can be accessed in class methods
 ```
+
+[prev][f1] [content][f0] [next][f2]
+
+[f1]: 04_variables.md
+[f0]: 00_contents.md
+[f2]: 06_classes.md

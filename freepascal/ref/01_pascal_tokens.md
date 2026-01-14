@@ -1,19 +1,19 @@
 
 # 1 Pascal Tokens
 
-[content](00_contents.md) [next](02_constants.md)
+[content][f0] [next][f2]
 
 Tokens are the basic lexical building blocks of source code; they are the “words” of the language; characters are combined into tokens according to the rules of the programming language. There are five classes of tokens:
 
-- **reserved words**  
+- **Reserved words**  
   These are words which have a fixed meaning in the language. They cannot be changed or redefined.
-- **identifiers**  
+- **Identifiers**  
   These are names of symbols that the programmer defines. They can be changed and re-used. They are subject to the scope rules of the language.
-- **operators**  
+- **Operators**  
   These are usually symbols for mathematical or other operations: +, -, * and so on.
-- **separators**  
+- **Separators**  
   This is usually white-space.
-- **constants**  
+- **Constants**  
   Numerical or character constants are used to denote actual values in the source code, such as 1 (integer constant) or 2.3 (float constant) or “String constant” (a string: a piece of text).
 
 In this chapter we describe all the Pascal reserved words, as well as the various ways to denote strings, numbers, identifiers etc.
@@ -31,9 +31,11 @@ Free Pascal allows all characters, digits and some special character symbols in 
   `' + - * / = < > [ ] . , ( ) : ^ @ { } $ # & %`
 - and the following character pairs too:  
   `<< >> ** <> >< <= >= := += -= *= /= (* *) (. .) //`
-- When used in a range specifier, the character pair `(`. is equivalent to the left square bracket `[`.
+- When used in a range specifier, the character pair `(`. is equivalent to the
+  left square bracket `[`.
 - Likewise, the character pair `.)` is equivalent to the right square bracket `]`.
-- When used for comment delimiters, the character pair `(*` is equivalent to the left brace `{`.
+- When used for comment delimiters, the character pair `(*` is equivalent to the
+  left brace `{`.
 - and the character pair `*)` is equivalent to the right brace `}`.
 
   These character pairs retain their normal meaning in string expressions.
@@ -110,11 +112,12 @@ and
 
 The compiler will react with a “invalid character” error when it encounters such constructs, regardless of the -Mtp switch.
 
-Remark In TP and Delphi mode, nested comments are not allowed, for maximum compatibility with existing code for those compilers.
+**Remark**  
+In TP and Delphi mode, nested comments are not allowed, for maximum compatibility with existing code for those compilers.
 
 ## 1.3 Reserved words
 
-**Reserved words** are part of the Pascal language, and as such, cannot be redefined by the programmer. Throughout the syntax diagrams they will be denoted using a bold typeface. Pascal is not case sensitive so the compiler will accept any combination of upper or lower case letters for reserved words.
+Reserved words are part of the Pascal language, and as such, cannot be redefined by the programmer.Pascal is not case sensitive so the compiler will accept any combination of upper or lower case letters for reserved words.
 
 We make a distinction between Turbo Pascal and Delphi reserved words. In TP mode, only the Turbo Pascal reserved words are recognized, but the Delphi ones can be redefined. By default, Free Pascal recognizes the Delphi reserved words.
 
@@ -174,13 +177,23 @@ begin
 end.
 ```
 
-however, it is not recommended to use this feature in new code, as it makes code less readable. It is mainly intended to fix old code when the list of reserved words changes and encompasses a word that was not yet reserved (See also section 1.4, page 47).
+However, it is not recommended to use this feature in new code, as it makes code less readable. It is mainly intended to fix old code when the list of reserved words changes and encompasses a word that was not yet reserved (See also section 1.4, page 47).
 
 ## 1.4 Identifiers
 
-Identifiers denote programmer defined names for specific constants, types, variables, procedures and functions, units, and programs. All programmer defined names in the source code – excluding reserved words – are designated as identifiers.
+Identifiers denote programmer defined names for specific:
 
-Identifiers consist of between 1 and 127 significant characters (letters, digits and the underscore character), of which the first must be a letter (a–z or A–Z), or an underscore (_). The following diagram gives the basic syntax for identifiers.
+- `constants`,
+- `types`,
+- `variables`,
+- `procedures`,
+- `functions`,
+- `units` and
+- `programs`.
+
+All programmer defined names in the source code – excluding reserved words – are designated as identifiers.
+
+Identifiers consist of between 1 and 127 significant characters (letters, digits and the underscore character), of which the first must be a letter (a–z or A–Z), or an underscore (_).
 
 Like Pascal reserved words, identifiers are case insensitive, that is, both
   
@@ -212,18 +225,19 @@ begin
 end.
 ```
 
-The reserved word do is used as an identifier for the declaration as well as the invocation of the procedure do.
+The reserved word `do` is used as an identifier for the declaration as well as the invocation of the procedure.
 
 ## 1.5 Hint directives
 
-Most identifiers (constants, variables, functions or methods, properties) can have a hint directive appended to their definition.
+Most identifiers (constants, variables, functions or methods, properties) can have a `hint` directive appended to their definition.
 
 Whenever an identifier marked with a hint directive is later encountered by the compiler, then a warning will be displayed, corresponding to the specified hint.
 
 - **deprecated**  
   The use of this identifier is deprecated, use an alternative instead. The deprecated keyword can be followed by a string constant with a message. The compiler will show this message whenever the identifier is encountered.
 - **experimental**  
-    The use of this identifier is experimental: this can be used to flag new features that should be used with caution.
+  The use of this identifier is experimental: this can be used to flag new features that should
+  be used with caution.
 - **platform**  
   This is a platform-dependent identifier: it may not be defined on all platforms.
 - **unimplemented**
@@ -257,7 +271,15 @@ testhd.pp(11,22) Warning: Symbol "AConst" is deprecated
 testhd.pp(15,3) Warning: Symbol "Something" is experimental
 ```
 
-`Hint directives` can follow all kinds of identifiers: `units`, `constants`, `types`, `variables`, `functions`, `procedures` and `methods`.
+`Hint directives` can follow all kinds of identifiers:
+
+- `units`,
+- `constants`,
+- `types`,
+- `variables`,
+- `functions`,
+- `procedures` and
+- `methods`.
 
 ## 1.6 Numbers
 
@@ -266,9 +288,13 @@ Numbers are by default denoted in decimal notation. Real (or decimal) numbers ar
 For integer type constants, Free Pascal supports four formats:
 
 - Normal, **decimal format** (base 10). This is the standard format.
-- **Hexadecimal format** (base 16), in the same way as Turbo Pascal does. To specify a constant value in hexadecimal format, prepend it with a dollar sign (`$`). Thus, the hexadecimal $FF equals 255 decimal. Note that case is insignificant when using hexadecimal constants.
-- As of version 1.0.7, **Octal format** (base 8) is also supported. To specify a constant in octal format, prepend it with an ampersand (`&`). For instance 15 is specified in octal notation as &17.
-- **Binary notation** (base 2). A binary number can be specified by preceding it with a percent sign (`%)`. Thus, 255 can be specified in binary notation as %11111111.
+- **Hexadecimal format** (base 16), in the same way as Turbo Pascal does. To specify a constant
+  value in hexadecimal format, prepend it with a dollar sign (`$`). Thus, the hexadecimal $FF
+  equals 255 decimal. Note that case is insignificant when using hexadecimal constants.
+- As of version 1.0.7, **Octal format** (base 8) is also supported. To specify a constant in octal
+  format, prepend it with an ampersand (`&`). For instance 15 is specified in octal notation as &17.
+- **Binary notation** (base 2). A binary number can be specified by preceding it with a percent
+  sign (`%)`. Thus, 255 can be specified in binary notation as %11111111.
 
 **Remark**:  
 `Octal` and `Binary` notation are not supported in TP or Delphi compatibility mode.
@@ -278,7 +304,8 @@ For integer type constants, Free Pascal supports four formats:
 A label is a name for a location in the source code to which can be jumped to from another location with a goto statement. A Label is a standard identifier or a digit sequence.
 
 **Remark**:  
-The `-Sg` or `-Mtp` switches must be specified before labels can be used. By default, Free Pascal doesn’t support label and goto statements. The {$GOTO ON} directive can also be used to allow use of labels and the goto statement.
+The `-Sg` or `-Mtp` switches must be specified before labels can be used. By default, Free Pascal doesn’t support label and goto statements. The {$GOTO ON} directive can also be used to allow use
+of labels and the goto statement.
 
 The following are examples of valid labels:
 
@@ -290,11 +317,12 @@ Label
 
 ## 1.8 Character strings
 
-A character string (or string for short) is a sequence of zero or more characters (byte sized), enclosed in single quotes, and on a single line of the program source code: no literal carriage return or linefeed characters can appear in the string.
+A character string (or string for short) is a sequence of zero or more characters (byte sized),enclosed in single quotes, and on a single line of the program source code: no literal carriage return or linefeed characters can appear in the string.
 
 A character set with nothing between the quotes (’’) is an empty string.
 
-The string consists of standard, 8-bit ASCII characters or Unicode (normally UTF-8 encoded) characters. The control string can be used to specify characters which cannot be typed on a keyboard, such as #27 for the escape character.
+The string consists of standard, 8-bit ASCII characters or Unicode (normally UTF-8 encoded)characters. The control string can be used to specify characters which cannot be typed on a
+keyboard, such as #27 for the escape character.
 
 The single quote character can be embedded in the string by typing it twice. The C construct of escaping characters in the string (using a backslash) is not supported in Pascal.
 
@@ -335,4 +363,7 @@ on a classic Mac-like operating system.
 
 It is possible to use other character sets in strings: in that case the codepage of the source file must be specified with the `{$CODEPAGE XXX}` directive or with the `-Fc` command line option for the compiler. In that case the characters in a string will be interpreted as characters from the specified codepage.
 
-[content](00_contents.md) [next](02_constants.md)
+[content][f0] [next][f2]
+
+[f0]: 00_contents.md
+[f2]: 02_constants.md

@@ -1,4 +1,7 @@
+
 # 4 Variables
+
+[prev][f1] [content][f0] [next][f2]
 
 ## 4.1 Definition
 
@@ -71,7 +74,8 @@ Note that assembler names must be unique. It’s not possible to declare or expo
 Variables, just as any identifier, obey the general rules of scope. In addition, initialized variables are initialized when they enter scope:
 
 - **Global initialized variables** are initialized once, when the program starts.
-- **Local initialized variables** are initialized each time the procedure is entered.
+- **Local initialized variables** are initialized each time the procedure is
+  entered.
 
 Note that the behavior for local initialized variables is different from the one of a local typed constant. A local typed constant behaves like a global initialized variable.
 
@@ -353,3 +357,9 @@ end.
 ```
 
 More information about properties can be found in chapter 6, page 294.
+
+[prev][f1] [content][f0] [next][f2]
+
+[f1]: 03_types.md
+[f0]: 00_contents.md
+[f2]: 06_classes.md

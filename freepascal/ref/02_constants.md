@@ -1,7 +1,7 @@
 
 # 2 Constants
 
-[prev](pascal%20tokens.md) [content](contents.md) [next](03_types.md)
+[prev][f1] [content][f0] [next][f2]
 
 Just as in Turbo Pascal, Free Pascal supports both ordinary and typed constants. They are declared in a constant declaration block in a unit, program or class, function or procedure declaration (section 16.5, page 923).
 
@@ -123,4 +123,8 @@ end.
 
 This will print “Yes.” or “No.” depending on the value of B, even if the constants Yes and No have been localized by some localization mechanism.
 
-[prev](pascal%20tokens.md) [content](contents.md) [next](03_types.md)
+[prev][f1] [content][f0] [next][f2]
+
+[f1]: 01_pascal_tokens.md
+[f0]: 00_contents.md
+[f2]: 03_types.md
