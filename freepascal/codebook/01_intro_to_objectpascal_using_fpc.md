@@ -5,11 +5,12 @@ This page is my go-to guide to the key basics of Object Pascal with the Free Pas
 
 Hope you find it helpful!
 
-**Note**  
-`Prerequisite Knowledge`: This guide assumes you have a basic understanding of programming concepts such as variables, data types, and control flow. If you're completely new to programming, you may want to start with a general programming tutorial first.
-
-**Note**  
-Setup the Lazarus IDE (which includes the Free Pascal Compiler) for your OS to run the snippets on this page.
+> [!Note]  
+> `Prerequisite Knowledge`: This guide assumes you have a basic understanding of
+  programming concepts such as variables, data types, and control flow. If you're completely new to programming, you may want to start with a general programming tutorial first.  
+> [!Note]  
+> Setup the Lazarus IDE (which includes the Free Pascal Compiler) for your OS to
+  run the snippets on this page.
 
 ## Hello, World
 
@@ -26,8 +27,8 @@ begin
 end.
 ```
 
-**Tip**  
-Running from the Lazarus IDE
+> [!Tip]  
+> Running from the Lazarus IDE
 
 When running a console program in the Lazarus IDE, the console window may close too quickly to see the output.
 
@@ -47,8 +48,9 @@ end.
 
 Reserved words are special words in the Pascal language that you cannot change or redefine.
 
-**Note**  
-The Free Pascal Compiler lets you use uppercase or lowercase letters for these special words; they will work the same way.
+> [!Note]  
+> The Free Pascal Compiler lets you use uppercase or lowercase letters for these
+  special words; they will work the same way.
 
 The following keywords exist in Turbo Pascal mode.
 
@@ -91,9 +93,10 @@ In Free Pascal, you can create comments by using the following methods:
     //
 ```
 
-> **Tip**  
-  Mobius1 — 2024-10-06 at 08:15  
-  Suggested the addition of (*...*). Since { ... } can be combined with directives, it may confuse  the syntax checker.
+> [!Tip]  
+> Mobius1 — 2024-10-06 at 08:15  
+> Suggested the addition of (*...*). Since { ... } can be combined with
+  directives, it may confuse  the syntax checker.
 
 You can use (*...*) to prevent accidental { }.
 
@@ -183,13 +186,14 @@ Check out the official documentation Types for a full list and explanation of th
 
 ### Assignment
 
-**Tip**  
-After declaring a variable, make sure to initialise it before use, else you might end up with a garbage value.
-
-**Note**:
-
-- `:=` is assignment.
-- `=` is comparison, equality.
+> [!Tip]  
+> After declaring a variable, make sure to initialise it before use, else you
+> might end up with a garbage value.  
+>
+> [!Note]  
+>
+> - `:=` is assignment.
+> - `=` is comparison, equality.
 
 Use `:=` for assigning a variable to a value.
 
@@ -281,9 +285,9 @@ end.
 
 ### Display Text
 
-Similarly, Write and WriteLn are used to output text, but they behave differently.
+Similarly, `Write` and `WriteLn` are used to output text, but they behave differently.
 
-Use Write to output text without moving to the next line. It keeps the cursor on the same line, so subsequent output will continue from where the previous output ended.
+Use `Write` to output text without moving to the next line. It keeps the cursor on the same line, so subsequent output will continue from where the previous output ended.
 
 ```pascal
 program WriteExample;
@@ -300,7 +304,7 @@ begin
 end.
 ```
 
-Use WriteLn to output text and then moves the cursor to the next line. It adds a newline character after the text, so any subsequent output starts on a new line.
+Use `WriteLn` to output text and then moves the cursor to the next line. It adds a newline character after the text, so any subsequent output starts on a new line.
 
 ```pascal
 program WriteLnExample;
@@ -830,14 +834,14 @@ end.
 
  Operator/Function | Description |
  ----------------- | ----------- |
- (+) Addition | Adds numbers together |
- (-) Subtraction | Subtracts one number from another. |
- (*) Multiplication | Multiplies numbers. |
- (power) | Require unit Math. Raises one number to the power of another. |  
- (div) Division | Divides numbers and returns the whole number part of the result. |  
- (/) (Real Division) | Divides numbers and includes the decimal part of the result. |  
- (LogN(n, a)) | Require unit Math. Calculates the logarithm base n of a number. |  
- (mod) Modulus | Returns the remainder when one number is divided by another. |  
+  `+` - Addition | Adds numbers together |
+  `-` - Subtraction | Subtracts one number from another. |
+  `*` - Multiplication | Multiplies numbers. |
+  `power` | Require unit Math. Raises one number to the power of another. |  
+  `div` - Division | Divides numbers and returns the whole number part of the result. |  
+  `/` - Real Division | Divides numbers and includes the decimal part of the result. |  
+  `LogN(n, a)` | Require unit Math. Calculates the logarithm base n of a number. |  
+  `mod` - Modulus | Returns the remainder when one number is divided by another. |  
 
 **Example**:
 
@@ -901,16 +905,16 @@ end.
 
 You can use the following functions.
 
-- Round: Rounds a floating-point number to the nearest integer uses banker's rounding.
-- Ceil: Rounds a floating-point number up to the nearest integer.
-- Floor: Rounds a floating-point number down to the nearest integer.
+- `Round`: Rounds a floating-point number to the nearest integer uses banker's rounding.
+- `Ceil`: Rounds a floating-point number up to the nearest integer.
+- `Floor`: Rounds a floating-point number down to the nearest integer.
 
-**Note**  
-For `Round`, in the case of .5 (equidistant from two numbers), the algorithm uses "banker's rounding": .5 values are always rounded towards the even number.
-Source: <https://www.freepascal.org/docs-html/rtl/system/round.html>
-
-**Note**:
-Remember to add `Math` in the `uses` section Ceil and Floor functions.
+> [!Note]  
+> For `Round`, in the case of .5 (equidistant from two numbers), the algorithm uses "banker's
+  rounding": .5 values are always rounded towards the even number. Source: <https://www.freepascal.org/docs-html/rtl/system/round.html>
+>
+> [!Note]  
+> Remember to add `Math` in the `uses` section Ceil and Floor functions.
 
 **Examples**:
 
@@ -1000,10 +1004,8 @@ end.
  OR | Bitwise OR | 5 or 3 | 0101 or 0011 | 0111 |
  XOR | Bitwise XOR | 5 xor 3 | 0101 xor 0011 | 0110 |
  NOT | Bitwise NOT | (unary) not 5 | not 0101 | 1010 (in 2's complement) |
- SHL | Shift left | 5 shl 1 | 0101 shl 1 | 1010 |
- ( << ) | Shift left (equivalent) | 5 << 1 | 0101 << 1 | 1010 |
- SHR | Shift right | 5 shr 1 | 0101 shr 1 | 0010 |
- ( >> ) | Shift right (equivalent) | 5 >> 1 | 0101 >> 1 | 0010 |
+ SHL (<<) | Shift left | 5 shl 1 | 0101 shl 1 | 1010 |
+ SHR (>>) | Shift right | 5 shr 1 | 0101 shr 1 | 0010 |
 
 **Examples**:
 
@@ -1060,22 +1062,14 @@ end.
 Outputs
 
 ```sh
-AND:
- 5 and 3 = 1 (0001)
-OR:
- 5 or 3 = 7 (0111)
-XOR:
- 5 xor 3 = 6 (0110)
-NOT:
- not 5 = -6 (1010)
-SHL:
- 5 shl 1 = 10 (1010)
-<<
- : 5 << 1 = 10 (1010)
-SHR:
- 5 shr 1 = 2 (0010)
->>
- : 5 >> 1 = 2 (0010)
+AND: 5 and 3 = 1 (0001)
+OR: 5 or 3 = 7 (0111)
+XOR: 5 xor 3 = 6 (0110)
+NOT: not 5 = -6 (1010)
+SHL: 5 shl 1 = 10 (1010)
+<< : 5 << 1 = 10 (1010)
+SHR: 5 shr 1 = 2 (0010)
+>> : 5 >> 1 = 2 (0010)
 ```
 
 ## Boolean Operations
@@ -1087,8 +1081,9 @@ SHR:
  or | Logical disjunction | Returns True if at least one operand is True. |
  xor | Exclusive OR | Returns True if exactly one of the operands is True. |
 
-> **Note**
-  By default, boolean expressions are evaluated with short-circuit evaluation. This means that from the moment the result of the complete expression is known, evaluation is stopped and the result is returned.
+> [!Note]  
+> By default, boolean expressions are evaluated with short-circuit evaluation. This means that
+  from the moment the result of the complete expression is known, evaluation is stopped and the result is returned.
 >
 > For instance, in the following expression:
 >
@@ -1097,7 +1092,8 @@ SHR:
 > The compiler will never look at the value of MaybeTrue, since it is obvious that the expression
   will always be True.
 >
-> As a result of this strategy, if MaybeTrue is a function, it will not get called! (This can have > surprising effects when used in conjunction with properties).
+> As a result of this strategy, if MaybeTrue is a function, it will not get called! (This can
+  have  surprising effects when used in conjunction with properties).
 >
 > Adapted from: <https://www.freepascal.org/docs-html/current/ref/refsu46.html#x153-17700012.8.3>
 
@@ -1126,7 +1122,7 @@ Useful strings operators and functions.
 
  Operator/Function | Description |
  ----------------- | ------------ |
- (+) | Concatenates two strings. |
+ `+` | Concatenates two strings. |
  CompareStr | Case-sensitive string comparison. Returns 0 if strings are the same. |
  CompareText | Case-insensitive string comparison. Returns 0 if strings are the same. |
  Length | Returns the string length. |
@@ -1226,40 +1222,27 @@ end.
 Outputs
 
 ```sh
-Concatenated
- string: Hello World, Welcome to Pascal
-CompareStr
- result: -32
-CompareText
- result: 0
-Length
- of str1: 11
-Position
- of 'World' in str1: 7
-Copy
- 'World' from str1: World
-After
- deleting 'NOT ' from str3: This is easy!
-After
- inserting 'really ' into str3: This is really easy!
-After
- StringReplace to str1: Hello Free Pascal World
-Character
- at pos 7 in str2: e
-UpperCase
- of str2: WELCOME TO PASCAL
-LowerCase
- of str2: welcome to pascal
-Press
- enter key to quit
+Concatenated string: Hello World, Welcome to Pascal
+CompareStr result: -32
+CompareText result: 0
+Length of str1: 11
+Position of 'World' in str1: 7
+Copy 'World' from str1: World
+After deleting 'NOT ' from str3: This is easy!
+After inserting 'really ' into str3: This is really easy!
+After StringReplace to str1: Hello Free Pascal World
+Character at pos 7 in str2: e
+UpperCase of str2: WELCOME TO PASCAL
+LowerCase of str2: welcome to pascal
+Press enter key to quit
 ```
 
 ## Format Strings
 
 Format Numbers with Commas
 
-- Include the SysUtils unit, as the Format function is part of this unit.
-- Use the Format function with appropriate format specifiers.
+- Include the `SysUtils` unit, as the `Format` function is part of this unit.
+- Use the `Format` function with appropriate format specifiers.
 
 See Format for more info.
 
@@ -1289,13 +1272,13 @@ begin
 end.
 ```
 
-> `'%.0n'` format specifier means "format as a number with no decimal places, using the locale's  
-  thousands separator".
+`'%.0n'` format specifier means "format as a number with no decimal places, using the locale's  
+thousands separator".
 
 ### Format Numbers as Currency
 
-- Include the SysUtils unit, as the CurrToStrF function is part of this unit.
-- Use the CurrToStrF function with appropriate format specifiers and decimal place.
+- Include the `SysUtils unit`, as the `CurrToStrF` function is part of this unit.
+- Use the `CurrToStrF` function with appropriate format specifiers and decimal place.
 
 See CurrToStrF for more info.
 
@@ -1333,10 +1316,11 @@ end.
 
 ### Read a Text File
 
-Here's an example to read a file line by line using TFileStream and TStreamReader:
+Here's an example to read a file line by line using `TFileStream` and `TStreamReader`:
 
-**Note**
-For this example to work, create a text file named your-file.csv (or any name you prefer, then update the code) in the same directory as your compiled program. Add some lines of text to it.
+> [!Note]  
+> For this example to work, create a text file named "your-file.csv" (or any name you prefer, then
+  update the code) in the same directory as your compiled program. Add some lines of text to it.
 
 **Example**:
 
@@ -1385,10 +1369,10 @@ begin
 end.
 ```
 
-- The streamex unit includes the TStreamReader class for handling text stream operations.
-- The try...finally blocks guarantee that both streamReader and fileStream are properly released,
-  even if an error occurs during the file reading process.
-- Substitute your-file.csv with the name of your file.
+- The `streamex` unit includes the `TStreamReader` class for handling text stream operations.
+- The `try...finally` blocks guarantee that both `streamReader` and `fileStream` are properly
+  released, even if an error occurs during the file reading process.
+- Substitute "your-file.csv" with the name of your file.
 
 ### Write a Text File
 
@@ -1438,12 +1422,11 @@ begin
 end.
 ```
 
-- The try...finally block ensures that the fileStream is properly closed and released even if an
+- The `try...finally` block ensures that the fileStream is properly closed and released even if an
   exception occurs during the file writing process.
-
 - Update the content of the Text variable with the string you want to write to the file.
-- Change hello-text.txt to the name of the file you wish to create or modify.
-- The try...except block captures any exceptions that might occur during file operations and
+- Change "hello-text.txt" to the name of the file you wish to create or modify.
+- The `try...except` block captures any exceptions that might occur during file operations and
   displays an appropriate error message.
 
 ## Enum Types
@@ -1549,9 +1532,8 @@ begin
 end.
 ```
 
-> **Note**
-> Why Not Just Use Integer?
->
+> [!Note]  
+> Why Not Just Use Integer?  
 > Using a subrange like TDayOfWeek instead of a plain integer provides type safety. It ensures that
   the variable day can only be assigned values within the defined range (1 to 7). This helps prevent errors and makes your code more robust and readable. For example, if you accidentally try to assign a value outside the range, the compiler will catch the error.
 
@@ -1585,6 +1567,7 @@ var
 ```pascal
 program WorkingWithArraysExample;
 {$mode objfpc}{$H+}{$J-}
+
 var
   numbers: array[1..5] of Integer;
 
@@ -1636,7 +1619,7 @@ end.
 
 ### Dynamic Arrays
 
-Dynamic arrays can be resized at runtime using the SetLength procedure.
+Dynamic arrays can be resized at runtime using the `SetLength` procedure.
 
 **Syntax**:
 
@@ -1682,7 +1665,7 @@ end.
 
 ### Concat Dynamic Arrays
 
-This operator is available in Delphi mode, but must be enabled explicily using the modeswitch arrayoperators in objfpc mode:
+This operator `+` is available in Delphi mode, but must be enabled explicily using the `modeswitch arrayoperators` in objfpc mode:
 
 ```pascal
 {$mode objfpc}  
@@ -1750,9 +1733,9 @@ See more info on the Dynamic Array Operators document.
 
 Open arrays are typically used in procedures or functions to accept arrays of varying sizes.
 
-> **Syntax**:
->
-> **procedure ProcedureName(arrayName: array of elementType);**
+**Syntax**:
+
+`procedure ProcedureName(arrayName: array of elementType);`
 
 **Example**:
 
@@ -2031,7 +2014,8 @@ end.
 Why use this? Generics allow you to write reusable code that works with different data types without duplication. For example, instead of writing separate functions for adding two integers, two real numbers, and two strings, you can write one generic function that works for all types. This reduces code duplication and makes maintenance easier.
 
 Generics allow you to write code that can work with different data types without having to rewrite the same code for each type.
-Generic Routines
+
+### Generic Routines
 
 **Syntax**:
 
@@ -2061,7 +2045,7 @@ var
 
 begin
   resultInt := specialize DoubleValue<integer>(8);
-  Writeln('resultInt:  ', resultInt);         // Output: resultInt: 64
+  Writeln('resultInt:  ', resultInt);         // Output: resultInt: 16
 
   resultReal := specialize DoubleValue<real>(-1.2);
   Writeln('resultReal: ', resultReal: 0: 2); // Output: resultReal: -2.40
@@ -2220,7 +2204,7 @@ end.
 
 ## Function References
 
-> **Note**  
+> [!Note]  
 > Function References is available for FPC versions >= 3.3.1.
 > Official doc: <https://forum.lazarus.freepascal.org/index.php/topic,59468.msg443370.html#msg443370>
 
@@ -2286,7 +2270,7 @@ end.
 
 ## Anonymous Functions
 
-> **Note**  
+> [!Note]  
 > Anonymous Functions is available for FPC versions >= 3.3.1.
 > Official doc: <https://forum.lazarus.freepascal.org/index.php/topic,59468.msg443370.html#msg443370>.
 
@@ -2364,7 +2348,7 @@ end.
 
 Why use this? Interfaces define a "contract" that classes must follow. They're useful when you have multiple classes that should perform similar tasks but in different ways. For example, you might have a IAnimal interface that guarantees any animal can eat, sleep, and make a sound. Different animal classes (Dog, Cat, Bird) can implement this interface in their own way. Interfaces promote code reusability and flexibility.
 
-> **Note**  
+> [!Note]  
 > By default, Free Pascal uses the Windows COM IUnknown interface type. This is important for
   compatibility with other systems, especially on Windows. For simpler, non-COM interfaces, you might see them declared without descending from IUnknown or TInterfacedObject, but this changes how memory management (like reference counting) works.
 >
@@ -2377,7 +2361,7 @@ Why use this? Interfaces define a "contract" that classes must follow. They're u
 - GUIDs (Globally Unique Identifiers): You'll often see interfaces defined with a long, unique
   string like ['{12345678-1234-1234-1234-1234567890AB}']. This GUID ensures the interface is uniquely identifiable worldwide, which is crucial for systems like COM (Component Object Model) where different programs need to interact reliably. For simpler applications not using COM, the GUID might be omitted, but it's good practice for broadly usable interfaces.
 
-> **Info**  
+> [!Info]  
 > Refer to the official doc Interfaces for more info.
 
 **Syntax**:
@@ -2413,9 +2397,13 @@ procedure TMyClass.DoSomething;
 begin
   WriteLn('Doing something...');
 end;
+```
 
-3. Use the Interface and Class The main program block would look like this:
+### Use the Interface and Class
 
+The main program block would look like this
+
+```pascal
 var
   MyObject: IMyInterface;
 begin
@@ -2464,7 +2452,7 @@ begin
 end.
 ```
 
-TInterfacedObject is a base class from the Classes unit (implicitly used in many FPC programs) that helps manage memory for interfaces through reference counting. When an interface variable goes out of scope or is set to nil, if it's the last reference to the object, the object is automatically freed.
+`TInterfacedObject` is a base class from the Classes unit (implicitly used in many FPC programs) that helps manage memory for interfaces through reference counting. When an interface variable goes out of scope or is set to nil, if it's the last reference to the object, the object is automatically freed.
 
 ## Pointers
 
