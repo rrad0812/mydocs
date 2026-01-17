@@ -1,5 +1,7 @@
 # Building and Processing Lists
 
+[Prev](11_arrays.md) [Content](00_freepascal_cookbook.md) [Next](13_strings.md)
+
 ## What is a list?
 
 Think of it as a higher-level construct than a static or dynamic array.
@@ -535,3 +537,5 @@ begin
   ReadLn;
 end.
 ```
+
+[Prev](11_arrays.md) [Content](00_freepascal_cookbook.md) [Next](13_strings.md)

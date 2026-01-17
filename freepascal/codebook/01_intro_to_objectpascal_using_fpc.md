@@ -1,6 +1,8 @@
 
 # Intro to Object Pascal using FPC
 
+[Content](00_freepascal_cookbook.md) [Next](02_common_data_types.md)
+
 This page is my go-to guide to the key basics of Object Pascal with the Free Pascal Compiler. It's not a complete guide, but it's got all the essentials to help you dive in and discover just how powerful Free Pascal can be!
 
 Hope you find it helpful!
@@ -2585,3 +2587,5 @@ Object-Oriented Programming Terms
 **Record**: A data structure that groups different types of data together. Unlike classes, records are simpler and don't have methods (unless advanced records are used).
 
 **Modeswitch**: A compiler directive that enables specific language features. For example, {$modeswitch advancedrecords} enables advanced record functionality.
+
+[Content](00_freepascal_cookbook.md) [Next](02_common_data_types.md)

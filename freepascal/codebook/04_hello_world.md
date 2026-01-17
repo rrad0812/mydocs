@@ -1,6 +1,8 @@
 
 # Hello, World
 
+[Prev](03_setup_lazarus_ide_i_fpc.md) [Content](00_freepascal_cookbook.md) [Next](05_lazarus_IDE.md)
+
 How would you like to do your Hello World?
 
 - I'm using the Lazarus IDE
@@ -143,3 +145,4 @@ On Linux, compile and run as follows.
 ```sh
 fpc HelloWorld.pas && ./HelloWorld
 ```
+[Prev](03_setup_lazarus_ide_i_fpc.md) [Content](00_freepascal_cookbook.md) [Next](05_lazarus_IDE.md)

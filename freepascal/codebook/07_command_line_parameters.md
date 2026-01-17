@@ -1,6 +1,8 @@
 
 # Command Line Parameters
 
+[Prev](06_structure_of_code.md) [Content](00_freepascal_cookbook.md) [Next](08_functions_and_procedures.md)
+
 ## How do I capture command line arguments?
 
 Use `ParamStr(n)` to get the n-th arguments.
@@ -121,3 +123,5 @@ begin
 
 end.
 ```
+
+[Prev](06_structure_of_code.md) [Content](00_freepascal_cookbook.md) [Next](08_functions_and_procedures.md)

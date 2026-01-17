@@ -1,6 +1,8 @@
 
 # Common Data Types in Free Pascal
 
+[Prev](01_intro_to_objectpascal_using_fpc.md) [Content](00_freepascal_cookbook.md) [Next](03_setup_lazarus_ide_i_fpc.md)
+
 ## Understanding Data Types
 
 Every piece of data your program handles needs a type. A data type tells the compiler what kind of value you're storing—a whole number, a decimal, text, true/false, and so on. Different types use different amounts of memory and have different limitations.
@@ -631,3 +633,4 @@ begin
   ReadLn; 
 end. 
 ```
+[Prev](01_intro_to_objectpascal_using_fpc.md) [Content](00_freepascal_cookbook.md) [Next](03_setup_lazarus_ide_i_fpc.md)

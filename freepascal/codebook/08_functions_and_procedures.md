@@ -1,5 +1,7 @@
 # Functions and Procedures
 
+[Prev](07_command_line_parameters.md) [Content](00_freepascal_cookbook.md) [Next](09_immutability.md)
+
 **Can a routine receive a pointer to the passed variable**?
 
 Yes. Use the `var` parameter modifier.
@@ -72,3 +74,5 @@ begin
   ReadLn;
 end.
 ```
+
+[Prev](07_command_line_parameters.md) [Content](00_freepascal_cookbook.md) [Next](09_immutability.md)

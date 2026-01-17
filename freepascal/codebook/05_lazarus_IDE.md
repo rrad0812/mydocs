@@ -1,6 +1,8 @@
 
 # Post-Install
 
+[Prev](04_hello_world.md) [Content](00_freepascal_cookbook.md) [Next](06_structure_of_code.md)
+
 ## Change the header style of the panels
 
 - Go to Tool -> Options ....
@@ -45,3 +47,5 @@ You have choices. Pick one.
 - Use Shift+Ctrl+F9 to compile (as necessary) and run without the debugger.
 - Use Ctrl+F9 if you'd like to compile without running it in the IDE. You will
   run the executable manually via a CLI.
+
+[Prev](04_hello_world.md) [Content](00_freepascal_cookbook.md) [Next](06_structure_of_code.md)

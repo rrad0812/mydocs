@@ -1,5 +1,7 @@
 # Arrays in Free Pascal
 
+[Prev](10_loops.md) [Content](00_freepascal_cookbook.md) [Next](12_lists.md)
+
 Official docs
 
 - <https://www.freepascal.org/docs-html/ref/refsu14.html>
@@ -429,3 +431,5 @@ begin
   ReadLn;
 end.
 ```
+
+[Prev](10_loops.md) [Content](00_freepascal_cookbook.md) [Next](12_lists.md)

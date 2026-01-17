@@ -1,6 +1,8 @@
 
 # Loops
 
+[Prev](09_immutability.md) [Content](00_freepascal_cookbook.md) [Next](11_arrays.md)
+
 ## For Loop
 
 ```pascal
@@ -220,3 +222,5 @@ Nested Loops: For Cirtus, You can buy in pack of 30
   Examples:
   - Populating a 3x3 array of integer.
   - Finding possible combination of words between N array of strings.
+
+[Prev](09_immutability.md) [Content](00_freepascal_cookbook.md) [Next](11_arrays.md)

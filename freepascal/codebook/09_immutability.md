@@ -1,5 +1,7 @@
 # Immutability
 
+[Prev](08_functions_and_procedures.md) [Content](00_freepascal_cookbook.md) [Next](10_loops.md)
+
 **How do I make const variables constant**?
 
 Add a global directive {$J-} to your main pascal file.
@@ -43,3 +45,5 @@ begin
   WriteLn('The gravity on the Earth is ', gravityEarth:0:2);
 end.
 ```
+
+[Prev](08_functions_and_procedures.md) [Content](00_freepascal_cookbook.md) [Next](10_loops.md)

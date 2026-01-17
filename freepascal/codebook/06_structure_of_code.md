@@ -1,6 +1,8 @@
 
 # Structuring Code
 
+[Prev](05_lazarus_IDE.md) [Content](00_freepascal_cookbook.md) [Next](07_command_line_parameters.md)
+
 ## Structure of a Pascal Program
 
 Here is a common structure of a Pascal program.
@@ -201,3 +203,5 @@ begin
   ReadLn;
 end.
 ```
+
+[Prev](05_lazarus_IDE.md) [Content](00_freepascal_cookbook.md) [Next](07_command_line_parameters.md)

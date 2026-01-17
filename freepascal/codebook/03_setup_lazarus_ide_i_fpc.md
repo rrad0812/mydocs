@@ -1,6 +1,8 @@
 
 # Setup Lazarus IDE and FPC
 
+[Prev](02_common_data_types.md) [Content](00_freepascal_cookbook.md) [Next](04_hello_world.md)
+
 Here are two easy ways to set up Lazarus IDE and Free Pascal Compiler (FPC) on your system.
 
 - Use Lazarus IDE's Installer (easiest)
@@ -76,3 +78,5 @@ At the end of the installation, you will find `Lazarus_fcpupdeluxe` on your desk
 For Linux and macOS, `fpcupdeluxe` is typically used as a command-line tool, though precompiled GUI versions might be available for some systems.
 
 Consult the official fpcupdeluxe GitHub page for detailed instructions. Look for sections relevant to your operating system, including how to download or build the tool and the commands for installing FPC and Lazarus.
+
+[Prev](02_common_data_types.md) [Content](00_freepascal_cookbook.md) [Next](04_hello_world.md)
