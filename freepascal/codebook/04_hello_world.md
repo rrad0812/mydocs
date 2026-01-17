@@ -10,7 +10,7 @@ How would you like to do your Hello World?
 
 ## Using the Lazarus IDE
 
-> **Note**:  
+> [!Note]  
   This section assumes you have correctly set up the following for your OS.
 >
 > - The Free Pascal Compiler.
@@ -102,9 +102,9 @@ end.
 
 Save it as HelloWorld.pas.
 
-**Note**  
-.pas is the standard file extension for Free Pascal source code. This tells the
-compiler it's a Pascal program.
+> [!Note]  
+> .pas is the standard file extension for Free Pascal source code. This tells the
+  compiler it's a Pascal program.
 
 ### Compile and Run
 
@@ -145,4 +145,5 @@ On Linux, compile and run as follows.
 ```sh
 fpc HelloWorld.pas && ./HelloWorld
 ```
+
 [Prev](03_setup_lazarus_ide_i_fpc.md) [Content](00_freepascal_cookbook.md) [Next](05_lazarus_IDE.md)
