@@ -7,19 +7,12 @@
   - Trikovi
 - Docker
 - Git
-- GoLang
-  - Http API Demo
-  - Learn Go for dev
-  - Uvod u Go with examples
-  - Uvod u go
+- Go
 - `Jam.py`
-  - Framework review
-  - Howto
-  - Tutorial - transcribed videos
-- Python misc
+- Python
 - Reflex  
 - SQLAlchemy
 - Ubuntu
 
 Radosav.
-avg - dec. 2025.
+januar, 2026.
