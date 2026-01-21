@@ -7,8 +7,8 @@
 [**02 Constants**][f02]  
 [**03 Types**][f03]  
 [**04 Variables**][f04]  
-[**05 Objects**][f05]  
-[**06 Classes**][f06]  
+[**05 Objects**][f05] *(legacy OOP, prototipsko nasleđivanje)*  
+[**06 Classes**][f06] *(moderni OOP, preporučeno za novi kod)*  
 [**07 Interfaces**][f07]  
 [**08 Generics**][f08]  
 

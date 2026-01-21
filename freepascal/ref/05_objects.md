@@ -35,7 +35,8 @@ It contains a constructor/destructor pair, and a method to get and set a caption
 
 Remark In MacPas mode, the Object keyword is replaced by the class keyword for compatibility with other pascal compilers available on the Mac. That means that objects cannot be used in MacPas mode.
 
-Remark Free Pascal also supports the packed object. This is the same as an object, only the elements (fields) of the object are byte-aligned, just as in the packed record. The declaration of a packed object is similar to the declaration of a packed record:
+**Remark**  
+Free Pascal also supports the `packed` object. This is the same as an object, only the elements (fields) of the object are byte-aligned, just as in the packed record. The declaration of a packed object is similar to the declaration of a packed record:
 
 ```pascal
 Type  
@@ -162,8 +163,11 @@ begin
   writeln(cl1.v);  
   Writeln(cl.v);  
 end.
+```
 
 will be the following
+
+```pascal
 Static  
 2  
 3  
@@ -194,14 +198,23 @@ Type
    end;  
   Pobj = ^TObj;  
 Var PP : Pobj;
+```
 
 Then the following three calls are equivalent:
+
+```pascal
  pp := new (Pobj,Init);
+```
 
 and
+
+```pascal
   new(pp,init);
+```
 
 and also
+
+```pascal
   new (pp);  
   pp^.init;
 ```
@@ -232,9 +245,9 @@ Type
 
 Methods are called just as normal procedures are called, only they have an object instance identifier prepended to them (see also chapter 13, page 668). To determine which method is called, it is necessary to know the type of the method. We treat the different types in what follows.
 
-Normal static methods
+#### 5.6.2.1 Normal ( static ) methods
 
-Normal (static) methods are methods that have been declared without a abstract or virtual keyword. When calling a static method, the declared (i. e. compile time) method of the object is used. For example, consider the following declarations:
+Normal (static) methods are methods that have been declared without a `abstract` or `virtual` keyword. When calling a static method, the declared (i. e. compile time) method of the object is used. For example, consider the following declarations:
 
 ```pascal
 Type  
@@ -244,14 +257,18 @@ Type
     ...  
     end;  
   PParent = ^TParent;  
+  
   TChild = Object(TParent)  
     ...  
     procedure Doit;  
     ...  
     end;  
   PChild = ^TChild;
+```
 
-As it is visible, both the parent and child objects have a method called Doit. Consider now the following declarations and calls:
+As it is visible, both the parent and child objects have a method called `Doit`. Consider now the following declarations and calls:
+
+```pascal
 Var  
   ParentA,ParentB : PParent;  
   Child           : PChild;  
@@ -265,11 +282,11 @@ begin
    Child^.Doit;
 ```
 
-Of the three invocations of Doit, only the last one will call TChild.Doit, the other two calls will call TParent.Doit. This is because for static methods, the compiler determines at compile time which method should be called. Since ParentB is of type TParent, the compiler decides that it must be called with TParent.Doit, even though it will be created as a TChild. There may be times when the method that is actually called should depend on the actual type of the object at run-time. If so, the method cannot be a static method, but must be a virtual method.
+Of the three invocations of `Doit`, only the last one will call `TChild.Doit`, the other two calls will call `TParent.Doit`. This is because for `static` methods, the compiler determines at compile time which method should be called. Since `ParentB` is of type `TParent`, the compiler decides that it must be called with `TParent.Doit`, even though it will be created as a TChild. There may be times when the method that is actually called should depend on the actual type of the object at run-time. If so, the method cannot be a `static` method, but must be a `virtual` method.
 
-### 5.6.3 Virtual methods
+#### 5.6.2.2 Virtual methods
 
-To remedy the situation in the previous section, virtual methods are created. This is simply done by appending the method declaration with the virtual modifier. The descendent object can then override the method with a new implementation by re-declaring the method (with the same parameter list) using the virtual keyword.
+To remedy the situation in the previous section, `virtual` methods are created. This is simply done by appending the method declaration with the `virtual` modifier. The descendent object can then override the method with a new implementation by re-declaring the method (with the same parameter list) using the `virtual` keyword.
 
 Going back to the previous example, consider the following alternative declaration:
 
@@ -281,6 +298,7 @@ Type
     ...  
     end;  
   PParent = ^TParent;  
+  
   TChild = Object(TParent)  
     ...  
     procedure Doit;virtual;  
@@ -309,7 +327,7 @@ Now, different methods will be called, depending on the actual run-time type of 
 
 For ParentB however, the situation does change: Even though it was declared as a TParent, it is created as an instance of TChild. Now, when the program runs, before calling Doit, the program checks what the actual type of ParentB is, and only then decides which method must be called. Seeing that ParentB is of type TChild, TChild.Doit will be called. The code for this run-time checking of the actual type of an object is inserted by the compiler at compile time.
 
-The TChild.Doit is said to override the TParent.Doit. It is possible to access the TParent.Doit from within the varTChild.Doit, with the inherited keyword:
+The `TChild.Doit` is said to override the TParent.Doit. It is possible to access the `TParent.Doit` from within the `TChild.Doit`, with the `inherited` keyword:
 
 ```pascal
 Procedure TChild.Doit;  
@@ -319,13 +337,13 @@ begin
 end;
 ```
 
-In the above example, when TChild.Doit is called, the first thing it does is call TParent.Doit. The inherited keyword cannot be used in static methods, only on virtual methods.
+In the above example, when `TChild.Doit` is called, the first thing it does is call `TParent.Doit`. The `inherited` keyword cannot be used in `static` methods, only on `virtual methods.
 
-To be able to do this, the compiler keeps – per object type – a table with virtual methods: the VMT (Virtual Method Table). This is simply a table with pointers to each of the virtual methods: each virtual method has its fixed location in this table (an index). The compiler uses this table to look up the actual method that must be used. When a descendent object overrides a method, the entry of the parent method is overwritten in the VMT. More information about the VMT can be found in Programmer’s Guide.
+To be able to do this, the compiler keeps – per object type – a table with `virtual` methods: the VMT (Virtual Method Table). This is simply a table with pointers to each of the virtual methods: each virtual method has its fixed location in this table (an index). The compiler uses this table to look up the actual method that must be used. When a descendent object overrides a method, the entry of the parent method is overwritten in the VMT. More information about the VMT can be found in Programmer’s Guide.
 
 As remarked earlier, objects that have a VMT must be initialized with a constructor: the object variable must be initialized with a pointer to the VMT of the actual type that it was created with.
 
-### 5.6.4 Abstract methods
+#### 5.6.2.3 Abstract methods
 
 An abstract method is a special kind of virtual method. A method that is declared abstract does not have an implementation for this method. It is up to inherited objects to override and implement this method.
 
@@ -372,7 +390,7 @@ testo.pp(32,3) Error: Abstract methods can't be called directly
 
 If, through some mechanism, an abstract method is called at run-time, then a run-time error will occur. (run-time error 211, to be precise)
 
-### 5.6.5 Class or static methods
+#### 5.6.2.4 Class or static methods
 
 Class methods or methods declared with the static directive are methods that are global to the object type. When called, the implicit “self” pointer is not available. This means that normal methods cannot be called, and none of the fields of an object can be accessed. Class variables can be used, however.
 
@@ -435,6 +453,369 @@ Uncommenting one of the commented statements and trying to compile the resulting
 ocv.pp(32,6) Error: Only class methods, class properties and  
   class variables can be accessed in class methods
 ```
+
+## 5.7 Pregled vrsta metoda
+
+Tabela ispod sumira sve vrste metoda koje su dostupne u **Object** tipu podataka:
+
+ Tip metode | Deklaracija | Karakteristike | Kada koristiti |
+ --------- | ----------- | -------------- | -------------- |
+ **Static (Normal)** | `procedure Doit;` | Poziv se određuje u vreme kompajliranja. Tip promenljive određuje koja metoda se poziva. Najbrža metoda poziva. Ne može se override-ovati. Standardni metodi bez potrebe za polimorfizmom. | |
+ **Virtual** | `procedure Doit; virtual;` | Poziv se određuje u vreme izvršavanja. Koristi VMT (Virtual Method Table). Može se nadjačati u potomcima. U potomku takođe koristi `virtual` (ne `override`!) | Kada je potreban polimorfizam |
+ **Abstract** | `procedure Doit; virtual; abstract;` | Mora biti `virtual`. Nema implementaciju.  Mora se implementirati u potomku. Ne može se kreirati instanca objekta sa abstract metodama | Interfejsi, šablonski obrazac |
+ **Class/Static** | `class procedure Doit`; ili `procedure Doit; static;` | Nema pristup `Self`. Nema pristup običnim poljima. Ima pristup class poljima. Može se dodeli proceduralnoj promenljivoj | Pomoćne funkcije bez potrebe za instancom |
+
+### 5.7.1 Važne razlike u odnosu na C++ i Classes
+
+#### Virtuelne metode u Objects vs Classes
+
+U **Objects** (trenutni tip):
+
+```pascal
+Type
+  TParent = Object
+    procedure Doit; virtual;  // U roditeljskoj klasi
+  end;
+  
+  TChild = Object(TParent)
+    procedure Doit; virtual;  // U potomku TAKOĐE virtual!
+  end;
+```
+
+U **Classes** (pogledaj [06_classes.md](06_classes.md)):
+
+```pascal
+Type
+  TParent = Class
+    procedure Doit; virtual;   // U roditeljskoj klasi
+  end;
+  
+  TChild = Class(TParent)
+    procedure Doit; override;  // U potomku override!
+  end;
+```
+
+#### Ključne razlike
+
+  Aspekt | Objects | Classes |
+ ------- | ------- | ------- |
+ **Alokacija** | Može se na steku ili heap-u | Uvek na heap-u (sa `Create`) |
+ **Inicijalizacija** | `New(P, Constructor)` | `P := TClass.Create` |
+ **Destrukcija** | `Dispose(P, Destructor)` | `P.Free` ili `P.Destroy` |
+ **Override sintaksa** | `virtual` u oba | `virtual` → `override` |
+ **Nasleđivanje** | Prototipsko | Klasično OOP |
+ **Automatsko čišćenje** | Ne | Da (sa `try-finally`) |
+ **RTTI** | Ograničeno | Potpuno |
+ **Interfejsi** | Ne | Da |
+ **Property** | Ograničeno | Potpuno |
+
+### 5.7.2 Pojašnjenje: Static (Normal) vs Class/Static
+
+**VAŽNO: Terminološka zabuna!**
+
+**"Static (Normal)"** metod i **"Class/Static"** metod su **potpuno različite stvari**:
+
+  Karakteristika | Static (Normal) metod | Class/Static metod |
+  -------------- | --------------------- | ------------------ |
+  **Druga imena** | Obični metod, Regular metod | Metod klase |
+  **Self pokazivač** | ✅ DA (pokazuje na **instancu**) | ❌ NE (ili pokazuje na **VMT**) |
+  **Pristup poljima instance** | ✅ DA | ❌ NE |
+  **Pristup class poljima** | ✅ DA | ✅ DA |
+  **"Static" znači** | Poziv određen u vreme **kompajliranja** | Pripada **klasi**, ne instanci |
+  **Deklaracija** | `procedure Doit;` | `class procedure Doit;` ili `procedure Doit; static;` |
+
+**Primer razlike:**
+
+```pascal
+type
+  TExample = object
+    FValue: Integer;                 // Obično polje (instance)
+    class var FClassValue: Integer;  // Class polje
+    
+    procedure NormalMethod;          // Static(Normal) - ima Self
+    class procedure ClassMethod; static;  // Class/Static - nema Self
+  end;
+
+procedure TExample.NormalMethod;
+begin
+  FValue := 10;          // ✅ OK - pristupa polju instance
+  FClassValue := 20;     // ✅ OK - pristupa class polju
+  WriteLn(Self.FValue);  // ✅ OK - Self postoji
+end;
+
+class procedure TExample.ClassMethod;
+begin
+  // FValue := 10;       // ❌ GREŠKA - nema pristup instance poljima!
+  FClassValue := 30;     // ✅ OK - pristup class polju
+  // WriteLn(Self.FValue); // ❌ GREŠKA - Self ne postoji!
+end;
+```
+
+### 5.7.3 Kako rade Static (Normal) metode u nasleđivanju
+
+**Ključno razumevanje**: TIP PROMENLJIVE određuje koja se metoda poziva, NE stvarni tip objekta!
+
+**Radi kao u Pythonu** - poziv se određuje u vreme kompajliranja:
+
+```pascal
+program StaticInheritanceDemo;
+
+type
+  TAnimal = object
+    procedure Speak; virtual;        // Virtual - biće override-ovan
+    procedure Identify;              // Static - NEĆE biti override-ovan
+  end;
+  AnimalPointer: ^TAnimal;
+
+  TDog = object(TAnimal)
+    procedure Speak; virtual;        // Override virtual metoda
+    procedure Identify;              // Ovo je NOVA metoda, ne override!
+  end;
+  DogPointer: ^TDog;
+
+procedure TAnimal.Speak;
+begin
+  WriteLn('Some animal sound');
+end;
+
+procedure TAnimal.Identify;
+begin
+  WriteLn('I am an animal');
+end;
+
+procedure TDog.Speak;
+begin
+  WriteLn('Woof!');
+end;
+
+procedure TDog.Identify;
+begin
+  WriteLn('I am a dog');
+end;
+
+begin
+  // Kreiramo TDog instancu
+  New(DogPointer, Create);
+  
+  // Dečiji pokazivač dodelimo roditeljskom pokazivaču
+  AnimalPointer := DogPointer;  // ✅ Dozvoljeno - TDog je TAnimal
+  
+  WriteLn('=== Poziv preko AnimalPointer (tip ^TAnimal) ===');
+  AnimalPointer^.Speak;      // Output: "Woof!"
+                             // ✅ Virtual - gleda STVARNI tip (TDog)
+  
+  AnimalPointer^.Identify;   // Output: "I am an animal"
+                             // ❌ Static - gleda TIP PROMENLJIVE (TAnimal)
+  
+  WriteLn('=== Poziv preko DogPointer (tip ^TDog) ===');
+  DogPointer^.Speak;         // Output: "Woof!"
+  DogPointer^.Identify;      // Output: "I am a dog"
+  
+  Dispose(DogPointer, Destroy);
+end.
+```
+
+**Output:**
+
+```sh
+=== Poziv preko AnimalPointer (tip ^TAnimal) ===
+Woof!
+I am an animal
+=== Poziv preko DogPointer (tip ^TDog) ===
+Woof!
+I am a dog
+```
+
+**Objašnjenje:**
+
+- `AnimalPointer` je **tipa** `^TAnimal`, ali pokazuje na **instancu** `TDog`
+- Za **virtual** metode: koristi VMT → poziva `TDog.Speak` ✅
+- Za **static** metode: koristi tip promenljive → poziva `TAnimal.Identify` ❌
+
+Ovo je **kao u Pythonu**, ali u Pascalu se to zove "static binding" vs "dynamic binding".
+
+### 5.7.4 Virtual metode mogu (ali ne moraju) biti override-ovane
+
+Virtual metod u roditelju **IMA implementaciju**. Potomak može:
+
+1. **Override-ovati potpuno** (zameniti kod):
+
+```pascal
+type
+  TParent = object
+    procedure DoWork; virtual;
+  end;
+  
+  TChild = object(TParent)
+    procedure DoWork; virtual;  // Potpuno nova implementacija
+  end;
+
+procedure TParent.DoWork;
+begin
+  WriteLn('Parent doing work');
+end;
+
+procedure TChild.DoWork;
+begin
+  WriteLn('Child doing work differently');  // Bez inherited
+end;
+```
+
+2. **Override-ovati i ulančati** (dodati kod):
+
+```pascal
+procedure TChild.DoWork;
+begin
+  inherited DoWork;  // Pozovi roditeljski kod prvo
+  WriteLn('Child adds extra work');
+end;
+```
+
+3. **Ne override-ovati** (nasleđuje roditeljski kod):
+
+```pascal
+type
+  TChild = object(TParent)
+    // procedure DoWork;  // Ne deklarišemo - koristi roditeljski
+  end;
+
+var
+  C: ^TChild;
+begin
+  New(C, Create);
+  C^.DoWork;  // Poziva TParent.DoWork
+end;
+```
+
+### 5.7.5 RTTI = Run-Time Type Information
+
+RTTI omogućava proveru i manipulaciju tipova u vreme izvršavanja:
+
+```pascal
+type
+  TAnimal = object
+    constructor Create;
+    procedure Speak; virtual;
+  end;
+  
+  TDog = object(TAnimal)
+    procedure Speak; virtual;
+  end;
+
+var
+  Animal: ^TAnimal;
+begin
+  Animal := New(PDog, Create);
+  
+  // RTTI provere:
+  if Animal is TDog then           // Provera tipa
+    WriteLn('This is a dog!');
+    
+  // TypeInfo,ClassName i slično...
+end;
+```
+
+**RTTI u Objects vs Classes:**
+
+- **Objects**: Ograničen RTTI (samo osnovne provere)
+- **Classes**: Pun RTTI (streaming, reflection, property inspection)
+
+### 5.7.6 Pregled: Kako se pozivi metoda određuju
+
+ Tip metoda | Određivanje poziva | Vreme određivanja | Primer |
+ ---------- | ------------------ | ----------------- | ------- |
+ **Static (Normal)** | Po **tipu promenljive** | **Compile-time** | `AnimalPtr^.Method` → `TAnimal.Method` |
+ **Virtual** | Po **stvarnom tipu objekta** | **Run-time** (VMT) | `AnimalPtr^.Method` → `TDog.Method` |
+ **Class/Static** | Po **klasi** (ne instanci) | **Compile-time** | `TAnimal.ClassMethod` |
+
+**Analogija:**
+
+- **Static metod** = telefonski broj "zakucan" u kod
+- **Virtual metod** = telefonski imenik koji se konsultuje u runtime
+- **Class metod** = poziv koji ne zahteva instancu
+
+### 5.7.7 Praktični savet: Kada koristiti šta
+
+  Scenario | Preporuka | Razlog |
+  -------- | --------- | ------- |
+ Metod se nikad ne menja | Static (Normal) | Brži, jednostavniji |
+ Metod se override-uje u potomcima | Virtual | Polimorfizam |
+ Metod bez potrebe za instancom | Class/Static | Ne zahteva objekat |
+ Treba pristup poljima | Static (Normal) | Ima Self |
+ Interfejs koji potomci implementiraju | Abstract | Forsira implementaciju |
+
+### 5.7.8 Kompletan primer: Static vs Virtual
+
+```pascal
+program CompleteDemo;
+
+type
+  TAnimal = object
+    procedure Speak; virtual;        // Virtual - dynamic binding
+    procedure Identify;              // Static - static binding
+  end;
+
+  TDog = object(TAnimal)
+    procedure Speak; virtual;        
+    procedure Identify;              
+  end;
+
+procedure TAnimal.Speak;
+begin
+  WriteLn('Some animal sound');
+end;
+
+procedure TAnimal.Identify;
+begin
+  WriteLn('I am an animal');
+end;
+
+procedure TDog.Speak;
+begin
+  WriteLn('Woof!');
+end;
+
+procedure TDog.Identify;
+begin
+  WriteLn('I am a dog');
+end;
+
+var
+  AnimalPointer: ^TAnimal;
+  DogPointer: ^TDog;
+  
+begin
+  New(DogPointer, Create);
+  AnimalPointer := DogPointer;  // Dečiji → roditeljski pokazivač
+  
+  WriteLn('Poziv preko AnimalPointer (tip ^TAnimal):');
+  AnimalPointer^.Speak;      // "Woof!" - virtual gleda stvarni tip
+  AnimalPointer^.Identify;   // "I am an animal" - static gleda tip promenljive
+  
+  WriteLn('Poziv preko DogPointer (tip ^TDog):');
+  DogPointer^.Speak;         // "Woof!"
+  DogPointer^.Identify;      // "I am a dog"
+  
+  Dispose(DogPointer, Destroy);
+end.
+```
+
+### 5.7.9 Preporuka
+
+Za **novi kod**, razmotri korišćenje **Classes** umesto **Objects**:
+
+- Sintaksa bliža modernom OOP-u (Delphi, C++, Java)
+- `override` direktiva je eksplicitnija i bezbednija
+- Bolja podrška za RTTI i interfejse
+- Kompatibilno sa Delphi kodom
+
+Vidi detaljnije u [Classes (06_classes.md)](06_classes.md).
+
+**Objects** se i dalje koriste kada je:
+
+- Potrebna alociranje na steku (bolje performanse)
+- Potrebna kompatibilnost sa starijim kodom
+- Rad sa low-level sistemskim kodom
 
 [prev][f1] [content][f0] [next][f2]
 

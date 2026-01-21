@@ -31,7 +31,7 @@ A list of predefined integer types is presented in table (3.1).
 Table 3.1: Predefined integer types
 
  Name |
- --- |
+ ---- |
  Integer |
  Shortint |
  SmallInt |

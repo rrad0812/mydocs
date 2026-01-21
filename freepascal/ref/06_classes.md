@@ -1,11 +1,11 @@
 
-# 6 Classes
+# 6 Klase
 
 [prev][f1] [content][f0] [next][f2]
 
-In the Delphi approach to Object Oriented Programming, everything revolves around the concept of “Classes”. A class can be seen as a pointer to an object, or a pointer to a record, with methods associated with it.
+U Delfiju mogućnosti OOP-a uglavnom se vrte oko koncepta “Classes”. Klasa može biti razmatrana kao pokazivač na objekat, ili pokazivač na zapis, sa pridruženim metodama.
 
-The difference between objects and classes is mainly that an object is allocated on the stack, as an ordinary record would be, and that classes are always allocated on the heap. In the following example:
+Razlike izmedju objekata i klasa  su uglavanom da je objekat alociran na steku, kao što bi pravi zapis trebao biti, i da se klase uvek alociraju na heapu. U sledećem primeru:
 
 ```pascal
 Var  
@@ -13,49 +13,50 @@ Var
   B: TSomeClass;  // a Class
 ```
 
-The main difference is that the variable A will take up as much space on the stack as the size of the object (TSomeObject). The variable B, on the other hand, will always take just the size of a pointer on the stack. The actual class data is on the heap.
+Glavana razlika je da će varijabla A zauzeti prostor na seku u zavisnosti veličine objekta(TSomeObject). Varijabla B, će uvek zauzeti na steku veličinu pointera. Aktuelni podaci klase su na heap.
 
-From this, a second difference follows: a class must always be initialized through its constructor, whereas for an object, this is not necessary. Calling the constructor allocates the necessary memory on the heap for the class instance data.
+Druga razlika je: klasa uvek mora inicijalizovana kroz svoj konstruktor, dok za objekat to nije obaveza. Pozivanje konstruktora alocira neophodnu memoriju na heap za podatke instance klase.
 
-Remark In earlier versions of Free Pascal it was necessary, in order to use classes, to put the objpas unit in the uses clause of a unit or program. This is no longer needed as of version 0.99.12. As of this version, the unit will be loaded automatically when the -MObjfpc or -MDelphi options are specified, or their corresponding directives are used:
+**Napomena**  
+U ranijim verzijama Free Pascala bilo je obavezno, da bi koristili klase, da postavimo `objpas` unit u `uses` klauzuli unita ili programa. To više od verzije 0.99.12 nije potrebno. Od te verzije unit će biti učitana automatski kada `-Mobjfpc` or `-Mdelphi` opcije su specificirani, ili njihove odgovarajuće direktive se koriste:
 
 ```pascal
 {$mode objfpc}  
 {$mode delphi}
 ```
 
-In fact, the compiler will give a warning if it encounters the objpas unit in a uses clause.
+U stvari, kompajler će dati upozorenje ako pronađe `objpas` unit u `uses` klauzuli.
 
-## 6.1 Class definitions
+## 6.1 Definicija klase
 
-The prototype declaration of a class is as follows:
+Prototip deklaracije klase je kao što sledi:
 
-Remark In MacPas mode, the Object keyword is replaced by the class keyword for compatibility with other pascal compilers available on the Mac. That means that in MacPas mode, the reserved word “class” in the above diagram may be replaced by the reserved word “object”.
+**Napomena**  
+U MacPas modu, Object ključna reč je zamenjen sa class ključnom reči zbog kompatabilnosti sa drugim pascal kompajlerima raspoloživim na Macu.
 
-In a class declaration, as many visibility blocks as needed can be used: the various blocks can be repeated, and there is no special order in which they must appear.
+U deklaraciji klase, više vidljivih blokova kao potreba mogu biti korišćeni: različiti blokovi mogu biti ponovljenim i ne postoji specijalni poredak u kume se mogu pojavljivati.
 
-Methods are normal function or procedure declarations. As can be seen, the declaration of a class is almost identical to the declaration of an object. The real difference between objects and classes is in the way they are created (see further in this chapter).
+Metode su noramlne funkcijeske ili proceduralne deklaracije. Kao što se može primetiti, deklaracija klase je najčešće identična deklaraciji objekta. Realna razlika izmedju objekta i klase je u načinu kako se kreiraju.
 
-The visibility of the different sections is as follows:
+Vidljivost različitih sekcija je kao što sledi:
 
-- Private
-  All fields and methods that are in a private block, can only be accessed in the module (i. e. unit) that contains the class definition. They can be accessed from inside the classes’ methods or from outside them (e. g. from other classes’ methods)
-- Strict Private
-  All fields and methods that are in a strict private block, can only be accessed from methods of the class itself. Other classes or descendent classes (even in the same unit) cannot access strict private members.
-- Protected
-  Is the same as Private, except that the members of a Protected section are also accessible to descendent types, even if they are implemented in other modules.
-- Strict Protected
-  Is the same as Protected, except that the members of a Protected section are also accessible to other classes implemented in the same unit. Strict protected members are only visible to descendent classes, not to other classes in the same unit.
-- Public
-  sections are always accessible.
-- Published
-  From a language perspective, this is the same as a Public section, but the compiler generates also type information that is needed for automatic streaming of these classes if the compiler is in the {$M+} state. Fields defined in a published section must be of class type. Array properties cannot be in a published section.
+- `Private`  
+  Svim poljima i metodama koje su u `private` bloku može se pristupiti u modulu (tj. unitu) koji sadrži definiciju klase. Njima se može pristupiti iz klasnih metoda ili izvan njih (tj. iz medoda drugih klasa unita.)
+- `Strict Private`
+  Svim poljima i metodama koje su u `strict private` bloku, može se pristupiti jedino iz metoda same klase. Druge klase unita, ili nasleđene klase, čak u istom unitu, ne mogu pristupiti `strict private` članovima.
+- `Protected`
+  Članovima `Protected` sekcije su takođe pristupačni drugim klasama implementiranim u istiom unitu kao i izvedenim klasama implementirane u ovom ili drugim modulima.
+- `Strict Protected`
+  `Strict protected` članovi su jedino vidljivi izvedenim klasama, ne za druge klase u istom ili drugim unitima.
+- `Public`
+  sekcije su uvek pristupne.
+- `Published`
+  Iz perspektive jezika, ovo je isto kao `Public` section, ali kompajler generiše informacije tipa koje su potrebne za automatski streaming te klase, ako je kompajler u {$M+} stanju. Polja definisana u `Published` sekciju moraju biti tipa klase. Niz properties ne može biti u `Published` sekciju.
 
-In the syntax diagram, it can be seen that a class can list implemented interfaces. This feature will be discussed in the next chapter.
+Klase mogu sadržavati `class methods`: to su rutine koje ne zahtevaju instancu. Self identifikator je valida u tim metodama ali pokazuje na class pointer ( VMT ).
 
-Classes can contain Class methods: these are functions that do not require an instance. The Self identifier is valid in such methods, but refers to the class pointer (the VMT).
-
-Remark Like with functions and pointer types, sometimes a forward definition of a class is needed. A class forward definition is simply the name of the class, with the keyword Class, as in the following example:
+**Remark**  
+Kao i kod funkcija i tipova pokazivača, ponekad je potrebna definicija klase unapred. Definicija klase unapred je jednostavno ime klase, sa ključnom rečju Class, kao u sledećem primeru:
 
 ```pascal
 Type  
@@ -69,16 +70,16 @@ Type
   end;
 ```
 
-When using a class forward definition, the class must be defined in the same unit, in the same section (interface/implementation). It must not necessarily be defined in the same type section.
+Kada koristite definiciju klase unapred, klasa mora biti definisana u istom unitu i u istom odeljku (interfejs/implementacija). Ne mora nužno biti definisan u odeljku istog tipa.
 
-Class reference types are used to create instances of a certain class, which is not yet known at compile time, but which is specified at run time. Essentially, a variable of a class reference type contains a pointer to the definition of the specified class. This can be used to construct an instance of the class corresponding to the definition, or to check inheritance. The following example shows how it works:
+Referentni tipovi klasa se koriste za kreiranje instanci određene klase, koja još nije poznata u vreme kompajliranja, ali je specificirana u vreme izvršavanja. U suštini, promenljiva referentnog tipa klase sadrži pokazivač na definiciju navedene klase. Ovo se može koristiti za konstruisanje instance klase koja odgovara definiciji ili za proveru nasleđivanja. Sledeći primer pokazuje kako to funkcioniše:
 
 ```pascal
 Type  
   TComponentClass = Class of TComponent;  
 
-Function CreateComponent(AClass: TComponentClass;  
-                         AOwner: TComponent): TComponent;  
+Function CreateComponent(AClass: TComponentClass; 
+                             AOwner: TComponent): TComponent;  
 
 begin  
   // ...  
@@ -87,18 +88,18 @@ begin
 end;
 ```
 
-This function can be passed a class reference of any class that descends from TComponent. The following is a valid call:
+Ovoj funkciji može biti prosleđena referenca bilo koje klasekoja nasledjuje `TComponent`. Sledeći poziv je validan:
 
 ```pascal
 Var  
   C : TComponent;  
 
 begin  
-  C:=CreateComponent(TEdit,Form1);  
+  C:=CreateComponent(TEdit, Form1);  
 end;
 ```
 
-On return of the CreateComponent function, C will contain an instance of the class TEdit. Note that the following call will fail to compile:
+Na povratku `CreateComponent` funkcije, C će sadržati instancu klase `TEdit`. Primetite da se sledeći primer neće kompajlirati:
 
 ```pascal
 Var  
@@ -109,9 +110,9 @@ begin
 end;
 ```
 
-because TStream does not descend from TComponent, and AClass refers to a TComponent class. The compiler can (and will) check this at compile time, and will produce an error.
+jer `TStream` ne nasleđuje iz `TComponent`, a `AClass` referencira na `TComponent` class. Kompajler može (i hoće) da proveri ovo u vremenu kompajliranja, i proizvešće grešku.
 
-References to classes can also be used to check inheritance:
+Referenca klase može takodje biti korišćena za proveru nasledjivanja:
 
 ```pascal
   TMinClass = Class of TMyClass;  
@@ -127,11 +128,11 @@ begin
 end;
 ```
 
-The above example will raise an exception if the passed instance is not a descendent of TMinClass or a descendent of TMaxClass.
+Gornji primer će podići izuzetak ako prosledjena instanca nije nasledjena iz `TMinClass` ili `TMaxClass`.
 
-## 6.2 Abstract and sealed classes
+## 6.2 Abstraktne i zapečaćene klase
 
-A class can be declared as sealed. In that case, it is not possible to declare a descendent class. The compiler will return an error if it encounters a declaration of a descendent:
+Klasa može biti deklarisana kao `sealed`. U tom slučaju nije moguće deklarisanje nasledjenih klasa. Kompajler će vratiti grešku:
 
 ```pascal
 {$mode objfpc}  
@@ -150,30 +151,33 @@ begin
 end.
 ```
 
-This will result in the following error:
+Ovo će rezultovati greškom:
 
 ```sh
 Error: Cannot create a descendant of the sealed class "TMyClass"
 ```
 
-An abstract class is a class that cannot be instantiated directly. Instead, a descendent class must always be instantiated. However, for Delphi compatibility, the compiler ignores this directive.
+Abstraktna klasa je klasa koja se ne može instancirati direktno. Umesto toga nasledna klasa mora uvek biti instancirana.
 
-## 6.3 Normal and static fields
+## 6.3 Normalna i statička polja
 
-Classes can have fields. Depending on how they are defined, fields hold data specific to an instance of a class or to the class as a whole. Whatever the way they were defined, fields observe the rules of visibility just like any other member of the class.
+Klase mogu imati polja. U zavisnosti od toga kako su definisana, polja sadrže podatke specifične za instancu klase. Bez obzira kako su definisana, polja mogu imati nametnuta pravila vidljivosti kao i drugi članovi klase.
 
-### 6.3.1 Normal fields/variables
+### 6.3.1 Normalna polja/varijable
 
-There are two ways to declare a normal field. The first one is the classical way, similar to a definition in an object:
+Postoji dva načina za deklaraciju normalnih polja. Prvi je klasičan način, sličan definiciji objekta:
 
 ```pascal
-{$mode objfpc}  
+{$mode objfpc}
+
 type  
   cl=class  
     l : longint;  
   end;  
+
 var  
   cl1,cl2 : cl;  
+
 begin  
   cl1:=cl.create;  
   cl2:=cl.create;  
@@ -181,18 +185,22 @@ begin
   writeln(cl1.l);  
   writeln(cl2.l);  
 end.
+```
 
-will be the following
+Ovaj kod će napraviti izlaz:
+
+```sh
 2  
 0
 ```
 
-The example demonstrates that values of fields are initialized with zero (or the equivalent of zero for non ordinal types: empty string, empty array and so on).
+Ovaj primer demonstira da vrednosti polja su inicijalizovana sa nulom (ili ekvivalentom nule za ne ordinalne tipove, `empty string`, `empty array` and so on).
 
-The second way to declare a field (only available in more recent versions of Free Pascal) is using a var block:
+Drugi način za deklaracije polja (u najnovijim verzijama FreePascala) je korišćenje `var` block:
 
 ```pascal
-{$mode objfpc}  
+{$mode objfpc}
+
 type  
   cl=class  
   var  
@@ -200,26 +208,30 @@ type
   end;
 ```
 
-This definition is completely equivalent to the previous definition.
+Ova definicija je ekvivalentna prehodnoj.
 
-Remark As of version 3.0 of the compiler, the compiler can re-order the fields in memory if this leads to better alignment and smaller instances. That means that in an instance, the fields do not necessarily appear in the same order as in the declaration. RTTI generated for a class will reflect this change.
+**Remark**  
+Od verzije 3.0 kompajlera, kompajler može preurediti poredak polja u memoriji ako to vodi boljem poravnjavanju i manjoj instanci. To znači, da u instanci polja ne moraju da se pojave u istom poretku kao u deklaraciji. RTTI generisan za klasu će reflektovati ovu promenu.
 
-### 6.3.2 Class fields/variables
+### 6.3.2 Polja/varijable klase
 
-Similar to objects, a class can contain static fields or class variables: these fields or variables are global to the class, and act like global variables, but are known only as part of the class. They can be referenced from within the classes’ methods, but can also be referenced from outside the class by providing the fully qualified name.
+Slično objektima, klasa može da sadrži statička polja ili promenljive klase: ova polja ili promenljive su globalne za klasu i deluju kao globalne promenljive, ali su poznate samo kao deo klase. Na njih se može referencirati unutar metoda klasa, ali se mogu referencirati i izvan klase davanjem potpunog kvalifikovanog imena.
 
-Again, there are two ways to define class variables. The first one is equivalent to the way it is done in objects, using a static modifier:
+Opet, postoje dva načina da se definišu promenljive klase. Prvi je ekvivalentan načinu na koji se radi u objektima, koristeći `static` modifikator:
 
-For instance, the output of the following program is the same as the output for the version using an object:
+Na primer, izlaz sledećeg programa je isti kao i izlaz za verziju koja koristi objekat:
 
 ```pascal
-{$mode objfpc}  
+{$mode objfpc}
+
 type  
-  cl=class  
-    l : longint;static;  
+  cl = class  
+    l : longint; static;  
   end;  
+
 var  
   cl1,cl2 : cl;  
+
 begin  
   cl1:=cl.create;  
   cl2:=cl.create;  
@@ -231,7 +243,7 @@ begin
 end.
 ```
 
-The output of this will be the following:
+Izlaz ovo koda će biti:
 
 ```sh
 2  
@@ -239,28 +251,30 @@ The output of this will be the following:
 3
 ```
 
-Note that the last line of code references the class type itself (cl), and not an instance of the class (cl1 or cl2).
+Primetite da poslednja linja koda referencira samu klasu (`cl`), a ne instancu klase (cl1 ili cl2).
 
 In addition to the static field approach, in classes, a Class Var can be used. Similar to the way a field can be defined in a variable block, a class variable can be declared in a class var block:
 
 ```pascal
 {$mode objfpc}  
+
 type  
   cl=class  
-  class var  
-    l : longint;  
+    class var  
+      l : longint;  
   end;
 ```
 
-This definition is equivalent to the previous one.
+Ova definicija je ekvivalentna prethodnoj.
 
-Note that a class variable is tied to a specific class. Descendent classes will refer to the same instance, unless the variable is redeclared. The following program demonstrates this:
+Primetimo da je `class variable` povezan za određenu klasu. Nasledne klase će se odnositi na istu instancu, osim ako se promenljiva ponovo deklariše. Sledeći program to pokazuje:
 
 ```pascal
 {$mode objfpc}  
+
 type  
-  TA = class // base type  
-    class var CODE: integer;  
+  TA = class                  // base type  
+    class var Code: integer;  
   end;  
   TB = class(TA);  
   TC = class(TA);  
@@ -273,20 +287,20 @@ begin
 end.
 ```
 
-The output of this program is:
+Izlaz je:
 
 ```sh
  2 2 2
 ```
 
-Because it is tied to a class, it can be overridden in delphi mode:
+Pošto je povezana sa klasom, može biti preklopljeno u Delphi modu:
 
 ```pascal
 {$mode delphi}  
 
 type  
   TA = class // base type  
-    class var CODE: integer;  
+    class var code: integer;  
   end;  
   TB = class(TA)  
     Class var code : integer;  
@@ -309,40 +323,39 @@ It will print the following:
  0 1 2
 ```
 
-However, in OBJFPC mode it will not compile, and will give a duplicate identifier error.
+Medjutim, u OBJFPC modu to se neće kompajlirati, i daće `duplicate identifier error`.
 
-## 6.4 Class instantiation
+## 6.4 Instanciranje
 
-Classes must be created using one of their constructors (there can be multiple constructors). Remember that a class is a pointer to an object on the heap. When a variable of some class is declared, the compiler just allocates room for this pointer, not the entire object. The constructor of a class returns a pointer to an initialized instance of the object on the heap. So, to initialize an instance of some class, one would do the following:
+Klase moraju biti kreirane pomoću jednog od njihovih konstruktora (može biti više konstruktora). Zapamtite da je instanca klase pokazivač na objekat na heapu. Kada se deklariše promenljiva neke klase, kompajler samo dodeljuje prostor za ovaj pokazivač, a ne za ceo objekat. Konstruktor klase vraća pokazivač na inicijalizovanu instancu objekta na heapu. Dakle, da biste inicijalizovali instancu neke klase, uradili bi sledeće:
 
 ```pascal
   ClassVar := ClassType.ConstructorName;
 ```
 
-The extended syntax of new and dispose can not be used to instantiate and destroy class instances: That construct is reserved for use with objects only. Calling the constructor will provoke a call to the virtual class method NewInstance, which, in its default implementation, calls GetMem, to allocate enough space to hold the class instance data, and then zeroes out the memory.
+Proširena sintaksa `new` i `dispose` se ne može se koristiti za instanciranje i uništavanje instanci klase: ta konstrukcija je rezervisana za upotrebu samo sa objektima. Pozivanje konstruktora će izazvati poziv virtuelne metode klase NewInstance, koja, u svojoj podrazumevanoj implementaciji, poziva GetMem, da dodeli dovoljno prostora za čuvanje podataka o instanci klase, a zatim isprazni memoriju.
 
-After that, the constructor’s code is executed. The constructor has a pointer to its data, in Self.
+Posle toga, kod konstrujtora je izvršen. Konstruktor ima pokazivač na svoje podatke, u `self`.
 
 **Remark**:
 
-- The `{$PackRecords }` directive also affects classes, i. e. the alignment in
-  memory of the different fields depends on the value of the `{$PackRecords }` directive.
-- Just as for objects and records, a packed class can be declared. This has the
-  same effect as on an object, or record, namely that the elements are aligned on 1-byte boundaries, i. e. as close as possible.
-- SizeOf(class) will return the same as SizeOf(Pointer), since a class is a
-  pointer to an object. To get the size of the class instance data, use the TObject.InstanceSize method.
-- If an exception happens during an the execution of a constructor, the
-  destructor will be called automatically.
+- `{$PackRecords }` direktiva takođe se primenjuje na klase, tj. poravnavanje u memoriji
+  različitih polja zavisi od ove direktive.
+- Kao za `objects` i `records`, pakovane klase mogu biti deklarisane. Ovo ima isti efekat kao kod
+  object ili record, elementi su poravnate na 1-byte granice, što bliže moguće.
+- `SizeOf(class)` će vratiti isto kao `SizeOf(Pointer)`, pošto je klasa pokazivač na objekat.
+  Da dobijete veličinu instance podataka, korišćenjem `TObject.InstanceSize` metoda.
+- Ako se pojavi izuzetak za vreme izvršenja konstruktora, destruktor će biti pozvan automatski.
 
-## 6.5 Class destruction
+## 6.5 Destrukcija instance
 
-Class instances must be destroyed using the destructor. In difference with the constructor, there is no choice in destructors: the destructor must have the name Destroy, it must override the Destroy destructor declared in TObject, cannot have arguments, and the inherited destructor must always be called.
+Instance klase moraju biti uništene korišćenjem destructor. Za razliku od konstruktor, nema izbora za destruktor: destruktor mora imati ime `Destroy`, on mora preklopiti `Destroy` destruktor deklarisan u `TObject`, ne može imati argumente, i nasledjeni destruktor mora uvek biti pozvon.
 
-Destroy will call FreeInstance, which, in its default implementation, calls FreeMem to release the memory occupied by the instance.
+Destroy će pozvati `FreeInstance`, koja će po podrazumevanoj implementaciji, pozvati `FreeMem` za oslobadjanje memorije zauzete instancom.
 
-To avoid calling a destructor on a Nil instance, it is best to call the Free method of TObject. This method will check if Self is not Nil, and if so, then it calls Destroy. If Self equals Nil, it will just exit.
+Da bi sprečili pozivanje destruktor na Nil instanci, najbolje je pozvati `Free` metod `TObject`-a. Ovaj metod će proveriti da li `Self` nije Nil, i ako nije, tada će pozvati `Destroy`. Ako je `Self` jednak Nil, on će izaći.
 
-Destroying an instance does not remove or Nil a reference to an instance:
+Uništavanje instance ne uklanja ili postavlja Nil na referencu instance:
 
 ```pascal
 Var  
@@ -352,17 +365,17 @@ begin
   A:=TComponent.Create;  
   A.Name:='MyComponent';  
   A.Free;  
-  Writeln('A is still assigned: ',Assigned(A));  
+  Writeln('A is still assigned: ', Assigned(A));  
 end.
 ```
 
-After the call to Free, the variable A will not be Nil, the output of this program will be:
+Posle poziva `Free`, varijabla A neće biti Nil, izlaz programa biće:
 
 ```sh
 A is still assigned: TRUE
 ```
 
-To make sure that the variable A is cleared after the destructor was called, the function FreeAndNil from the SysUtils unit can be used. It will call Free and will then write Nil in the object pointer (A in the above example):
+Da bi bili sigurni da je varijabla A očišćena pošto je destruktor pozvan, funkcija `FreeAndNil` iz `SysUtils` unit može biti korišćen. To će pozvati `Free` i potom postaviti `Nil` na pokazivač objekta. (A u gornjem primeru):
 
 ```pascal
 Var  
@@ -376,36 +389,39 @@ begin
 end.
 ```
 
-After the call to FreeAndNil, the variable A will contain Nil, the output of this program will be:
+Posle poziva `FreeAndNil`, varijabla A će sadržavati Nil, izlaz će biti:
 
 ```sh
 A is still assigned: FALSE
 ```
 
-Remark if an exception happens during an the execution of a constructor, the destructor will be called automatically.
+**Remark**  
+Ako se pojavi izuzetak za vreme izvršavanje konstruktora, destruktor će biti pozvan automatski.
 
-## 6.6 Methods
+## 6.6 Metode
 
-### 6.6.1 Declaration
+### 6.6.1 Deklaracija
 
-Declaration of methods in classes follows the same rules as method declarations in objects.
+Deklaracija metoda klase prati neka pravila kao deklaracija metoda u objektima.
 
-The only differences are the override, reintroduce and message directives.
+Jedina razlika je `override`, `reintroduce` i `message` direktive.
 
-### 6.6.2 Invocation
+### 6.6.2 Pozivanje metoda
 
-Method invocation for classes is no different than for objects. The following is a valid method invocation:
+Pozivanje metoda u klasama nije drugačije od objekata:
 
 ```pascal
-Var  AnObject : TAnObject;  
+Var  
+  AnObject: TAnObject;  
+
 begin  
-  AnObject := TAnObject.Create;  
+  AnObject:= TAnObject.Create;  
   ANobject.AMethod;
 ```
 
-### 6.6.3 Virtual methods
+### 6.6.3 Virtuelne metode
 
-Classes have virtual methods, just as objects do. There is however a difference between the two. For objects, it is sufficient to redeclare the same method in a descendent object with the keyword virtual to override it. For classes, the situation is different: virtual methods must be overridden with the override keyword. Failing to do so, will start a new batch of virtual methods, hiding the previous one. The Inherited keyword will not jump to the inherited method, if Virtual was used.
+Klase imaju virtuelne metode, baš kao i objekti. Međutim, postoji razlika između to dvoje. Za objekte, dovoljno je ponovo deklarisati isti metod u objektu potomka sa ključnom rečju `virtual` da bi se on zamenio. Za klase je situacija drugačija: virtuelne metode moraju biti zamenjene ključnom reči `override`. Ako to ne uradite, pokrenuće se nova serija virtuelnih metoda, skrivajući prethodnu. Ključna reč `Inherited` neće skočiti na nasleđeni metod, ako je korišćen u virtuelnom.
 
 The following code is wrong:
 
@@ -414,62 +430,66 @@ Type
   ObjParent = Class  
     Procedure MyProc; virtual;  
   end;  
+  
   ObjChild  = Class(ObjPArent)  
     Procedure MyProc; virtual;  
   end;
 ```
 
-The compiler will produce a warning:
+Kompajler će prijaviti grešku:
 
 ```sh
 Warning: An inherited method is hidden by OBJCHILD.MYPROC
 ```
 
-The compiler will compile it, but using Inherited can produce strange effects.
+Kompajler će da kompajlira, ali korišćenje `Inherited` može izazvati čudne efekte.
 
-The correct declaration is as follows:
+Korktna deklaracija je:
 
-```pascaa
+```pascal
 Type  
   ObjParent = Class  
     Procedure MyProc; virtual;  
   end;  
+
   ObjChild  = Class(ObjPArent)  
     Procedure MyProc; override;  
   end;
 ```
 
-This will compile and run without warnings or errors.
+Ovaj kod će se kompajlirati be upozorenja na greške.
 
-If the virtual method should really be replaced with a method with the same name, then the reintroduce keyword can be used:
+Ako bi virtualni method trebao stvarno biti zamenjen sa metodom istog imena, tada `reintroduce` ključna reč može biti korišćena:
 
 ```pascal
 Type  
   ObjParent = Class  
     Procedure MyProc; virtual;  
   end;  
+
   ObjChild  = Class(ObjPArent)  
     Procedure MyProc; reintroduce;  
   end;
 ```
 
-This new method is no longer virtual.
+Ovaj novi metod nije virtuelni.
 
-To be able to do this, the compiler keeps – per class type – a table with virtual methods: the VMT (Virtual Method Table). This is simply a table with pointers to each of the virtual methods: each virtual method has its fixed location in this table (an index). The compiler uses this table to look up the actual method that must be used at runtime. When a descendent object overrides a method, the entry of the parent method is overwritten in the VMT. More information about the VMT can be found in Programmer’s Guide.
+Da bi se ovo omogućilo, kompajler pravi po klasi ( po tipu ) – tabelu sa virtuelnim metodama: VMT (Virtual Method Table). Ovo je jedna tabela sa pokazivačima na svaku virtuelnu metodu: svaki virtuelni metod ima fiksiranu lokaciju u ovaoj tabeli. Kompajler će koristiti ovu tabelu za look up aktuelni metod koji mora biti korišćen u runtime-u. Kada nasledni objekat preklopi metod, ulaz roditeljskog metoda je prepisan u VMT.
 
-Remark The keyword “virtual” can be replaced with the “dynamic” keyword: dynamic methods behave the same as virtual methods. Unlike in Delphi, in FPC the implementation of dynamic methods is equal to the implementation of virtual methods.
+**Remark**  
+Ključna reč `virtual` može biti prepisan sa `dynamic` ključnom reči: `dynamic` metode se ponašaju kao virtualne metode. Za razliku od Delphi, u FPC implementatcija `dynamic` metode su jednake za implementaciju kao virtuelne metode.
 
-### 6.6.4 Class methods
+### 6.6.4 Class metode
 
-Class methods are identified by the keyword Class in front of the procedure or function declaration, as in the following example:
+`Class metode` se identifikuju sa ključnom reči `Class` ispred procedure ili function deklaracije:
 
 ```pascal
   Class Function ClassName : String;
 ```  
 
-Class methods are methods that do not have an instance (i. e. Self does not point to a class instance) but which follow the scoping and inheritance rules of a class. They can be used to return information about the current class, for instance for registration or use in a class factory. Since no instance is available, no information available in instances can be used.
+`Class metode` su metode koje nemaju instancu (tj. Self ne pokazuje na instancu klase) ali koja prati opseg i pravila nasledjivanja klase. Oni mogu biti korišćenje za povratak informacija o trenutnoj klasi, na primer za registraciju ili korišćenje u class factory. Sve dok instanca klase nije raspoloživa, nema informacije o instancama koje mogu biti korišćene.
 
-Class methods can be called from inside a regular method, but can also be called using a class identifier:
+Class metode mogu biti pozvane iz regularnog metoda ali mogu biti pozvane i korišćenjem identifikatora klase:
 
 ```pascal
 Var  
@@ -481,7 +501,7 @@ begin
   ...  
 ```
 
-But calling them from an instance is also possible:
+Ali pozivanje njih iz instance je takođe moguće:
 
 ```pascal
 Var  
@@ -493,29 +513,25 @@ begin
   ...
 ```
 
-The reverse is not possible: Inside a class method, the Self identifier points to the VMT table of the class. No fields, properties or regular methods are available inside a class method. Accessing a regular property or method will result in a compiler error.
+Obrnuto nije moguće: Unutar class metoda, Self identifikator pokazuje na VMT tabelu klase. Nema polja, propertija ili regularnih metoda. Pristup regularnom propertiju ili metodi će rezultovati greškom kompajlera.
 
-Note that class methods can be virtual, and can be overridden.
+Primetimo, da class metode mogu biti `virtual`, i mogu biti `override`.
 
-Class methods can be used as read or write specifiers for a regular property, but naturally, this property will have the same value for all instances of the class, since there is no instance available in the class method.
+Class metode mogu biti korišćene kao `read` ili `write` specifikatori za regularan property, ali prirodno, taj property će imati istu vrednost za sve instance klase, pošto instance nisu raspoložive u class metodama.
 
-### 6.6.5 Class constructors and destructors
+### 6.6.5 Konstruktori i destruktori klase
 
-A class constructor or destructor can also be created. They serve to instantiate some class variables or class properties which must be initialized before a class can be used. These constructors are called automatically at program startup: The constructor is called before the initialization section of the unit it is declared in, the destructor is called after the finalisation section of the unit it is declared in.
+Takođe se može kreirati konstruktor ili destruktor klase. Oni služe da instanciraju neke promenljive klase ili svojstva klase koja moraju biti inicijalizovana pre nego što se klasa može koristiti. Ovi konstruktori se pozivaju automatski pri pokretanju programa: konstruktor se poziva pre odeljka za inicijalizaciju unita u kome je deklarisan, destruktor se poziva posle sekcije finalizacije unita u kome je deklarisan.
 
-There are some caveats when using class destructors/constructors:
+Ovde su neke činjenice kada koristimo class destructors/constructors:
 
-- There may be only one constructor per class. The name is arbitrary, but it can
-  not have parameters.
-- There may be only one destructor per class. The name is arbitrary, but it can
-  not have parameters.
-- Neither constructor nor destructor can be virtual.
-- The class constructor/destructor is called irrespective of the use of the
-  class: even if a class is never used, the constructor and destructor are called anyway.
-- There is no guaranteed order in which the class constructors or destructors
-  are called. For nested classes, the only guaranteed order is that the constructors of nested classes are called after the constructor of the encompassing class is called, and for the destructors the opposite order is used.
-
-The following program:
+- Može biti samo jedan konstruktor po klasi. Ime je proizvoljno, ali ne moge imati parametre.
+- Može biti samo jedan konstruktor po klasi. Ime je proizvoljno, ali ne može imati parametre.
+- Ni konstruktor ni destruktor ne mogu biti virtual.
+- Konstruktor/Destruktor je pozvan bez obzira na korišćenje klase: čak iako se klasa ne koristi,
+  konstruktor i destruktor se pozivaju.
+- Ne postoji garancija poretka pozivanja konstruktora klasa. Za ugnježdene klase, jedini
+  garantovani poredak je da konstruktori ugneždenih klasa se pozivaju posle konstruktora obuhvatne klase, i da se deskriptori se pozivaju u kontra redosledu.
 
 ```pascal
 {$mode objfpc}{$h+}  
@@ -571,7 +587,7 @@ Class constructor TA
 Class destructor TA
 ```
 
-### 6.6.6 Static class methods
+### 6.6.6 Statičke (class) metode
 
 FPC knows static class methods in classes: these are class methods that have the Static keyword at the end. These methods behave completely like regular procedures or functions. This means that:
 
@@ -699,14 +715,20 @@ MyObject.Dispatch (Msg);
 In this example, the Dispatch method will look at the object and all its ancestors (starting at the object, and searching up the inheritance class tree), to see if a message method with message MSGID has been declared. If such a method is found, it is called, and passed the Msg parameter.
 
 If no such method is found, DefaultHandler is called. DefaultHandler is a virtual method of TObject that doesn’t do anything, but which can be overridden to provide any processing that might be needed. DefaultHandler is declared as follows:
-   procedure DefaultHandler(var message);virtual;
+
+```pascal
+procedure DefaultHandler(var message);virtual;
+```
 
 In addition to the message method with a Integer identifier, Free Pascal also supports a message method with a string identifier:
- Procedure TMyObject.MyStrHandler(Var Msg); Message 'OnClick';
+
+```pascal
+Procedure TMyObject.MyStrHandler(Var Msg); Message 'OnClick';
+```
 
 The working of the string message handler is the same as the ordinary integer message handler:
 
-The TObject.DispatchStr method can be used to call a message handler. It is declared in the system unit and will accept one parameter which must have at the first position a short string with the message ID that should be called. For example:
+The `TObject.DispatchStr` method can be used to call a message handler. It is declared in the system unit and will accept one parameter which must have at the first position a short string with the message ID that should be called. For example:
 
 ```pascal
 Type  
@@ -898,10 +920,8 @@ Type
     Procedure SetInt (I : Longint; Value : Longint;);  
     Procedure SetAsString (A : String; Value : String);  
   Public  
-    Property Items [i : Longint] : Longint Read GetInt  
-                                           Write SetInt;  
-    Property StrItems [S : String] : String Read GetAsString  
-                                            Write SetAsstring;  
+    Property Items [i : Longint] : Longint Read GetInt Write SetInt;  
+    Property StrItems [S : String] : String Read GetAsString Write SetAsstring;  
   end;  
 
 Var  
@@ -944,8 +964,7 @@ If there are N dimensions, then the types of the first N arguments of the getter
 Array properties can be declared as default properties. This means that it is not necessary to specify the property name when assigning or reading it. In the previous example, if the definition of the items property would have been
 
 ```pascal
-Property Items[i : Longint]: Longint Read GetInt  
-                                     Write SetInt; Default;
+Property Items[i : Longint]: Longint Read GetInt Write SetInt; Default;
 ```
 
 Then the assignment
@@ -1269,6 +1288,269 @@ Will write
 ```sh
  0 1 2
 ```
+
+## 6.15 Pregled vrsta metoda u Classes
+
+Classes nude različite vrste metoda, sličnih onima u Objects, ali sa važnim razlikama:
+
+ Tip metode | Deklaracija | Karakteristike | Kada koristiti |
+ ---------- | ----------- | -------------- | -------------- |
+ **Static (Normal)** | `procedure Doit;` | Poziv se određuje u vreme kompajliranja. Tip promenljive određuje metodu. Najbrža metoda poziva. Ne može se override-ovati | Kada polimorfizam nije potreban |
+ **Virtual** | `procedure Doit; virtual;` | Poziv se određuje u vreme izvršavanja. Koristi VMT. U potomku se koristi `override`. Može se override-ovati | Standardni polimorfni metod |
+ **Dynamic** | `procedure Doit; dynamic;` | Isto kao `virtual` u FPC. U Delphi ima drugu implementaciju. U potomku koristi `override` | Za Delphi kompatibilnost |
+ **Abstract** | `procedure Doit; virtual; abstract;` | Mora biti `virtual`. Nema implementaciju.Mora se override-ovati u potomku. Ne može se kreirati instanca | Interfejsi/apstraktne bazne klase |
+ **Class Method** | `class procedure Doit;` | Self pokazuje na VMT klase.- Pristup class poljima i metodama. Nema pristup običnim poljima. Može biti virtual i override | Fabrike, registracija tipova |
+ **Static Class Method** | `class procedure Doit; static;` | Nema Self parametar. Pristup samo class poljima. Ne može biti virtual. Može se dodeliti proc. promenljivoj | Pomoćne funkcije u namespace-u klase |
+ **Class Constructor** | `class constructor Create;` | Poziva se pre initialization sekcije. Samo jedan po klasi.- Bez parametara.- Ne može biti virtual | Inicijalizacija class polja |
+ **Class Destructor** | `class destructor Destroy;` | Poziva se nakon finalization sekcije.Samo jedan po klasi. Bez parametara. Ne može biti virtual | Čišćenje class resursa |
+ **Message Method** | `procedure Handler(var Msg); message 1;` | Automatski virtual. Poziva se preko Dispatch(). Jedan var parametar. Integer ili string ID | GUI callback funkcije |
+
+### 6.15.1 Ključna razlika: Objects vs Classes
+
+Najvažnija razlika u sintaksi virtuelnih metoda:
+
+**U Objects:**
+
+```pascal
+Type
+  TParent = Object
+    procedure Doit; virtual;  
+  end;
+  
+  TChild = Object(TParent)
+    procedure Doit; virtual;   // Ponovo 'virtual'!
+  end;
+```
+
+**U Classes:**
+
+```pascal
+Type
+  TParent = Class
+    procedure Doit; virtual;   
+  end;
+  
+  TChild = Class(TParent)
+    procedure Doit; override;  // Koristi 'override'!
+  end;
+```
+
+Ako u Classes koristiš `virtual` umesto `override`, dobićeš **warning**:
+
+```sh
+Warning: An inherited method is hidden by TCHILD.DOIT
+```
+
+### 6.15.2 Primer: Razlika između različitih tipova metoda
+
+```pascal
+{$mode objfpc}
+{$h+}
+program ClassMethodsDemo;
+
+type
+  TExample = class
+  private
+    FValue: Integer;
+    class var FClassValue: Integer;
+  public
+    // Normal method - ima Self, pristup svemu
+    procedure NormalMethod;
+    
+    // Virtual method - može se override-ovati
+    procedure VirtualMethod; virtual;
+    
+    // Abstract method - mora se implementirati u potomku
+    procedure AbstractMethod; virtual; abstract;
+    
+    // Class method - Self pokazuje na VMT
+    class procedure ClassMethod;
+    
+    // Static class method - nema Self
+    class procedure StaticClassMethod; static;
+    
+    // Class constructor - poziva se automatski
+    class constructor Create;
+    
+    // Class destructor - poziva se automatski  
+    class destructor Destroy;
+    
+    // Message method - za callback funkcije
+    procedure MessageHandler(var Msg); message 100;
+  end;
+
+procedure TExample.NormalMethod;
+begin
+  FValue := 10;                    // OK - pristup instance polju
+  FClassValue := 20;               // OK - pristup class polju
+  WriteLn('Normal: ', ClassName);  // OK - pristup class metodi
+end;
+
+procedure TExample.VirtualMethod;
+begin
+  WriteLn('Virtual method called');
+end;
+
+class procedure TExample.ClassMethod;
+begin
+  // FValue := 10;                 // GREŠKA - nema pristup instance poljima
+  FClassValue := 30;               // OK - pristup class polju
+  WriteLn('Class: ', ClassName);   // OK
+end;
+
+class procedure TExample.StaticClassMethod;
+begin
+  // FValue := 10;                 // GREŠKA
+  FClassValue := 40;               // OK
+  WriteLn('Static class method');  // OK
+  // ClassName se tretira kao TExample.ClassName
+end;
+
+class constructor TExample.Create;
+begin
+  FClassValue := 0;
+  WriteLn('Class constructor called');
+end;
+
+class destructor TExample.Destroy;
+begin
+  WriteLn('Class destructor called');
+end;
+
+procedure TExample.MessageHandler(var Msg);
+begin
+  WriteLn('Message handler called');
+end;
+
+// Potomak koji override-uje virtual metod
+type
+  TChild = class(TExample)
+    procedure VirtualMethod; override;  // MORA biti 'override'!
+    procedure AbstractMethod; override; // Implementacija abstract metoda
+  end;
+
+procedure TChild.VirtualMethod;
+begin
+  inherited;  // Pozovi roditeljski metod
+  WriteLn('Child virtual method');
+end;
+
+procedure TChild.AbstractMethod;
+begin
+  WriteLn('Child abstract implementation');
+end;
+
+var
+  Parent: TExample;
+  Child: TChild;
+  
+begin
+  // Class constructor je već pozvan ovde!
+  
+  Parent := TExample.Create;
+  Child := TChild.Create;
+  
+  Parent.NormalMethod;
+  Parent.VirtualMethod;
+  
+  Child.VirtualMethod;  // Poziva TChild.VirtualMethod
+  Child.AbstractMethod;
+  
+  TExample.ClassMethod;
+  TExample.StaticClassMethod;
+  
+  Parent.Free;
+  Child.Free;
+  
+  // Class destructor će biti pozvan na kraju
+end.
+```
+
+Output:
+
+```sh
+Class constructor called
+Normal: TExample
+Virtual method called
+Virtual method called
+Child virtual method
+Child abstract implementation
+Class: TExample
+Static class method
+Class destructor called
+```
+
+### 6.15.3 Kada koristiti koju vrstu metoda
+
+ Situacija | Preporučena vrsta |
+ ---------- | ----------------- |
+ Običan metod bez nasleđivanja | Normal (static) |
+ Polimorfni metod koji se override-uje | Virtual + override |
+ Interfejs koji potomci moraju implementirati | Abstract |
+ Metod koji treba pozivati bez instance | Class method |
+ Pomoćna funkcija u namespace-u klase | Static class method |
+ Inicijalizacija class polja | Class constructor |
+ GUI event handler | Message method |
+ Factory pattern | Class method (virtual) |
+
+### 6.15.4 Česte greške i kako ih izbegavati
+
+**1. Zaboravljen override:**
+
+```pascal
+// LOŠE - kompajler će dati warning
+type
+  TChild = class(TParent)
+    procedure MyProc; virtual;  // Trebalo je: override
+  end;
+```
+
+**2. Pokušaj pristupa instance poljima iz class metoda:**
+
+```pascal
+class procedure TExample.ClassMethod;
+begin
+  FValue := 10;  // GREŠKA - FValue je instance polje
+end;
+```
+
+**3. Pozivanje abstract metoda:**
+
+```pascal
+var
+  Obj: TAbstractClass;
+begin
+  Obj := TAbstractClass.Create;  // GREŠKA - ne može se kreirati
+end;
+```
+
+**4. Zaboravljen inherited u destruktoru:**
+
+```pascal
+destructor TChild.Destroy;
+begin
+  // cleanup...
+  inherited;  // MORA biti na kraju!
+end;
+```
+
+### 6.15.5 Zašto Classes, a ne Objects?
+
+ Prednost Classes | Objašnjenje |
+ ----------------- | ----------- |
+ **Modernija sintaksa** | `override` umesto ponovnog `virtual` |
+ **Exception safety** | Automatski poziv destruktora pri greški |
+ **Reference counting** | Podrška za automatsko upravljanje memorijom |
+ **Interfejsi** | Potpuna podrška za interfejse |
+ **RTTI** | Bolja run-time type information |
+ **Properties** | Naprednije property funkcionalnosti |
+ **Message methods** | Za GUI programiranje |
+ **Class methods** | Moćniji class-level metodi |
+ **Delphi kompatibilnost** | Lakša portabilnost koda |
+
+**Zaključak:** Za novi kod, **koristi Classes**. Objects su tu za legacy kod ili specifične low-level slučajeve.
+
+Detaljnije o Objects-ima vidi u [05_objects.md](05_objects.md).
 
 [prev][f1] [content][f0] [next][f2]
 
