@@ -234,7 +234,7 @@ end.
 
 It works for all types, except the various file types (or complex types containing a file type).
 
-**Remark**:
+**Napomena**:
 
 - For generics, the use of Default is especially useful, since the type of a
   variable may not be known during the declaration of a generic. For more information section 8.7, page 484.

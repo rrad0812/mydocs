@@ -112,7 +112,7 @@ and
 
 The compiler will react with a “invalid character” error when it encounters such constructs, regardless of the -Mtp switch.
 
-**Remark**  
+**Napomena**  
 In TP and Delphi mode, nested comments are not allowed, for maximum compatibility with existing code for those compilers.
 
 ## 1.3 Reserved words
@@ -161,10 +161,10 @@ The following is a list of all modifiers. They are not exactly reserved words in
  softfloat | specialize | static | stdcall | stored | strict | unaligned |
  unimplemented | varargs | virtual | winapi | write | | |
 
-**Remark**  
+**Napomena**  
 Predefined types such as `Byte`, `Boolean` and `constants` such as `maxint` are not reserved words. They are identifiers, declared in the system unit. This means that these types can be redefined in other units. The programmer is however not encouraged to do this, as it will cause a lot of confusion.
 
-**Remark**  
+**Napomena**  
 As of version 2.5.1 it is possible to use reserved words as identifiers by escaping them with a `&` sign. This means that the following is possible
 
 ```pascal
@@ -209,7 +209,7 @@ and
 
 refer to the same procedure.
 
-**Remark**  
+**Napomena**  
 As of version 2.5.1 it is possible to specify a reserved word as an identifier by prepending it with an ampersand (&). This means that the following is possible:
 
 ```pascal
@@ -296,14 +296,14 @@ For integer type constants, Free Pascal supports four formats:
 - **Binary notation** (base 2). A binary number can be specified by preceding it with a percent
   sign (`%)`. Thus, 255 can be specified in binary notation as %11111111.
 
-**Remark**:  
+**Napomena**:  
 `Octal` and `Binary` notation are not supported in TP or Delphi compatibility mode.
 
 ## 1.7 Labels
 
 A label is a name for a location in the source code to which can be jumped to from another location with a goto statement. A Label is a standard identifier or a digit sequence.
 
-**Remark**:  
+**Napomena**:  
 The `-Sg` or `-Mtp` switches must be specified before labels can be used. By default, Free Pascal doesn’t support label and goto statements. The {$GOTO ON} directive can also be used to allow use
 of labels and the goto statement.
 

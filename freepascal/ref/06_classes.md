@@ -55,7 +55,7 @@ Vidljivost različitih sekcija je kao što sledi:
 
 Klase mogu sadržavati `class methods`: to su rutine koje ne zahtevaju instancu. Self identifikator je valida u tim metodama ali pokazuje na class pointer ( VMT ).
 
-**Remark**  
+**Napomena**  
 Kao i kod funkcija i tipova pokazivača, ponekad je potrebna definicija klase unapred. Definicija klase unapred je jednostavno ime klase, sa ključnom rečju Class, kao u sledećem primeru:
 
 ```pascal
@@ -210,7 +210,7 @@ type
 
 Ova definicija je ekvivalentna prehodnoj.
 
-**Remark**  
+**Napomena**  
 Od verzije 3.0 kompajlera, kompajler može preurediti poredak polja u memoriji ako to vodi boljem poravnjavanju i manjoj instanci. To znači, da u instanci polja ne moraju da se pojave u istom poretku kao u deklaraciji. RTTI generisan za klasu će reflektovati ovu promenu.
 
 ### 6.3.2 Polja/varijable klase
@@ -337,7 +337,7 @@ Proširena sintaksa `new` i `dispose` se ne može se koristiti za instanciranje 
 
 Posle toga, kod konstrujtora je izvršen. Konstruktor ima pokazivač na svoje podatke, u `self`.
 
-**Remark**:
+**Napomena**:
 
 - `{$PackRecords }` direktiva takođe se primenjuje na klase, tj. poravnavanje u memoriji
   različitih polja zavisi od ove direktive.
@@ -395,7 +395,7 @@ Posle poziva `FreeAndNil`, varijabla A će sadržavati Nil, izlaz će biti:
 A is still assigned: FALSE
 ```
 
-**Remark**  
+**Napomena**  
 Ako se pojavi izuzetak za vreme izvršavanje konstruktora, destruktor će biti pozvan automatski.
 
 ## 6.6 Metode
@@ -476,7 +476,7 @@ Ovaj novi metod nije virtuelni.
 
 Da bi se ovo omogućilo, kompajler pravi po klasi ( po tipu ) – tabelu sa virtuelnim metodama: VMT (Virtual Method Table). Ovo je jedna tabela sa pokazivačima na svaku virtuelnu metodu: svaki virtuelni metod ima fiksiranu lokaciju u ovaoj tabeli. Kompajler će koristiti ovu tabelu za look up aktuelni metod koji mora biti korišćen u runtime-u. Kada nasledni objekat preklopi metod, ulaz roditeljskog metoda je prepisan u VMT.
 
-**Remark**  
+**Napomena**  
 Ključna reč `virtual` može biti prepisan sa `dynamic` ključnom reči: `dynamic` metode se ponašaju kao virtualne metode. Za razliku od Delphi, u FPC implementatcija `dynamic` metode su jednake za implementaciju kao virtuelne metode.
 
 ### 6.6.4 Class metode
@@ -525,13 +525,16 @@ Takođe se može kreirati konstruktor ili destruktor klase. Oni služe da instan
 
 Ovde su neke činjenice kada koristimo class destructors/constructors:
 
-- Može biti samo jedan konstruktor po klasi. Ime je proizvoljno, ali ne moge imati parametre.
-- Može biti samo jedan konstruktor po klasi. Ime je proizvoljno, ali ne može imati parametre.
+- Može biti samo jedan konstruktor po klasi. Ime je proizvoljno, ali ne moge
+  imati parametre.
+- Može biti samo jedan konstruktor po klasi. Ime je proizvoljno, ali ne može
+  imati parametre.
 - Ni konstruktor ni destruktor ne mogu biti virtual.
-- Konstruktor/Destruktor je pozvan bez obzira na korišćenje klase: čak iako se klasa ne koristi,
+- Konstruktor/Destruktor je pozvan bez obzira na korišćenje klase: čak iako se
+  klasa ne koristi,
   konstruktor i destruktor se pozivaju.
-- Ne postoji garancija poretka pozivanja konstruktora klasa. Za ugnježdene klase, jedini
-  garantovani poredak je da konstruktori ugneždenih klasa se pozivaju posle konstruktora obuhvatne klase, i da se deskriptori se pozivaju u kontra redosledu.
+- Ne postoji garancija poretka pozivanja konstruktora klasa. Za ugnježdene
+  klase, jedini garantovani poredak je da konstruktori ugneždenih klasa se pozivaju posle konstruktora obuhvatne klase, i da se destruktori pozivaju u kontra redosledu.
 
 ```pascal
 {$mode objfpc}{$h+}  
@@ -580,7 +583,7 @@ begin
 end.
 ```
 
-Will, when run, output the following:
+Izlaz će biti:
 
 ```sh
 Class constructor TA  
@@ -589,14 +592,14 @@ Class destructor TA
 
 ### 6.6.6 Statičke (class) metode
 
-FPC knows static class methods in classes: these are class methods that have the Static keyword at the end. These methods behave completely like regular procedures or functions. This means that:
+FPC poznaje static class metode u klasama: to su metode klase koje imaju Static ključnu reč na kraju deklaracije. Ove metode se ponašaju kao regularne procedure ili funkcije. To znači da:
 
-- They do not have a Self parameter. As a result, they cannot access roperties
-  or fields or regular methods.
-- They cannot be virtual.
-- They can be assigned to regular procedural variables.
+- Nemaju Sel parametar. Kao rezultat, ne mogu pristupiti property ili poljima
+  ili regularnim metodama instance klase.
+- Ne mogu biti virtuelne.
+- Mogu biti pridružene kao regularne prodeduralne varijable.
 
-Their use is mainly to include the method in the namespace of the class as opposed to having the procedure in the namespace of the unit. Note that they do have access to all class variables, types etc, meaning something like this is possible:
+Njihovo korišćenje uglavnom uključuje metod u imenski prostor klase, u suprotnosti sa procedurom u imenskom prostoru unita. Primetimo da one imaju pristup svim varijablama klase:
 
 ```pascal
 {$mode objfpc}  
@@ -629,9 +632,9 @@ begin
 end.
 ```
 
-Which will output 123, when run.
+Ovo će imati izlaz 123.
 
-In the implementation of a static class method, the Self identifier is not available. The method behaves as if Self is hardcoded to the declared class, not the actual class with which it was called. In regular class methods, Self contains the Actual class for which the method was called. The following example makes this clear:
+U implementaciji metode statičke klase, Self identifikator nije dostupan. Metod se ponaša kao da je Self čvrsto kodiran za deklarisanu klasu, a ne za stvarnu klasu sa kojom je pozvan. U redovnim metodama klase, Self sadrži aktuelnu klasu za koju je metoda pozvana:
 
 ```pascal
 Type  
@@ -683,52 +686,51 @@ TA.Doit : TB
 TB.Doit : TB
 ```
 
-For the static class method, even though it was called using TB, the class (Self, if it were available) is set to TA, the class in which the static method was defined. For the class method, the class is set to the actual class used to call the method (TB).
+Za metod statičke klase, iako je pozvan pomoću TB, klasa (Self, ako je bila dostupna) je postavljena na TA, klasu u kojoj je statička metoda definisana. Za metod klase, klasa je postavljena na stvarnu klasu koja se koristi za pozivanje metode (TB).
 
-### 6.6.7 Message methods
+### 6.6.7 Message metode
 
-New in classes are message methods. Pointers to message methods are stored in a special table, together with the integer or string constant that they were declared with. They are primarily intended to ease programming of callback functions in several GUI toolkits, such as Win32 or GTK. In difference with Delphi, Free Pascal also accepts strings as message identifiers. Message methods are always virtual.
+Novo u klasama su `message` metode. Pokazivači na `message` metode su smešteni u posebnoj tabeli, zajedno sa integer ili string konstantantom sa kojima su deklarisani. Primarno su namenjeni za lakše programiranje `callback` funkcija u nekim GUI alatima, kao što su Win32 ili GTK. Za razliku od Delfija, Free Pascal prihvata i stringove kao identifikatore poruka. Message metode su uvek virtualne.
 
-As can be seen in the class declaration diagram, message methods are declared with a Message keyword, followed by an integer constant expression.
-
-Additionally, they can take only one var argument (typed or not):
+Dodatno, one mogu uzeti samo jedan var argument (tipiziran ili ne):
 
 ```pascal
   Procedure TMyObject.MyHandler(Var Msg); Message 1;
 ```
 
-The method implementation of a message function is not different from an ordinary method. It is also possible to call a message method directly, but this should not be done. Instead, the TObject.Dispatch method should be used. Message methods are automatically virtual, i. e. they can be overridden in descendent classes.
+Implementacija metode message se ne razlikuje od obične metode. Takođe je moguće direktno pozvati metod message, ali to ne bi trebalo da se radi. Umesto toga, trebalo bi koristiti metod `TObject.Dispatch`.
 
-The TObject.Dispatch method can be used to call a message handler. It is declared in the system unit and will accept a var parameter which must have at the first position a cardinal with the message ID that should be called. For example:
+`TObject.Dispatch` metod može biti korišćen za poziv message handlera. On je deklarisan u `system` unitu i prima var parametar koji mora imati prvu poziciju sa message ID tipa `Cardinal`, koji treba biti pozvan:
 
 ```pascal
 Type  
   TMsg = Record  
     MSGID : Cardinal;  
     Data : Pointer;  
+
 Var  
   Msg : TMSg;  
 
 MyObject.Dispatch (Msg);
 ```
 
-In this example, the Dispatch method will look at the object and all its ancestors (starting at the object, and searching up the inheritance class tree), to see if a message method with message MSGID has been declared. If such a method is found, it is called, and passed the Msg parameter.
+U ovom primeru, Dispatch metod će gledati na objekat i sve njgove pretke, da vidi da li je message metod sa MSGID deklarisan. Ako je metod nađen, on je pozvan, i prosleđen je parameter.
 
-If no such method is found, DefaultHandler is called. DefaultHandler is a virtual method of TObject that doesn’t do anything, but which can be overridden to provide any processing that might be needed. DefaultHandler is declared as follows:
+Ako metod nije nađen, `DefaultHandler` je pozvan. `DefaultHandler` je virtuelna metoda TObject koja ne radi ništa, ali koji može biti preklopljen da omogući bilo koje procesiranje koje je potrebno. `DefaultHandler` je deklarisan ovako:
 
 ```pascal
-procedure DefaultHandler(var message);virtual;
+procedure DefaultHandler(var message); virtual;
 ```
 
-In addition to the message method with a Integer identifier, Free Pascal also supports a message method with a string identifier:
+Kao dodatak message metodu sa Integer identifikator, Free Pascal takođe podržava message metod sa string identifikatorom:
 
 ```pascal
 Procedure TMyObject.MyStrHandler(Var Msg); Message 'OnClick';
 ```
 
-The working of the string message handler is the same as the ordinary integer message handler:
+Princip rada ovog string message hendlera je isti kao ordinarnog integer hendlera:
 
-The `TObject.DispatchStr` method can be used to call a message handler. It is declared in the system unit and will accept one parameter which must have at the first position a short string with the message ID that should be called. For example:
+`TObject.DispatchStr` metod može biti korišćen za poziva message handler. On je deklarisan u `system` unitu i biće prihvaćen var parametar koji mora biti na prvoj poziciji kao `short` string sa message ID koji treba bit pozvan:
 
 ```pascal
 Type  
@@ -741,19 +743,19 @@ Var
 MyObject.DispatchStr (Msg);
 ```
 
-In this example, the DispatchStr method will look at the object and all its ancestors (starting at the object, and searching up the inheritance class tree), to see if a message method with message MsgStr has been declared. If such a method is found, it is called, and passed the Msg parameter.
+U ovom primeru, metoda `DispatchStr` će pogledati objekat i sve njegove pretke (počevši od objekta i pretražujući stablo klasa nasleđivanja), da vidi da li je deklarisan metod message sa porukom MsgStr. Ako se pronađe takav metod, on se poziva i prosleđuje parametar Msg.
 
-If no such method is found, DefaultHandlerStr is called. DefaultHandlerStr is a virtual method of TObject that doesn’t do anything, but which can be overridden to provide any processing that might be needed. DefaultHandlerStr is declared as follows:
+Ako takav metod nije nađen, `DefaultHandlerStr` je pozvan. `DefaultHandlerStr` je virtual metod TObject klase koji ne radi ništa, ali može biti preklopljen bilo koji procesiranjem koje je potrebno. `DefaultHandlerStr` je deklarisan ovako:
 
 ```pascal
   procedure DefaultHandlerStr(var message);virtual;
 ```
 
-### 6.6.8 Using inherited
+### 6.6.8 Korišćenje inherited klauzule
 
-In an overridden virtual method, it is often necessary to call the parent class’ implementation of the virtual method. This can be done with the inherited keyword. Likewise, the inherited keyword can be used to call any method of the parent class.
+U preklopljenom metodu, često je neophodno pozvati implementaciju virtuelnog metoda iz roditeljske klase. To može biti urađeno sa `inherited` ključnom reči. Slično, `inherited` ključna reč može biti korišćen za poziv bilo koje metode roditeljske klase.
 
-The first case is the simplest:
+Prvi slučaj je najjednostavniji:
 
 ```pascal
 Type  
@@ -769,11 +771,11 @@ begin
 end;
 ```
 
-In the above example, the Inherited statement will call Create of TComponent, passing it AOwner as a parameter: the same parameters that were passed to the current method will be passed to the parent’s method. They must not be specified again: if none are specified, the compiler will pass the same arguments as the ones received.
+U prethodnom primeru, `Inherited` izjava će pozvati Create od TComponent, prosledjujući AOwner kao parametarr: isti parametri koji su prosledjeni tekućoj metodi će biti prosledjeni roditeljskoj metodi. Oni ne moraju biti specificirani ponovo, ako ništa nije specificirano, kompajler će proslediti argumente kao one primljene.
 
-If no inherited method with the same name exists, the Inherited will have no effect in this case. The presence of Inherited in this form can thus be interpreted as “call the overridden method if it exists”.
+Ako ne postoji inherited metod istog imena, Inherited neće imati efekta. Prisustvo Inherited metoda u toj formi može biti interpretirano kao “pozovi sve overridden metode ako postoje”.
 
-The second case is slightly more complicated:
+Drugi slučaj je blago komplikovaniji:
 
 ```pascal
 Type  
@@ -794,27 +796,26 @@ begin
 end;
 ```
 
-The CreateNew method will first call TComponent.Create and will pass it AOwner as a parameter. It will not call TMyClass.Create.
+CreateNew metod će prvo pozvati `TComponent.Create` i proslediti AOwner kao parametar. On neće pozvati `TMyClass.Create`.
 
-If no method with the given name exists in parent classes, the compiler will give an error.
+Ako ne postoji metod sa takvim imenom u parent klasi, kompajler će izdati grešku.
 
-Although the examples were given using constructors, the use of inherited is not restricted to constructors, it can be used for any procedure or function or destructor as well.
+Iako su primeri dati korišćenjem konstruktora, korišćenje `inherited` klauzule nije ograničeno na konstruktore, to može biti korišćeno za bilo koju proceduru ili funkciju ili destruktor isto tako.
 
-## 6.7 Properties
+## 6.7 Propertiji
 
-### 6.7.1 Definition
+### 6.7.1 Definicija
 
-Classes can contain properties as part of their fields list. A property acts like a normal field, i. e. its value can be retrieved or set, but it allows to redirect the access of the field through functions and procedures. They provide a means to associate an action with an assignment of or a reading from a class “field”. This allows e. g. checking that a value is valid when assigning, or, when reading, it allows to construct the value on the fly. Moreover, properties can be read-only or write only.
+Klase mogu sadržati propertije kao deo njihove liste polja. Properti je kao normalno polje, tj. njegova vrednost može biti vraćeno ili postavljeno, ali oni omogućavaju redirekciju pristupa polja kroz funkcije ili procedure. Oni obezbeđuju način da se properti poveže sa pisanjem ili čitanjem iz klase „polja“. Ovo omogućava tzv. proveru da li je vrednost važeća prilikom dodeljivanja, ili, prilikom čitanja, omogućava konstruisanje vrednosti u hodu. Štaviše, propertiji mogu biti samo za čitanje ili samo za pisanje.
 
-A read specifier is either the name of a field that contains the property, or the name of a method function that has the same return type as the property type. In the case of a simple type, this function must not accept an argument. In case of an array property, the function must accept a single argument of the same type as the index. In case of an indexed property, it must accept a integer as an argument.
+Read specifikator je ili ime polja koje sadrži property, ili ime metode koja ima isti povratni
+tip kao tip propertija. U slučaju prostih tipova, metoda ne mora da prihvata argument. U slučaju propertija niza metoda ne mora da prihvati argument. U slučaju niza propertija, metoda mora prihvatiti prosti argument istog tipa kao index. S slučaju indexed property, metoda mora prihvatiti integer kao argument.
 
-A read specifier is optional, making the property write-only. Note that class methods cannot be used as read specifiers.
+Specifikator čitanja je opcioni, čineći svojstvo samo za pisanje. Imajte na umu da se metode klase ne mogu koristiti kao specifikacije čitanja.
 
-A write specifier is optional: If there is no write specifier, the property is read-only. A write specifier is either the name of a field, or the name of a method procedure that accepts as a sole argument a variable of the same type as the property. In case of an array property, the procedure must accept two arguments: the first argument must have the same type as the index, the second argument must be of the same type as the property. Similarly, in case of an indexed property, the first parameter must be an integer.
+Specifikator pisanja je opcioni: ako ne postoji specifikacija pisanja, syvojstvo je samo za čitanje. Specifikator pisanja je ili ime polja, ili ime procedure metode koja prihvata kao jedini argument promenljivu istog tipa kao i svojstvo. U slučaju svojstva niza, procedura mora prihvatiti dva argumenta: prvi argument mora imati isti tip kao indeks, drugi argument mora biti istog tipa kao svojstvo. Slično, u slučaju indeksiranog svojstva, prvi parametar mora biti ceo broj.
 
-The section (private, published) in which the specified function or procedure resides is irrelevant. Usually, however, this will be a protected or private method.
-
-For example, given the following declaration:
+Odeljak (privatan, objavljen) u kome se nalazi navedena funkcija ili procedura je irelevantan. Međutim, obično će ovo biti zaštićena ili privatna metoda.
 
 ```pascal
 Type  
@@ -823,9 +824,11 @@ Type
     Field1 : Longint;  
     Field2 : Longint;  
     Field3 : Longint;  
+    
     Procedure  Sety (value : Longint);  
     Function Gety : Longint;  
     Function Getz : Longint;  
+    
     Public  
     Property X : Longint Read Field1 write Field2;  
     Property Y : Longint Read GetY Write Sety;  
@@ -834,33 +837,39 @@ Type
 
 Var  
   MyClass : TMyClass;
+```
 
-The following are valid statements:
-WriteLn ('X : ',MyClass.X);  
+Sledeće su validne izjave:
+
+```pascal
+WriteLn ('X : ', MyClass.X);  
 WriteLn ('Y : ',MyClass.Y);  
 WriteLn ('Z : ',MyClass.Z);  
 MyClass.X := 0;  
 MyClass.Y := 0;
 ```
 
-But the following would generate an error:
+Ali sledeće će generisati grešku:
 
 ```pascal
 MyClass.Z := 0;
 ```
 
-because Z is a read-only property.
+jer je Z read-only property.
 
-What happens in the above statements is that when a value needs to be read, the compiler inserts a call to the various getNNN methods of the object, and the result of this call is used. When an assignment is made, the compiler passes the value that must be assigned as a parameter to the various setNNN methods.
+Ono što se dešava u gornjim izjavama je da kada vrednost treba da se pročita, kompajler ubacuje poziv različitim getNNN metodama objekta i koristi se rezultat ovog poziva. Kada se izvrši dodela, prevodilac prosleđuje vrednost koja se mora dodeliti kao parametar različitim setNNN metodama.
 
-Because of this mechanism, properties cannot be passed as var arguments to a function or procedure, since there is no known address of the property (at least, not always).
+Zbog ovog mehanizma, svojstva se ne mogu prosleđivati kao var argumenti funkciji ili proceduri, pošto ne postoji poznata adresa svojstva (barem, ne uvek).
 
-### 6.7.2 Indexed properties
+### 6.7.2 Indeksirani properti
 
-If the property definition contains an index, then the read and write specifiers must be a function and a procedure. Moreover, these functions require an additional parameter : An integer parameter. This allows to read or write several properties with the same function. For this, the properties must have the same type. The following is an example of a property with an index:
+Ako definicija propertij sadrži indeks, tada Read i Write specifikatori motaju biti metode. Štaviše, te metode zahtevaju dodatni parametar: integer parametar. To mogućava da read ili write ima nekoliko prpertia sa istom metodom. Zbog toga propertiji moraju imati isti tip.
+
+Sledeći primer propertija sa indeksom:
 
 ```pascal
 {$mode objfpc}  
+
 Type  
   TPoint = Class(TObject)  
   Private  
@@ -870,7 +879,7 @@ Type
   Public  
     Property X : Longint index 1 read GetCoord Write SetCoord;  
     Property Y : Longint index 2 read GetCoord Write SetCoord;  
-    Property Coords[Index : Integer]:Longint Read GetCoord;  
+    Property Coords[Index : Integer]: Longint Read GetCoord;  
   end;  
 
 Procedure TPoint.SetCoord (Index : Integer; Value : Longint);  
@@ -897,19 +906,19 @@ begin
   P.X := 2;  
   P.Y := 3;  
   With P do  
-    WriteLn ('X=',X,' Y=',Y);  
+    WriteLn ('X=', X,' Y=', Y);  
 end.
 ```
 
-When the compiler encounters an assignment to X, then SetCoord is called with as first parameter the index (1 in the above case) and with as a second parameter the value to be set. Conversely, when reading the value of X, the compiler calls GetCoord and passes it index 1. Indexes can only be integer values.
+Kada kompajler naiđe na dodeljivanje X-u, tada se SetCoord poziva sa kao prvim parametrom indeksom (1 u gornjem slučaju) i kao drugim parametrom sa vrednošću koju treba postaviti. Suprotno tome, kada čita vrednost X, kompajler poziva GetCoord i prosleđuje mu indeks 1. Indeksi mogu biti samo celobrojne vrednosti.
 
-### 6.7.3 Array properties
+### 6.7.3 Niz properti
 
-Array properties also exist. These are properties that accept an index, just as an array does. The index can be one-dimensional, or multi-dimensional. In difference with normal (static or dynamic) arrays, the index of an array property doesn’t have to be an ordinal type, but can be any type.
+Niz properti takođe postoje. Ovo su propertiji koja prihvataju indeks, baš kao što to čini niz. Indeks može biti jednodimenzionalan ili višedimenzionalan. Za razliku od normalnih (statičkih ili dinamičkih) nizova, indeks niz propertija ne mora biti redni tip, ali može biti bilo koji tip.
 
-A read specifier for an array property is the name method function that has the same return type as the property type. The function must accept as a sole argument a variable of the same type as the index type. For an array property, one cannot specify fields as read specifiers.
+Specifikator čitanja za niz propertije je metoda koja ima isti tip povratka kao tip svojstva. Metoda mora da prihvati kao jedini argument promenljivu istog tipa kao tip indeksa. Za niz properti, ne mogu se navesti polja kao specifikatori čitanja.
 
-A write specifier for an array property is the name of a method procedure that accepts two arguments: the first argument has the same type as the index, and the second argument is a parameter of the same type as the property type. As an example, see the following declaration:
+Specifikator pisanja za niz properti je ime metode koja prihvata dva argumenta: prvi argument ima isti tip kao indeks, a drugi argument je parametar istog tipa kao i tip svojstva. Kao primer, pogledajte sledeću deklaraciju:
 
 ```pascal
 Type  
@@ -926,24 +935,27 @@ Type
 
 Var  
   AIntList : TIntList;
+```
 
-Then the following statements would be valid:
+Tada bi važile sledeće izjave:
+
+```pascal
 AIntList.Items[26] := 1;  
-AIntList.StrItems['twenty-five'] := 'zero';  
+AIntList.StrItems['twenty-five'] := 'zero';   
 WriteLn ('Item 26 : ',AIntList.Items[26]);  
 WriteLn ('Item 25 : ',AIntList.StrItems['twenty-five']);
 ```
 
-While the following statements would generate errors:
+Dok bi sledeće izjave generisale greške:
 
 ```pascal
 AIntList.Items['twenty-five'] := 1;  
 AIntList.StrItems[26] := 'zero';
 ```
 
-Because the index types are wrong.
+Zato što su tipovi indeksa pogrešni.
 
-Array properties can be multi-dimensional:
+Niz properti mogu biti višedimenzionalna:
 
 ```pascal
 Type  
@@ -952,82 +964,82 @@ Type
     Function GetCell (I,J : Longint) : String;  
     Procedure SetCell (I,J : Longint; Value : String);  
   Public  
-    Property Cellcs [Row,Col : Longint] : String Read GetCell  
-                                            Write SetCell;  
+    Property Cellcs [Row,Col : Longint] : String Read GetCell Write SetCell;  
   end;
 ```
 
-If there are N dimensions, then the types of the first N arguments of the getter and setter must correspond to the types of the N index specifiers in the array property definition.
+Ako postoji N dimenzija, onda tipovi prvih N argumenata getera i setera moraju odgovarati tipovima N indeksnih specifikacija u definiciji svojstva niza.
 
-### 6.7.4 Default properties
+### 6.7.4 Default propertii
 
-Array properties can be declared as default properties. This means that it is not necessary to specify the property name when assigning or reading it. In the previous example, if the definition of the items property would have been
+Niz propertii mogu biti deklarisani kao podrazumevani propertii. To znači da nije potrebno navesti ime propertija prilikom dodeljivanja ili čitanja. U prethodnom primeru, ako bi definicija propertija stavke bila
 
 ```pascal
 Property Items[i : Longint]: Longint Read GetInt Write SetInt; Default;
 ```
 
-Then the assignment
+Tada bi pridruživanje
 
 ```pascal
 AIntList.Items[26] := 1;
 ```
 
-Would be equivalent to the following abbreviation.
+bilo ekvivalentno:
 
 ```pascal
 AIntList[26] := 1;
 ```
 
-Only one default property per class is allowed, but descendent classes can redeclare the default property.
+Samo jedan podrazumevani properti po klasi je dozvoljen, ali izvedene klase mogu redeklarisati podrzumevani properti.
 
-### 6.7.5 Published properties
+### 6.7.5 Objavljena svojstva
 
-Classes compiled in the {$M+} state (such as TPersistent from the classes unit) can have a published section. For methods, fields and properties in the Published section, the compiler generates RTTI information (Run Time Type Information), which can be used to query the defined methods, fields and properties in the published section(s). The typinfo unit contains the necessary routines to query this information, and this unit is used in the streaming system in FPC in the classes unit.
+Klase kompajlirane u stanju {$M+} (kao što je TPersistent iz unita class) mogu imati `Published` odeljak. Za metode, polja i svojstva u odeljku `Published`, kompajler generiše RTTI informacije (Informacije o tipu vremena rada), koje se mogu koristiti za ispitivanje definisanih metoda, polja i svojstava u objavljenim odeljcima. Unit `typeinfo` sadrži neophodne rutine za ispitivanje ovih informacija, a ovaj unit se koristi u sistemu strimovanja u FPC u unitu `class`.
 
-The RTTI is generated regardless of what the read and write specifiers are: fields, functions/procedures or indexed functions/procedures.
+RTTI se generiše bez obzira na to šta su specifikacije čitanja i pisanja: polja, funkcije/procedure ili indeksirane funkcije/procedure.
 
-Only class-typed fields can be published. For properties, any simple property whose size is less than or equal to a pointer, can be declared published: floats, integers, sets (with less than 32 distinct elements), enumerated, classes or dynamic arrays (not array properties).
+Mogu se objaviti samo polja tipizirana u klasi. Za propertije, svaki jednostavni properti čija je veličina manja ili jednaka pokazivaču, može se proglasiti objavljenim: float, celi brojevi, skupovi (sa manje od 32 različita elementa), nabrojani, klase ili dinamički nizovi (ne niz properti).
 
-Although run-time type information is available for other types, these types cannot be used for a property or field definition in a published section. The information is present to describe for example arguments of procedures or functions.
+Iako su informacije o tipu vremena izvršavanja dostupne za druge tipove, ovi tipovi se ne mogu koristiti za definiciju svojstva ili polja u objavljenom odeljku. Informacije su prisutne da opisuju, na primer, argumente procedura ili funkcija.
 
-### 6.7.6 Storage information
+### 6.7.6 Informacije o skladištenju
 
-The compiler offers two specifiers to control whether a property is streamed using a streaming mechanism, such as the one implemented in the classes unit. These specifiers write extra information to the generated RTTI, which is later used in the streaming system:
+Kompajler nudi dva specifikatora za kontrolu da li se properti strimuje pomoću mehanizma strimovanja, kao što je onaj koji je implementiran u unitu class. Ovi specifikatori pišu dodatne informacije u generisani RTTI, koji se kasnije koristi u sistemu za striming:
 
-- The stored specifier.
-- The default specifier and its counterpart nodefault.
+- Sačuvana specifikacija.
+- Podrazumevana specifikacija i njen pandan - nodefault.
 
-These two specifiers are both evaluated to decide whether a property must be streamed.
+Oba ova specifikatora se procenjuju da bi se odlučilo da li se svojstvo mora strimovati.
 
-The argument to the stored specifier should be either a boolean constant, a boolean field of the class, or a parameterless function which returns a boolean result. If the argument of the stored specifier evaluates to False, the property will not be streamed.
+Argument uskladištene specifikacije treba da bude ili logička konstanta, logičko polje klase ili funkcija bez parametara koja vraća logički rezultat. Ako je argument uskladištene specifikacije procenjen na False, properti neće biti strimovano.
 
-Remark Absence of a stored specifier is equivalent to stored True.
+**Napomena**  
+Odsustvo uskladištene specifikacija je ekvivalentno sačuvanom True.
 
-If the evaluation of Stored resulted in True, the default for a property is considered:
+Ako je procena `Stored` dovela do True, podrazumevana vrednost svojstva se smatra:
 
-The default specifier can be specified for ordinal types and sets. Properties that have as value this default value, will not be written to the stream by the streaming system, even if Stored is True. The default value is stored in the RTTI that is generated for the class.
+- Podrazumevana specifikacija može se navesti za redne tipove i skupove. Propertii koja kao
+  vrednost imaju ovu podrazumevanu vrednost, sistem za striming neće upisati u tok, čak i ako je Stored vrednost True. Podrazumevana vrednost se čuva u RTTI-u koji se generiše za klasu.
 
-String, floating-point and pointer properties have implicit default value of empty string, 0 or nil, respectively. Ordinal and set properties have no implicit default value.
+- Properti stringa, pokretne tačke i pokazivača imaju implicitnu podrazumevanu vrednost praznog
+  stringa, 0 ili nil, respektivno. Svojstva rednog i skupa nemaju implicitnu podrazumevanu vrednost.
 
-The nodefault specifier must be used to indicate that a property has no default value. The effect is that the value of this property is always written to the stream when streaming the property, if stored is True.
+- Specifikator `nodefault` mora da se koristi da označi da svojstvo nema podrazumevanu vrednost.
+  Efekat je da se vrednost ovog svojstva uvek upisuje u tok prilikom strimovanja svojstva, ako je sačuvana vrednost True.
 
-**Remark**:
+**Primedba**:
 
-- When the class is instantiated, the default value is not automatically applied
-  to the property, it is the responsibility of the programmer to do this in the constructor of the class.
-- The value -2147483648 cannot be used as a default value, as it is used
-  internally to denote nodefault.
-- It is not possible to specify a default for array properties.
-- It is not possible to specify the Stored directive for array properties.
-- All storage specifiers can be overridden in descendent classes.
-  
-  property Test stored False;
-
-- The nodefault specifier can be used to override the implicit default specifier
-  of string, floating-point and pointer properties.
-- The streaming mechanism described here is the one implemented in the classes
-  unit of the RTL. Other streaming mechanisms can be implemented, and they can use the RTTI information in a different way.
+- Kada se klasa instancira, podrazumevana vrednost se ne primenjuje automatski za properti,
+  Odgovornost je programera da to uradi u konstruktoru klase.
+- Vrednost -2147483648 se ne može koristiti kao podrazumevana vrednost, jer se koristi interno za
+  označavanje nodefault.
+- Nije moguće odrediti podrazumevanu vrednost za niz proprtije.
+- Nije moguće specificirati Stored direktivu za niz propertije.
+- Sve specifikacije skladištenja mogu biti zamenjene u klasama potomaka.
+- Specifikator nodefault može da se koristi za zamenu implicitno podrazumevane specifikacije
+  propertia niza, pokretnog zareza i pokazivača.
+- Mehanizam striminga koji je ovde opisan je onaj koji je implementiran u klasama unita RTL-a.
+  Mogu se implementirati i drugi mehanizmi striminga, koji mogu koristiti RTTI informacije na drugačiji način.
 
 ### 6.7.7 Overriding and redeclaring properties
 
@@ -1036,6 +1048,14 @@ Properties can be both overridden and redeclared in descendent classes.
 Property redeclaration takes action if the property type is declared, otherwise it is property override. The only difference is that property override replaces or extends the inherited modifiers with the new modifiers, whereas property redeclaration hides all inherited modifiers that are not present in the redeclaration. The type of the redeclared property does not have to be the same as the parent”s class property type.
 
 The example below demonstrates the difference between property override and redeclaration.
+
+### 6.7.7 Preklapanje i ponovno deklarisanje propertija
+
+Propertiji se mogu i preklopiti i ponovo deklarisati u klasama potomaka.
+
+Ponovna deklaracija svojstva preduzima radnju ako je tip svojstva deklarisan, u suprotnom je preklapanje svojstva. Jedina razlika je u tome što preklapanje propertija zamenjuje ili proširuje nasleđene modifikatore novim modifikatorima, dok ponovna deklaracija svojstva sakriva sve nasleđene modifikatore koji nisu prisutni u ponovnoj deklaraciji. Tip ponovo deklarisanog propertija ne mora da bude isti kao tip propertija nadređene klase.
+
+Primer ispod pokazuje razliku između preklapanja svojstva i ponovne deklaracije.
 
 ```pascal
 type  
@@ -1059,14 +1079,20 @@ type
   end;
 ```
 
-TP1 extends property P with a default value, TPReadOnly redeclares property P as read-only.
+TP1 proširuje property P sa podrazumevanom vrednosšću, TPReadOnly redeklariše property P kao read-only.
 
-**Remark**  
+**Napomena**  
 TP1 should set the default value of P to 1 in its constructor.
 
 In case of both property redeclaration and property override, the access to the getter and setter is always static. I.e. property override acts only on the RTTI of the object and is not to be confused with method override.
 
 The keyword “inherited” can be used to refer to the parent definition of the property. For example consider the following code:
+
+TP1 treba da postavi podrazumevanu vrednost P na 1 u svom konstruktoru.
+
+U slučaju i ponovne deklaracije svojstva i zaobilaženja svojstva, pristup geteru i seteru je uvek statičan. tj. nadjačavanje svojstva deluje samo na RTTI objekta i ne treba ga mešati sa zamenom metoda.
+
+Ključna reč `inherited` može se koristiti za upućivanje na roditeljsku definiciju svojstva. Na primer, razmotrite sledeći kod:
 
 ```pascal
 type  
@@ -1099,9 +1125,9 @@ begin
 end;
 ```
 
-TClassA redefines P as a character property instead of an integer property, but uses the parent”s P property to store the value.
+TClassA redefiniše P kao properti karaktera umesto celobrojnog propertija, ali koristi properti P roditelja za čuvanje vrednosti.
 
-Care must be taken when using virtual get/set routines for a property: setting the inherited property still observes the normal rules of inheritance for methods. Consider the following example:
+Mora se voditi računa kada se koriste virtuelne rutine get/set za properti: podešavanje nasleđenog propertija i dalje poštuje normalna pravila nasleđivanja metoda. Razmotrite sledeći primer:
 
 ```pascal
 type  
@@ -1127,9 +1153,9 @@ begin
 end;
 ```
 
-In this case, when setting the inherited property P, the implementation TClassA.SetP1 will be called, because the SetP1 method is overridden.
+U ovom slučaju, prilikom postavljanja nasleđenog svojstva P, biće pozvana implementacija TClassA.SetP1, jer je metod SetP1 poništen.
 
-If the parent class implementation of SetP1 must be called, then this must be called explicitly:
+Ako se implementacija nadređene klase SetP1 mora pozvati, onda se ovo mora eksplicitno pozvati:
 
 ```pascal
 constructor TClassA.Create;  
@@ -1138,7 +1164,7 @@ begin
 end;
 ```
 
-The redeclared ancestor properties are also available from inside and outside the descendant object with a direct cast to the ancestor:
+Ponovo deklarisana svojstva predaka su takođe dostupna iznutra i izvan objekta potomka sa direktnim prebacivanjem na pretka:
 
 ```pascal
 function GetP(const AClassA: TClassA): Integer;  
@@ -1147,7 +1173,7 @@ begin
 end;
 ```
 
-## 6.8 Class properties
+## 6.8 Klasni propertiji
 
 Class properties are very much like global property definitions. They are associated with the class, not with an instance of the class.
 
@@ -1156,6 +1182,14 @@ A consequence of this is that the storage for the property value must be a class
 Class properties can have a getter and setter method like regular properties, but these must be static methods of the class.
 
 That means that the following contains a valid class property definition:
+
+Propertiji klase su veoma slični definicijama globalnih svojstava. Oni su povezani sa klasom, a ne sa instancom klase.
+
+Posledica ovoga je da skladište za vrednost svojstva mora biti var klase, a ne redovno polje ili promenljiva klase: normalna polja ili promenljive se čuvaju u instanci klase.
+
+Svojstva klase mogu imati metod grtere i setere kao obična svojstva, ali to moraju biti statičke metode klase.
+
+To znači da sledeće sadrži važeću definiciju svojstva klase:
 
 ```pascal
 TA = Class(TObject)  
@@ -1170,15 +1204,15 @@ public
 end;
 ```
 
-The reason for the requirement is that a class property is associated to the particular class in which it is defined, but not to descendent classes. Since class methods can be virtual, this would allow descendent classes to override the method, making them unsuitable for class property access.
+Razlog za zahtev je da je svojstvo klase povezano sa određenom klasom u kojoj je definisano, ali ne i sa klasama potomcima. Pošto metode klase mogu biti virtuelne, to bi omogućilo klasama potomaka da zamene metod, čineći ih neprikladnim za pristup svojstvima klase.
 
-## 6.9 Nested types, constants and variables
+## 6.9 Ugnežđeni tipovi, konstante i promenljive
 
-A class definition can contain a type section, const section and a variable section. The type and constant sections act as a regular type section as found in a unit or method/function/procedure implementation. The variables act as regular fields of the class, unless they are in a class var section, in which case they act as if they were defined at the unit level, within the namespace of the class (section 6.3, page 308).
+Definicija klase može da sadrži type sekciju, const sekciju i var sekciju. Sekcije type i const deluju kao obični odeljak type koji se nalazi u implementaciji jedinice ili metode/funkcije/procedure. Var deluju kao redovna polja klase, osim ako se ne nalaze u sekciji var klase, u kom slučaju se ponašaju kao da su definisane na nivou unita, unutar imenskog prostora klase (odeljak 6.3, strana 308).
 
-However, the visibility of these sections does play a role: private and protected (strict or not) constants, types and variables can only be used as far as their visibility allows.
+Međutim, vidljivost ovih sekcija igra ulogu: privatne i zaštićene (stroge ili ne) konstante, tipovi i promenljive mogu se koristiti samo onoliko koliko njihova vidljivost dozvoljava.
 
-Public types can be used outside the class, by their full name:
+Javni tipovi se mogu koristiti van klase, po svom punom imenu:
 
 ```pascal
 type  
@@ -1202,7 +1236,7 @@ begin
 end.
 ```
 
-Whereas
+gde je
 
 ```pascal
 type  
@@ -1227,13 +1261,13 @@ begin
 end.
 ```
 
-Will not compile and will return an error:
+Neće se kompajlirati i pokrenuće grešku:
 
 ```pascal
 tt.pp(20,10) Error: identifier idents no member "TEnum"
 ```
 
-Note that for writeable constants, the same rules apply as for class variables with regard to scope and overriding in descendents:
+Imajte na umu da za konstante koje se mogu pisati važe ista pravila kao i za varijable klase u pogledu opsega i preglasavanja u potomcima:
 
 ```pascal
 {$mode delphi}{$J+}  
@@ -1253,13 +1287,13 @@ begin
 end.
 ```
 
-Will write
+Će ispisati:
 
 ```sh
  2 2 2
 ```
 
-But
+Ali
 
 ```pascal
 {$mode delphi}{$J+}  
@@ -1283,7 +1317,7 @@ begin
 end.
 ```
 
-Will write
+će ispisati:
 
 ```sh
  0 1 2
@@ -1551,6 +1585,216 @@ end;
 **Zaključak:** Za novi kod, **koristi Classes**. Objects su tu za legacy kod ili specifične low-level slučajeve.
 
 Detaljnije o Objects-ima vidi u [05_objects.md](05_objects.md).
+
+## 6.16 Self u Class metodama - praktična upotreba
+
+Kada class metoda (bez `static`) ima Self parametar, Self pokazuje na **VMT (Virtual Method Table)** te klase, što omogućava moćne programske obrasce.
+
+### 6.16.1 Self u različitim kontekstima
+
+ Vrsta metode | Self pokazuje na |
+ ------------ | ---------------- |
+ **Obična metoda instance** | **Instancu objekta** (konkretni objekat u memoriji - podaci) |
+ **Class metoda** | **VMT (Virtual Method Table)** - class pointer, metapodatke klase |
+ **Static class metoda** | **Nema Self** - ili se tretira kao hardcoded klasa |
+
+### 6.16.2 Primer razlike u Self-u
+
+```pascal
+Type
+  TExample = Class
+    FData: Integer;                 // Instance polje
+    class var FClassData: Integer;  // Class polje
+    
+    procedure InstanceMethod;       // Self → instanca (objekat sa podacima)
+    class procedure ClassMethod;    // Self → VMT (metapodaci klase)
+    class procedure StaticMethod; static;   // Nema Self
+  end;
+
+procedure TExample.InstanceMethod;
+begin
+  FData := 10;              // OK - Self.FData (instance podataka)
+  WriteLn(Self.ClassName);  // Self je instanca, ali može pristupiti VMT-u
+end;
+
+class procedure TExample.ClassMethod;
+begin
+  // FData := 10;           // GREŠKA - Self je VMT, ne instanca!
+  FClassData := 20;         // OK - class podatak
+  WriteLn(Self.ClassName);  // Self je VMT (class pointer)
+end;
+
+class procedure TExample.StaticMethod;
+begin
+  // Self;                  // GREŠKA - nema Self!
+  FClassData := 30;         // OK - pristup kroz ime klase
+end;
+```
+
+### 6.16.3 Praktična upotreba
+
+1. **Factory Pattern**
+
+   Self omogućava kreiranje instance prave klase bez hardcoding-a:
+
+   ```pascal
+   Type
+     TAnimal = Class
+       class function CreateAnimal: TAnimal;  // Bez virtual!
+     end;
+     
+     TDog = Class(TAnimal)
+     end;
+     
+     TCat = Class(TAnimal)
+     end;
+   
+   class function TAnimal.CreateAnimal: TAnimal;
+   begin
+     Result := Self.Create;  // Self je VMT - kreira pravu klasu!
+   end;
+   
+   var
+     Dog: TAnimal;
+     Cat: TAnimal;
+   begin
+     Dog := TDog.CreateAnimal;  // Self = TDog VMT → kreira TDog!
+     Cat := TCat.CreateAnimal;  // Self = TCat VMT → kreira TCat!
+     
+     WriteLn(Dog.ClassName);    // "TDog"
+     WriteLn(Cat.ClassName);    // "TCat"
+   end;
+   ```
+
+   **Ključna prednost:** Isti kod radi za sve potomke bez override-ovanja!
+
+2. **Registracija klasa**
+
+   ```pascal
+   Type
+     TForm = Class
+       class procedure RegisterForm;
+     end;
+   
+   class procedure TForm.RegisterForm;
+   begin
+     // Self.ClassName = ime forme koja poziva
+     WriteLn('Registering: ', Self.ClassName);
+     FormRegistry.Add(Self.ClassName, Self);
+   end;
+   
+   // Automatski registruje pravu klasu:
+   TLoginForm.RegisterForm;   // "Registering: TLoginForm"
+   TMainForm.RegisterForm;    // "Registering: TMainForm"
+   ```
+
+3. **Type checking i RTTI**
+
+   ```pascal
+   class function TAnimal.CanFly: Boolean;
+   begin
+     Result := Self.InheritsFrom(TBird);  // Da li je ova klasa ptica?
+   end;
+   
+   class function TAnimal.GetSize: Integer;
+   begin
+     Result := Self.InstanceSize;  // Kolika je instanca ove klase?
+   end;
+   
+   class function TAnimal.GetInfo: string;
+   begin
+     Result := Format('Class: %s, Size: %d bytes', [Self.ClassName, Self.InstanceSize]);
+   end;
+   ```
+
+4. **Singleton Pattern**
+
+   ```pascal
+   Type
+     TDatabase = Class
+     private
+       class var FInstance: TDatabase;
+     public
+       class function GetInstance: TDatabase;
+     end;
+   
+   class function TDatabase.GetInstance: TDatabase;
+   begin
+     if not Assigned(FInstance) then
+       FInstance := Self.Create;  // Kreira pravu klasu (može biti potomak)!
+     Result := FInstance;
+   end;
+   
+   // Korišćenje:
+   var
+     DB: TDatabase;
+   begin
+     DB := TMySQL.GetInstance;       // Kreira TMySQL singleton
+     DB := TPostgreSQL.GetInstance;  // Kreira TPostgreSQL singleton
+   end;
+   ```
+
+### 6.16.4 Poređenje: Sa i bez Self-a
+
+**Bez Self-a (LOŠE - ponavljanje koda):**
+
+```pascal
+class function TDog.CreateAnimal: TAnimal;
+begin
+  Result := TDog.Create;  // Hardcoded - mora override u svakom potomku
+end;
+
+class function TCat.CreateAnimal: TAnimal;
+begin
+  Result := TCat.Create;  // Ponavljanje koda!
+end;
+```
+
+**Sa Self-om (DOBRO - generički kod):**
+
+```pascal
+// Jedan metod u roditeljskoj klasi:
+class function TAnimal.CreateAnimal: TAnimal;
+begin
+  Result := Self.Create;  // Self automatski zna koja je klasa!
+end;
+
+// Svi potomci dobijaju funkcionalnost besplatno:
+Dog := TDog.CreateAnimal;    // Self = TDog
+Cat := TCat.CreateAnimal;    // Self = TCat
+Bird := TBird.CreateAnimal;  // Self = TBird
+```
+
+### 6.16.5 VMT (Virtual Method Table) - šta sadrži?
+
+**VMT sadrži metapodatke o klasi**:
+
+- Pokazivače na virtuelne metode
+- Informacije o tipu (ClassName, ClassType, ClassParent)
+- Class polja (class var)
+- RTTI (Run-Time Type Information)
+- Veličinu instance (InstanceSize)
+
+**Zato class metoda sa Self-om može**:
+
+- Pristupiti class poljima
+- Pozvati class metode
+- Koristiti ClassName, ClassType, InheritsFrom
+- Kreirati instance prave klase (Self.Create)
+- **ALI NE MOŽE pristupiti poljima poljima** (jer Self nije instanca)
+
+### 6.16.6 Kada koristiti Self u class metodi?
+
+ Situacija | Da li treba Self? | Koristi |
+ ---------- | ----------------- | ------- |
+ Factory metod koji kreira instance | **DA** | `Self.Create` |
+ Registracija klasa u registry | **DA** | `Self.ClassName` |
+ Type checking (InheritsFrom) | **DA** | `Self.InheritsFrom(...)` |
+ Pomoćna matematička funkcija | **NE** | `static` metod |
+ Konverziona funkcija | **NE** | `static` metod |
+ RTTI operacije | **DA** | `Self.InstanceSize` |
+
+**Pravilo:** Ako metod zavisi od **toga koja klasa ga poziva**, treba Self (ne-static class metod). Ako ne zavisi, koristi static.
 
 [prev][f1] [content][f0] [next][f2]
 

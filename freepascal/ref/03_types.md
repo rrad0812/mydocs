@@ -21,7 +21,7 @@ With the exception of floating point value types, all base types are `ordinal` t
 - **Ordinal values** have a smallest possible value. Trying to apply the `Pred` function on the smallest possible value will generate a `range check error` if range checking is enabled `{R+}`.
 - **Ordinal values** have a largest possible value. Trying to apply the `Succ` function on the largest possible value will generate a `range check error` if range checking is enabled `{R+}`.
 
-**Remark**:  
+**Napomena**:  
 `Int64` and `QWord` are considered ordinal types on 64-bit CPUs. On 32-bit types they have some of the characteristics of ordinals, but they cannot be used e. g. in `for` loops.
 
 #### 3.1.1.1 Integers
@@ -82,7 +82,7 @@ Table 3.3: Integer constant type mapping
 
 That means constants in the range -128..127 are mapped to shortint, constants in range 128..255 are mapped to byte, etc. Constants in the range 2147483647..high(cardinal) are parsed as cardinals, and all decimal constants which do not fit either of the above ranges are parsed as 64-bit integer constants.
 
-**Remark**  
+**Napomena**  
 In newer Delphi versions, the longint type is platform and CPU dependent. This is not so in FPC, where longint is 32-bit on all platforms.
 
 As a pascal compiler, Free Pascal does automatic type conversion and upgrading in expressions where different kinds of integer types are used:
@@ -125,7 +125,7 @@ Assuming B to be of type `Boolean`, the following are valid assignments:
 
 Boolean expressions are also used in conditions.
 
-**Remark**:  
+**Napomena**:  
 In Free Pascal, boolean expressions are by default always evaluated in such a way that when the result is known, the rest of the expression will no longer be evaluated: this is called short-cut boolean evaluation.
 
 In the following example, the function Func will never be called, which may have strange side-effects.
@@ -351,7 +351,7 @@ Type
 
 `NameString` can contain a maximum of 10 characters. While `StreetString` can contain up to 255 characters.
 
-**Remark**  
+**Napomena**  
 Short strings have a maximum length of 255 characters: when specifying a maximum length, the maximum length may not exceed 255. If a length larger than 255 is attempted, then the compiler will give an error message:
 
 ```pascal
@@ -372,7 +372,7 @@ If no codepage is given in the declaration, the system codepage is assumed. What
 
 This is all handled transparently, i. e. they can be manipulated as a normal short string. Ansistrings can be defined using the predefined AnsiString type or using the string keyword in mode {$H+}.
 
-**Remark**  
+**Napomena**  
 The null-termination does not mean that null characters (char(0) or #0) cannot be used: the null-termination is not used internally, but is there for convenience when dealing with external routines that expect a null-terminated string (as most C routines do).
 
 If the `{$H}` switch is on, then a string definition using the regular String keyword that doesn’t contain a length specifier, will be regarded as an ansistring as well. If a length specifier is present, a short string will be used, regardless of the {$H} setting.
@@ -393,7 +393,7 @@ If the reference count of a string reaches zero, then the memory occupied by the
 
 When an ansistring is declared, the Free Pascal compiler initially allocates just memory for a pointer, not more. This pointer is guaranteed to be Nil, meaning that the string is initially empty. This is true for local and global ansistrings or ansistrings that are part of a structure (arrays, records or objects).
 
-**Remark**  
+**Napomena**  
 Note that a function result in this regard is considered equivalent to a var parameter and hence will not be initialized to Nil. As a consequence it may point to a legitimate non-Nil ansistring when the function begins.
 
 This does introduce an overhead. For instance, declaring:
@@ -530,13 +530,13 @@ This automated conversion of code pages can slow down the code seriously, so car
 
 The code page of a string can be set explicitly using the SetCodePage routine of the system unit. Calling this routine will convert the value of a string to the requested code page.
 
-**Remark**:  
+**Napomena**:  
 Code page conversions can result in loss of data: if a certain character cannot be represented in the target code page, the output for that character is undefined.
 
-**Remark**  
+**Napomena**  
 When a string whose static code page equals the source file code page, to anything with code page CP_ACP (i. e., a plain ansistring, shortstring, or pchar), no conversion will be performed either. No code page conversion is done when s can result in loss of data: if a certain character cannot be represented in the target code page, the output for that character is undefined.
 
-**Remark**  
+**Napomena**  
 Code page support requires quite some helper routines, these are implemented in the unicodestring manager. On windows, the system routines are used for this. On Unices, the cwstring unit can be used to link to the C library and use the C library conversion support. Alternatively, the fpwidestring unit contains a unicodestring manager implemented natively in Object Pascal.
 
 ### 3.2.8 RawByteString
@@ -1862,7 +1862,7 @@ Class instances containing managed types are also initialized, but the class ins
 
 Variables of managed types will also be finalized: this means, in general, that their reference count will be decreased at the latest at the end of the current scope.
 
-**Remark**:  
+**Napomena**:  
 Note that no assumption should be made about the exact time of this finalization. All that is guaranteed that they are finalized when they go out of scope.
 
 [prev][f1] [content][f0] [next][f2]

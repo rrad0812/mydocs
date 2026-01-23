@@ -141,7 +141,7 @@ type
   TRealPointSet = specialize TPointSet<extended>;
 ```
 
-**Remark**  
+**Napomena**  
 A word on visibility: the template types `T` or `_T` are available as strict private types. That means that the types are not available in the descendent classes, unless they are made available through some protected or private mechanism, as in the following example:
 
 ```pascal
@@ -219,7 +219,7 @@ and
 
 In these definitions, the specialization is only performed when the generic type itself is specialized, and at that time, the types are known.
 
-**Remark**  
+**Napomena**  
 It is not possible to make a forward definition of a class which is a specialization of a generic, i.e. the following will not compile:
 
 ```pascal

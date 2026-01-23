@@ -35,7 +35,7 @@ It contains a constructor/destructor pair, and a method to get and set a caption
 
 Remark In MacPas mode, the Object keyword is replaced by the class keyword for compatibility with other pascal compilers available on the Mac. That means that objects cannot be used in MacPas mode.
 
-**Remark**  
+**Napomena**  
 Free Pascal also supports the `packed` object. This is the same as an object, only the elements (fields) of the object are byte-aligned, just as in the packed record. The declaration of a packed object is similar to the declaration of a packed record:
 
 ```pascal
@@ -640,52 +640,52 @@ Virtual metod u roditelju **IMA implementaciju**. Potomak može:
 
 1. **Override-ovati potpuno** (zameniti kod):
 
-```pascal
-type
-  TParent = object
-    procedure DoWork; virtual;
-  end;
-  
-  TChild = object(TParent)
-    procedure DoWork; virtual;  // Potpuno nova implementacija
-  end;
-
-procedure TParent.DoWork;
-begin
-  WriteLn('Parent doing work');
-end;
-
-procedure TChild.DoWork;
-begin
-  WriteLn('Child doing work differently');  // Bez inherited
-end;
-```
+   ```pascal
+   type
+     TParent = object
+       procedure DoWork; virtual;
+     end;
+     
+     TChild = object(TParent)
+       procedure DoWork; virtual;  // Potpuno nova implementacija
+     end;
+   
+   procedure TParent.DoWork;
+   begin
+     WriteLn('Parent doing work');
+   end;
+   
+   procedure TChild.DoWork;
+   begin
+     WriteLn('Child doing work differently');  // Bez inherited
+   end;
+   ```
 
 2. **Override-ovati i ulančati** (dodati kod):
 
-```pascal
-procedure TChild.DoWork;
-begin
-  inherited DoWork;  // Pozovi roditeljski kod prvo
-  WriteLn('Child adds extra work');
-end;
-```
+   ```pascal
+   procedure TChild.DoWork;
+   begin
+     inherited DoWork;  // Pozovi roditeljski kod prvo
+     WriteLn('Child adds extra work');
+   end;
+   ```
 
 3. **Ne override-ovati** (nasleđuje roditeljski kod):
 
-```pascal
-type
-  TChild = object(TParent)
-    // procedure DoWork;  // Ne deklarišemo - koristi roditeljski
-  end;
-
-var
-  C: ^TChild;
-begin
-  New(C, Create);
-  C^.DoWork;  // Poziva TParent.DoWork
-end;
-```
+   ```pascal
+   type
+     TChild = object(TParent)
+       // procedure DoWork;  // Ne deklarišemo - koristi roditeljski
+     end;
+   
+   var
+     C: ^TChild;
+   begin
+     New(C, Create);
+     C^.DoWork;  // Poziva TParent.DoWork
+   end;
+   ```
 
 ### 5.7.5 RTTI = Run-Time Type Information
 

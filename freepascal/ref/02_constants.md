@@ -71,7 +71,7 @@ Contrary to ordinary constants, a value can be assigned to them at run-time. Thi
 
 Support for assigning values to typed constants is controlled by the `{$J}` directive: it can be switched off, but is on by default (for Turbo Pascal compatibility). Initialized variables are always allowed.
 
-**Remark**:  
+**Napomena**:  
 It should be stressed that typed constants are automatically initialized at program start. This is also true for local typed constants and initialized variables. Local typed constants are also initialized at program start. If their value was changed during previous invocations of the function, they will retain their changed value, i. e. they are not initialized each time the function is invoked.
 
 ## Resource strings
@@ -104,7 +104,7 @@ resourcestring
 
 If the localization routines translate Part1 and Part2, the Sentence constant will not be translated automatically: it has a separate entry in the resource string tables, and must therefore be translated separately. The above construct simply says that the initial value of Sentence equals Part1+’ ’+Part2.
 
-**Remark**:  
+**Napomena**:  
 Likewise, when using resource strings in a constant array, only the initial values of the resource strings will be used in the array: when the individual constants are translated, the elements in the array will retain their original value.
 
 ```pascal

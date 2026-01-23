@@ -229,7 +229,7 @@ EInvalidCast: Invalid type cast
 $0000000000411A27
 ```
 
-7.5 Interface delegation
+## 7.5 Interface delegation
 
 Sometimes, the methods of an interface are implemented by a helper (or delegate) object, or the class instance has obtained an interface pointer for this interface and that should be used. This can be for instance when an interface must be added to a series of totally unrelated classes: the needed interface functionality is added to a separate class, and each of these classes uses an instance of the helper class to implement the functionality.
 
