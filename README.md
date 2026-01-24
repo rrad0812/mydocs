@@ -2,9 +2,9 @@
 # Sadržaj
 
 - [Baze podataka](https://github.com/rrad0812/mydocs/tree/main/baze_podataka)
-- Django Admin
-  - Kuvar
-  - Trikovi
+- [Django Admin](https://github.com/rrad0812/mydocs/tree/main/django-admin)
+  - [Kuvar](https://github.com/rrad0812/mydocs/tree/main/django-admin/kuvar)
+  - [Trikovi](https://github.com/rrad0812/mydocs/tree/main/django-admin)
 - Docker
 - Git
 - Go
