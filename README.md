@@ -1,7 +1,7 @@
 
 # Sadržaj
 
-- Baze podataka
+- [Baze podataka](https://github.com/rrad0812/mydocs/tree/main/baze_podataka)
 - Django Admin
   - Kuvar
   - Trikovi
