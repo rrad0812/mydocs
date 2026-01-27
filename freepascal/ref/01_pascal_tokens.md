@@ -145,8 +145,6 @@ property | raise | resourcestring | threadvar | try | | |
 
 ### 1.3.3 Modifikatori
 
-The following is a list of all modifiers. They are not exactly reserved words in the sense that they can be used as identifiers, but in specific places, they have a special meaning for the compiler, i. e., the compiler considers them as part of the Pascal language.
-
 Sledi lista svih modifikatora. Nisu baš rezervisane reči u smislu da se mogu koristiti kao identifikatori, ali na određenim mestima imaju posebno značenje za kompajlera, tj., kompajler ih smatra delom Pascal jezika.
 
  ... | ... | ... | ... | ... | ... | ... |
@@ -210,7 +208,7 @@ and
 referenciraju na istu proceduru.
 
 **Napomena**  
-As of version 2.5.1 it is possible to specify a reserved word as an identifier by prepending it with an ampersand (&). This means that the following is possible:
+Od verzije 2.5.1 moguće je navesti rezervisanu reč kao identifikator tako što ćete je dodati znakom ampersanda (&). To znači da je moguće sledeće:
 
 ```pascal
 program testdo;  
@@ -225,25 +223,27 @@ begin
 end.
 ```
 
-The reserved word `do` is used as an identifier for the declaration as well as the invocation of the procedure.
+Rezervisana reč `do` se koristi kao identifikator za deklaraciju kao i za pozivanje procedure.
 
-## 1.5 Hint directives
+## 1.5 Hint direktive
 
-Most identifiers (constants, variables, functions or methods, properties) can have a `hint` directive appended to their definition.
+Većina identifikatora (konstante, promenljive, funkcije ili metode, svojstva) mogu imati `hint` direktivu pridodatu njihovoj definiciji.
 
-Whenever an identifier marked with a hint directive is later encountered by the compiler, then a warning will be displayed, corresponding to the specified hint.
+Kad god prevodilac kasnije naiđe na identifikator označen direktivom nagoveštaja, tada će se prikazati upozorenje koje odgovara navedenom nagoveštaju.
 
-- **deprecated**  
-  The use of this identifier is deprecated, use an alternative instead. The deprecated keyword can be followed by a string constant with a message. The compiler will show this message whenever the identifier is encountered.
-- **experimental**  
-  The use of this identifier is experimental: this can be used to flag new features that should
-  be used with caution.
-- **platform**  
-  This is a platform-dependent identifier: it may not be defined on all platforms.
-- **unimplemented**
-  This should be used on functions and procedures only. It should be used to signal that a particular feature has not yet been implemented.
+- **zastarelo**
+Upotreba ovog identifikatora je zastarela, umesto toga koristite alternativu. Zastarela ključna reč može biti praćena string konstantom sa porukom. Kompajler će prikazati ovu poruku kad god se naiđe na identifikator.
 
-The following are examples:
+- **eksperimentalno**
+Upotreba ovog identifikatora je eksperimentalna: može se koristiti za označavanje novih funkcija koje bi trebalo koristiti sa oprezom.
+
+- **platforma**
+Ovo je identifikator zavisan od platforme: možda nije definisan na svim platformama.
+
+- **nepimplementirano**
+Ovo bi trebalo da se koristi samo za funkcije i procedure. Trebalo bi da se koristi da signalizira da određena funkcija još nije implementirana.
+
+Slede primeri:
 
 ```pascal
 Const  
@@ -282,32 +282,6 @@ testhd.pp(15,3) Warning: Symbol "Something" is experimental
 - `methods`.
 
 ## 1.6 Brojevi
-
-Numbers are by default denoted in decimal notation. Real (or decimal) numbers are written using engineering or scientific notation (e. g. 0.314E1).
-
-For integer type constants, Free Pascal supports four formats:
-
-- Normal, **decimal format** (base 10). This is the standard format.
-- **Hexadecimal format** (base 16), in the same way as Turbo Pascal does. To specify a constant
-  value in hexadecimal format, prepend it with a dollar sign (`$`). Thus, the hexadecimal $FF
-  equals 255 decimal. Note that case is insignificant when using hexadecimal constants.
-- As of version 1.0.7, **Octal format** (base 8) is also supported. To specify a constant in octal
-  format, prepend it with an ampersand (`&`). For instance 15 is specified in octal notation as &17.
-- **Binary notation** (base 2). A binary number can be specified by preceding it with a percent
-  sign (`%)`. Thus, 255 can be specified in binary notation as %11111111.
-
-**Napomena**:  
-`Octal` and `Binary` notation are not supported in TP or Delphi compatibility mode.
-
-## 1.7 Labels
-
-A label is a name for a location in the source code to which can be jumped to from another location with a goto statement. A Label is a standard identifier or a digit sequence.
-
-**Napomena**:  
-The `-Sg` or `-Mtp` switches must be specified before labels can be used. By default, Free Pascal doesn’t support label and goto statements. The {$GOTO ON} directive can also be used to allow use
-of labels and the goto statement.
-
-The following are examples of valid labels:
 
 Brojevi su podrazumevano označeni decimalnim zapisom. Realni (ili decimalni) brojevi se pišu korišćenjem inženjerske ili naučne notacije (npr. 0,314E1).
 

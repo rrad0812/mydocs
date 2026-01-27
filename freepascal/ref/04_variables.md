@@ -3,93 +3,91 @@
 
 [prev][f1] [content][f0] [next][f2]
 
-## 4.1 Definition
+## 4.1 Definicija
 
-Variables are explicitly named memory locations with a certain type. When assigning values to variables, the Free Pascal compiler generates machine code to move the value to the memory location reserved for this variable. Where this variable is stored depends on where it is declared:
+Promenljive su eksplicitno imenovane memorijske lokacije određenog tipa. Prilikom dodeljivanja vrednosti promenljivim, kompajler Free Pascal-a generiše mašinski kod za premeštanje vrednosti na memorijsku lokaciju rezervisanu za ovu promenljivu. Gde se ova promenljiva čuva zavisi od toga gde je deklarisana:
 
-- **Global variables** are variables declared in a unit or program, but not
-  inside a procedure or function. They are stored in fixed memory locations, and are available during the whole execution time of the program.
-- **Local variables** are declared inside a procedure or function. Their value is
-  stored on the program stack, i. e. not at fixed locations.
+- **Globalne promenljive** su promenljive deklarisane u jedinici ili programu, ali ne unutar procedure ili funkcije. One se čuvaju na fiksnim memorijskim lokacijama i
+  dostupne su tokom celog vremena izvršavanja programa.
+- **Lokalne promenljive** se deklarišu unutar procedure ili funkcije. NJihova vrednost se čuva na programskom steku, tj. ne na fiksnim lokacijama.
 
-The Free Pascal compiler handles the allocation of these memory locations transparently, although this location can be influenced in the declaration.
+Kompilator FreePaskala transparentno obrađuje alokaciju ovih memorijskih lokacija, iako se na ovu lokaciju može uticati u deklaraciji.
 
-The Free Pascal compiler also handles reading values from or writing values to the variables transparently. But even this can be explicitly handled by the programmer when using properties.
+Kompilator FreePascal-a takođe transparentno obrađuje čitanje vrednosti iz promenljivih ili pisanje vrednosti u njih. Ali čak i ovo programer može eksplicitno da obradi kada koristi svojstva.
 
-Variables must be explicitly declared when they are needed. No memory is allocated unless a variable is declared. Using a variable identifier (for instance, a loop variable) which is not declared first, is an error which will be reported by the compiler.
+Promenljive moraju biti eksplicitno deklarisane kada su potrebne. Memorija se ne dodeljuje osim ako se promenljiva ne deklariše. Korišćenje identifikatora promenljive (na primer, promenljive petlje) koji nije prvo deklarisan predstavlja grešku koju će prijaviti kompajler.
 
-## 4.2 Declaration
+## 4.2 Declaracija
 
-The variables must be declared in a variable declaration block of a unit or a procedure or function (section 16.5, page 923).
+Promenljive moraju biti deklarisane u bloku deklaracije promenljivih unita ili procedure ili funkcije.
 
-This means that the following are valid variable declarations:
+To znači da su sledeće validne deklaracije promenljivih:
 
 ```pascal
 Var  
-  curterm1 : integer;  
+  curterm1 : integer;  // #1
 
-  curterm2 : integer; cvar;  
-  curterm3 : integer; cvar; external;  
+  curterm2 : integer; cvar; // #2  
+  curterm3 : integer; cvar; external;  // #3
 
-  curterm4 : integer; external name 'curterm3';  
-  curterm5 : integer; external 'libc' name 'curterm9';  
+  curterm4 : integer; external name 'curterm3';  // #4
+  curterm5 : integer; external 'libc' name 'curterm9';  // #5
 
-  curterm6 : integer absolute curterm1;  
+  curterm6 : integer absolute curterm1;  // #6
 
-  curterm7 : integer; cvar;  export;  
-  curterm8 : integer; cvar;  public;  
-  curterm9 : integer; export name 'me';  
-  curterm10 : integer; public name 'ma';  
+  curterm7 : integer; cvar;  export;  // #7
+  curterm8 : integer; cvar;  public;  // #8
+  curterm9 : integer; export name 'me';  // #9
+  curterm10 : integer; public name 'ma';  // #10
 
-  curterm11 : integer = 1;
+  curterm11 : integer = 1; // #11
 ```
 
-The difference between these declarations is as follows:
+Razlika između ovih deklaracija je sledeća:
 
-- The first form (curterm1) defines a regular variable. The compiler manages
-  everything by itself.
-- The second form (curterm2) declares also a regular variable, but specifies that
-  the assembler name for this variable equals the name of the variable as written in the source.
-- The third form (curterm3) declares a variable which is located externally: the
-  compiler will assume memory is located elsewhere, and that the assembler name of this location is specified by the name of the variable, as written in the source. The name may not be specified.
-- The fourth form is completely equivalent to the third, it declares a variable  
-  which is stored externally, and explicitly gives the assembler name of the location. If cvar is not used, the name must be specified.
-- The fifth form is a variant of the fourth form, only the name of the library in
-  which the memory is reserved is specified as well.
-- The sixth form declares a variable (curterm6), and tells the compiler that it
-  is stored in the same location as another variable (curterm1).
-- The seventh form declares a variable (curterm7), and tells the compiler that
-  the assembler label of this variable should be the name of the variable (case sensitive) and must be made public. i. e. it can be referenced from other object files.
-- The eighth form (curterm8) is equivalent to the seventh: “public” is an alias
-  for “export”.
-- The ninth and tenth form are equivalent: they specify the assembler name of the
-  variable.
-- The eleventh form declares a variable (curterm11) and initializes it with a
-  value (1 in the above case).
+- Prvi oblik ( curterm1 ) definiše regularnu promenljivu. Kompilator sve sam upravlja.
 
-Note that assembler names must be unique. It’s not possible to declare or export two variables with the same assembler name. In particular, do not attempt to export variables with a public name that starts with FPC_; the compiler uses some internal system routines with this name.
+- Drugi oblik ( curterm2 ) takođe deklariše regularnu promenljivu, ali navodi da je asemblersko ime za ovu promenljivu jednako imenu promenljive kako je napisano u izvornom kodu.
 
-## 4.3 Scope
+- Treći oblik ( curterm3 ) deklariše promenljivu koja se nalazi eksterno: kompajler će pretpostaviti da se memorija nalazi negde drugde i da je asemblersko ime ove lokacije određeno imenom promenljive, kao što je napisano u izvornom kodu. Ime se ne sme navesti.
 
-Variables, just as any identifier, obey the general rules of scope. In addition, initialized variables are initialized when they enter scope:
+- Četvrti oblik je potpuno ekvivalentan trećem, deklariše promenljivu koja se čuva eksterno i eksplicitno daje asemblerski naziv lokacije. Ako se cvar ne koristi, naziv mora biti naveden.
 
-- **Global initialized variables** are initialized once, when the program starts.
-- **Local initialized variables** are initialized each time the procedure is
-  entered.
+- Peti oblik je varijanta četvrtog oblika, samo je navedeno i ime biblioteke u kojoj je memorija rezervisana.
 
-Note that the behavior for local initialized variables is different from the one of a local typed constant. A local typed constant behaves like a global initialized variable.
+- Šesti oblik deklariše promenljivu ( curterm6 ) i govori kompajleru da je ona sačuvana na istoj lokaciji kao i druga promenljiva ( curterm1 ).
 
-## 4.4 Initialized variables
+- Sedmi oblik deklariše promenljivu ( curterm7 ) i govori kompajleru da asemblerska oznaka ove promenljive treba da bude ime promenljive (razlikuje velika i mala slova) i da mora biti javna, tj. može se pozivati na nju iz drugih objektnih datoteka.
 
-By default, simple variables in Pascal are not initialized after their declaration. Any assumption that they contain 0 or any other default value is erroneous: They can contain rubbish. To remedy this, the concept of initialized variables exists. The difference with normal variables is that their declaration includes an initial value, as can be seen in the diagram in the previous section.
+- Osmi oblik ( curterm8 ) je ekvivalentan sedmom: „public“ je pseudonim za „export“.
 
-Remark 2 exceptions to this rule exist:
+- Deveti i deseti oblik su ekvivalentni: oni određuju asemblersko ime promenljive.
 
-- **Managed types** are an exception to this rule: Managed types are always
-  initialized with a default value: in general this means setting the reference count to zero, or setting the pointer value of the type to Nil. See section 3.9, page 226
-- **Global variables** are initialized with the equivalent of zero.
+- Jedanaesti oblik deklariše promenljivu ( curterm11 ) i inicijalizuje je vrednošću (1 u gornjem slučaju).
 
-Note that the behavior of zeroing out certain variables can result in invalid content for variables:
+Imajte na umu da asemblerska imena moraju biti jedinstvena. Nije moguće deklarisati ili eksportovati dve promenljive sa istim asemblerskim imenom. Posebno, ne pokušavajte da eksportujete promenljive sa javnim imenom koje počinje sa FPC _ ; kompajler koristi neke interne sistemske rutine sa ovim imenom.
+
+## 4.3 Opseg
+
+Promenljive, baš kao i svaki identifikator, poštuju opšta pravila opsega važenja. Pored toga, inicijalizovane promenljive se inicijalizuju kada uđu u opseg važenja:
+
+- **Globalne inicijalizovane promenljive** se inicijalizuju jednom, pri pokretanju programa.
+- **Lokalne inicijalizovane promenljive** se inicijalizuju svaki put kada se uđe u proceduru.
+
+Imajte na umu da se ponašanje lokalno inicijalizovanih promenljivih razlikuje od ponašanja lokalno tipizirane konstante. Lokalna tipizirana konstanta se ponaša kao globalno inicijalizovana promenljiva.
+
+## 4.4 Inicijalizovane promenljive
+
+Podrazumevano, jednostavne promenljive u Paskalu se ne inicijalizuju nakon njihove deklaracije. Bilo kakva pretpostavka da sadrže 0 ili bilo koju drugu podrazumevanu vrednost je pogrešna: One mogu da sadrže gluposti. Da bi se ovo ispravilo, postoji koncept inicijalizovanih promenljivih. Razlika u odnosu na normalne promenljive je u tome što njihova deklaracija uključuje početnu vrednost.
+
+**Napomena**  
+Postoje 2 izuzetka od ovog pravila:
+
+- Upravljani tipovi su izuzetak od ovog pravila: Upravljani tipovi se uvek inicijalizuju podrazumevanom vrednošću: generalno, to znači postavljanje brojača referenci na nulu ili postavljanje vrednosti pokazivača tipa na Nil.
+
+- Globalne promenljive se inicijalizuju ekvivalentom nule.
+
+Imajte na umu da ponašanje nuliranja određenih promenljivih može dovesti do nevažećeg sadržaja za promenljive:
 
 ```pascal
 Type  
@@ -114,16 +112,16 @@ $000000000042BF70
 $00000000004001D2
 ```
 
-Therefore is is Highly recommended to always initialize variables before using them.
+Zbog toga se toplo preporučuje da uvek inicijalizujete promenljive pre nego što ih upotrebite.
 
-This can be easily done in the declaration of the variables. Given the declaration:
+Ovo se lako može uraditi u deklaraciji promenljivih. S obzirom na deklaraciju:
 
 ```pascal
 Var  
   S : String = 'This is an initialized string';
 ```
 
-The value of the variable following will be initialized with the provided value. The following is an even better way of doing this:
+Vrednost sledeće promenljive biće inicijalizovana datom vrednošću. Sledeći način je još bolji da se to uradi:
 
 ```pascal
 Const  
@@ -133,7 +131,7 @@ Var
   S : String = SDefault;
 ```
 
-Initialization is often used to initialize arrays and records. For arrays, the initialized elements must be specified, surrounded by round brackets, and separated by commas. The number of initialized elements must be exactly the same as the number of elements in the declaration of the type. As an example:
+Inicijalizacija se često koristi za inicijalizaciju nizova i zapisa. Za nizove, inicijalizovani elementi moraju biti navedeni, okruženi okruglim zagradama i odvojeni zarezima. Broj inicijalizovanih elemenata mora biti potpuno isti kao broj elemenata u deklaraciji tipa. Na primer:
 
 ```pascal
 Var  
@@ -141,9 +139,9 @@ Var
   ti : array [1..3] of Longint = (1,2,3);
 ```
 
-For constant records, each element of the record that you wish to initialize must be specified in the form Field: Value, separated by semicolons, and surrounded by round brackets.. You can omit fields that you don’t wish to initialize, in fact you can skip all fields. If you skip fields, the compiler will emit a warning.
+Za konstantne zapise, svaki element zapisa koji želite da inicijalizujete mora biti naveden u obliku Polje: Vrednost, odvojen tačka-zarezom i okružen okruglim zagradama.Možete izostaviti polja koja ne želite da inicijalizujete, zapravo možete preskočiti sva polja. Ako preskočite polja, kompajler će izdati upozorenje.
 
-As an example:
+Kao primer:
 
 ```pascal
 Type  
@@ -156,25 +154,27 @@ Var
   Empty : Point = ();
 ```
 
-The above declarations will result in the following warnings:
+Gore navedene deklaracije će rezultirati sledećim upozorenjima:
 
 ```sh
 iv.pp(7,27) Warning: Some fields coming after "X" were not initialized  
 iv.pp(8,20) Warning: Some fields coming after "" were not initialized
 ```
 
-The order of the fields in a constant record needs to be the same as in the type declaration, otherwise a compile-time error will occur.
+Redosled polja u konstantnom zapisu mora biti isti kao u deklaraciji tipa, u suprotnom će doći do greške prilikom kompajliranja.
 
-Remark It should be stressed that initialized variables are initialized when they come into scope, in difference with typed constants, which are initialized at program start. This is also true for local initialized variables. Local initialized variables are initialized whenever the routine is called. Any changes that occurred in the previous invocation of the routine will be undone, because they are again initialized.
+**Napomena**  
+Treba naglasiti da se inicijalizovane promenljive inicijalizuju kada dođu u opseg važenja, za razliku od tipiziranih konstanti, koje se inicijalizuju pri pokretanju programa. Ovo važi i za lokalno inicijalizovane promenljive. Lokalno inicijalizovane promenljive se inicijalizuju kad god se rutina pozove. Sve promene koje su se dogodile u prethodnom pozivanju rutine biće poništene, jer se ponovo inicijalizuju.
 
-Remark Care should be taken when using initialized pointer types such as PChars. In the following examples, S is a pointer, pointing to a block of constant (read-only) program data. Assigning a character in the string will therefore not work. Assigning S itself will of course work. The first routine will give an error, the second not:
+**Napomena**  
+Treba biti oprezan pri korišćenju inicijalizovanih tipova pokazivača kao što je `PChars`. U sledećim primerima, S je pokazivač, koji pokazuje na blok konstantnih (samo za čitanje) programskih podataka. Dodeljivanje karaktera u stringu stoga neće funkcionisati. Dodeljivanje samog S će naravno funkcionisati. Prva rutina će dati grešku, druga ne:
 
 ```pascal
 procedure foo1;  
 var  
   s: PChar = 'PChar';  
 begin  
-  s[0] := 'a';  
+  s[0] := 'a'; // Pokušaj promene konstantnog stringa ne uspeva. Greška!!!  
 end;  
  
 procedure foo2;  
@@ -182,17 +182,17 @@ var
   s: PChar;  
 begin  
   s := 'PChar';  
-  s[0] := 'a';  
+  s[0] := 'a';  // Sada uspeva jer je s dodeljena string vrednost
 end;
 ```
 
-## 4.5 Initializing variables using default
+## 4.5 Inicijalizacija promenljivih korišćenjem podrazumevanih vrednosti
 
-Some variables must be initialized because they contain managed types. For variables that are declared in the var section of a function or in the main program, this happens automatically. For variables that are allocated on the heap, this is not necessarily the case.
+Neke promenljive moraju biti inicijalizovane jer sadrže upravljane tipove. Za promenljive koje su deklarisane u odeljku var funkcije ili u glavnom programu, ovo se dešava automatski. Za promenljive koje su alocirane na hipu, ovo nije nužno slučaj.
 
-For this, the compiler contains the Default intrinsic. This function accepts a type identifier as the argument, and will return a correctly initialized variable of that type. In essence, it will zero out the whole variable.
+Za ovo, kompajler sadrži `Default` intrinzičnu funkciju. Ova funkcija prihvata identifikator tipa kao argument i vratiće ispravno inicijalizovanu promenljivu tog tipa. U suštini, ona će poništiti celu promenljivu.
 
-The following gives an example of its use:
+Sledeći primer daje njegovu upotrebu:
 
 ```pascal
 type  
@@ -205,13 +205,15 @@ var
   i: LongInt;  
   o: TObject;  
   r: TRecord;  
+
 begin  
   i := Default(LongInt); // 0  
   o := Default(TObject); // Nil  
   r := Default(TRecord); // ( i: 0; s: '')  
 end.
 
-The case where a variable is allocated on the heap, is more interesting:
+Interesantniji je slučaj kada je promenljiva dodeljena na hipu:
+
 type  
   TRecord = record  
     i: LongInt;  
@@ -222,6 +224,7 @@ var
   i: ^LongInt;  
   o: ^TObject;  
   r: ^TRecord;  
+
 begin  
   i:=GetMem(SizeOf(Longint));  
   i^ := Default(LongInt); // 0  
@@ -232,39 +235,37 @@ begin
 end.
 ```
 
-It works for all types, except the various file types (or complex types containing a file type).
+Radi za sve tipove, osim za različite tipove datoteka (ili složene tipove koji sadrže tip datoteke).
 
 **Napomena**:
 
-- For generics, the use of Default is especially useful, since the type of a
-  variable may not be known during the declaration of a generic. For more information section 8.7, page 484.
-- Function results are available as a Result identifier, and as such resemble
-  variables. They are not variables, but are treated as passed-by-reference parameters. They are therefore not initialized.
+- Za generike, upotreba `Default` je posebno korisna, jer tip promenljive možda nije poznat tokom deklaracije generika.
+- Rezultati funkcija su dostupni kao identifikator `Result` i kao takvi podsećaju na promenljive. One nisu promenljive, već se tretiraju kao parametri prosleđeni referencom. Stoga nisu inicijalizovani.
 
-## 4.6 Thread Variables
+## 4.6 Thread promenljive
 
-For a program which uses threads, the variables can be really global, i. e. the same for all threads, or thread-local: this means that each thread gets a copy of the variable. Local variables (defined inside a procedure) are always thread-local. Global variables are normally the same for all threads. A global variable can be declared thread-local by replacing the var keyword at the start of the variable declaration block with Threadvar:
+Za program koji koristi niti, promenljive mogu biti zaista globalne, tj. iste za sve niti, ili lokalne za nit: to znači da svaka nit dobija kopiju promenljive. Lokalne promenljive (definisane unutar procedure) su uvek lokalne za nit. Globalne promenljive su obično iste za sve niti. Globalna promenljiva može biti deklarisana kao lokalna za nit zamenom ključne reči var na početku bloka deklaracije promenljive sa `ThreadVar` :
 
 ```pascal
-Threadvar  
+ThreadVar  
   IOResult : Integer;
 ```
 
-If no threads are used, the variable behaves as an ordinary variable. If threads are used then a copy is made for each thread (including the main thread). Note that the copy is made with the original value of the variable, not with the value of the variable at the time the thread is started.
+Ako se ne koriste niti, promenljiva se ponaša kao obična promenljiva. Ako se koriste niti, onda se kopija pravi za svaku nit (uključujući i glavnu nit). Imajte na umu da se kopija pravi sa originalnom vrednošću promenljive, a ne sa vrednošću promenljive u trenutku pokretanja niti.
 
-Threadvars should be used sparingly: There is an overhead for retrieving or setting the variable’s value. If possible at all, consider using local variables; they are always faster than thread variables.
+Promenljive tipa niti treba koristiti štedljivo: Postoji dodatni trošak za preuzimanje ili podešavanje vrednosti promenljive. Ako je ikako moguće, razmislite o korišćenju lokalnih promenljivih; one su uvek brže od promenljivih tipa niti.
 
-Threads are not enabled by default. For more information about programming threads, see the chapter on threads in the Programmer’s Guide.
+Niti nisu podrazumevano omogućene. Za više informacija o programiranju niti, pogledajte poglavlje o nitima u Vodiču za programere .
 
-## 4.7 Properties
+## 4.7 Svojstva
 
-A global block can declare properties, just as they could be defined in a class. The difference is that the global property does not need a class instance: there is only one instance of this property. Other than that, a global property behaves like a class property. The read/write specifiers for the global property must also be regular procedures, not methods.
+Globalni blok može deklarisati svojstva, baš kao što bi se ona mogla definisati u klasi. Razlika je u tome što globalnom svojstvu nije potrebna instanca klase: postoji samo jedna instanca ovog svojstva. Osim toga, globalno svojstvo se ponaša kao svojstvo klase. Specifikatori čitanja/pisanja za globalno svojstvo takođe moraju biti regularne procedure, a ne metode.
 
-The concept of a global property is specific to Free Pascal, and does not exist in Delphi. ObjFPC mode is required to work with properties.
+Koncept globalnog svojstva je specifičan za Free Pascal i ne postoji u Delphi-ju. Za rad sa svojstvima je potreban ObjFPC režim.
 
-The concept of a global property can be used to “hide” the location of the value, or to calculate the value on the fly, or to check the values which are written to the property.
+Koncept globalnog svojstva može se koristiti za "sakrivanje" lokacije vrednosti, ili za izračunavanje vrednosti u hodu, ili za proveru vrednosti koje su zapisane u svojstvo.
 
-The following is an example:
+Deklaracija je sledeća:
 
 ```pascal
 {$mode objfpc}  
@@ -302,7 +303,7 @@ end;
 end.
 ```
 
-The read/write specifiers can be hidden by declaring them in another unit which must be in the uses clause of the unit. This can be used to hide the read/write access specifiers for programmers, just as if they were in a private section of a class (discussed below). For the previous example, this could look as follows:
+Specifikatori za čitanje/pisanje mogu se sakriti deklarisanjem u drugoj jedinici koja mora biti u klauzuli uses jedinice. Ovo se može koristiti za skrivanje specifikatora pristupa za čitanje/pisanje za programere, baš kao da su u privatnom odeljku klase (o čemu će biti reči u nastavku). Za prethodni primer, ovo bi moglo izgledati ovako:
 
 ```pascal
 {$mode objfpc}  
@@ -338,7 +339,7 @@ end;
 end.
 ```
 
-The unit testprop would then look like:
+Jedinični testprop bi tada izgledao ovako:
 
 ```pascal
 {$mode objfpc}  
@@ -355,8 +356,6 @@ Implementation
  
 end.
 ```
-
-More information about properties can be found in chapter 6, page 294.
 
 [prev][f1] [content][f0] [next][f2]
 

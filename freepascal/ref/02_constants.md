@@ -3,16 +3,6 @@
 
 [prev][f1] [content][f0] [next][f2]
 
-## 2.1 Ordinary constants
-
-Ordinary constants declarations are constructed using an identifier name followed by an “=” token, and followed by an optional expression consisting of legal combinations of numbers, characters, boolean values or enumerated values as appropriate.
-
-The compiler must be able to evaluate the expression in a constant declaration at compile time. This means that most of the functions in the Run-Time library cannot be used in a constant declaration. Operators such as +, -, *, /, not, and, or, div, mod, ord, chr, sizeof, pi, int, trunc, round, frac, odd can be used, however. For more information on expressions, see chapter 12, page 583.
-
-When a previously declared ordinary constant is used in the code, the compiler will insert the actual value of the constant instead of the constant name. That is, the following two pieces of code are entirely equivalent:
-
-Baš kao u Turbo Pascal-u, Free Pascal podržava i obične i tipizirane konstante. One su deklarisane u bloku deklaracije `const` u deklaraciji unita, programa ili klase, funkcije ili procedure.
-
 ## 2.1 Obične konstante
 
 Deklaracije običnih konstanti se konstruiše korišćenjem imena identifikatora praćenog tokenom "=", a praćenog opcionim izrazom koji se sastoji od legalnih kombinacija brojeva, znakova, logičkih vrednosti ili nabrojanih vrednosti prema potrebi.
@@ -95,14 +85,6 @@ Resourcestring
   EditMenu = '&Edit...';
 ```
 
-All string constants defined in the resourcestring section are stored in special tables. The strings in these tables can be manipulated at runtime with some special mechanisms in the objpas unit.
-
-Semantically, the strings act like ordinary constants; It is not allowed to assign values to them (except through the special mechanisms in the objpas unit). However, they can be used in assignments or expressions as ordinary string constants. The main use of the resourcestring section is to provide an easy means of internationalization.
-
-More on the subject of resourcestrings can be found in the Programmer’s Guide, and in the objpas unit reference.
-
-Remark Note that a resource string which is given as an expression will not change if the parts of the expression are changed:
-
 Sve string konstante definisane u odeljku `resourcestring` se čuvaju u posebnim tabelama. Stringovima u ovim tabelama može se manipulisati tokom rada pomoću nekih posebnih mehanizama iz unita `objpas`.
 
 Semantički, stringovi se ponašaju kao obične konstante; Nije dozvoljeno da im se dodeljuju vrednosti (osim preko posebnih mehanizama u jedinici `objpas`). Međutim, oni se mogu koristiti u zadacima ili izrazima kao obične string konstante. Glavna upotreba odeljka `resourcestring` je da obezbedi sredstvo za laku internacionalizaciju.
@@ -118,11 +100,6 @@ resourcestring
   Part2 = 'Second part of a long string.';  
   Sentence = Part1+' '+Part2;
 ```
-
-If the localization routines translate Part1 and Part2, the Sentence constant will not be translated automatically: it has a separate entry in the resource string tables, and must therefore be translated separately. The above construct simply says that the initial value of Sentence equals Part1+’ ’+Part2.
-
-**Napomena**:  
-Likewise, when using resource strings in a constant array, only the initial values of the resource strings will be used in the array: when the individual constants are translated, the elements in the array will retain their original value.
 
 Ako rutine lokalizacije prevode "Part1" i "Part2", konstanta "Sentence" neće biti automatski prevedena: ona ima poseban unos u tabelama resourcestring i stoga mora biti prevedena odvojeno. Gornja konstrukcija jednostavno kaže da je početna vrednost rečenice jednaka "Part1+’ ’+Part2".
 
@@ -143,7 +120,7 @@ begin
 end.
 ```
 
-This will print “Yes.” or “No.” depending on the value of B, even if the constants Yes and No have been localized by some localization mechanism.
+Ovo će odštampati „Da“. ili „Ne“. u zavisnosti od vrednosti B, čak i ako su konstante Da i Ne lokalizovane nekim mehanizmom lokalizacije.
 
 [prev][f1] [content][f0] [next][f2]
 

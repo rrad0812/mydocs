@@ -1,28 +1,28 @@
-# 5 Objects
+# 5 Objekti
 
 [prev][f1] [content][f0] [next][f2]
 
-## 5.1 Declaration
+## 5.1 Deklaracija
 
-Free Pascal supports object oriented programming. In fact, most of the compiler is written using objects. Here we present some technical questions regarding object oriented programming in Free Pascal.
+FreePaskal podržava objektno orijentisano programiranje. U stvari, veći deo kompajlera je napisan pomoću objekata. Ovde predstavljamo neka tehnička pitanja u vezi sa objektno orijentisanim programiranjem u FreePaskalu.
 
-Objects should be treated as a special kind of record. The record contains all the fields that are declared in the objects definition, and pointers to the methods that are associated to the objects’ type.
+Objekte treba tretirati kao posebnu vrstu zapisa. Zapis sadrži sva polja koja su deklarisana u definiciji objekta i pokazivače na metode koje su povezane sa tipom objekta.
 
-An object is declared just as a record would be declared; except that now, procedures and functions can be declared as if they were part of the record. Objects can “inherit” fields and methods from “parent” objects. This means that these fields and methods can be used as if they were included in the objects declared as a “child” object.
+Objekat se deklariše baš kao što bi se deklarisao zapis; osim što se sada procedure i funkcije mogu deklarisati kao da su deo zapisa. Objekti mogu "nasleđivati" polja i metode od "roditeljskih" objekata. To znači da se ova polja i metode mogu koristiti kao da su uključeni u objekte deklarisane kao "podređeni" objekat.
 
-Furthermore, a concept of visibility is introduced: fields, procedures and functions can be declared as public, protected or private. By default, fields and methods are public, and are exported outside the current unit.
+Štaviše, koncept vidljivostije je uveden: polja, procedure i funkcije mogu biti deklarisane kao javne, zaštićene ili privatne. Podrazumevano, polja i metode su javne i izvoze se van trenutnog unita.
 
-Fields or methods that are declared private are only accessible in the current unit: their scope is limited to the implementation of the current unit.
+Polja ili metode koje su deklarisane kao privatne dostupne su samo u trenutnom unitu: njihov opseg je ograničen na implementaciju trenutnog unita.
 
-As can be seen, any visibility block can be specified multiple times, as often as needed..
-
-The following is a valid definition of an object:
+Sledeća je validna definicija objekta:
 
 ```pascal
 Type  
   TObj = object  
+  
   Private  
     Caption : ShortString;  
+  
   Public  
     Constructor init;  
     Destructor done;  
@@ -31,12 +31,13 @@ Type
   end;
 ```
 
-It contains a constructor/destructor pair, and a method to get and set a caption. The Caption field is private to the object: it cannot be accessed outside the unit in which TObj is declared.
-
-Remark In MacPas mode, the Object keyword is replaced by the class keyword for compatibility with other pascal compilers available on the Mac. That means that objects cannot be used in MacPas mode.
+Sadrži par konstruktor/destruktor i metodu za dobijanje i postavljanje natpisa. Polje Natpis je privatno za objekat: ne može mu se pristupiti van unita u kojoj je deklarisan TObj.
 
 **Napomena**  
-Free Pascal also supports the `packed` object. This is the same as an object, only the elements (fields) of the object are byte-aligned, just as in the packed record. The declaration of a packed object is similar to the declaration of a packed record:
+U MacPas režimu, ključna reč `Object` je zamenjena ključnom reči `class` radi kompatibilnosti sa drugim Pascal kompajlerima dostupnim na Mac-u. To znači da se objekti ne mogu koristiti u MacPas režimu.
+
+**Primedba**  
+FreePaskal takođe podržava pakovani objekat. Ovo je isto što i objekat, samo što su elementi (polja) objekta poravnati po bajtovima, baš kao kod pakovanog zapisa. Deklaracija pakovanog objekta je slična deklaraciji pakovanog zapisa:
 
 ```pascal
 Type  
@@ -48,11 +49,11 @@ Type
 Var PP : Pobj;
 ```
 
-Similarly, the {$PackRecords } directive acts on objects as well.
+Slično, direktiva `{$PackRecords}` deluje i na objekte.
 
-## 5.2 Abstract and sealed objects
+## 5.2 Apstraktni i zapečaćeni objekti
 
-An object can be declared as sealed. In that case, it is not possible to declare a descendent object. The compiler will return an error if it encounters a declaration of a descendent:
+Objekat se može proglasiti zapečaćenim. U tom slučaju nije moguće deklarisati descendentni objekat. Prevodilac će vratiti grešku ako naiđe na deklaraciju potomka:
 
 ```pascal
 Type  
@@ -68,33 +69,35 @@ begin
 end.
 ```
 
-This will result in the following error:
+Ovo će dovesti do sledeće greške:
 
 ```sh
 Error: Cannot create a descendant of the sealed class "TMyClass"
 ```
 
-An abstract class is a class that cannot be used directly. Instead, a descendent class must always be used. However, for Delphi compatibility, the compiler ignores this directive.
+Apstraktna klasa je klasa koja se ne može direktno koristiti. Umesto toga, uvek se mora koristiti klasa potomaka. Međutim, radi Delphi kompatibilnosti, kompajler ignoriše ovu direktivu.
 
-## 5.3 Fields
+## 5.3 Polja
 
-Object Fields are like record fields. They are accessed in the same way as a record field would be accessed: by using a qualified identifier. Given the following declaration:
+Polja objekata su kao polja zapisa. Njima se pristupa na isti način kao što bi se pristupilo polju zapisa: korišćenjem kvalifikovanog identifikatora. S obzirom na sledeću izjavu:
 
 ```pascal
 Type TAnObject = Object  
-       AField : Longint;  
-       Procedure AMethod;  
-       end;  
+  AField : Longint;  
+
+  Procedure AMethod;  
+  end;  
+
 Var AnObject : TAnObject;
 ```
 
-then the following would be a valid assignment:
+onda bi sledeći zadatak bio validan:
 
 ```pascal
   AnObject.AField := 0;
 ```
 
-Inside methods, fields can be accessed using the short identifier:
+Unutar metoda, poljima se može pristupiti pomoću kratkog identifikatora:
 
 ```pascal
 Procedure TAnObject.AMethod;  
@@ -105,7 +108,7 @@ begin
 end;
 ```
 
-Or, one can use the self identifier. The self identifier refers to the current instance of the object:
+Ili se može koristiti self identifikator. Self identifikator se odnosi na trenutnu instancu objekta:
 
 ```pascal
 Procedure TAnObject.AMethod;  
@@ -116,27 +119,27 @@ begin
 end;
 ```
 
-One cannot access fields that are in a private or protected sections of an object from outside the objects’ methods. If this is attempted anyway, the compiler will complain about an unknown identifier.
+Nije moguće pristupiti poljima koja se nalaze u privatnim ili zaštićenim odeljcima objekta izvan metoda objekta. Ako se ovo ipak pokuša, kompajler će se žaliti na nepoznati identifikator.
 
-It is also possible to use the with statement with an object instance, just as with a record:
+Takođe je moguće koristiti naredbu `with` sa instancom objekta, baš kao i sa zapisom:
 
 ```pascal
 With AnObject do  
   begin  
-  Afield := 12;  
-  AMethod;  
+    Afield := 12;  
+    AMethod;  
   end;
 ```
 
-In this example, between the begin and end, it is as if AnObject was prepended to the Afield and Amethod identifiers. More about this in section 13.2.8, page 725.
+U ovom primeru, između `begin` i `end`, to je kao da je `AnObject` dodat pred identifikatorima `AField` i `AMethod`.
 
-## 5.4 Class or Static fields
+## 5.4 Class ili static polja
 
-An object can contain class or static fields: these fields are global to the object type, and act like global variables, but are known only in the scope of the object. The difference between static and class variables is purely the mode in which they work: The static keyword will always work, the class keyword will need `{$MODE DELPHI}` or `{$MODE OBJFPC}`.
+Objekat može da sadrži polja `class` ili `static`: ova polja su globalna za tip objekta i ponašaju se kao globalne promenljive, ali su poznata samo u opsegu važenja objekta. Razlika između `static` i `class` promenljivih je isključivo u načinu na koji rade: ključna reč `static` će uvek raditi, ključna reč `class` će zahtevati `{ $ MODE DELPHI }` ili `{ $ MODE OBJFPC }`.
 
-They can be referenced from within the objects methods, but can also be referenced from outside the object by providing the fully qualified name.
+Može se pozivati na njih unutar metoda objekta, ali se mogu pozivati i izvan objekta navođenjem potpuno kvalifikovanog imena.
 
-For instance, the output of the following program:
+Na primer, izlaz sledećeg programa:
 
 ```pascal
 {$mode objfpc}  
@@ -165,7 +168,7 @@ begin
 end.
 ```
 
-will be the following
+biće sledeći:
 
 ```pascal
 Static  
@@ -178,60 +181,55 @@ Class
 5
 ```
 
-Note that the last line of code references the object type itself (cl), and not an instance of the object (cl1 or cl2).
+Imajte na umu da poslednji red koda upućuje na sam tip objekta (cl), a ne na instancu objekta (cl1 ili cl2).
 
-## 5.5 Constructors and destructors
+## 5.5 Konstruktori i destruktori
 
-As can be seen in the syntax diagram for an object declaration, Free Pascal supports constructors and destructors. The programmer is responsible for calling the constructor and the destructor explicitly when using objects.
+Free Pascal podržava konstruktore i destruktore. Programer je odgovoran za eksplicitno pozivanje konstruktora i destruktora kada se koriste objekti.
 
-A constructor/destructor pair is required if the object uses virtual methods. The reason is that for an object with virtual methods, some internal housekeeping must be done: this housekeeping is done by the constructor1.
-
-In the declaration of the object type, a simple identifier should be used for the name of the constructor or destructor. When the constructor or destructor is implemented, a qualified method identifier should be used, i. e. an identifier of the form objectidentifier.methodidentifier.
-
-Free Pascal supports also the extended syntax of the New and Dispose procedures. In case a dynamic variable of an object type must be allocated the constructor’s name can be specified in the call to New. The New is implemented as a function which returns a pointer to the instantiated object. Consider the following declarations:
+Deklaracija konstruktora ili destruktora je sledeća:
 
 ```pascal
 Type  
   TObj = object;  
-   Constructor init;  
-   ...  
-   end;  
+    Constructor init;  
+    ...  
+    end;  
   Pobj = ^TObj;  
+
 Var PP : Pobj;
 ```
 
-Then the following three calls are equivalent:
+Tada su sledeća tri poziva ekvivalentna:
 
 ```pascal
  pp := new (Pobj,Init);
 ```
 
-and
+i
 
 ```pascal
   new(pp,init);
 ```
 
-and also
+i takodje
 
 ```pascal
   new (pp);  
   pp^.init;
 ```
 
-In the last case, the compiler will issue a warning that the extended syntax of new and dispose must be used to generate instances of an object. It is possible to ignore this warning, but it’s better programming practice to use the extended syntax to create instances of an object. Similarly, the Dispose procedure accepts the name of a destructor. The destructor will then be called, before removing the object from the heap.
+U poslednjem slučaju, kompajler će izdati upozorenje da se proširena sintaksa `new` i `dispose` mora koristiti za generisanje instanci objekta. Moguće je zanemariti ovo upozorenje, ali je bolja praksa programiranja koristiti proširenu sintaksu za kreiranje instanci objekta. Slično, `Dispose` procedura prihvata ime destruktora. Zatim će biti pozvan destruktor pre uklanjanja objekta iz gomile.
 
-In view of the compiler warning remark, the following chapter presents the Delphi approach to object-oriented programming, and may be considered a more natural way of object-oriented programming.
+S obzirom na upozorenje kompajlera, sledeće poglavlje predstavlja Delphi pristup objektno orijentisanom programiranju i može se smatrati prirodnijim načinom objektno orijentisanog programiranja.
 
-## 5.6 Methods
+## 5.6 Metode
 
-Object methods are just like ordinary procedures or functions, only they have an implicit extra parameter: self. Self points to the object with which the method was invoked. When implementing methods, the fully qualified identifier must be given in the function header. When declaring methods, a normal identifier must be given.
+Objektne metode su kao obične procedure ili funkcije, samo što imaju implicitni dodatni parametar: `self`. `Self` ukazuje na objekat sa kojim je metoda pozvana. Prilikom implementacije metoda, potpuno kvalifikovani identifikator mora biti dat u zaglavlju funkcije. Kada se deklarišu metode, mora se dati normalan identifikator.
 
-### 5.6.1 Declaration
+### 5.6.1 Deklaracija
 
-The declaration of a method is much like a normal function or procedure declaration, with some additional specifiers, as can be seen from the following diagram, which is part of the object declaration:
-
-from the point of view of declarations, Method definitions are normal function or procedure declarations. Contrary to TP and Delphi, fields can be declared after methods in the same block, i. e. the following will generate an error when compiling with Delphi or Turbo Pascal, but not with FPC:
+Deklaracija metode je kao normalna deklaracija funkcije ili procedure, sa nekim dodatnim specifikacijama, koji su deo deklaracije objekta: sa stanovišta deklaracija, definicije metoda su deklaracije normalne funkcije ili procedure. Za razliku od TP i Delphija, polja se mogu deklarisati nakon metoda u istom bloku, tj. sledeće će generisati grešku prilikom kompajliranja sa Delphi ili Turbo Pascal, ali ne i sa FPC:
 
 ```pascal
 Type  
@@ -241,13 +239,13 @@ Type
   end;
 ```
 
-### 5.6.2 Method invocation
+### 5.6.2 Ppozivanje metoda
 
-Methods are called just as normal procedures are called, only they have an object instance identifier prepended to them (see also chapter 13, page 668). To determine which method is called, it is necessary to know the type of the method. We treat the different types in what follows.
+Metode se pozivaju isto kao što se pozivaju i normalne procedure, samo što se ispred njih dodaje identifikator instance objekta. Da bi se utvrdilo koja se metoda poziva, potrebno je znati tip metode. U nastavku ćemo obraditi različite tipove.
 
-#### 5.6.2.1 Normal ( static ) methods
+#### 5.6.2.1 Obične ili statičke metode
 
-Normal (static) methods are methods that have been declared without a `abstract` or `virtual` keyword. When calling a static method, the declared (i. e. compile time) method of the object is used. For example, consider the following declarations:
+Normalne (statičke - u smislu da se poziv odredjuje za vreme compile-time) metode su metode koje nisu deklarisane bez `apstract` ili `virtual` ključne reči. Prilikom pozivanja obične metode, koristi se deklarisana (tj. metoda vremena kompajliranja) objekta. Na primer, razmotrite sledeće deklaracije:
 
 ```pascal
 Type  
@@ -266,7 +264,7 @@ Type
   PChild = ^TChild;
 ```
 
-As it is visible, both the parent and child objects have a method called `Doit`. Consider now the following declarations and calls:
+Kao što je vidljivo, i roditeljski i podređeni objekti imaju metod pod nazivom `Doit`. Razmotrite sada sledeće deklaracije i pozive:
 
 ```pascal
 Var  
@@ -274,21 +272,21 @@ Var
   Child           : PChild;  
  
 begin  
-   ParentA := New(PParent,Init);  
-   ParentB := New(PChild,Init);  
-   Child := New(PChild,Init);  
-   ParentA^.Doit;  
-   ParentB^.Doit;  
-   Child^.Doit;
+  ParentA := New(PParent,Init);  
+  ParentB := New(PChild,Init);  
+  Child := New(PChild,Init);
+  ParentA^.Doit;  
+  ParentB^.Doit;  
+  Child^.Doit;
 ```
 
-Of the three invocations of `Doit`, only the last one will call `TChild.Doit`, the other two calls will call `TParent.Doit`. This is because for `static` methods, the compiler determines at compile time which method should be called. Since `ParentB` is of type `TParent`, the compiler decides that it must be called with `TParent.Doit`, even though it will be created as a TChild. There may be times when the method that is actually called should depend on the actual type of the object at run-time. If so, the method cannot be a `static` method, but must be a `virtual` method.
+Od tri poziva metode Doit, samo poslednji će pozvati TChild.Doit, dok će druga dva poziva pozvati TParent.Doit. To je zato što kod običnih metoda, kompajler u vreme kompajliranja određuje koja metoda treba da se pozove. Pošto je ParentB tipa TParent, kompajler odlučuje da se mora pozvati sa TParent.Doit, iako će biti kreiran kao TChild. Može postojati situacija kada metoda koja se zapravo poziva treba da zavisi od stvarnog tipa objekta u vreme izvršavanja. Ako je tako, metoda ne može biti obična metoda, već mora biti virtuelna metoda.
 
-#### 5.6.2.2 Virtual methods
+#### 5.6.2.2 Virtuelne metode
 
-To remedy the situation in the previous section, `virtual` methods are created. This is simply done by appending the method declaration with the `virtual` modifier. The descendent object can then override the method with a new implementation by re-declaring the method (with the same parameter list) using the `virtual` keyword.
+Da bi se rešila situacija iz prethodnog odeljka, kreiraju se virtuelne metode. To se jednostavno radi dodavanjem modifikatora `virtual` deklaraciji metode. Nasledni objekat zatim može da prepiše metodu novom implementacijom ponovnim deklarisanjem metode (sa istom listom parametara) koristeći ključnu reč `virtual`.
 
-Going back to the previous example, consider the following alternative declaration:
+Vraćajući se na prethodni primer, razmotrite sledeću alternativnu deklaraciju:
 
 ```pascal
 Type  
@@ -307,7 +305,7 @@ Type
   PChild = ^TChild;
 ```
 
-As it is visible, both the parent and child objects have a method called Doit. Consider now the following declarations and calls:
+Kao što je vidljivo, i roditeljski i podređeni objekti imaju metod koji se zove Doit. Razmotrite sada sledeće deklaracije i pozive:
 
 ```pascal
 Var  
@@ -315,19 +313,20 @@ Var
   Child           : PChild;  
  
 begin  
-   ParentA := New(PParent,Init);  
-   ParentB := New(PChild,Init);  
-   Child := New(PChild,Init);  
-   ParentA^.Doit;  
-   ParentB^.Doit;  
-   Child^.Doit;
+  ParentA := New(PParent,Init);  
+  ParentB := New(PChild,Init);  
+  Child := New(PChild,Init);  
+
+  ParentA^.Doit;  
+  ParentB^.Doit;  
+  Child^.Doit;
 ```
 
-Now, different methods will be called, depending on the actual run-time type of the object. For ParentA, nothing changes, since it is created as a TParent instance. For Child, the situation also doesn’t change: it is again created as an instance of TChild.
+Sada će se pozivati različite metode, u zavisnosti od stvarnog tipa objekta tokom izvršavanja. Za ParentA se ništa ne menja, pošto je kreiran kao instanca TParent. Za Child se situacija takođe ne menja: ponovo se kreira kao instanca TChild.
 
-For ParentB however, the situation does change: Even though it was declared as a TParent, it is created as an instance of TChild. Now, when the program runs, before calling Doit, the program checks what the actual type of ParentB is, and only then decides which method must be called. Seeing that ParentB is of type TChild, TChild.Doit will be called. The code for this run-time checking of the actual type of an object is inserted by the compiler at compile time.
+Međutim, za ParentB se situacija menja: Iako je deklarisan kao TParent, kreira se kao instanca TChild. Sada, kada se program pokrene, pre pozivanja Doit, program proverava koji je stvarni tip ParentB, i tek tada odlučuje koja metoda mora biti pozvana. Pošto je ParentB tipa TChild, biće pozvana TChild.Doit. Kod za ovu proveru stvarnog tipa objekta tokom izvršavanja ubacuje kompajler tokom kompajliranja.
 
-The `TChild.Doit` is said to override the TParent.Doit. It is possible to access the `TParent.Doit` from within the `TChild.Doit`, with the `inherited` keyword:
+Za TChild.Doit se kaže da "preklapa" TParent.Doit. Moguće je pristupiti TParent.Doit iz TChild.Doit, pomoću `inherited` ključne reči:
 
 ```pascal
 Procedure TChild.Doit;  
@@ -337,28 +336,29 @@ begin
 end;
 ```
 
-In the above example, when `TChild.Doit` is called, the first thing it does is call `TParent.Doit`. The `inherited` keyword cannot be used in `static` methods, only on `virtual methods.
+U gornjem primeru, kada se pozove TChild.Doit, prvo što se radi jeste poziv TParent.Doit. `Inherited` ključna reč ne može se koristiti u običnim metodama, već samo u virtuelnim metodama.
 
-To be able to do this, the compiler keeps – per object type – a table with `virtual` methods: the VMT (Virtual Method Table). This is simply a table with pointers to each of the virtual methods: each virtual method has its fixed location in this table (an index). The compiler uses this table to look up the actual method that must be used. When a descendent object overrides a method, the entry of the parent method is overwritten in the VMT. More information about the VMT can be found in Programmer’s Guide.
+Da bi ovo mogao da uradi, kompajler čuva – za svaki tip objekta – tabelu sa virtuelnim metodama: VMT (Virtuelna tabela metoda). Ovo je jednostavno tabela sa pokazivačima na svaku od virtuelnih metoda: svaka virtuelna metoda ima svoju fiksnu lokaciju u ovoj tabeli (indeks). Kompajler koristi ovu tabelu da bi pronašao stvarnu metodu koja se mora koristiti. Kada potomački objekat prepiše metodu, unos roditeljske metode se prepisuje u VMT-u. Više informacija o VMT-u možete pronaći u Vodiču za programere.
 
-As remarked earlier, objects that have a VMT must be initialized with a constructor: the object variable must be initialized with a pointer to the VMT of the actual type that it was created with.
+Kao što je ranije napomenuto, objekti koji imaju VMT moraju biti inicijalizovani konstruktorom: objektna promenljiva mora biti inicijalizovana pokazivačem na VMT stvarnog tipa sa kojim je kreirana.
 
-#### 5.6.2.3 Abstract methods
+#### 5.6.2.3 Apstraktne metode
 
-An abstract method is a special kind of virtual method. A method that is declared abstract does not have an implementation for this method. It is up to inherited objects to override and implement this method.
+Apstraktna metoda je posebna vrsta virtuelne metode. Metoda koja je deklarisana kao apstraktna nema implementaciju za ovu metodu. Na nasleđenim objektima je da je prepišu i implementiraju.
 
-From this it follows that a method can not be abstract if it is not virtual (this can be seen from the syntax diagram). A second consequence is that an instance of an object that has an abstract method cannot be created directly.
+Iz ovoga sledi da metoda ne može biti apstraktna ako nije virtuelna. Druga posledica je da se instanca objekta koji ima apstraktnu metodu ne može direktno kreirati.
 
-The reason is obvious: there is no method where the compiler could jump to! A method that is declared abstract does not have an implementation for this method. It is up to inherited objects to override and implement this method. Continuing our example, take a look at this:
+Razlog je očigledan: ne postoji metoda na koju bi kompajler mogao da pređe! Metoda koja je deklarisana kao apstraktna nema implementaciju za ovu metodu. Na nasleđenim objektima je da je prepišu i implementiraju. Nastavljajući naš primer, pogledajte ovo:
 
 ```pascal
 Type  
   TParent = Object  
     ...  
-    procedure Doit;virtual;abstract;  
+    procedure Doit; virtual; abstract;  
     ...  
     end;  
-  PParent=^TParent;  
+  PParent=^TParent;
+
   TChild = Object(TParent)  
     ...  
     procedure Doit;virtual;  
@@ -367,7 +367,7 @@ Type
   PChild = ^TChild;
 ```
 
-As it is visible, both the parent and child objects have a method called Doit. Consider now the following declarations and calls:
+Kao što je vidljivo, i roditeljski i podređeni objekti imaju metod koji se zove Doit. Razmotrite sada sledeće deklaracije i pozive:
 
 ```pascal
 Var  
@@ -378,29 +378,31 @@ begin
    ParentA := New(PParent,Init);  
    ParentB := New(PChild,Init);  
    Child := New(PChild,Init);  
-   ParentA^.Doit;  
+   
+   ParentA^.Doit;  // Greška. Ne može se izvesti instanca klase koja ima apstraktnu metodu
    ParentB^.Doit;  
    Child^.Doit;
 ```
 
-First of all, Line 3 will generate a compiler error, stating that one cannot generate instances of objects with abstract methods: The compiler has detected that PParent points to an object which has an abstract method. Commenting line 3 would allow compilation of the program.
+Pre svega, red 3 će generisati grešku kompannjlera, navodeći da se ne mogu generisati instance objekata sa apstraktnim metodama: Kompajler je otkrio da PParent ukazuje na objekat koji ima apstraktnu metodu. Komentarisaje reda 3 bi omogućilo kompajliraje programa.
 
-Remark If an abstract method is overridden, the parent method cannot be called with inherited, since there is no parent method; The compiler will detect this, and complain about it, like this:
-testo.pp(32,3) Error: Abstract methods can't be called directly
+Nasleđena primedba Ako je apstraktna metoda prepisana, roditeljska metoda ne može biti pozvana sa , jer ne postoji roditeljska metoda; kompajler će ovo detektovati i žaliti se na to, ovako:
+testo.pp(32,3) Greška: Apstraktne metode se ne mogu direktno pozivati
 
-If, through some mechanism, an abstract method is called at run-time, then a run-time error will occur. (run-time error 211, to be precise)
+Ako se, putem nekog mehanizma, apstraktna metoda pozove tokom izvršavanja, doći će do greške tokom izvršavanja. (preciznije, greška tokom izvršavanja 211)
 
-#### 5.6.2.4 Class or static methods
+#### 5.6.2.4 Class ili static metode
 
-Class methods or methods declared with the static directive are methods that are global to the object type. When called, the implicit “self” pointer is not available. This means that normal methods cannot be called, and none of the fields of an object can be accessed. Class variables can be used, however.
+`Class` metode ili `static` metode su metode koje su globalne za tip objekta. Kada se pozovu, implicitni pokazivač „self“ nije dostupan. To znači da se normalne metode ne mogu pozvati iz njih i da se ne može pristupiti nijednom polju objekta. Međutim, mogu se koristiti promenljive klase.
 
-Class or static methods are regular methods, they can be assigned to a procedural variable.
+Class ili static metode su regularne metode, mogu se dodeliti proceduralnoj promenljivoj.
 
-The following program demonstrates all this. The commented-out statements will not compile.
+Sledeći program demonstrira sve ovo. Komentarisane izjave se neće kompajlirati.
 
 ```pascal
 {$APPTYPE CONSOLE}  
 {$IFDEF FPC}{$MODE DELPHI}{$H+}{$ENDIF}  
+
 type  
   TTest = object  
     const Epsylon = 100;  
@@ -408,7 +410,7 @@ type
     class var cv1,cv2:integer;  
     procedure myproc;  
     class procedure testproc;  
-    class procedure testproc2;static;  
+    class procedure testproc2; static;  
     procedure testproc3; static;  
   end;  
 
@@ -447,7 +449,7 @@ begin
 end.
 ```
 
-Uncommenting one of the commented statements and trying to compile the resulting code will result in a compiler error:
+Dekomentarisanje jedne od komentarisanih izjava i pokušaj kompajliranja rezultujućeg koda će dovesti do greške kompajlera:
 
 ```sh
 ocv.pp(32,6) Error: Only class methods, class properties and  
@@ -460,8 +462,8 @@ Tabela ispod sumira sve vrste metoda koje su dostupne u **Object** tipu podataka
 
  Tip metode | Deklaracija | Karakteristike | Kada koristiti |
  --------- | ----------- | -------------- | -------------- |
- **Static (Normal)** | `procedure Doit;` | Poziv se određuje u vreme kompajliranja. Tip promenljive određuje koja metoda se poziva. Najbrža metoda poziva. Ne može se override-ovati. Standardni metodi bez potrebe za polimorfizmom. | |
- **Virtual** | `procedure Doit; virtual;` | Poziv se određuje u vreme izvršavanja. Koristi VMT (Virtual Method Table). Može se nadjačati u potomcima. U potomku takođe koristi `virtual` (ne `override`!) | Kada je potreban polimorfizam |
+ **Obične (statičke)** | `procedure Doit;` | Poziv se određuje u vreme kompajliranja. Tip promenljive određuje koja metoda se poziva. Najbrža metoda poziva. Ne može se override-ovati. | Standardni metodi bez potrebe za polimorfizmom. |
+ **Virtual** | `procedure Doit; virtual;` | Poziv se određuje u vreme izvršavanja. Koristi VMT (Virtual Method Table). Može se nadjačati u potomcima. U potomku takođe koristite `virtual` (ne `override`!) | Kada je potreban polimorfizam |
  **Abstract** | `procedure Doit; virtual; abstract;` | Mora biti `virtual`. Nema implementaciju.  Mora se implementirati u potomku. Ne može se kreirati instanca objekta sa abstract metodama | Interfejsi, šablonski obrazac |
  **Class/Static** | `class procedure Doit`; ili `procedure Doit; static;` | Nema pristup `Self`. Nema pristup običnim poljima. Ima pristup class poljima. Može se dodeli proceduralnoj promenljivoj | Pomoćne funkcije bez potrebe za instancom |
 
@@ -509,15 +511,15 @@ Type
  **Interfejsi** | Ne | Da |
  **Property** | Ograničeno | Potpuno |
 
-### 5.7.2 Pojašnjenje: Static (Normal) vs Class/Static
+### 5.7.2 Pojašnjenje: Obične (Statičke) vs Class/Static
 
 **VAŽNO: Terminološka zabuna!**
 
-**"Static (Normal)"** metod i **"Class/Static"** metod su **potpuno različite stvari**:
+**"Obični (Statičke)"** metod i **"Class/Static"** metod su **potpuno različite stvari**:
 
-  Karakteristika | Static (Normal) metod | Class/Static metod |
+  Karakteristika | Obični (Statički) metod | Class/Static metod |
   -------------- | --------------------- | ------------------ |
-  **Druga imena** | Obični metod, Regular metod | Metod klase |
+  **Druga imena** | Obični metod, Regularni metod | Metod klase |
   **Self pokazivač** | ✅ DA (pokazuje na **instancu**) | ❌ NE (ili pokazuje na **VMT**) |
   **Pristup poljima instance** | ✅ DA | ❌ NE |
   **Pristup class poljima** | ✅ DA | ✅ DA |
@@ -551,11 +553,10 @@ begin
 end;
 ```
 
-### 5.7.3 Kako rade Static (Normal) metode u nasleđivanju
+### 5.7.3 Kako rade obične (statičke) metode u nasleđivanju
 
-**Ključno razumevanje**: TIP PROMENLJIVE određuje koja se metoda poziva, NE stvarni tip objekta!
-
-**Radi kao u Pythonu** - poziv se određuje u vreme kompajliranja:
+- **Ključno razumevanje**: TIP PROMENLJIVE određuje koja se metoda poziva, NE stvarni tip objekta!  
+- **Radi kao u Pythonu** - poziv se određuje u vreme kompajliranja:
 
 ```pascal
 program StaticInheritanceDemo;
@@ -728,17 +729,11 @@ end;
  **Virtual** | Po **stvarnom tipu objekta** | **Run-time** (VMT) | `AnimalPtr^.Method` → `TDog.Method` |
  **Class/Static** | Po **klasi** (ne instanci) | **Compile-time** | `TAnimal.ClassMethod` |
 
-**Analogija:**
-
-- **Static metod** = telefonski broj "zakucan" u kod
-- **Virtual metod** = telefonski imenik koji se konsultuje u runtime
-- **Class metod** = poziv koji ne zahteva instancu
-
 ### 5.7.7 Praktični savet: Kada koristiti šta
 
   Scenario | Preporuka | Razlog |
   -------- | --------- | ------- |
- Metod se nikad ne menja | Static (Normal) | Brži, jednostavniji |
+ Metod se nikad ne menja | Obični (Statički) | Brži, jednostavniji |
  Metod se override-uje u potomcima | Virtual | Polimorfizam |
  Metod bez potrebe za instancom | Class/Static | Ne zahteva objekat |
  Treba pristup poljima | Static (Normal) | Ima Self |
