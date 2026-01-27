@@ -3,14 +3,14 @@
 
 ## Contents
 
-[**01 Pascal Tokens**][f01]  
-[**02 Constants**][f02]  
-[**03 Types**][f03]  
-[**04 Variables**][f04]  
-[**05 Objects**][f05] *(legacy OOP, prototipsko nasleđivanje)*  
-[**06 Classes**][f06] *(moderni OOP, preporučeno za novi kod)*  
-[**07 Interfaces**][f07]  
-[**08 Generics**][f08]  
+[**01 Tokeni**][f01]  
+[**02 Konstante**][f02]  
+[**03 Tipovi**][f03]  
+[**04 Promenljive**][f04]  
+[**05 Objekti**][f05] *(legacy OOP, prototipsko nasleđivanje)*  
+[**06 Klase**][f06] *(moderni OOP, preporučeno za novi kod)*  
+[**07 Interfejsi**][f07]  
+[**08 Generici**][f08]  
 
 [09 Extended records]()  
 [10 Class, Record and Type helpers]()

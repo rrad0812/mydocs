@@ -1,9 +1,7 @@
 
-# 2 Constants
+# 2 Konstante
 
 [prev][f1] [content][f0] [next][f2]
-
-Just as in Turbo Pascal, Free Pascal supports both ordinary and typed constants. They are declared in a constant declaration block in a unit, program or class, function or procedure declaration (section 16.5, page 923).
 
 ## 2.1 Ordinary constants
 
@@ -12,6 +10,16 @@ Ordinary constants declarations are constructed using an identifier name followe
 The compiler must be able to evaluate the expression in a constant declaration at compile time. This means that most of the functions in the Run-Time library cannot be used in a constant declaration. Operators such as +, -, *, /, not, and, or, div, mod, ord, chr, sizeof, pi, int, trunc, round, frac, odd can be used, however. For more information on expressions, see chapter 12, page 583.
 
 When a previously declared ordinary constant is used in the code, the compiler will insert the actual value of the constant instead of the constant name. That is, the following two pieces of code are entirely equivalent:
+
+Baš kao u Turbo Pascal-u, Free Pascal podržava i obične i tipizirane konstante. One su deklarisane u bloku deklaracije `const` u deklaraciji unita, programa ili klase, funkcije ili procedure.
+
+## 2.1 Obične konstante
+
+Deklaracije običnih konstanti se konstruiše korišćenjem imena identifikatora praćenog tokenom "=", a praćenog opcionim izrazom koji se sastoji od legalnih kombinacija brojeva, znakova, logičkih vrednosti ili nabrojanih vrednosti prema potrebi.
+
+Kompajler mora biti u stanju da proceni izraz u konstantnoj deklaraciji u vreme kompajliranja. To znači da većina funkcija u Run-Time biblioteci ne može da se koristi u konstantnoj deklaraciji. Međutim, mogu se koristiti operatori kao što su `+`, `-`, `*`, `/`, `not`, `and`, `or`, `div`, `mod`, `ord`, `chr`, `sizeof`, `pi`, `int`, `trunc`, `round`, `frac`, `odd`.
+
+Kada se prethodno deklarisana obična konstanta koristi u kodu, kompajler će umetnuti stvarnu vrednost konstante umesto imena konstante. To jest, sledeća dva dela koda su potpuno ekvivalentna:
 
 ```pascal
 Const  
@@ -22,7 +30,7 @@ begin
 end.
 ```
 
-The above will produce the same code as if one had written:
+Gornji kod će proizvesti isti izvršni kod kao da je bio napisan ovako:
 
 ```pascal
 begin  
@@ -30,16 +38,16 @@ begin
 end.
 ```
 
-Only constants of the following types can be declared:
+Samo konstante sledećih tipova mogu biti deklarisane:
 
-- **Ordinal** types
-- **Set** types
-- **Pointer** types** (but the only allowed value is Nil).
-- **Real** types
+- **Ordinal**
+- **Set**
+- **Pointer** (ali jedina dozvoljena vrednost je Nil).
+- **Real**
 - **Char**
 - **String**.
 
-The following are all valid constant declarations:
+Slede validne deklaracije konstanti:
 
 ```pascal
 Const  
@@ -47,38 +55,38 @@ Const
   a = 2;                            { Ordinal (Integer) type constant. }  
   c = '4';                          { Character type constant. }  
   s = 'This is a constant string';  {String type constant.}  
-  sc = chr(32)  
+  sc = chr(32)                       
   ls = SizeOf(Longint);  
   P = Nil;  
-  Ss = [1,2];
+  Ss = [1, 2];
 ```
 
-Assigning a value to an ordinary constant is not permitted. Thus, given the previous declaration, the following will result in a compiler error:
+Dodeljivanje vrednosti običnoj konstanti nije dozvoljeno. Dakle, s obzirom na prethodnu deklaraciju, sledeće će dovesti do greške kompajlera:
 
 ```pascal
   s := 'some other string';
 ```
 
-For string constants, the type of the string is dependent on some compiler switches. If a specific type is desired, a typed constant should be used, as explained in the following section.
+Za konstante niza, tip stringa zavisi od nekih prekidača kompajlera. Ako se želi određeni tip, treba koristiti ukucanu konstantu, kao što je objašnjeno u sledećem odeljku.
 
-Prior to version 1.9, Free Pascal did not correctly support 64-bit constants. As of version 1.9, 64-bit constants can be specified.
+Pre verzije 1.9, Free Pascal nije ispravno podržavao 64-bitne konstante. Od verzije 1.9, mogu se specificirati 64-bitne konstante.
 
-## 2.2 Typed constants
+## 2.2 Tipizirane konstante
 
-Sometimes it is necessary to specify the type of a constant, for instance for constants of complex structures (defined later in the manual). Their definition is quite simple.
+Ponekad je potrebno specificirati tip konstante, na primer za konstante složenih struktura (definisane kasnije u priručniku). Njihova definicija je prilično jednostavna.
 
-Contrary to ordinary constants, a value can be assigned to them at run-time. This is an old concept from Turbo Pascal, which has been replaced with support for initialized variables: For a detailed description, see section 4.4, page 234.
+Za razliku od običnih konstanti, vrednost im se može dodeliti u toku rada. Ovo je stari koncept iz Turbo Paskala, koji je zamenjen podrškom za inicijalizovane varijable.
 
-Support for assigning values to typed constants is controlled by the `{$J}` directive: it can be switched off, but is on by default (for Turbo Pascal compatibility). Initialized variables are always allowed.
+Podršku za dodeljivanje vrednosti tipiziranim konstantama kontroliše `{$J}` direktiva: može se isključiti, ali je podrazumevano uključena (za Turbo Pascal kompatibilnost). Inicijalizovane promenljive su uvek dozvoljene.
 
-**Napomena**:  
-It should be stressed that typed constants are automatically initialized at program start. This is also true for local typed constants and initialized variables. Local typed constants are also initialized at program start. If their value was changed during previous invocations of the function, they will retain their changed value, i. e. they are not initialized each time the function is invoked.
+**Napomena**:
+Treba naglasiti da se tipizirane konstante automatski inicijalizuju pri pokretanju programa. Ovo takođe važi za lokalno tipizirane konstante i inicijalizovane promenljive. Lokalne tipizirane konstante se takođe inicijalizuju pri pokretanju programa. Ako je njihova vrednost promenjena tokom prethodnih poziva funkcije, oni će zadržati promenjenu vrednost, tj. ne inicijalizuju se svaki put kada se funkcija pozove.
 
-## Resource strings
+## Resourcestring
 
-A special kind of constant declaration block is the `Resourcestring` block. Resourcestring declarations are much like constant string declarations: resource strings act as constant strings, but they can be localized by means of a set of special routines in the objpas unit. A resource string declaration block is only allowed in the Delphi or Objfpc modes.
+Posebna vrsta bloka deklaracije konstante je blok `Resourcestring`. Deklaracije stringova resursa su slične deklaracijama konstantnih stringova: stringovi resursa deluju kao konstantni stringovi, ali se mogu lokalizovati pomoću skupa posebnih rutina u jedinici `objpas`. Blok deklaracije niza resursa je dozvoljen samo u Delphi ili Objfpc režimima.
 
-The following is an example of a resourcestring definition:
+Sledi primer definicije `resourcestring`:
 
 ```pascal
 Resourcestring  
@@ -95,7 +103,16 @@ More on the subject of resourcestrings can be found in the Programmer’s Guide,
 
 Remark Note that a resource string which is given as an expression will not change if the parts of the expression are changed:
 
-```pascla
+Sve string konstante definisane u odeljku `resourcestring` se čuvaju u posebnim tabelama. Stringovima u ovim tabelama može se manipulisati tokom rada pomoću nekih posebnih mehanizama iz unita `objpas`.
+
+Semantički, stringovi se ponašaju kao obične konstante; Nije dozvoljeno da im se dodeljuju vrednosti (osim preko posebnih mehanizama u jedinici `objpas`). Međutim, oni se mogu koristiti u zadacima ili izrazima kao obične string konstante. Glavna upotreba odeljka `resourcestring` je da obezbedi sredstvo za laku internacionalizaciju.
+
+Više o temi `resourcestring` resursa možete pronaći u Vodiču za programere i u referenci unita `objpas`.
+
+**Napomena**  
+Imajte na umu da se `resourcestring` koji je dat kao izraz neće promeniti ako se delovi izraza promene:
+
+```pascal
 resourcestring  
   Part1 = 'First part of a long string.';  
   Part2 = 'Second part of a long string.';  
@@ -106,6 +123,11 @@ If the localization routines translate Part1 and Part2, the Sentence constant wi
 
 **Napomena**:  
 Likewise, when using resource strings in a constant array, only the initial values of the resource strings will be used in the array: when the individual constants are translated, the elements in the array will retain their original value.
+
+Ako rutine lokalizacije prevode "Part1" i "Part2", konstanta "Sentence" neće biti automatski prevedena: ona ima poseban unos u tabelama resourcestring i stoga mora biti prevedena odvojeno. Gornja konstrukcija jednostavno kaže da je početna vrednost rečenice jednaka "Part1+’ ’+Part2".
+
+**Napomena**:
+Slično, kada koristite resourcestring u nizu konstanti, u nizu će se koristiti samo početne vrednosti resourcestringa: kada se pojedinačne konstante prevedu, elementi u nizu će zadržati svoju originalnu vrednost.
 
 ```pascal
 resourcestring  

@@ -1,34 +1,34 @@
 
-# 3 Types
+# 3 Tipovi
 
 [prev][f1] [content][f0] [next][f2]
 
-All variables have a type. Free Pascal supports the same basic types as Turbo Pascal, with some extra types from Delphi as well as some of its own.
+Sve varijable imaju tip. Free Pascal podržava iste osnovne tipove kao Turbo Pascal, sa nekim dodatnim tipovima iz Delphija, kao i nekim sopstvenim.
 
-The programmer can declare his own types, which is in essence defining an identifier that can be used to denote this custom type when declaring variables further in the source code. Declaring a type happens in a Type block (section 16.5, page 923), which is a collection of type declarations, separated by semicolons.
+Programer može deklarisati sopstvene tipove, što u suštini definiše identifikator koji može da se koristi za označavanje ovog prilagođenog tipa kada se deklarišu promenljive dalje u izvornom kodu. Deklarisanje tipa se dešava u bloku `Type`,  koji je kolekcija deklaracija tipa, odvojenih tačkom i zarezom.
 
-Each of these cases will be examined separately.
+Svaki od ovih slučajeva će se posebno razmatrati.
 
-## 3.1 Base types
+## 3.1 Osnovni tipovi
 
-The base or simple types of Free Pascal are the Delphi types. We will discuss each type separately.
+Osnovni ili jednostavni tipovi Free Pascala su Delphi tipovi. Pričaćemo o svakom odvojeno.
 
-### 3.1.1 Ordinal types
+### 3.1.1 Redni tipovi
 
-With the exception of floating point value types, all base types are `ordinal` types. Ordinal types have the following characteristics:
+Sa izutetkom tipova floating point vrednosti, svi osnovni tipovi su `ordinal` tipovi. Redni tipovi imaju sledeće krakteristike:
 
-- **Ordinal types** are countable and ordered, i. e. it is, in principle, possible to start counting them one by one, in a specified order. This property allows the operation of functions as `Inc`, `Ord`, `Dec` on ordinal types to be defined.
-- **Ordinal values** have a smallest possible value. Trying to apply the `Pred` function on the smallest possible value will generate a `range check error` if range checking is enabled `{R+}`.
-- **Ordinal values** have a largest possible value. Trying to apply the `Succ` function on the largest possible value will generate a `range check error` if range checking is enabled `{R+}`.
+- **Redni tipovi** su prebrojivi i uređeni, tj., u principu je moguće početi brojati jedan po jedan, određenim redosledom. Ovo svojstvo omogućava da se definiše rad funkcija kao `Inc`, `Ord`, `Dec` na rednim tipovima.
+- **Redne vrednosti** imaju najmanju moguću vrednost. Pokušaj primene funkcije `Pred` na najmanju moguću vrednost će generisati `range check error` ako je provera opsega omogućena `{R+}`.
+- **Redne vrednosti** imaju najveću moguću vrednost. Pokušaj primene funkcije `Succ` na najveću moguću vrednost će generisati `range check error` ako je provera opsega omogućena `{R+}`.
 
-**Napomena**:  
-`Int64` and `QWord` are considered ordinal types on 64-bit CPUs. On 32-bit types they have some of the characteristics of ordinals, but they cannot be used e. g. in `for` loops.
+**Napomena**:
+`Int64` i `QWord` se smatraju rednim tipovima na 64-bitnim CPU-ima. Na 32-bitnim tipovima oni imaju neke od rednih karakteristika, ali se ne mogu koristiti npr. u `for` petljama.
 
-#### 3.1.1.1 Integers
+#### 3.1.1.1 Intidžeri - celi brojevi
 
-A list of predefined integer types is presented in table (3.1).
+Lista predefinisanih integer tipova je prikazan u Tabeli 3.1:
 
-Table 3.1: Predefined integer types
+Tabela 3.1: Predefinisani nteger tipovi
 
  Name |
  ---- |
@@ -47,9 +47,9 @@ Table 3.1: Predefined integer types
  LongBool |
  QWordBool |
 
-The integer types, and their ranges and sizes, that are predefined in Free Pascal are listed in table (3.2). Please note that the qword and int64 types are not true ordinals, so some Pascal constructs will not work with these two integer types.
+Celobrojni tipovi, i njihovi opsezi i veličine, koji su unapred definisani u Free Pascal-u, navedeni su u tabeli (3.2). Imajte na umu da tipovi qword i int64 nisu pravi redni brojevi, tako da neke Pascal konstrukcije neće raditi sa ova dva tipa celih brojeva.
 
-Table 3.2: Predefined integer types
+Tabela 3.2: Predefinisani intidžer tipovi
 
  Type | Range | Size in bytes |
  ----- | ----- | ------------ |
@@ -64,11 +64,16 @@ Table 3.2: Predefined integer types
  Int64 | -9223372036854775808 .. 9223372036854775807 | 8 |
  QWord | 0 .. 18446744073709551615 | 8 |
 
-The integer type is an alias to the smallint type in the default Free Pascal mode. It is an alias for the longint type in either Delphi or ObjFPC mode. The cardinal type is currently always mapped to the longword type.
+**Napomena**  
 
-Remark The compiler decides on the type of an integer constant based on the value: An integer constant gets the smallest possible signed type. The first match in table (3.3) is used.
+- Celobrojni tip (Integer) je pseudonim za tip Smallint u podrazumevanom režimu Free Pascala.
+- Celobrojni tip (Integer) je pseudonim za tip Longint u Delphi ili ObjFPC režimu.
+- Cardinal tip je trenutno uvek mapiran u tip duge reči (Longword).
 
-Table 3.3: Integer constant type mapping
+**Napomena**  
+Kompajler odlučuje o tipu celobrojne konstante na osnovu vrednosti: Celobrojna konstanta dobija najmanji mogući tip sa znakom. Koristi se prvo podudaranje u tabeli (3.3).
+
+Tabela 3.3: Mapiranje integer konstanti
 
  Range | Type |
 ------ | ---- |
@@ -80,27 +85,28 @@ Table 3.3: Integer constant type mapping
 2147483648..4294967295 | Cardinal (longword) |
 -9223372036854775808 .. 9223372036854775807 | Int64 |
 
-That means constants in the range -128..127 are mapped to shortint, constants in range 128..255 are mapped to byte, etc. Constants in the range 2147483647..high(cardinal) are parsed as cardinals, and all decimal constants which do not fit either of the above ranges are parsed as 64-bit integer constants.
+To znači da su konstante u opsegu -128..127 mapirane u `shortint`, konstante u opsegu 128..255 su mapirane u `byte`, itd. Konstante u opsegu `2147483647..high(cardinal)` se raščlanjuju kao cardinal, a sve decimalne konstante koje se ne uklapaju u bilo koju od gornjih konstanti su parbitne kao konstante iznad.
 
 **Napomena**  
-In newer Delphi versions, the longint type is platform and CPU dependent. This is not so in FPC, where longint is 32-bit on all platforms.
+U novijim verzijama Delphija, `longint` tip zavisi od platforme i CPU-a. Ovo nije tako u FPC-u, gde je `longint` 32-bitni na svim platformama.
 
-As a pascal compiler, Free Pascal does automatic type conversion and upgrading in expressions where different kinds of integer types are used:
+Kao pascal kompajler, Free Pascal vrši automatsku konverziju tipova i nadogradnju u izrazima u kojima se koriste različite vrste celih tipova:
 
-- Every platform has a “native” integer size, depending on whether the platform is 8-bit, 16-bit,
-  32-bit or 64-bit. E. g. on AVR this is 8-bit.
-- Every integer smaller than the “native” size is promoted to a signed version of the “native”
-  size. Integers equal to the “native” size keep their signedness.
-- The result of binary arithmetic operators (+, -, *, etc.) is determined in the following way:
-  - If at least one of the operands is larger than the native integer size, the result is chosen to be the smallest type that encompasses the ranges of the types of both operands. This means that mixing an unsigned with a smaller or equal in size signed will produce a signed type that is larger than both of them.
-  - If both operands have the same signedness, the result is the same type as them. The only exception is subtracting (-): in the case of unsigned - unsigned subtracting produces a signed result in FPC (as in Delphi, but not in TP7).
-  - Mixing signed and unsigned operands of the “native” int size produces a larger signed result. This means that mixing longint and longword on 32-bit platforms will produce an int64. Similarly, mixing byte and shortint on 8-bit platforms (AVR) will produce a smallint.
+- Svaka platforma ima „prirodnu“ veličinu celog broja, u zavisnosti od toga da li je platforma
+  8-bitna, 16-bitna, 32-bitni ili 64-bitni. E. g. na AVR-u ovo je 8-bitno.
+– Svaki ceo broj manji od „nativne“ veličine se unapređuje u potpisanu verziju „nativne“
+  veličina. Celi brojevi jednaki „nativnoj“ veličini zadržavaju svoj predznak.
+- Rezultat binarnih aritmetičkih operatora (+, -, *, itd.) određuje se na sledeći način:
+  - Ako je bar jedan od operanada veći od prirodne veličine celog broja, rezultat se bira da bude najmanji tip koji obuhvata opsege tipova oba operanda. To znači da će mešanje neoznačenog sa manjim ili jednakim predznakom proizvesti potpisani tip koji je veći od oba.
+  - Ako oba operanda imaju isti predznak, rezultat je istog tipa kao i oni. Jedini izuzetak je oduzimanje (-): u slučaju neoznačenog - oduzimanje bez predznaka daje rezultat sa znakom u FPC (kao u Delphiju, ali ne i u TP7).
+- Mešanje potpisanih i neoznačenih operanada „nativne“ veličine int daje veći rezultat sa znakom.
+  To znači da će mešanje longinta i longvord na 32-bitnim platformama proizvesti int64. Slično tome, mešanje bajta i shortinta na 8-bitnim platformama (AVR) će proizvesti smallint.
 
-#### 3.1.1.2 Boolean types
+#### 3.1.1.2 Boolean tipovi
 
-Free Pascal supports the `Boolean` type, with its two predefined possible values `True` and `False`. These are the only two values that can be assigned to a `Boolean` type. Of course, any expression that resolves to a boolean value, can also be assigned to a boolean type.
+Free Pascal podržava `Boolean` tip, sa svoje dve unapred definisane moguće vrednosti `True` i `False`. Ovo su jedine dve vrednosti koje se mogu dodeliti `Boolean` tipu. Naravno, bilo koji izraz koji se rešava u logičku vrednost, takođe može biti dodeljen logičkom tipu.
 
-Table 3.4: Boolean types
+Tabela 3.4: Boolean tipovi
 
 Name | Size | Ord(True) |
 ---- | ---- | --------- |
@@ -119,65 +125,70 @@ To make interfacing with C even easier, Free Pascal also supports the `ByteBool`
 
 Assuming B to be of type `Boolean`, the following are valid assignments:
 
+Pored jednostavnog tipa „Boolean“, postoje dodatni tipovi „Boolean16“, „Boolean32“ i „Boolean64“. To su u stvari celobrojni tipovi, koji su kompatibilni sa dodeljivanjem sa jednostavnim logičkim tipom. Kao ceo broj, vrednosti za `True` i `False` su `1` i `0`. Ovo se može koristiti za povezivanje sa C kodom koji definiše logički broj ove veličine sa vrednostima `0` i `1`.
+
+Da bi povezivanje sa C bio još lakše, Free Pascal takođe podržava tipove `ByteBool`, `WordBool`, `LongBool` i `QWordBool`. Oni su tipa `Byte`, `Word`, `Longint` ili `Int64`, ali su opet za dodeljivanje kompatibilni sa `Boolean`. Jedina razlika sa tipovima Boolean16/32/64 je u tome koje se vrednosti smatraju `True` ili `False`“: vrednost `False` je ekvivalentna `0` (nula) i svaka vrednost različita od nule se smatra `True` kada se konvertuje u logičku vrednost. Logička vrednost `True` se konvertuje u `Not(0)` u slučaju da je dodeljena promenljivoj tipa `ByteBool`, `WordBool`, `LongBool` ili `QWordBool`.
+
+Pod pretpostavkom da je B tipa `Boolean`, sledeće su važeće dodele:
+
 > B := True;  
 > B := False;  
 > B := 1<>2;  { Results in B := True }
 
-Boolean expressions are also used in conditions.
+Logički izrazi se takođe koriste u uslovima.
 
 **Napomena**:  
-In Free Pascal, boolean expressions are by default always evaluated in such a way that when the result is known, the rest of the expression will no longer be evaluated: this is called short-cut boolean evaluation.
+U Free Pascal-u, logički izrazi se podrazumevano uvek procenjuju na takav način da kada je rezultat poznat, ostatak izraza više neće biti procenjen: ovo se zove prečica logičke evaluacije.
 
-In the following example, the function Func will never be called, which may have strange side-effects.
+U sledećem primeru, funkcija Func nikada neće biti pozvana, što može imati čudne sporedne efekte.
 
 ```pascal  
  B := False;  
  A := B and Func;
 ```
 
-Here Func is a function which returns a `Boolean` type.
+Ovde je Func funkcija koja vraća vrednost `Boolean` tipa.
 
-This behavior is controllable by the `{$B}` compiler directive.
+Ovo ponašanje je kontrolisano sa `{$B}` kompajlerskom direktivom.
 
-#### 3.1.1.3 Enumeration types
+#### 3.1.1.3 Tipovi nabrajanja
 
-`Enumeration types` are supported in Free Pascal. On top of the Turbo Pascal implementation, Free Pascal allows also a C-style extension of the enumeration type, where a value is assigned to a particular element of the enumeration list.
-(see chapter 12, page 583 for how to use expressions) When using assigned enumerated types, the assigned elements must be in ascending numerical order in the list, or the compiler will complain. The expressions used in assigned enumerated elements must be known at compile time. So the following is a correct enumerated type declaration:
+`Tipovi nabrajanja` su podržani u Free Pascal-u. Pored Turbo Pascal implementacije, Free Pascal takođe dozvoljava proširenje tipa nabrajanja u stilu C, gde se vrednost dodeljuje određenom elementu liste nabrajanja. Kada koristite dodeljene nabrojane tipove, dodeljeni elementi moraju biti u rastućem numeričkom redosledu na listi, inače će kompajler da se žali. Izrazi koji se koriste u dodeljenim nabrojanim elementima moraju biti poznati u vreme kompajliranja. Dakle, sledeće je ispravna deklaracija nabrojanog tipa:
 
 ```pascal
 Type  
   Direction = ( North, East, South, West );
 ```
 
-A C-style enumeration type looks as follows:
+C-stil tipa nabrajanja izgleda ovako:
 
 ```pascal
 Type  
   EnumType = (one, two, three, forty := 40, fortyone);
 ```
 
-or you can use
+ili možete koristiti:
 
 ```pascal
 Type  
   EnumType = (one, two, three, forty = 40, fortyone);
 ```
 
-The latter notation is mandatory in mode DELPHI.
+Poslednja notacija je obavezna u režimu DELPHI.
 
-As a result, the ordinal number of forty is 40, and not 3, as it would be when the ’:= 40’ wasn’t present. The ordinal value of fortyone is then 41, and not 4, as it would be when the assignment wasn’t present. After an assignment in an enumerated definition the compiler adds 1 to the assigned value to assign to the next enumerated value.
+Kao rezultat, redni broj "forty" je 40, a ne 3, kao što bi bilo kada dodele ’:= 40’ nije bilo. Redna vrednost "fortyone" je tada 41, a ne 4, kao što bi bilo kada zadatak dodele nije bio prisutan. Nakon dodele u nabrojanoj definiciji, kompajler dodaje 1 dodeljenoj vrednosti da bi dodelio sledećoj nabrojanoj vrednosti.
 
-When specifying such an enumeration type, it is important to keep in mind that the enumerated elements should be kept in ascending order. The following will produce a compiler error:
+Prilikom navođenja takvog tipa nabrajanja, važno je imati na umu da nabrojane elemente treba držati u rastućem redosledu. Sledeće će proizvesti grešku kompajlera:
 
 ```pascal
 Type  
   EnumType = (one, two, three, forty := 40, thirty := 30);
 ```
 
-It is necessary to keep forty and thirty in the correct order. When using enumeration types it is important to keep the following points in mind:
+Neophodno je držati četrdeset i trideset u ispravnom redosledu. Kada koristite tipove nabrajanja, važno je imati na umu sledeće:
 
-- The `Pred` and `Succ` functions cannot be used on this kind of enumeration types. Trying to do this anyhow will result in a compiler error.
-- Enumeration types are stored using a default, independent of the actual number of values: the compiler does not try to optimize for space. This behavior can be changed with the `{$PACKENUM n}` compiler directive, which tells the compiler the minimal number of bytes to be used for enumeration types. For instance:
+- Funkcije `Pred` i `Succ` se ne mogu koristiti na ovakvim tipovima nabrajanja. Pokušaj da ovo uradite na bilo koji način će dovesti do greške kompajlera.
+- Tipovi nabrajanja se čuvaju koristeći podrazumevanu vrednost, nezavisno od stvarnog broja vrednosti: kompajler ne pokušava da optimizuje prostor. Ovo ponašanje se može promeniti pomoću direktive kompajlera `{$PACKENUM n}`, koja kompajleru govori o minimalnom broju bajtova koji će se koristiti za tipove nabrajanja. na primer:
 
 ```pascal
 Type  
@@ -195,20 +206,18 @@ begin
 end.
 ```
 
-will, when run, print the following:
+će, kada se pokrene štampati:
 
-```pascal
+```sh
 Small enum : 1  
 Large enum : 4
 ```
 
-More information can be found in the Programmer’s Guide, in the compiler directives section.
+#### 3.1.1.4 Subrange tipovi
 
-#### 3.1.1.4 Subrange types
+Subrange tip je opseg vrednosti iz rednog tipa (tip domaćina). Da bi se definisao subrange tip, moraju se navesti njegove granične vrednosti: najviša i najniža vrednost tipa.
 
-A subrange type is a range of values from an ordinal type (the host type). To define a subrange type, one must specify its limiting values: the highest and lowest value of the type.
-
-Some of the predefined integer types are defined as subrange types:
+Neki od unapred definisanih tipova celih brojeva su definisani kao tipovi podopsega:
 
 ```pascal
 Type  
@@ -219,34 +228,68 @@ Type
   Word     = 0..65535;
 ```
 
-Subrange types of enumeration types can also be defined:
+Subrange tipovi enumeracionih tipova takodje mogu biti definisani:
 
 ```pascal
 Type  
-  Days = (monday,tuesday,wednesday,thursday,friday,  
-          saturday,sunday);  
+  Days = (monday,tuesday,wednesday,thursday,friday,saturday,sunday);  
   WorkDays = monday .. friday;  
   WeekEnd = Saturday .. Sunday;
 ```
 
-#### 3.1.1.5 Character types
+### 3.1.2 Karakter tipovi
 
-A `character type` is also an ordinal type: characters are ordered, can be counted. There are 2 character types:
+#### 3.1.2.1 Char
 
-- `AnsiChar`  
-  This is a 1-byte character. The interpretation of the character depends on the codepage.
-- `WideChar`
-  This is a 2-byte character. The interpretation of the character depends on the codepage.
+Free Pascal podržava tip `Char`. `Char` je veličine tačno 1 bajt i sadrži jedan ASCII znak.  
 
-Characters can be used in a loop, one can use `prev` and `succ` on it, as well as `ord`.
+- Znakovna konstanta se može navesti tako što se karakter stavi u jednostruke navodnike, na
+  sledeći način: 'a' ili 'A' su obe karakterne konstante.  
 
-For more information on characters, see section 3.2, page 108.
+- Znak se takođe može navesti njegovom vrednošću karaktera (obično ASCII kod), tako što se
+  ispred redne vrednosti nalazi simbol broja (#). Na primer, navođenje `#65` bi bilo isto kao `A`.  
 
-### 3.1.2 Real types
+- Takođe, znak za umetanje (`^`) može da se koristi u kombinaciji sa slovom da se navede znak sa
+  ASCII vrednošću manjom od 27. Tako je `^G` jednako `#7` - G je sedmo slovo u abecedi. Prevodilac je prilično aljkav u vezi sa znakovima koji su dozvoljeni nakon kareta, ali generalno treba pretpostaviti samo slova.  
 
-Free Pascal uses the math coprocessor (or emulation) for all its floating-point calculations. The Real native type is processor dependent, but it is either a Single or a Double. Only the IEEE floating point types are supported, and these depend on the target processor and emulation options. The true Turbo Pascal compatible types are listed in table (3.5).
+- Kada znak jednostrukog navodnika mora biti predstavljen, treba ga otkucati dva puta uzastopno,
+  tako da `''''` predstavlja znak jednostrukog navodnika.
 
-Table 3.5: Supported Real types
+#### 3.1.2.2 AnsiChar
+
+Da bi razlikovali `Char` od `WideChar`, `system` unit takođe definiše tip `AnsiChar`, koji je isti kao tip `Char`. U budućim verzijama FPC-a, tip `Char` može postati pseudonim za `WideChar` ili `AnsiChar`.
+
+#### 3.1.2.3 WideChar
+
+Free Pascal podržava tip `WideChar`. `WideChar` je veličine tačno 2 bajta i sadrži jedan znak `UNICODE` u `UTF-16` kodiranju.
+
+- Unicode znak se može navesti njegovom vrednošću karaktera (UTF-16 kod), tako što se ispred
+  redne vrednosti nalazi simbol broja (`#`).
+
+- Normalan ansi (1-bajtni) literal karaktera se takođe može koristiti za široki karakter,
+  kompajler će ga automatski konvertovati u 2-bajtni UTF-16 karakter.
+
+- Sledeće definiše neke grčke znakove (fi, omega):
+
+  ```pascal
+  Const  
+    C3 : widechar = #$03A8;  
+    C4 : widechar = #$03A9;
+  ```
+
+- Isto može biti postignuto typecasting-om `word` u `widechar`:
+
+  ```pascal
+  Const  
+    C3 : widechar = widechar($03A8);  
+    C4 : widechar = widechar($03A9);
+  ```
+
+### 3.1.3 Real tipovi
+
+Free Pascal koristi matematički koprocesor (ili emulaciju) za sve svoje proračune sa pokretnim zarezom. Realni izvorni tip zavisi od procesora, ali je ili `Single` ili `Double`. Podržani su samo IEEE tipovi sa pokretnim zarezom, a oni zavise od ciljnog procesora i opcija emulacije. Pravi Turbo Pascal kompatibilni tipovi su navedeni u tabeli (3.5).
+
+Tabela 3.5: Podržani Real tipovi (Turbo Pascal)
 
 Type | Range | Significant digits | Size |
 ---- | ----- | ------------------ | ---- |
@@ -257,248 +300,234 @@ Extended | 1.9E-4932 .. 1.1E4932 | 19–20 | 10 |
 Comp | -2E64+1 .. 2E63-1 | 19–20 | 8 |
 Currency | -922337203685477.5808 .. 922337203685477.5807 | 19–20 | 8 |
 
-The Comp type is, in effect, a 64-bit integer and is not available on all target platforms. To get more information on the supported types for each platform, refer to the Programmer’s Guide.
+`Comp` tip je, u stvari, 64-bitni ceo broj i nije dostupan na svim ciljnim platformama. Da biste dobili više informacija o podržanim tipovima za svaku platformu, pogledajte Vodič za programere.
 
-The currency type is a fixed-point real data type which is internally used as an 64-bit integer type (automatically scaled with a factor 10000), this minimizes rounding errors. This type should be used with care: when used in expressions using e.g. multiplication, the evaluation of the expression may go wrong (losing precision) if intermediate results fall outside the currency range.
+Tip `Currency` je stvarni tip podataka sa fiksnim zarezom koji se interno koristi kao 64-bitni celobrojni tip (automatski skaliran sa faktorom 10000), što minimizira greške zaokruživanja. Ovaj tip treba koristiti pažljivo: kada se koristi u izrazima koji koriste npr. množenja, procena izraza može poći po zlu (izgubiti preciznost) ako srednji rezultati padnu van opsega valute.
 
-Note that not all float types are available on all platforms. The single float type is the only one guaranteed to be available on all platforms that have floating point support (so e.g. AVR does not have it). The double type is available on all platforms with coprocessor, and the extended type is available on all Intel x86 processors, except on the Windows 64-bit platform. More details on availability can be found in the Programmer’s Guide.
+Imajte na umu da nisu svi floating point tipovi dostupni na svim platformama. Tip `Single` je jedini garantovano dostupan na svim platformama koje imaju podršku za plutajući zarez (tako da je, na primer, AVR nema). `Double` tip je dostupan na svim platformama sa koprocesorom, a `Extended` tip je dostupan na svim Intel x86 procesorima, osim na Windows 64-bitnoj platformi. Više detalja o dostupnosti možete pronaći u Vodiču za programere.
 
-## 3.2 Character types
+## 3.2 String tipovi
 
-### 3.2.1 Char or AnsiChar
+### 3.2.1 Single-byte string tipovi
 
-Free Pascal supports the type Char. A Char is exactly 1 byte in size, and contains one ASCII character.
+- Ako postoji specifikacija veličine (koristeći uglaste zagrade), to ukazuje na maksimalnu
+  veličinu stringa, ako ne to je – 255.
+- Ako postoji specifikacija kodne stranice, (koristeći okrugle zagrade) on ukazuje na `AnsiString`
+  sa pridruženim informacijama kodne stranice.
+- Značenje izjave o nizu bez veličine i oznake kodne stranice se različito tumači u zavisnosti od
+  prekidača `{$H}`:
+  
+  ```pascal
+  var  
+  A : String;
+  ```
 
-A character constant can be specified by enclosing the character in single quotes, as follows: ’a’ or ’A’ are both character constants.
+- Ako veličina i kodna strana nisu prisutne, gornja deklaracija može deklarisati `AnsiString`
+  ili `ShortString`.
+- Bez obzira na stvarni tip, jednobajtni stringovi (`AnsiString`ili `ShortString`) se mogu
+  koristiti naizmenično. Kompajler uvek vodi računa o potrebnim konverzijama tipova. Imajte na umu, međutim, da će rezultat izraza koji sadrži `AnsiString` i `ShortString` uvek biti `AnsiString`.
 
-A character can also be specified by its character value (commonly an ASCII code), by preceding the ordinal value with the number symbol (#). For example specifying `#65` would be the same as `’A’`.
+#### 3.2.1.1 ShortString
 
-Also, the caret character (`^`) can be used in combination with a letter to specify a character with ASCII value less than 27. Thus `^G` equals `#7` - G is the seventh letter in the alphabet. The compiler is rather sloppy about the characters it allows after the caret, but in general one should assume only letters.
+Deklaracija stringa deklariše `ShortString` u sledećim slučajevima:
 
-When the single quote character must be represented, it should be typed two times successively, thus `’’’’` represents the single quote character.
+- Ako je prekidač `$H` isključen: `{$H-}`, deklaracija stringa će uvek biti kratka.
+- Ako je prekidač na `{$H+}`, a postoji specifikacija maksimalne dužine (veličine), deklaracija je
+  deklaracija kratkog stringa.
+- Pretpostavlja se da kratki stringovi uvek koriste sistemsku kodnu stranicu.
+- Unapred definisani tip `ShortString` je definisan kao string veličine 255:
 
-To distinguish `Char` from `WideChar`, the system unit also defines the AnsiChar type, which is the same as the char type. In future versions of FPC, the `Char` type may become an alias for either `WideChar` or `AnsiChar`.
+  ```pascal
+  ShortString = String[255];
+  ```
 
-Free Pascal supports the type `WideChar`. A `WideChar` is exactly 2 bytes in size, and contains one `UNICODE` character in `UTF-16` encoding.
+- Ako veličina stringa nije navedena, podrazumevano se uzima 255. Stvarna dužina stringa se može
+  dobiti pomoću standardne runtime rutine `Length`. Na primer u:
 
-A unicode character can be specified by its character value (an UTF-16 code), by preceding the ordinal value with the number symbol (`#`).
+  ```pascal
+  {$H-}  
+   
+  Type  
+    NameString = String[10];  
+    StreetString = String;
+  ```
 
-A normal ansi (1-byte) character literal can also be used for a widechar, the compiler will automatically convert it to a 2-byte UTF-16 character.
+  "NameString" može da sadrži najviše 10 znakova, dok "StreetString" može da sadrži do 255 znakova.
 
-The following defines some greek characters (phi, omega):
+**Napomena**
+Kratki stringovi imaju maksimalnu dužinu od 255 karaktera: kada navedete maksimalnu dužinu, maksimalna dužina ne sme biti veća od 255. Ako se pokuša dužina veća od 255, kompajler će dati poruku o grešci:
 
-```pascal
-Const  
-  C3 : widechar = #$03A8;  
-  C4 : widechar = #$03A9;
+```sh
+Greška: dužina stringa mora da bude vrednost od 1 do 255
 ```
-
-The same can be accomplished by typecasting a word to widechar:
-
-```pascal
-Const  
-  C3 : widechar = widechar($03A8);  
-  C4 : widechar = widechar($03A9);
-```
-
-### 3.2.3 Other character types
-
-Free Pascal defines some other character types in the system unit such as `UCS2Char`, `UCS4Char`, `UniCodeChar`. However, no special support for these character types exists, they have been defined for Delphi compatibility only.
-
-### 3.2.4 Single-byte String types
-
-Free Pascal supports the `String` type as it is defined in Turbo Pascal: a sequence of single-byte characters with an optional size specification. It also supports ansistrings (with unlimited length) and codepage information1 as in Delphi.
-
-To declare a variable as a string, use the following type specification:
-
-- If there is a size specifier (using square brackets), then its maximum value –
-  indicating the maximum size of the string – is 255. If there is a codepage specifier, (using round brackets) it indicates an ansistring with associated code page information.
-
-  The meaning of a string declaration statement without size and code page indication is interpreted differently depending on the {$H} switch:
-
-```pascal
-var  
-A : String;
-```
-
-- If no size and code page indication indication is present, the above
-  declaration can declare an ansistring or a short string.
-
-Whatever the actual type, single byte strings can be used interchangeably. The compiler always takes care of the necessary type conversions. Note, however, that the result of an expression that contains ansistrings and short strings will always be an ansistring.
-
-### 3.2.5 Short strings
-
-A string declaration declares a short string in the following cases:
-
-- If the `$H` switch is off: `{$H-}`, the string declaration will always be a short string declaration.
-- If the switch is on `{$H+}`, and there is a maximum length (the size) specifier, the declaration is a short string declaration.
-
-Short strings are always assumed to use the system code page. The predefined type `ShortString` is defined as a string of size 255:
-
-```pascal
-ShortString = String[255];
-```
-
-If the size of the string is not specified, 255 is taken as a default. The actual length of the string can be obtained with the `Length` standard runtime routine. For example in:
-
-```pascal
-{$H-}  
- 
-Type  
-  NameString = String[10];  
-  StreetString = String;
-```
-
-`NameString` can contain a maximum of 10 characters. While `StreetString` can contain up to 255 characters.
 
 **Napomena**  
-Short strings have a maximum length of 255 characters: when specifying a maximum length, the maximum length may not exceed 255. If a length larger than 255 is attempted, then the compiler will give an error message:
+Za kratke stringove, dužina se čuva u znaku na indeksu 0. Stari Turbo Pascal kod se oslanja na ovo, a implementiran je na sličan način u Free Pascal-u.
 
-```pascal
-Error: string length must be a value from 1 to 255
-```
+Uprkos tome, da biste pisali prenosivi kod, najbolje je da podesite dužinu kratkog stringa `SetLength` i da je preuzmete pozivom `Length`. Ove funkcije će uvek raditi, bez obzira na internu reprezentaciju kratkih stringova ili drugih stringova koji se koriste: ovo omogućava lako prebacivanje između različitih tipova stringova.
 
-For short strings, the length is stored in the character at index 0. Old Turbo Pascal code relies on this, and it is implemented similarly in Free Pascal.
+#### 3.2.1.2 AnsiString
 
-Despite this, to write portable code, it is best to set the length of a shortstring with the `SetLength` call, and to retrieve it with the `Length` call. These functions will always work, whatever the internal representation of the shortstrings or other strings in use: this allows easy switching between the various string types.
+`AnsiString` su stringovi koji:
 
-### 3.2.6 Ansistrings
+- nemaju ograničenje dužine,  
+- imaju pridruženu kodnu stranicu,  
+- broje im se reference i  
+- garantovano su nulto prekinuti.  
 
-Ansistrings are strings that have no length limit, and have a code page associated with them. They are reference counted and are guaranteed to be null terminated.
+Neke činjenice u vezi `AnsiString`-ova:
 
-Internally, an ansistring is treated as a pointer: the actual content of the string is stored on the heap, as much memory as needed to store the string content is allocated.
+- Interno, `AnsiString` se tretira kao pokazivač: stvarni sadržaj stringa se čuva na heap-u,
+  dodeljuje se onoliko memorije koliko je potrebno za skladištenje sadržaja stringa.
 
-If no codepage is given in the declaration, the system codepage is assumed. What codepage this is, is determined by the DefaultSystemCodePage constant in the system unit.
+- Ako u deklaraciji nije data kodna stranica, pretpostavlja se sistemska kodna stranica. Koja je
+  ovo kodna stranica, određuje konstanta `DefaultSystemCodePage` u `sistem` unitu. Sve se to radi transparentno, tj. njima se može manipulisati kao normalnim `ShortString`-om.
 
-This is all handled transparently, i. e. they can be manipulated as a normal short string. Ansistrings can be defined using the predefined AnsiString type or using the string keyword in mode {$H+}.
+- `AnsiString`-ovi se mogu definisati korišćenjem unapred definisanog tipa `AnsiString` ili pomoću
+  ključne reči `String` u režimu `{$H+}`.
 
-**Napomena**  
-The null-termination does not mean that null characters (char(0) or #0) cannot be used: the null-termination is not used internally, but is there for convenience when dealing with external routines that expect a null-terminated string (as most C routines do).
+- Null-završetak ne znači da se nulti znakovi (char(0) ili #0) ne mogu koristiti: null-završetak
+  se ne koristi interno, ali je tu radi pogodnosti kada se radi sa eksternim rutinama koje očekuju string sa nultom završetkom (kao većina C rutina).
 
-If the `{$H}` switch is on, then a string definition using the regular String keyword that doesn’t contain a length specifier, will be regarded as an ansistring as well. If a length specifier is present, a short string will be used, regardless of the {$H} setting.
+- Ako je prekidač `{$H}` uključen, onda će se definicija stringa koja koristi redovnu ključnu reč
+  `String` koja ne sadrži specifikaciju dužine takođe smatrati `AnsiString`-om.
+  
+- Ako je prisutan specificator dužine, koristiće se kratak string, bez obzira na postavku `{$H}`.
 
-If the string is empty (’’), then the internal pointer representation of the string pointer is `Nil`. If the string is not empty, then the pointer points to a structure in heap memory.
+- Ako je string prazan (’’), onda je interna reprezentacija pokazivača stringa `Nil`. Ako string
+  nije prazan, onda pokazivač pokazuje na strukturu u memoriji heap-a.
 
-The internal representation as a pointer, and the automatic null-termination make it possible to typecast an `ansistring` to a `pchar`. If the string is empty (so the pointer is Nil) then the compiler makes sure that the typecast `pchar` will point to a null byte.
+- Unutrašnja reprezentacija kao pokazivač i automatski null-termination omogućavaju da se
+  `AnsiString` unese u `pchar`. Ako je string prazan (tako da je pokazivač Nil) onda kompajler osigurava da će tip `pchar` pokazivati na nulti bajt.
 
-Assigning one `ansistring` to another doesn’t involve moving the actual string. A statement
+- Dodeljivanje jednog `AnsiString`-a drugom ne uključuje pomeranje stvarnog stringa. Izjava
 
-```pascal
-  S2:=S1;
-```
+  ```pascal
+    S2:=S1;
+  ```
 
-results in the reference count of S2 being decreased with 1, The reference count of S1 is increased by 1, and finally S1 (as a pointer) is copied to S2. This is a significant speed-up in the code.
+  rezultira smanjenjem referentnog broja S2 za 1, referentni broj S1 se povećava za 1, i konačno se S1 (kao pokazivač) kopira u S2. Ovo je značajno ubrzanje koda.
 
-If the reference count of a string reaches zero, then the memory occupied by the string is deallocated automatically, and the pointer is set to Nil, so no memory leaks arise.
+- Ako broj referenci stringa dostigne nulu, tada se memorija koju string zauzima automatski
+  oslobađa, a pokazivač je postavljen na nula, tako da ne dolazi do curenja memorije.
 
-When an ansistring is declared, the Free Pascal compiler initially allocates just memory for a pointer, not more. This pointer is guaranteed to be Nil, meaning that the string is initially empty. This is true for local and global ansistrings or ansistrings that are part of a structure (arrays, records or objects).
+- Kada se deklariše `AnsiString`, Free Pascal kompajler u početku dodeljuje samo memoriju za
+  pokazivač, ne više. Garantovano je da je ovaj pokazivač nula, što znači da je string u početku prazan. Ovo važi za lokalne i globalne `AnsiString`-ove ili `AnsiString`-ove koji su deo strukture (nizovi, zapisi ili objekti).
+  
+  <br/>
 
-**Napomena**  
-Note that a function result in this regard is considered equivalent to a var parameter and hence will not be initialized to Nil. As a consequence it may point to a legitimate non-Nil ansistring when the function begins.
+- Imajte na umu da se rezultat funkcije u ovom pogledu smatra ekvivalentnim parametru var i stoga
+  neće biti inicijalizovan na nulu. Kao posledica toga, može ukazivati na legitiman ne-Nil `AnsiString` kada funkcija počne.
+  
+  Ovo uvodi dodatne troškove. Na primer, izjava:
+  
+  ```pascal
+  var  
+    A : Array[1..100000] of string;
+  ```
+  
+  kopiraće vrednost Nil 100.000 puta u A. Kada A izađe van opsega, tada će referentni broj 100.000 stringova biti smanjen za 1 za svaki od ovih stringova. Sve ovo se dešava nevidljivo za programera, ali kada se razmatraju problemi sa performansama, ovo je važno.
+  
+- Memorija za sadržaj stringa biće dodeljena samo kada je stringu dodeljena vrednost. Ako string
+  izađe van opsega, onda se njegov broj referenci automatski smanjuje za 1. Ako broj referenci dostigne nulu, memorija rezervisana za string se oslobađa.
 
-This does introduce an overhead. For instance, declaring:
+- Ako je vrednost dodeljena znaku stringa koji ima broj referenci veći od 1, kao što je u sledećim
+  izjavama:
 
-```pascal
-var  
-  A : Array[1..100000] of string;
-```
+  ```pascal
+    S:=T;  { reference count for S and T is now 2 }  
+    S[I]:='@';
+  ```
+  
+  onda se kopija stringa kreira pre dodele. Ovo je poznato kao `semantika kopiranja na pisanje`.
 
-Will copy the value Nil 100,000 times into A. When A goes out of scope, then the reference count of the 100,000 strings will be decreased by 1 for each of these strings. All this happens invisible to the programmer, but when considering performance issues, this is important.
+- Moguće je prisiliti string da ima broj referenci jednak 1 pomoću poziva `UniqueString`:
 
-Memory for the string content will be allocated only when the string is assigned a value. If the string goes out of scope, then its reference count is automatically decreased by 1. If the reference count reaches zero, the memory reserved for the string is released.
+  ```pascal
+    S:=T;  
+    R:=T; // Reference count of T is at least 3  
+    UniqueString(T);  
+    // Reference count of T is guaranteed 1
+  ```
+  
+  Preporučuje se da to uradite tj., kada kopirate `AnsiString` u `PChar` var i prosleđujete ga C rutini koja modifikuje string.
+  
+- Funkcija `Length` se mora koristiti za dobijanje dužine `AnsiString`-a: dužina se ne čuva u
+  znaku 0 AnsiStringa. Konstrukt:
 
-If a value is assigned to a character of a string that has a reference count greater than 1, such as in the following statements:
+  ```pascal
+    L:=ord(S[0]);
+  ```
 
-```pascal
-  S:=T;  { reference count for S and T is now 2 }  
-  S[I]:='@';
-```
+  što je važilo za Turbo Pascal `ShortString`, više nije tačno za `AnsiString`. Kompajler će upozoriti ako se naiđe na takvu konstrukciju.
+  
+- Da biste podesili dužinu `AnsiStringa`, mora se koristiti funkcija `SetLength`. Konstantni
+  `AnsiString`-ovi imaju referentni broj -1 i tretiraju se posebno. Mora se dati ista primedba kao i za dužinu: Konstrukcija:
 
-then a copy of the string is created before the assignment. This is known as copy-on-write semantics. It is possible to force a string to have reference count equal to 1 with the UniqueString call:
+  ```pascal
+    L:=12;  
+    S[0]:=Char(L);
+  ```
+  
+  što je važilo za Turbo Pascal `ShortString`, više nije tačno za `AnsiString`. Kompajler će upozoriti ako se naiđe na takvu konstrukciju.
+  
+- Po potrebi kompajler konvertuje `AnsiString`-ove u `ShortString`-ove, što znači da se upotreba
+  `AnsiString`-a i `ShortString`-a može mešati bez problema.
 
-```pascal
-  S:=T;  
-  R:=T; // Reference count of T is at least 3  
-  UniqueString(T);  
-  // Reference count of T is guaranteed 1
-```
+- `AnsiString`-ovi se mogu typecast-ovati na tipove `PChar` ili `Pointer`:
 
-It’s recommended to do this e. g. when typecasting an `ansistring` to a `PChar var` and passing it to a C routine that modifies the string.
+  ```pascal
+  Var P : Pointer;  
+      PC : PChar;  
+      S : AnsiString;  
+   
+  begin  
+    S :='This is an ansistring';  
+    PC:=PChar(S);  
+    P :=Pointer(S);
+  ```
 
-The `Length` function must be used to get the length of an ansistring: the length is not stored at character 0 of the ansistring. The construct
+  Postoji razlika između ova dva typecast-a.
 
-```pascal
-  L:=ord(S[0]);
-```
+  Kada se prazan `AnsiString` konvertuje u pokazivač, pokazivač će biti Nil. Ako se prazan  
+  `AnsiString` unese u PChar, onda će rezultat biti pokazivač na nulti bajt (prazan string).
+  
+  Rezultat takvog typecastinga se mora pažljivo koristiti. Uopšteno govoreći, najbolje je smatrati da je rezultat takvog typecatinga samo za čitanje, tj. pogodan samo za prelazak na proceduru kojoj je potreban argument konstantan `pchar`.
+  
+  Stoga nije preporučljivo unositi stringove koji imaju broj referenci veći od 1. U ovom slučaju treba da pozovete `UniqueString` da biste bili sigurni da string ima broj referenci 1.
+  
+#### 3.2.1.3 Konverzija kodne strane
 
-which was valid for Turbo Pascal shortstrings, is no longer correct for Ansistrings. The compiler will warn if such a construct is encountered.
+Pošto stringovi imaju informacije o kodnoj stranici povezane sa njima, važno je znati koju kodnu stranicu string koristi:
 
-To set the length of an ansistring, the SetLength function must be used. Constant ansistrings have a reference count of -1 and are treated specially, The same remark as for Length must be given: The construct
+- `ShirtString` uvek koriste sistemsku kodnu stranicu.
+- `AnsiString` koristi sistemsku kodnu stranicu.
+- `AnsiString` sa deklarisanom kodnom stranicom koriste tu kodnu stranicu.
+- `RowByteString` nema pridružene informacije o kodnoj stranici.
+- `Konstantni stringovi` imaju kodnu stranicu izvorne datoteke. Ako nijedna nije navedena
+  koristi se sistemska kodna stranica (CP_ACP). Pogledajte Vodič za programere, direktiva
+  `{$CODEPAGE }`. Ova kodna stranica se naziva `deklarisana kodna stranica`.
 
-```pascal
-  L:=12;  
-  S[0]:=Char(L);
-```
+Kompajler će konvertovati kodnu stranicu stringova po potrebi Prilikom dodeljivanja stringa, stvarna kodna stranica izvornog stringa će biti konvertovana u deklarisanu kodnu stranicu ciljnog stringa ako su deklarisane izvorne i ciljne kodne stranice različite.
 
-which was valid for Turbo Pascal shortstrings, is no longer correct for Ansistrings. The compiler will warn if such a construct is encountered.
+Ako je string sa deklarisanom stranicom SOURCE_CP dodeljen nizu sa deklarisanom kodnom stranicom DEST_CP, u datoteci sa kodnom stranicom CODE_CP onda sledeće opisuje mehanizam:
 
-Ansistrings are converted to short strings by the compiler if needed, this means that the use of ansistrings and short strings can be mixed without problems.
+- ako (SOURCE_CP = `CP_NONE`) ili (DEST_CP = `CP_NONE`), pogledajte `RowByteString`.
+- ako (`CODE_CP` ili `CP_ACP`), onda ako (DEST_CP = `CP_ACP`) i (SOURCE_CP = `CODE_CP`)
+  ili obrnuto, neće doći do konverzije, čak i ako u vreme izvršavanja `DefaultSistemCodePage` ima drugačiju vrednost od SOURCE_CP.
+– Razlog za ovo stanje (`CODE_CP` ili `CP_ACP`) je kompatibilnost unatrag sa prethodnim FPC
+  verzijama:
+  - Iako nisu podržavali AnsiStrings sa proizvoljnim kodnim stranicama, uvek su ponovo
+    interpretirali AnsiStrings prema trenutnoj vrednosti sistemske kodne stranice.
+  - Inače, if (SOURCE_CP ili DEST_CP), podaci stringa će biti konvertovani iz kodne stranice
+    SOURCE_CP u kodnu stranicu DEST_CP pre dodeljivanja, pri čemu će CP_ACP biti interpretiran kao trenutna vrednost DefaultSistemCodePage. inače, ako (SOURCE_CP = DEST_CP), konverzija kodne stranice neće biti izvršena.
 
-Ansistrings can be typecast to PChar or Pointer types:
+Ova pravila znače da je sasvim moguće da `AnsiString` promenljiva dobije kodnu stranicu koja se razlikuje od deklarisane kodne stranice. Tj. u trećem slučaju SOURCE_CP može biti `CP_ACP`, dok nakon dodele može imati dinamičku kodnu stranicu jednaku `DefaultSistemCodePage`.
 
-```pascal
-Var P : Pointer;  
-    PC : PChar;  
-    S : AnsiString;  
- 
-begin  
-  S :='This is an ansistring';  
-  PC:=PChar(S);  
-  P :=Pointer(S);
-```
+**Napomena**:
+Kao što je gore pomenuto, da li će doći do potencijalne konverzije kodne stranice ili ne zavisi samo od deklarisanih kodnih stranica uključenih stringova. To znači da ako dodelite jedan `AnsiString(X)` drugom `AnsiString(X)` i dinamički kod prvog je bio drugačiji od X, podaci stringa neće biti konvertovani u kodnu stranicu X dodelom.
 
-There is a difference between the two typecasts. When an empty ansistring is typecast to a pointer, the pointer will be Nil. If an empty ansistring is typecast to a PChar, then the result will be a pointer to a zero byte (an empty string).
-
-The result of such a typecast must be used with care. In general, it is best to consider the result of such a typecast as read-only, i. e. only suitable for passing to a procedure that needs a constant pchar argument.
-
-It is therefore not advisable to typecast one of the following:
-
-**Expressions**:
-Strings that have reference count larger than 1. In this case you should call Uniquestring to ensure the string has reference count 1.
-
-### 3.2.7 Code page conversions
-
-Since strings have code page information associated with them, it is important to know which code page a string uses:
-
-- Short strings always use the system code page.
-- Plain ansistrings use the system code page.
-- Single byte strings with declared code page use that code page.
-- The RawByteString type has no code page information associated with it.
-- Constant strings have the code page of the source file. If none is specified
-  the system codepage is used (CP_ACP).
-  See Programmer’s Guide, `{$CODEPAGE }` directive.
-
-This code page is called the declared code page.
-
-The compiler will convert the code page of strings as needed: When assigning a string, the actual codepage of the source string will be converted to the declared code page of the target string if the declared source and target code pages are different.
-
-If a string with a declared page SOURCE_CP assigned to a string with declared code page DEST_CP, in a file with code page CODE_CP then the following describes the mechanism:
-
-- if (SOURCE_CP=CP_NONE) or (DEST_CP = CP_NONE), see RawByteString.
-- if (CODE_CP ¡¿ CP_ACP), then if (DEST_CP = CP_ACP) and (SOURCE_CP = CODE_CP)
-  or vice versa, no conversion will occur, even if at run time DefaultSystemCodePage has a different value from SOURCE_CP.
-- The reason for this “(CODE_CP ¡¿CP_ACP)” condition is backward compatibility
-  with previous FPC versions: While they did not support AnsiStrings with arbitrary code pages, they did always reinterpret AnsiStrings according to the current value of the system code page.
-- Otherwise,
-  if (SOURCE_CP ¡¿ DEST_CP), the string data will be converted from codepage SOURCE_CP to codepage DEST_CP before assignment, whereby CP_ACP will be interpreted as the current value of DefaultSystemCodePage. Otherwise,
-  if (SOURCE_CP = DEST_CP), no codepage conversion will be performed.
-
-These rules mean that it is perfectly possible for an AnsiString variable to get a code page that differs from its declared code page. E. g. in the third case SOURCE_CP could be CP_ACP, while after the assignment it may have a dynamic code page equal to DefaultSystemCodePage.
-
-**Note**:  
-As mentioned above, whether or not a potential code page conversion happens only depends on the declared code pages of the involved strings. This means that if you assign one AnsiString(X) to another AnsiString(X) and the former’s dynamic code was different from X, the string data will not be converted to code page X by the assignment.
-
-All this means that in the following code:
+Sve ovo znači da u sledećem kodu:
 
 ```pascal
 {$h+}  
@@ -524,124 +553,139 @@ B: "123345123" : 1 -> 1251
 A: "123345123" : 1 -> 1252
 ```
 
-During the assignment of A to B, the contents of string A is converted to the codepage of string B. Note that if a code page conversion takes place, the reference count mechanism is not used: a new string will be allocated.
+Tokom dodeljivanja B := A, sadržaj stringa A se konvertuje u kodnu stranicu stringa B. Imajte na umu da ako dođe do konverzije kodne stranice, mehanizam brojanja referenci se ne koristi: biće dodeljen novi string.
 
-This automated conversion of code pages can slow down the code seriously, so care must be taken to see to it that the code page conversions are limited to a minimum.
+Ova automatska konverzija kodnih stranica može ozbiljno da uspori kod, pa se mora voditi računa da konverzije kodnih stranica budu ograničene na minimum.
 
-The code page of a string can be set explicitly using the SetCodePage routine of the system unit. Calling this routine will convert the value of a string to the requested code page.
+Kodna stranica stringa može se eksplicitno postaviti korišćenjem rutine `SetCodePage` `sistem` unita. Pozivanje ove rutine će konvertovati vrednost stringa u traženu kodnu stranicu.
 
-**Napomena**:  
-Code page conversions can result in loss of data: if a certain character cannot be represented in the target code page, the output for that character is undefined.
+**Napomena**:
+Konverzije kodne stranice mogu dovesti do gubitka podataka: ako određeni znak ne može biti predstavljen na ciljnoj kodnoj stranici, izlaz za taj znak je nedefinisan.
 
-**Napomena**  
-When a string whose static code page equals the source file code page, to anything with code page CP_ACP (i. e., a plain ansistring, shortstring, or pchar), no conversion will be performed either. No code page conversion is done when s can result in loss of data: if a certain character cannot be represented in the target code page, the output for that character is undefined.
+**Napomena**
+Kada je string čija je statička kodna stranica jednaka kodnoj stranici izvorne datoteke, na bilo šta sa kodnom stranicom CP_ACP (tj., običan ansisting, kratki string ili pchar), takođe neće biti izvršena konverzija. Konverzija kodne stranice se ne vrši kada može dovesti do gubitka podataka: ako određeni znak ne može biti predstavljen u ciljnoj kodnoj stranici, izlaz za taj znak je nedefinisan.
 
-**Napomena**  
-Code page support requires quite some helper routines, these are implemented in the unicodestring manager. On windows, the system routines are used for this. On Unices, the cwstring unit can be used to link to the C library and use the C library conversion support. Alternatively, the fpwidestring unit contains a unicodestring manager implemented natively in Object Pascal.
+**Napomena**
+Podrška kodne stranice zahteva dosta pomoćnih rutina, koje su implementirane u menadžeru `UnicodeString`-a. Na Windows-u se za to koriste sistemske rutine. Na Unices-u, `cvstring` unit se može koristiti za povezivanje sa C bibliotekom i korišćenje podrške za konverziju C biblioteke. Alternativno, unit `fpwidestring` sadrži menadžer `UnicodeString`-a koji je nativno implementiran u Object Pascal.
 
-### 3.2.8 RawByteString
+#### 3.2.1.4 RawByteString
 
-The predefined `RawByteString` type is an ansistring string type without codepage information (CP_NONE):
+Predefinisani `RawByteString` tip je `AnsiString` tip bez informacija o kodnoj strani (`CP_NONE`):
 
 ```pascal
 Type  
-  RawByteString = type ansistring(CP_NONE);
+  RawByteString = type AnsiString(CP_NONE);
 ```
 
-It is treated specially in the sense that if the conversion routines encounter CP_NONE in a source or target string, no code page conversion is performed, the code page of the source string is preserved.
+Tretira se posebno u smislu da ako rutine konverzije naiđu na `CP_NONE` u izvornom ili ciljnom stringu, konverzija kodne stranice se ne vrši, kodna stranica izvornog stringa se čuva.
 
-For this reason, most single-byte string routines in the system and sysutils units use the RawByteString type.
+Iz tog razloga, većina rutina jednobajtnih stringova u `system` i `sysutils` unitima koristi tip `RowByteString`.
 
-### 3.2.9 UTF8String
+#### 3.2.1.5 UTF8String
 
-Single-byte code page strings can only store the characters available in that code page. Characters that are not present in the code page, cannot be represented by that string. The UTF-8 unicode encoding is an encoding that can be used with single-byte strings: The ASCII characters (ordinal value ¡128) in this encoding map exactly to the CP_ACP encoding. This fact is used to define a single byte string type that can contain all characters:
+Stringovi kodne stranice od jednog bajta mogu da čuvaju samo karaktere dostupne na toj kodnoj stranici. Znakovi koji nisu prisutni u kodnoj stranici ne mogu biti predstavljeni tim stringom.
+
+UTF-8 unicode kodiranje je kodiranje koje se može koristiti sa jednobajtnim stringovima: ASCII karakteri (redna vrednost > 128) u ovom kodiranju se mapiraju tačno u `CP_ACP` kodiranje. Ova činjenica se koristi za definisanje tipa stringa od jednog bajta koji može da sadrži sve karaktere:
 
 ```pascal
 Type  
   UTF8String = type AnsiString(CP_UTF8);
 ```
 
-The UTF8string string type can be used to represent all Unicode characters. This power comes as a price, though. Since a unicode character may require several bytes to be represented in the UTF-8 encoding, there are two points to take care of when using UTF8String:
+`UTF8string` tip stringa se može koristiti za predstavljanje svih Unicode znakova. Međutim, ova moć dolazi po određenoj ceni. Pošto unikod karakter može zahtevati nekoliko bajtova da bude predstavljeno u UTF-8 kodiranju, postoje dve tačke o kojima treba voditi računa kada koristite UTF8String:
 
-- The character index – which retrieves a byte-sized char at a certain position
-  – must be used with care: the expression S[i] will not necessarily be a valid character for a string S of type UTF8String.
-- The byte length of the string is not equal to the number of characters in the
-  string. The standard function length cannot be used to get the character length, it will always return the byte length.
+- Indeks znakova – koji vraća znak veličine bajta na određenoj poziciji
+- Mora se koristiti pažljivo: izraz S[i] neće nužno biti važeći karakter za string S tipa
+  `UTF8String`.
+- Dužina bajtova stringa nije jednaka broju znakova u string. Standardna `Length` funkcije se ne
+  može koristiti za dobijanje dužine stringa, ona će uvek vratiti dužinu stringa u bajtovima.
 
-For all other code pages, the number of characters in a single-byte code page string is equal to the byte length of the string.
+Za sve ostale kodne stranice, broj znakova u stringu kodne stranice od jednog bajta jednak je dužini stringa u bajtovima.
 
-### 3.2.10 Multi-byte String types
+### 3.2.2 Multi-byte String types
 
-For multi-byte string types, the basic character has a size of at least 2. This means it can be used to store a unicode character in UTF16 or UCS2 encoding.
+Za tipove višebajtnih stringova, osnovni znak ima veličinu od najmanje 2. To znači da se može koristiti za čuvanje unikod karaktera u UTF16 ili UCS2 kodiranju.
 
-**UnicodeStrings**:
+#### 3.2.2.1 UnicodeStrings
 
-Unicodestrings (used to represent unicode character strings) are implemented in much the same way as ansistrings: reference counted, null-terminated arrays, only they are implemented as arrays of WideChars instead of regular Chars. A WideChar is a two-byte character (an element of a DBCS: Double Byte Character Set). Mostly the same rules apply for UnicodeStrings as for AnsiStrings. The compiler transparently converts UnicodeStrings to AnsiStrings and vice versa.
+`UnicodeString`-ovi (koji se koriste za predstavljanje stringova sa unicode znakovima) se implementiraju na isti način kao i `AnsiString`: stringovi koji se broje, null-terminirani nizovi, samo što su implementirani kao `WideChar` stringovi umesto regularnih `AnsiChar`. `WideChar` je znak od dva bajta (element DBCS: Double Byte Character Set). Za `UnicodeStrings` važe uglavnom ista pravila kao i za `AnsiStrings`. Kompajler transparentno konvertuje `UnicodeString`-ove u `AnsiString`-ove i obrnuto.
 
-Similarly to the typecast of an Ansistring to a PChar null-terminated array of characters, a UnicodeString can be converted to a PUnicodeChar null-terminated array of characters. Note that the PUnicodeChar array is terminated by 2 null bytes instead of 1, so a typecast to a pchar is not automatic.
+Slično tipifikaciji `Ansistring`-a stringa znakova sa nultim završavanjem `PChar`-a, `UnicodeString` se može konvertovati u string znakova sa nultim završavanjem `PUnicodeChar`. Imajte na umu da se string `PUnicodeChar` završava sa 2 nula bajta umesto sa 1, tako da prevođenje tipa na `pchar` nije automatsko.
 
-The compiler itself provides no support for any conversion from Unicode to ansistrings or vice versa. The system unit has a unicodestring manager record, which can be initialized with some OS-specific unicode handling routines. For more information, see the system unit reference.
+Sam kompajler ne pruža podršku za bilo kakvu konverziju iz Unicode-a u AnsiString ili obrnuto. `System` unit ima zapis menadžera `UnicodeString`-a, koji se može inicijalizovati nekim rutinama za rukovanje Unicode specifičnim za OS. Za više informacija pogledajte referencu system unita.
 
-A unicode string literal can be constructed in a similar manner as a widechar:
+Unicode string literal se može konstruisati na sličan način kao široki znak:
 
 ```pascal
 Const  
   ws2: unicodestring = 'phi omega : '#$03A8' '#$03A9;
 ```
 
-**WideStrings**:
+#### 3.2.2.2 WideStrings
 
-The Widestring type (used to represent unicode character strings in COM applications) is implemented in much the same way as Unicodestring on Windows, and on other platforms, they are simply the same type. If interaction with COM is not required, the UnicodeString type should be used.
+Tip `WideString` (koji se koristi za predstavljanje stringova unikodnih znakova u COM aplikacijama) implementiran je na isti način kao UnicodeString na Windows-u, a na drugim platformama su jednostavno istog tipa. Ako interakcija sa COM nije potrebna, treba koristiti tip `UnicodeString`.
 
-On Windows, unlike UnicodeString, the WideString type is not reference counted, and are allocated with a special windows function which allows them to be used for OLE automation. This means they are implemented as null-terminated arrays of WideChars instead of regular Chars. WideString obeys the same rules as for UnicodeStrings. Similar to unicodestrings, the compiler transparenty converts WideStrings to AnsiStrings and vice versa.
+U Windows-u, za razliku od `UnicodeString`-a, tip `WideString` se ne računa na referencu i dodeljuje im se posebnom funkcijom prozora koja im omogućava da se koriste za OLE automatizaciju. To znači da se implementiraju kao stringovi `WideChars`-a sa nultom završetkom umesto regularnih znakova. `WideString` poštuje ista pravila kao za `UnicodeStringova`. Slično kao `UnicodeString`-ova, kompajler transparentno konvertuje `WideString` u `AnsiString` i obrnuto.
 
-For typecasting and conversion, the same rules apply as for the UnicodeString type.
+Za prevođenje i konverziju važe ista pravila kao i za tip `UnicodeString`.
 
-Note that on windows, because a WideString string is allocated using a special windows function, the memory layout differs from UnicodeString. The length for instance is stored in bytes rather than characters.
+Imajte na umu da se u prozorima, pošto se `WideString` string dodeljuje pomoću posebne funkcije prozora, raspored memorije razlikuje od `UnicodeString`-a. Dužina se, na primer, čuva u bajtovima, a ne u znakovima.
 
-### 3.2.11 Constant strings
+### 3.2.3 Const stringovi
 
-To specify a constant string, it must be enclosed in single-quotes, just as a Char type, only now more than one character is allowed. Given that S is of type String, the following are valid assignments:
+Da biste naveli konstantni string, on mora biti zatvoren u jednostrukim navodnicima, baš kao tip Char, samo što je sada dozvoljeno više od jednog karaktera. S obzirom da je S tipa String, sledeće su važeće dodele:
 
 ```pascal
 S := 'This is a string.';  
-S := 'One'+', Two'+', Three';  
+S := 'One' + ', Two' + ', Three';  
 S := 'This isn't difficult!';  
 S := 'This is a weird character : '#145' !';
 ```
 
-As can be seen, the single quote character is represented by 2 single-quote characters next to each other. Strange characters can be specified by their character value (usually an ASCII code). The example shows also that two strings can be added. The resulting string is just the concatenation of the first with the second string, without spaces in between them. Strings can not be subtracted, however.
+Kao što se može videti, jednostruki navodnik je predstavljen sa 2 znaka jednostrukog navodnika jedan pored drugog. Čudni znakovi se mogu specificirati njihovom vrednošću karaktera (obično ASCII kod). Primer takođe pokazuje da se mogu dodati dva stringa. Dobijeni string je samo spoj prvog sa drugim stringom, bez razmaka između njih. Međutim, stringovi se ne mogu oduzimati.
 
-Whether the constant string is stored as an ansistring or a short string depends on the settings of the {$H} switch
+Da li je konstantni string sačuvan kao `AnsiString` ili `ShortString` zavisi od podešavanja prekidača `{$H}`.
 
-### 3.2.12 PChar – Null terminated strings
+### 3.2.4 PChar – Null terminated strings
 
 Free Pascal supports the Delphi implementation of the PChar type. PChar is defined as a pointer to a Char type, but allows additional operations. The PChar type can be understood best as the Pascal equivalent of a C-style null-terminated string, i. e. a variable of type PChar is a pointer that points to an array of type Char, which is ended by a null-character (#0). Free Pascal supports initializing of PChar typed constants, or a direct assignment. For example, the following pieces of code are equivalent:
+
+Free Pascal podržava Delphi implementaciju tipa `PChar`. `PChar` je definisan kao pokazivač na tip `Char`, ali dozvoljava dodatne operacije. Tip `PChar` se najbolje može razumeti kao Pascal ekvivalent stringa sa nultim završavanjem u C stilu, tj. promenljiva tipa `PChar` je pokazivač koji ukazuje na string tipa `Char`, koji se završava nul-karakterom (#0). Free Pascal podržava inicijalizaciju `PChar` tipiziranih konstanti ili direktno dodeljivanjem. Na primer, sledeći delovi koda su ekvivalentni:
 
 ```pascal
 program one;  
 
-var P : PChar;  
+var 
+  P : PChar;  
+
 begin  
   P := 'This is a null-terminated string.';  
   WriteLn (P);  
 end.
+```
 
-Results in the same as
+Rezultat je isti u:
+
+```pascal
 program two;  
-const P : PChar = 'This is a null-terminated string.';  
+
+const 
+  P : PChar = 'This is a null-terminated string.';  
+
 begin  
   WriteLn (P);  
 end.
 ```
 
-These examples also show that it is possible to write the contents of the string to a file of type Text. The strings unit contains procedures and functions that manipulate the PChar type as in the standard C library. Since it is equivalent to a pointer to a type Char variable, it is also possible to do the following:
-
-Program three;  
+Ovi primeri takođe pokazuju da je moguće upisati sadržaj stringa u datoteku tipa Text. Unit `String` sadrži procedure i funkcije koje manipulišu tipom `PChar` kao u standardnoj C biblioteci. Pošto je ekvivalentan pokazivaču na promenljivu tipa `Char`, moguće je uraditi i sledeće:
 
 ```pascal
-Var S : tring[30];  
-    P : PChar;  
+Program three;  
+
+Var 
+  S : String[30];  
+  P : PChar;  
+
 begin  
   S := 'This is a null-terminated string.'#0;  
   P := @S[1];  
@@ -649,114 +693,123 @@ begin
 end.
 ```
 
-This will have the same result as the previous two examples. Null-terminated strings cannot be added as normal Pascal strings. If two PChar strings must be concatenated; the functions from the unit strings must be used.
+Ovo će imati isti rezultat kao prethodna dva primera. Stringovi koji se završavaju nulom ne mogu se dodati kao normalni Pascal stringovi. Ako dva PChar niza moraju biti spojena; moraju se koristiti funkcije iz `String` unita.
 
-However, it is possible to do some pointer arithmetic. The operators + and - can be used to do operations on PChar pointers. In table (3.6), P and Q are of type PChar, and I is of type Longint.
+Međutim, moguće je napraviti neku aritmetiku pokazivača. Operatori + i - se mogu koristiti za obavljanje operacija na PChar pokazivačima. U tabeli (3.6), P i K su tipa `PChar`, a I tipa `LongInt`.
 
-Table 3.6: PChar pointer arithmetic
+Tabela 3.6: PChar pointerska aritmetika
 
-Operation | Result |
---------- | ------ |
-P + I | Adds I to the address pointed to by P. |
-I + P | Adds I to the address pointed to by P. |
-P - I | Subtracts I from the address pointed to by P. |
-P - Q | Returns, as an integer, the distance between two addresses (or the number of characters between P and Q) |
+Operacija | Rezultat |
+--------- | -------- |
+P + I | Dodaj I na adresu pokazanu sa P. |
+I + P | Dodaj I na adresu pokazanu sa P. |
+P - I | Oduzima I od adrese pokazane sa P. |
+P - Q | Vraća, kao intidžer, rastojanje izmedju dve adrese (ili broj karaktera izmedju P i Q) |
 
-### 3.2.13 String sizes
+### 3.2.5 Veličina stringa
 
-The memory occupied by a string depends on the string type. Some string types allocate the string data in memory on the heap, others have the string data on the stack. Table table (3.7) summarizes the memory usage of the various string types for the various string types. In the table, the following symbolic constants are used:
+Memorija koju string zauzima zavisi od tipa stringa. Neki tipovi stringova dodeljuju stringu memoriju na heapu, drugi imaju stringove na steku. U tabeli (3.7) rezimiramo upotrebu memorije različitih tipova stringova. U tabeli se koriste sledeće simboličke konstante:
 
-- L is the actual length of the string.
-  HS depends on the version of Free Pascal, but is 16 bytes as of Free Pascal 2.7.1.
-- UHS size is 8 bytes for all versions of Free Pascal.
-  On Windows, WHS size is 4 bytes for all versions of Free Pascal. On all other platforms, WHS equals UHS because the WideString type equals the UnicodeString type.
+- `L` je stvarna dužina niza.
+- `HS` zavisi od verzije Free Pascal-a, ali ima 16 bajtova od Free Pascal-a 2.7.1.
+- `UHS` veličina je 8 bajtova za sve verzije Free Pascal-a.
+- Na Windows-u, veličina `WHS`-a je 4 bajta za sve verzije Free Pascal-a. Na svim ostalim
+  platformama, `WHS` je jednak `UHS` jer je tip `WideString` jednak `UnicodeString` tipu.
 
-Table 3.7: String memory sizes
+Tabela 3.7: Veličina strnga u memoriji
 
 String type | Stack size | heap size |
 ----------- | ---------- | --------- |
-Shortstring | Declared length + 1 | 0 |
-Ansistring | Pointer size | L + 1 + HS |
-Widestring | Pointer size | 2*(L + 1) + WHS |
+ShortString | Declared length + 1 | 0 |
+AnsiString | Pointer size | L + 1 + HS |
+WideString | Pointer size | 2*(L + 1) + WHS |
 UnicodeString | Pointer size | 2*(L + 1) + UHS |
-Pchar | Pointer size | L+1 |
+PChar | Pointer size | L+1 |
 
-## 3.3 Structured Types
+## 3.3 Struktuirani tipovi
 
-A structured type is a type that can hold multiple values in one variable. Structured types can be nested to unlimited levels.
+Strukturirani tip je tip koji može da sadrži više vrednosti u jednoj promenljivoj. Strukturirani tipovi mogu biti ugnežđeni na neograničeno nivoa.
 
-Unlike Delphi, Free Pascal does not support the keyword `Packed` for all structured types. In the following sections each of the possible structured types is discussed. It will be mentioned when a type supports the `packed` keyword.
+Za razliku od Delphija, Free Pascal ne podržava ključnu reč `packed` za sve strukturirane tipove. U narednim odeljcima se govori o svakom od mogućih strukturiranih tipova. Pomenuće se kada tip podržava ključnu reč `packed`.
 
-### 3.3.1 Packed structured types
+### 3.3.1 Pakovani struktuirani tipovi
 
-When a structured type is declared, no assumptions should be made about the internal position of the elements in the type. The compiler will lay out the elements of the structure in memory as it thinks will be most suitable. That is, the order of the elements will be kept, but the location of the elements are not guaranteed, and is partially governed by the `$PACKRECORDS` directive (this directive is explained in the Programmer’s Guide).
+Kada se deklariše strukturirani tip, ne treba praviti pretpostavke o unutrašnjem položaju elemenata u tipu. Kompajler će postaviti elemente strukture u memoriju onako kako misli da će biti najpogodnije. To jest, redosled elemenata će se zadržati, ali lokacija elemenata nije zagarantovana i delimično je regulisana direktivom `$PACKRECORDS` (ova direktiva je objašnjena u Vodiču za programere).
 
-However, Free Pascal allows controlling the layout with the `Packed` and `Bitpacked` keywords. The meaning of these words depends on the context:
+Međutim, Free Pascal omogućava kontrolu rasporeda pomoću ključnih reči `Packed` i `Bitpacked`. Značenje ovih reči zavisi od konteksta:
 
-- **Bitpacked**
-  In this case, the compiler will attempt to align ordinal types on bit boundaries, as explained below.
+- **Bitpacked**  
+  U ovom slučaju, kompajler će pokušati da poravna redne tipove na granicama bita, kao što je objašnjeno u nastavku.
+
 - **Packed**
-  The meaning of the Packed keyword depends on the situation:
-  - In MACPAS mode, it is equivalent to the `Bitpacked` keyword.
-  - In other modes, with the `$BITPACKING` directive set to ON, it is also
-    equivalent to the `Bitpacked` keyword.
-  - In other modes, with the `$BITPACKING` directive set to OFF, it signifies
-    normal packing on byte boundaries.
+  Značenje ključne reči `Packed` zavisi od situacije:
+  - U MACPAS režimu, to je ekvivalentno ključnoj reči `Bitpacked`.
+  - U drugim režimima, kada je direktiva `$BITPACKING` postavljena na ON, takođe je ekvivalentno
+    ključnoj reči `Bitpacked`.
+  - U drugim režimima, kada je direktiva `$BITPACKING` podešena na OFF, to znači normalno
+    pakovanje na granicama bajtova.
 
-    Packing on byte boundaries means that each new element of a structured type starts on a byte boundary.
+Pakovanje na granicama bajtova znači da svaki novi element strukturiranog tipa počinje na granici bajta.
 
-The byte packing mechanism is simple: the compiler aligns each element of the structure on the first available byte boundary, even if the size of the previous element (small enumerated types, subrange types) is less than a byte.
+Mehanizam pakovanja bajtova je jednostavan: kompajler poravnava svaki element strukture na prvoj dostupnoj granici bajta, čak i ako je veličina prethodnog elementa (mali nabrojani tipovi, tipovi podopsega) manja od bajta.
 
-When using the bit packing mechanism, the compiler calculates for each ordinal type how many bits are needed to store it. The next ordinal type is then stored on the next free bit. Non-ordinal types – which include but are not limited to – sets, floats, strings, (bitpacked) records, (bitpacked) arrays, pointers, classes, objects, and procedural variables, are stored on the first available byte boundary.
+Kada se koristi `bitpacked` mehanizam za pakovanje bitova, kompajler izračunava za svaki redni tip koliko bitova je potrebno za njegovo skladištenje. Sledeći redni tip se zatim čuva na sledećem slobodnom bitu.
 
-Note that the internals of the bitpacking are opaque: they can change at any time in the future. What is more: the internal packing depends on the endianness of the platform for which the compilation is done, and no conversion between platforms are possible. This makes bitpacked structures unsuitable for storing on disk or transport over networks. The format is however the same as the one used by the GNU Pascal Compiler, and the Free Pascal team aims to retain this compatibility in the future.
+Neredni tipovi – koji uključuju, ali nisu ograničeni na – skupove, float, stringove, (upakovane bitovima) zapise, (bitove upakovane) nizove, pokazivače, klase, objekte i proceduralne varijable, čuvaju se na prvoj dostupnoj granici bajta.
 
-There are some more restrictions to elements of bitpacked structures:
+Imajte na umu da je unutrašnjost bitova "neprozirna": može se promeniti u bilo kom trenutku u budućnosti. Štaviše: unutrašnje pakovanje zavisi od endiannessa platforme za koju se kompilacija vrši i nije moguća konverzija između platformi. Ovo čini strukture sa bitovima neprikladnim za skladištenje na disku ili transport preko mreža. Međutim, format je isti kao onaj koji koristi GNU Pascal kompajler, a tim što Free Pascal ima za cilj da zadrži ovu kompatibilnost u budućnosti.
 
-- The address cannot be retrieved, unless the bit size is a multiple of 8 and
-  the element happens to be stored on a byte boundary.
-- An element of a bitpacked structure cannot be used as a var parameter, unless
-  the bit size is a multiple of 8 and the element happens to be stored on a byte boundary.
+Postoje još neka ograničenja za elemente `bitpacked` struktura:
 
-To determine the size of an element in a bitpacked structure, there is the `BitSizeOf` function. It returns the size – in bits – of the element. For other types or elements of structures which are not bitpacked, this will simply return the size in bytes multiplied by 8, i. e., the return value is then the same as 8*SizeOf.
+- Adresa se ne može preuzeti, osim ako je veličina bitnaa višestrukost od 8 i element se čuva na
+  granici bajta.
 
-The size of bitpacked records and arrays is limited:
+- Element strukture sa bitovima ne može se koristiti kao var parametar, osim ako veličina bita je
+  višestruka od 8 i element se dešava da se čuva na granici bajta.
 
-- On 32 bit systems the maximal size is 229 bytes (512 MB).
-- On 64 bit systems the maximal size is 261 bytes.
+Da bi se odredila veličina elementa u strukturi sa bitovima, postoji funkcija `BiteSizeOf`. Vraća veličinu – u bitovima – elementa. Za druge tipove ili elemente struktura koji nisu spakovani u bitovima, ovo će jednostavno vratiti veličinu u bitovima pomnoženu sa 8, tj. povratna vrednost je tada ista kao 8*SizeOf.
 
-The reason is that the offset of an element must be calculated with the maximum integer size of the system.
+Veličina bitnih zapisa i nizova je ograničena:
 
-### 3.3.2 Arrays
+- Na 32-bitnim sistemima maksimalna veličina je 229 bajtova (512 MB).
+- Na 64-bitnim sistemima maksimalna veličina je 261 bajt.
 
-Free Pascal supports arrays as in Turbo Pascal. Multi-dimensional arrays and (bit)packed arrays are also supported, as well as the dynamic arrays of Delphi:
+Razlog je taj što pomak elementa mora biti izračunat sa maksimalnom celobrojnom veličinom sistema.
 
-#### 3.3.2.1 Static arrays
+### 3.3.2 Nizovi
 
-When the range of the array is included in the array definition, it is called a `static` array. Trying to access an element with an index that is outside the declared range will generate a run-time error (if range checking `{R+}` is on). The following is an example of a valid array declaration:
+Besplatni Pascal podržava nizove kao u Turbo Pascal-u. Podržani su i višedimenzionalni nizovi i (bit) upakovani nizovi, kao i dinamički nizovi Delphija:
+
+#### 3.3.2.1 Statički nizovi
+
+Kada je veličina niza uključena u definiciju niza, on se naziva `statičkim` nizom. Pokušaj pristupa elementu sa indeksom koji je izvan deklarisane veličine će generisati grešku u vremenu izvođenja (ako je provera opsega `{R+}` uključena). Sledi primer važeće deklaracije niza:
 
 ```pascal
 Type  
   RealArray = Array [1..100] of Real;
 ```
 
-Valid indexes for accessing an element of the array are between 1 and 100, where the borders 1 and 100 are included. As in Turbo Pascal, if the array component type is in itself an array, it is possible to combine the two arrays into one multi-dimensional array. The following declaration:
+Važeći indeksi za pristup elementu niza su između 1 i 100, gde su granice 1 i 100 uključene. Kao i u Turbo Pascal-u, ako je tip komponente niza sam po sebi niz, moguće je kombinovati dva niza u jedan višedimenzionalni niz. Sledeća deklaracija:
 
 ```pascal
 Type  
-   APoints = array[1..100] of Array[1..3] of Real;
+  APoints = array[1..100] of Array[1..3] of Real;
 ```
 
-is equivalent to the declaration:
+je ekvivalentna deklaraciji:
 
 ```pascal
 Type  
-   APoints = array[1..100, 1..3] of Real;
+  APoints = array[1..100, 1..3] of Real;
 ```
 
 The functions `High` and `Low` return the high and low bounds of the leftmost index type of the array. In the above case, this would be 100 and 1. You should use them whenever possible, since it improves maintainability of your code. The use of both functions is just as efficient as using constants, because they are evaluated at compile time.
 
 When static array-type variables are assigned to each other, the contents of the whole array is copied. This is also true for multi-dimensional arrays:
+
+Funkcije `High` i `Low` vraćaju gornju i donju granicu najlevog tipa indeksa niza. U gornjem slučaju, ovo bi bilo 100 i 1. Trebalo bi da ih koristite kad god je to moguće, pošto to poboljšava mogućnost održavanja vašeg koda. Upotreba obe funkcije je jednako efikasna kao i upotreba konstanti, jer se procenjuju u vreme kompajliranja.
+
+Kada se statičke promenljive tipa niza dodeljuju jedna drugoj, sadržaj celog niza se kopira. Ovo važi i za višedimenzionalne nizove:
 
 ```pascal
 program testarray1;  
@@ -767,6 +820,7 @@ Type
 var  
   A,B : TA;  
   I,J : Integer;  
+
 begin  
   For I:=0 to 9 do  
     For J:=0 to 9 do  
@@ -791,32 +845,32 @@ begin
 end.
 ```
 
-The output of this program will be two identical matrices.
+Izlaz ovog programa biće dve identične matrice.
 
-#### 3.2.2.2 Dynamic arrays
+#### 3.2.2.2 Dynamički nizovi
 
-As of version 1.1, Free Pascal also knows dynamic arrays: In that case the array range is omitted, as in the following example:
+Od verzije 1.1, Free Pascal takođe poznaje dinamičke nizove: U tom slučaju veličina niza je izostavljena, kao u sledećem primeru:
 
 ```pascal
 Type  
   TByteArray = Array of Byte;
 ```
 
-When declaring a variable of a dynamic array type, the initial length of the array is zero. The actual length of the array must be set with the standard SetLength function, which will allocate the necessary memory to contain the array elements on the heap.
+Kada se deklariše promenljiva tipa dinamičkog niza, početna dužina niza je nula. Stvarna dužina niza mora biti podešena pomoću standardne funkcije `SetLength`, koja će dodeliti neophodnu memoriju da sadrži elemente niza na heap-u.
 
-The following example will set the length to 1000:
+Sledeći primer će postaviti dužinu na 1000:
 
 ```pascal
 Var  
   A : TByteArray;  
  
 begin  
-  SetLength(A,1000);
+  SetLength(A, 1000);
 ```
 
-After a call to SetLength, valid array indexes are 0 to 999: the array index is always zero-based.
+Nakon poziva `SetLength`, važeći indeksi niza su od 0 do 999: indeks dinamičkog niza je uvek zasnovan na nuli.
 
-SetLength can also be used for multi-dimensional arrays. The following example will create a “rectangular” array:
+`SetLength` se takođe može koristiti za višedimenzionalne nizove. Sledeći primer će kreirati "pravougaoni" niz:
 
 ```pascal
 Var  
@@ -826,9 +880,9 @@ begin
   SetLength(A, 10, 100);
 ```
 
-After a call to `SetLength`, valid array indexes are 0 to 9 for the first dimension, and 0 to 99 for the second dimension.
+Nakon poziva `SetLength`, važeći indeksi niza su 0 do 9 za prvu dimenziju i 0 do 99 za drugu dimenziju.
 
-In difference with static multi-dimensional arrays, dynamic arrays do not need to be “rectangular”, i. e. the various elements can have different lengths:
+Za razliku od statičkih višedimenzionalnih nizova, dinamički nizovi ne moraju biti „pravougaoni“, tj. e. različiti elementi mogu imati različite dužine:
 
 ```pascal
 var  
@@ -856,13 +910,13 @@ begin
 end.
 ```
 
-Note that the length of the array is set in elements, not in bytes of allocated memory (although these may be the same). The amount of memory allocated is the size of the array multiplied by the size of 1 element in the array. The memory will be disposed of at the exit of the current procedure or function.
+Imajte na umu da je dužina niza postavljena u elementima, a ne u bajtovima dodeljene memorije (iako oni mogu biti isti). Količina dodeljene memorije je veličina niza pomnožena sa veličinom 1 elementa u nizu. Memorija će biti odložena na izlazu iz trenutne procedure ili funkcije.
 
-It is also possible to resize the array: in that case, as much of the elements in the array as will fit in the new size, will be kept. The array can be resized to zero, which effectively resets the variable.
+Takođe je moguće promeniti veličinu niza: u tom slučaju će se zadržati onoliko elemenata u nizu koliko stane u novu veličinu. Veličina niza se može promeniti na nulu, što efektivno resetuje promenljivu.
 
-At all times, trying to access an element of the array with an index that is not in the current length of the array will generate a run-time error.
+U svakom trenutku, pokušaj da se pristupi elementu niza sa indeksom koji nije u trenutnoj dužini niza će generisati grešku tokom izvršavanja.
 
-Dynamic arrays are reference counted: assignment of one dynamic array-type variable to another will let both variables point to the same array. Contrary to ansistrings, an assignment to an element of one array will be reflected in the other: there is no copy-on-write. Consider the following example:
+Dinamički nizovi broje reference: dodeljivanje jedne promenljive dinamičkog tipa niza drugoj će omogućiti obe varijable da upućuju na isti niz. Suprotno `AnsiString`-ovima, dodeljivanje elementu jednog niza će se odraziti u drugom: nema kopiranja pri pisanju. Razmotrite sledeći primer:
 
 ```pascal
 Var  
@@ -875,9 +929,9 @@ begin
   A[0]:=31;
 ```
 
-After the second assignment, the first element in B will also contain 31.
+Posle druge dodele, prvi element u nizu B će takođe sadržati 31.
 
-It can also be seen from the output of the following example:
+To se takođe može videti iz rezultata sledećeg primera:
 
 ```pascal
 program testarray1;  
@@ -913,11 +967,11 @@ begin
 end.
 ```
 
-The output of this program will be a matrix of numbers, and then the same matrix, mirrored.
+Izlaz ovog programa će biti matrica brojeva, a zatim ista matrica, preslikana.
 
-As remarked earlier, dynamic arrays are reference counted: if in one of the previous examples A goes out of scope and B does not, then the array is not yet disposed of: the reference count of A (and B) is decreased with 1. As soon as the reference count reaches zero the memory, allocated for the contents of the array, is disposed of.
+Kao što je ranije napomenuto, dinamički nizovi broje referenci: ako u jednom od prethodnih primera A izađe van opsega, a B ne, onda niz još nije uklonjen: broj referenci A (i B) se smanjuje za 1. Čim broj referenci dostigne nulu, memorija dodeljena sadržaju niza se uklanja.
 
-The SetLength call will make sure the reference count of the returned array is 1, that is, if two dynamic array variables were pointing to the same memory they will no longer do so after the setlength call:
+Poziv `SetLength` će se uveriti da je broj referenci vraćenog niza 1, to jest, ako su dve dinamičke varijable niza ukazivale na istu memoriju, one to više neće činiti nakon poziva sa dužinom:
 
 ```pascal
 program testunique;  
@@ -931,17 +985,22 @@ var
  
 begin  
   Setlength(A,10);  
+  
   For I:=0 to 9 do  
     A[I]:=I;  
+  
   B:=A;  
+  
   SetLength(B,6);  
+  
   A[0]:=123;  
+  
   For I:=0 to 5 do  
     Writeln(B[I]);  
 end.
 ```
 
-It is also possible to copy and/or resize the array with the standard Copy function, which acts as the copy function for strings:
+Takođe je moguće kopirati i/ili promeniti veličinu niza pomoću standardne funkcije Copy, koja deluje kao funkcija kopiranja za nizove:
 
 ```pascal
 program testarray3;  
@@ -963,13 +1022,15 @@ begin
 end.
 ```
 
-The `Copy` function will copy six elements of the array to a new array. Starting at the element at index 3 (i. e. the fourth element) of the array.
+Funkcija `Copy` će kopirati šest elemenata niza u novi niz. Počevši od elementa sa indeksom 3 (tj. četvrti element) niza.
 
-The `Length` function will return the number of elements in the array. The `Low` function on a dynamic array will always return 0, and the `High` function will return the value `Length-1`, i. e., the value of the highest allowed array index.
+Funkcija `Length` će vratiti broj elemenata u nizu. Funkcija `Low` na dinamičkom nizu će uvek vratiti 0, a `High` funkcija će vratiti vrednost `Length-1`, tj. vrednost najvećeg dozvoljenog indeksa niza.
 
-#### 3.2.2.3 Dynamic array Type compatibility
+#### 3.2.2.3 Kompatabilnost dinamičkih tipova nizova
 
 Object Pascal is a strictly typed language. Two technically distinct types are sometimes considered assignment compatible (i. e. a value of one type can be assigned to a variable of another type) under certain circumstances. Dynamic arrays are considered assignment compatible when they use the same element type. That means that the following will compile:
+
+Object Pascal je strogo tipizirani jezik. Dva tehnički različita tipa se ponekad smatraju kompatibilnim sa dodeljivanjem (tj. vrednost jednog tipa može biti dodeljena promenljivoj drugog tipa) pod određenim okolnostima. Dinamički nizovi se smatraju kompatibilnim sa dodeljivanjem kada koriste isti tip elementa. To znači da će se sledeće kompajlirati:
 
 ```pascal
 {$mode objfpc}  
@@ -989,7 +1050,7 @@ begin
 end.
 ```
 
-But the following will not, even though the integer and word types are assignment compatible:
+Ali sledeće neće, iako su integer i word tipovi kompatabilni za dodeljivanje:
 
 ```pascal
 {$mode objfpc}  
@@ -1009,9 +1070,9 @@ begin
 end.
 ```
 
-#### 3.2.2.4 Dynamic array constructor
+#### 3.2.2.4 Konstruktor dinamičkog niza
 
-As of version 3.0 of Free Pascal, Dynamic array types have a constructor. This is intrinsic, the compiler provides it. Up to version 2.6.4, the only way to initialize a dynamic array was as follows:
+Od verzije 3.0 Free Pascal-a, tipovi dinamičkog niza imaju konstruktor. Ovo je suštinski, kompajler to obezbeđuje. Do verzije 2.6.4, jedini način da se inicijalizuje dinamički niz bio je sledeći:
 
 ```pascal
 Type  
@@ -1029,14 +1090,14 @@ begin
 end.
 ```
 
-As of version 3.0 of Free Pascal, an dynamic array can be initialized using a constructor-like syntax. The constructor is called Create, and accepts as parameters a variable number of parameters of the element type of the array type. This means the above initialization can now be done as:
+Od verzije 3.0 Free Pascal-a, dinamički niz se može inicijalizovati korišćenjem sintakse slične konstruktoru. Konstruktor se zove `Create` i prihvata kao parametre promenljiv broj argumenata tipa elementa niza. To znači da se gornja inicijalizacija sada može uraditi kao:
 
 ```pascal
 Type  
   TIntegerArray = Array of Integer;  
  
 var  
-  A : TIntegerArray;  
+  A: TIntegerArray;  
  
 begin  
   A:=TIntegerArray.Create(1,2,3);  
@@ -1044,7 +1105,7 @@ begin
 end.
 ```
 
-Note that this will not work for dynamic arrays for which no type was created. That is, the following will not work:
+Imajte na umu da ovo neće raditi za dinamičke nizove za koje nije kreiran tip. To jest, sledeće neće raditi:
 
 ```pascal
 var  
@@ -1056,7 +1117,7 @@ begin
 end.
 ```
 
-This approach also works recursively for multi-dimensional arrays:
+Ovaj pristup takođe funkcioniše rekurzivno za višedimenzionalne nizove:
 
 ```pascal
 Type  
@@ -1067,15 +1128,16 @@ var
   A : TIntegerArrayArray;  
  
 begin  
-  A:=TIntegerArrayArray.Create(TIntegerArray.Create(1,2,3),  
-                               TIntegerArray.Create(4,5,6),  
-                               TIntegerArray.Create(7,8,9));  
+  A:=TIntegerArrayArray.Create(
+    TIntegerArray.Create(1,2,3),  
+    TIntegerArray.Create(4,5,6),  
+    TIntegerArray.Create(7,8,9)
+  );  
   Writeln('Length ',length(A));  
 end.
 ```
 
-However, since it is a constructor (code is run at run-time) it is not possible to use this in an initialized variable syntax. That is, the following will not
-work:
+Međutim, pošto je to konstruktor (kod se pokreće u vreme izvođenja), nije moguće koristiti ovo u sintaksi inicijalizovane promenljive. To jest, sledeće neće raditi:
 
 ```pascal
 Type  
@@ -1089,9 +1151,9 @@ begin
 end.
 ```
 
-#### 3.2.2.5 Dynamic array constant expressions
+#### 3.2.2.5 Konstantni izrazi sa dinamičkim nizovima
 
-As of version 3.2 of the compiler, an array can be constructed using an array expression in an explicit assignment or in an initialized variable. However, the expression is different. In an assignment statement, it resembles a set expression, in an initializd variable, the same syntax as for a constant array of fixed length must be used:
+Od verzije 3.2 kompajlera, niz se može konstruisati korišćenjem izraza niza u eksplicitnoj dodeli ili u inicijalizovanoj promenljivoj. Međutim, izraz je drugačiji. U iskazu dodele, on podseća na izraz skupa, u promenljivoj inicijalizacije, mora se koristiti ista sintaksa kao za konstantni niz fiksne dužine:
 
 ```pascal
 Type  
@@ -1106,11 +1168,11 @@ begin
 end.
 ```
 
-#### 3.2.2.6 Packing and unpacking an array
+#### 3.2.2.6 Pakovanje i raspakivanje niza
 
-Arrays can be packed and bitpacked. Two array types which have the same index type and element type, but which are differently packed are not assignment compatible.
+Nizovi se mogu pakovati i bitova. Dva tipa niza koji imaju isti tip indeksa i tip elementa, ali koji su različito upakovani nisu kompatibilni sa dodeljivanjem.
 
-However, it is possible to convert a normal array to a bitpacked array with the pack routine. The reverse operation is possible as well; a bitpacked array can be converted to a normally packed array using the unpack routine, as in the following example:
+Međutim, moguće je konvertovati normalan niz u niz upakovan u bitove pomoću rutine pakovanja. Moguća je i obrnuta operacija; niz bitova se može konvertovati u normalno upakovani niz korišćenjem rutine raspakivanja, kao u sledećem primeru:
 
 ```pascal
 Var  
@@ -1125,13 +1187,13 @@ begin
 end.
 ```
 
-More information about the pack and unpack routines can be found in the system unit reference.
+Više informacija o rutinama za pakovanje i raspakivanje možete pronaći u referenci sistemske jedinice.
 
-### 3.3.3 Record types
+### 3.3.3 Record tipovi
 
-Free Pascal supports fixed records and records with variant parts.
+Free Pascal podržava fiksne zapise i zapise sa varijantnim delovima.
 
-So the following are valid record type declarations:
+Dakle, sledeće su važeće deklaracije tipa `Record`:
 
 ```pascal
 Type  
@@ -1150,9 +1212,10 @@ Type
     end;
 ```
 
-The variant part must be last in the record. The optional identifier in the case statement serves to access the tag field value, which otherwise would be invisible to the programmer. It can be used to see which variant is active at a certain time3. In effect, it introduces a new field in the record.
+Varijantni deo mora biti poslednji u zapisu. Opcioni identifikator u iskazu case služi za pristup vrednosti polja oznake, koja bi inače bila nevidljiva za programera. Može se koristiti da se vidi koja je varijanta aktivna u određenom trenutku. U stvari, to uvodi novo polje u zapisu.
 
-Remark It is possible to nest variant parts, as in:
+**Napomena**  
+Moguće je ugnezditi varijante delova, kao u:
 
 ```pascal
 Type  
@@ -1166,44 +1229,45 @@ Type
       end;
 ```
 
-#### 3.3.3.1 Record layout and size
+#### 3.3.3.1 Izgled i veličina zapisa
 
-The layout and size of a record is influenced by five aspects:
+Na izgled i veličinu zapisa utiče pet aspekata:
 
-- The size of its fields.
-  The alignment requirements of the types of the fields, which are platform-dependent. Note that the alignment requirements of a type inside a record may be different from those of a separate variable of that type. Additionally, the location of a field inside a record may also influence its type’s alignment requirements.
-- The currently active `{$ALIGN N}` or `{$PACKRECORDS N}` setting (these settings override each
-  other, so the last one specified is the active one; note that these directives to not accept exactly the same arguments, see the programmer’s manual for more information).
-- The currently active `{$CODEALIGN RECORDMIN=X}` setting.
-- The currently active `{$CODEALIGN RECORDMAX=X}` setting.
+- Veličina njegovih polja.
+  Zahtevi za usklađivanje tipova polja koji zavise od platforme. Imajte na umu da se zahtevi za poravnanje tipa unutar zapisa mogu razlikovati od zahteva za posebnu promenljivu tog tipa. Pored toga, lokacija polja unutar zapisa takođe može uticati na zahteve za poravnanje njegovog tipa.
+- Trenutno aktivno podešavanje `{$ALIGN N}` ili `{$PACKRECORDS N}` (ova podešavanja zamenjuju
+  svako drugi, tako da je poslednji navedeni aktivni; imajte na umu da ove direktive ne prihvataju potpuno iste argumente, pogledajte uputstvo za programere za više informacija).
+- Trenutno aktivno podešavanje `{$CODEALIGN RECORDMIN=Ks}`.
+- Trenutno aktivno podešavanje `{$CODEALIGN RECORDMAKS=Ks}`.
 
-The layout and size of variant parts in records is determined by replacing them with a field whose type is a record with as first element a field of the tag field type if an identifier was declared for this tag field, followed by the elements of the biggest variant.
+Izgled i veličina varijantnih delova u zapisima se određuje tako što se zamenjuju poljem čiji je tip zapis sa kao prvim elementom poljem tipa polja oznake ako je za ovo polje oznake deklarisan identifikator, a zatim slede elementi najveće varijante.
 
-Field F2’s offset in a record is equal to the sum of the previous field F1’s offset and F1’s size, rounded up to a multiple of F2’s required alignment. This required alignment is calculated as follows:
+Pomak polja F2 u zapisu je jednak zbiru pomaka prethodnog polja F1 i veličine F1, zaokružen na višestruko potrebno poravnanje F2. Ovo potrebno poravnanje se izračunava na sledeći način:
 
-- The required alignment is set to the default alignment of the field’s type,
-  Possibly adjusted based on the fact that this type occurs in a record and on the field’s location in the record.
-- If the required alignment is smaller than the currently active `{$CODEALIGN  RECORDMIN=X}`
-  setting, it is changed to this X value.
-- If the currently active `{$ALIGN N}` or {`$PACKRECORDS N}` setting is a numerical value: if the
-  required alignment is larger than N, it is changed to N. I. e., if N is 1, all fields will be placed right after each other.
-- RESET or DEFAULT: the resulting required alignment is target dependent.
-- C: the required alignment is adjusted according to the rules specified in the
-  official ABI for the current platform.
-- POWER/POWERPC, MAC68K: the alignment value’s adjustment is determined by
-  following the official ABI rules for resp. the (Classic) Macintosh PowerPC or Macintosh 680x0 platforms.
+- Potrebno poravnanje je podešeno na podrazumevano poravnanje tipa polja,
+  Možda prilagođeno na osnovu činjenice da se ovaj tip javlja u zapisu i na lokaciji polja u zapisu.
+- Ako je potrebno poravnanje manje od trenutno aktivnog `{$CODEALIGN RECORDMIN=Ks}`
+  podešavanje, menja se na ovu vrednost X.
+- Ako je trenutno aktivna postavka `{$ALIGN N}` ili {`$PACKRECORDS N}` numerička vrednost: ako
+  potrebno poravnanje je veće od N, menja se u N. tj., ako je N 1, sva polja će biti postavljena jedno iza drugog.
+- RESET ili DEFAULT: rezultirajuće potrebno poravnanje zavisi od cilja.
+- C: potrebno poravnanje se podešava prema pravilima navedenim u zvanični ABI za trenutnu
+  platformu.
+- POWERPC, MAC68K: podešavanje vrednosti poravnanja je određeno poštujući zvanična ABI pravila za
+  odn. (Klasični) Macintosh PoverPC ili Macintosh 680k0 platforme.
 
-The size of a record is equal to the sum of the record’s last field’s offset and this field’s size, rounded up to a multiple of the record’s required alignment. The record’s required alignment is calculated as follows:
+Veličina zapisa je jednaka zbiru pomaka poslednjeg polja zapisa i veličine ovog polja, zaokruženog na višestruko potrebno poravnanje zapisa. Potrebno poravnanje zapisa se izračunava na sledeći način:
 
-- The required alignment is set to the alignment of the record’s field with the largest alignment,
-  as determined while laying out the record.
-- If the current `{$ALIGN N}` or `{$PACKRECORDS N}` setting is different from C and the required
-  alignment is larger than than the currently active {$CODEALIGN RECORDMAX=X}, the required alignment is changed to X.
-- If the current `{$ALIGN N}` or `{$PACKRECORDS N}` setting is equal to C, the required alignment is determined by following the official ABI rules.
+- Zahtevano poravnanje je podešeno na poravnanje polja zapisa sa najvećim poravnanjem, kako je
+  utvrđeno prilikom postavljanja zapisa.
+- Ako se trenutno podešavanje `{$ALIGN N}` ili `{$PACKRECORDS N}` razlikuje od C i zahteva
+  poravnanje je veće od trenutno aktivnog {$CODEALIGN RECORDMAKS=Ks}, potrebno poravnanje se menja u X.
+- Ako je trenutna postavka `{$ALIGN N}` ili `{$PACKRECORDS N}` jednaka C, potrebno poravnanje je
+  određeno praćenjem zvaničnih ABI pravila.
 
 #### 3.3.3.2 Remarks and examples
 
-Free Pascal also supports a “packed record”, which is a record where all the elements are byte-aligned. As a result, the two following declarations are equivalent:
+Free Pascal takođe podržava "upakovani zapis", koji je zapis u kome su svi elementi poravnati po bajtovima. Kao rezultat, dve sledeće deklaracije su ekvivalentne:
 
 ```pascal
 {$PackRecords 1}  
@@ -1223,19 +1287,21 @@ Trec2 = Packed Record
   end;
 ```
 
-Note the {$PackRecords Default} after the first declaration to restore the default setting!
+Obratite pažnju na `{$PackRecords Default}` posle prve deklaracije da biste vratili podrazumevanu postavku!
 
-Given the platform-dependent nature of how records are laid out in memory, the only way to ensure a compatible layout across platforms (assuming that all fields are declared using a type with the same meaning across these same platforms) is by using `{$PACKRECORDS 1}`.
+S obzirom na platformu zavisnu prirodu načina na koji se zapisi postavljaju u memoriju, jedini način da se obezbedi kompatibilan raspored na različitim platformama (pod pretpostavkom da su sva polja deklarisana korišćenjem tipa sa istim značenjem na istim platformama) je korišćenje
+`{$PACKRECORDS 1}`.
 
-In particular, if a typed file with records, produced by a Turbo Pascal program, must be read, then chances are that attempting to read that file correctly will fail. The reason is that Free Pascal’s default `{$PACKRECORDS N}` setting is not necessarily compatible with Turbo Pascal’s. It can be changed to `{$PACKRECORDS 1}` or `{$PACKRECORDS 2}` depending on the setting used in the Turbo Pascal program that create the file (although it may still fail with `{$PACKRECORDS 2}` due to different type alignment requirements between 16 bit MSDOS and your current platform).
+Konkretno, ako se mora pročitati tipizirana datoteka sa zapisima, proizvedena od strane Turbo Pascal programa, onda su šanse da pokušaj ispravnog čitanja te datoteke neće uspeti. Razlog je taj što podrazumevana postavka `{$PACKRECORDS N}` Free Pascal-a nije nužno kompatibilna sa Turbo Pascal-om. Može se promeniti u `{$PACKRECORDS 1}` ili `{$PACKRECORDS 2}` u zavisnosti od podešavanja korišćenog u Turbo Pascal programu koji kreira datoteku (iako i dalje može da ne uspe sa `{$PACKRECORDS 2}` zbog različitih zahteva za usklađivanje tipa između 16-bitnog MSDOS-a i vaše trenutne platforme).
 
-The same remark goes for Delphi: exchanging data is only guaranteed to be possible if both the producer and consumer use a packed record, or if they are on the same platform and use the same `{$PACKRECORDS X}` setting.
+Ista primedba važi i za Delphi: razmena podataka je garantovano moguća samo ako i proizvođač i potrošač koriste upakovani zapis, ili ako su na istoj platformi i koriste istu postavku
+`{$PACKRECORDS Ks}`.
 
-### 3.3.4 Set types
+### 3.3.4 Set tipovi
 
-Free Pascal supports the set types as in Turbo Pascal.
+Free Pascal podržava tipove skupova kao u Turbo Pascal-u.
 
-Each of the elements of SetType must be of type TargetType. TargetType can be any ordinal type with a range between 0 and 255. A set can contain at most 256 elements. The following are valid set declaration:
+Svaki od elemenata SetType mora biti tipa TargetType. TargetType može biti bilo koji redni tip sa opsegom između 0 i 255. Set može da sadrži najviše 256 elemenata. Sledeće su važeće deklaracije seta:
 
 ```pascal
 Type  
@@ -1246,21 +1312,21 @@ Var
   WorkDays : Set of days;
 ```
 
-Given these declarations, the following assignment is legal:
+S obzirom na ove deklaracije, sledeći zadatak je legalan:
 
 ```pascal
 WorkDays := [Mon, Tue, Wed, Thu, Fri];
 ```
 
-Several operations can be done on sets: taking unions or differences, adding or removing elements, comparisons. These are documented in section 12.8.6, page 639
+Na skupovima se može uraditi nekoliko operacija: uzimanje unija ili razlika, dodavanje ili uklanjanje elemenata, poređenja.
 
-How the compiler stores sets depends on the mode and can be controlled with a directive. For more information, see the programmer’s guide.
+Način na koji kompajler čuva skupove zavisi od režima i može se kontrolisati pomoću direktive. Za više informacija pogledajte vodič za programera.
 
-### 3.3.5 File types
+### 3.3.5 File tipovi
 
-File types are types that store a sequence of some base type, which can be any type except another file type. It can contain (in principle) an infinite number of elements. File types are used commonly to store data on disk. However, nothing prevents the programmer, from writing a file driver that stores its data for instance in memory.
+Tipovi datoteka su tipovi koji čuvaju niz nekog osnovnog tipa, koji može biti bilo koji tip osim drugog tipa datoteke. Može da sadrži (u principu) beskonačan broj elemenata. Tipovi datoteka se obično koriste za skladištenje podataka na disku. Međutim, ništa ne sprečava programera da napiše upravljački program koji svoje podatke čuva, na primer, u memoriji.
 
-If no type identifier is given, then the file is an untyped file; it can be considered as equivalent to a file of bytes. Untyped files require special commands to act on them (see Blockread, Blockwrite). The following declaration declares a file of records:
+Ako nije dat identifikator tipa, onda je datoteka datoteka bez tipa; može se smatrati ekvivalentnim fajlu bajtova. Netipizirane datoteke zahtevaju posebne komande da bi delovale na njih (pogledajte BlockRead, BlockWrite). Sledeća deklaracija proglašava datoteku zapisa:
 
 ```pascal
 Type  
@@ -1270,61 +1336,62 @@ Type
   PointFile = File of Point;
 ```
 
-Internally, files are represented by the FileRec record, which is declared in the Dos or SysUtils units.
+Interno, datoteke su predstavljene zapisom FileRec, koji je deklarisan u unitima `Dos` ili `SysUtils`.
 
-A special file type is the Text file type, represented by the TextRec record. A file of type Text uses special input-output routines. The default Input, Output and StdErr file types are defined in the system unit: they are all of type Text, and are opened by the system unit initialization code.
+Poseban tip datoteke je tip tekstualne datoteke, predstavljen `TextRec` zapisom. Datoteka tipa Text koristi posebne ulazno-izlazne rutine. Podrazumevani tipovi ulaznih, izlaznih i StdErr datoteka definisani su u `system` unitu: svi su tipa Text i otvaraju se kodom za inicijalizaciju sistemske jedinice.
 
-## 3.4 Pointers
+## 3.4 Pokazivači
 
-Free Pascal supports the use of pointers. A variable of the pointer type contains an address in memory, where the data of another variable may be stored. A pointer type can be defined as follows:
+Free Pascal podržava upotrebu pokazivača. Promenljiva tipa pokazivača sadrži adresu u memoriji, gde se mogu čuvati podaci druge promenljive. Tip pokazivača se može definisati na sledeći način:
 
-As can be seen from this diagram, pointers are typed, which means that they point to a particular kind of data. The type of this data must be known at compile time.
+Pokazivači su tipizirani, što znači da ukazuju na određenu vrstu podataka. Tip ovih podataka mora biti poznat u vreme kompajliranja.
 
-Dereferencing the pointer (denoted by adding ^ after the variable name) behaves then like a variable. This variable has the type declared in the pointer declaration, and the variable is stored in the address that is pointed to by the pointer variable. Consider the following example:
+Dereferenciranje pokazivača (označeno dodavanjem ^ iza imena promenljive) se tada ponaša kao promenljiva. Ova promenljiva ima tip deklarisan u deklaraciji pokazivača, a promenljiva se čuva na adresi na koju ukazuje promenljiva pokazivača. Razmotrite sledeći primer:
 
 ```pascal
-Program pointers;  
+Program pointers;
+
 type  
   Buffer = String[255];  
   BufPtr = ^Buffer;  
+
 Var B  : Buffer;  
     BP : BufPtr;  
     PP : Pointer;  
 ```
 
-etc..
+U ovom primeru, BP je pokazivač na tip Buffer; dok je B promenljiva tipa Buffer. B zauzima 256 bajtova memorije, a BP samo 4 (ili 8) bajtova memorije: dovoljno memorije za skladištenje adrese.
 
-In this example, BP is a pointer to a Buffer type; while B is a variable of type Buffer. B takes 256 bytes memory, and BP only takes 4 (or 8) bytes of memory: enough memory to store an address.
-
-The expression
+Izraz:
 
 ```pascal
 BP^
 ```
 
-is known as the dereferencing of BP. The result is of type Buffer, so
+je poznato kao dereferenciranje BP. Rezultat je tipa Buffer, dakle
 
 ```pascal
 BP^[23]
 ```
 
-Denotes the 23rd character in the string pointed to by BP.
+označava 23. znak u nizu na koji ukazuje BP.
 
-Remark Free Pascal treats pointers much the same way as C does. This means that a pointer to some type can be treated as being an array of this type.
+**Primedba**  
+Free Pascal tretira pokazivače na isti način kao i C. To znači da se pokazivač na neki tip može tretirati kao niz ovog tipa.
 
-From this point of view, the pointer then points to the zeroeth element of this array. Thus the following pointer declaration
+Sa ove tačke gledišta, pokazivač tada pokazuje na nulti element ovog niza. Dakle, sledeća deklaracija pokazivača
 
 ```pascal
 Var p : ^Longint;
 ```
 
-can be considered equivalent to the following array declaration:
+može se smatrati ekvivalentnim sledećoj deklaraciji niza:
 
 ```pascal
 Var p : array[0..Infinity] of Longint;
 ```
 
-The difference is that the former declaration allocates memory for the pointer only (not for the array), and the second declaration allocates memory for the entire array. If the former is used, the memory must be allocated manually, using the Getmem function. The reference P^ is then the same as p[0]. The following program illustrates this maybe more clear:
+Razlika je u tome što prva deklaracija dodeljuje memoriju samo za pokazivač (ne za niz), a druga deklaracija dodeljuje memoriju za ceo niz. Ako se koristi prva, memorija se mora dodeliti ručno, koristeći funkciju `Getmem`. Referenca P^ je tada ista kao p[0]. Sledeći program ilustruje ovo možda jasnije:
 
 ```pascal
 program PointerArray;  
@@ -1335,22 +1402,25 @@ var
   pp : array[0..100] of Longint;  
 
 begin  
-  for i := 0 to 100 do pp[i] := i; { Fill array }  
+  for i := 0 to 100 do 
+    pp[i] := i; { Fill array }  
+  
   p := @pp[0];                     { Let p point to pp }  
+
   for i := 0 to 100 do  
     if p[i]<>pp[i] then  
       WriteLn ('Ohoh, problem !')  
 end.
 ```
 
-Free Pascal supports pointer arithmetic as C does. This means that, if P is a typed pointer, the instructions
+Free Pascal podržava aritmetiku pokazivača kao i C. To znači da, ako je P tipizirani pokazivač, uputstva:
 
 ```pascal
 Inc(P);  
 Dec(P);
 ```
 
-will increase, respectively decrease the address the pointer points to with the size of the type P is a pointer to. For example
+će se povećati, odnosno smanjiti adresa na koju pokazivač pokazuje sa veličinom tipa P na koji je pokazivač. Na primer:
 
 ```pascal
 Var P : ^Longint;  
@@ -1358,9 +1428,9 @@ Var P : ^Longint;
  Inc (p);
 ```
 
-will increase P by 4, because 4 is the size of a longint. If the pointer is untyped, a size of 1 byte is assumed (i. e. as if the pointer were a pointer to a byte: ^byte.)
+povećaće P za 4, jer je 4 veličina longinta. Ako pokazivač nije tipiziran, pretpostavlja se veličina od 1 bajta (tj. kao da je to pokazivač na bajt: ^bajt.)
 
-Normal arithmetic operators on pointers can also be used, that is, the following are valid pointer arithmetic operations:
+Mogu se koristiti i normalni aritmetički operatori na pokazivačima, odnosno sledeće su važeće aritmetičke operacije pokazivača:
 
 ```pascal
 var  
@@ -1376,11 +1446,11 @@ begin
 end.
 ```
 
-Here, the value that is added or subtracted is multiplied by the size of the type the pointer points to. In the previous example P1 will be decremented by 16 bytes, and P2 will be incremented by 16.
+Ovde se vrednost koja se dodaje ili oduzima množi sa veličinom tipa na koji pokazuje pokazivač. U prethodnom primeru P1 će biti umanjen za 16 bajtova, a P2 će biti povećan za 16.
 
-## 3.5 Forward type declarations
+## 3.5 Deklaracija tipa unapred
 
-Programs often need to maintain a linked list of records. Each record then contains a pointer to the next record (and possibly to the previous record as well). For type safety, it is best to define this pointer as a typed pointer, so the next record can be allocated on the heap using the New call. In order to do so, the record should be defined something like this:
+Programi često moraju da održavaju povezanu listu zapisa. Svaki zapis tada sadrži pokazivač na sledeći zapis (a možda i na prethodni zapis). Za sigurnost tipa, najbolje je da se ovaj pokazivač definiše kao otkucani pokazivač, tako da se sledeći zapis može dodeliti na hrpi pomoću poziva Nev. Da biste to uradili, zapis treba da bude definisan ovako:
 
 ```pascal
 Type  
@@ -1390,9 +1460,9 @@ Type
   end;
 ```
 
-When trying to compile this, the compiler will complain that the TListItem type is not yet defined when it encounters the Next declaration: This is correct, as the definition is still being parsed.
+Kada pokušava da prevede ovo, kompajler će se žaliti da tip TListItem još nije definisan kada naiđe na sledeću deklaraciju: Ovo je tačno, pošto se definicija još uvek raščlanjuje.
 
-To be able to have the Next element as a typed pointer, a “Forward type declaration” must be introduced:
+Da biste mogli da imate element Nekt kao otkucani pokazivač, mora se uvesti „Deklaracija tipa unapred“:
 
 ```pascal
 Type  
@@ -1403,13 +1473,13 @@ Type
   end;
 ```
 
-When the compiler encounters a typed pointer declaration where the referenced type is not yet known, it postpones resolving the reference till later. The pointer definition is a “Forward type declaration”.
+Kada kompajler naiđe na deklaraciju tipiziranog pokazivača gde referentni tip još nije poznat, odlaže rešavanje reference za kasnije. Definicija pokazivača je "Deklaracija tipa unapred".
 
-The referenced type should be introduced later in the same Type block. No other block may come between the definition of the pointer type and the referenced type. Indeed, even the word Type itself may not re-appear: in effect it would start a new type-block, causing the compiler to resolve all pending declarations in the current block.
+Referentni tip bi trebalo da se uvede kasnije u istom bloku Type. Nijedan drugi blok ne sme da dođe između definicije tipa pokazivača i referentnog tipa. Zaista, čak se i sama reč Type možda neće ponovo pojaviti: u stvari, ona bi pokrenula novi blok tipa, uzrokujući da kompajler razreši sve deklaracije na čekanju u trenutnom bloku.
 
-In most cases, the definition of the referenced type will follow immediately after the definition of the pointer type, as shown in the above listing. The forward defined type can be used in any type definition following its declaration.
+U većini slučajeva, definicija referentnog tipa će uslediti odmah nakon definicije tipa pokazivača, kao što je prikazano u gornjoj listi. Napred definisani tip se može koristiti u bilo kojoj definiciji tipa nakon njene deklaracije.
 
-Note that a forward type declaration is only possible with pointer types and classes, not with other types.
+Imajte na umu da je deklaracija tipa unapred moguća samo sa tipovima pokazivača i klasama, ne i sa drugim tipovima.
 
 ## 3.6 Procedural types
 
