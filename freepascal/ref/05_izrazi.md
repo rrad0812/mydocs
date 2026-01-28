@@ -1,5 +1,7 @@
 # 5 Izrazi
 
+[prev][f4] [content][f0] [next][f6]
+
 Izrazi se javljaju u naredbama dodele ili u testovima.
 
 Izrazi se sastoje od dve komponente: operatora i njihovih operanda. Većina operatora je binarna, tj. zahteva dva operanda. Binarni operatori se uvek javljaju između operanda (kao u X/Y ). Malo operatora je unarno, tj. zahteva samo jedan operand. Unarni operator se uvek javlja ispred operanda, kao u -X .
@@ -776,3 +778,9 @@ end.
 ```
 
 Iako interfejsi moraju biti COM interfejsi, pretvaranje tipa u klasu će funkcionisati samo ako interfejs dolazi iz Object Pascal klase. Neće raditi na interfejsima dobijenim iz sistema putem COM-a.
+
+[prev][f4] [content][f0] [next][f6]
+
+[f0]: 00_sadrzaj.md
+[f4]: 04_promenljive.md
+[f6]: 06_izjave.md

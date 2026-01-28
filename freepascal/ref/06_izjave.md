@@ -1,5 +1,7 @@
 # 6 Izjave
 
+[prev][f5] [content][f0] [next][f7]
+
 Srž svakog algoritma su akcije koje on preduzima. Ove akcije su sadržane u naredbama programa ili unita. Svaka naredba može biti označena i na nju se može skočiti (unutar određenih ograničenja) pomoću naredbi Goto.
 
 Oznaka može biti identifikator ili cela cifra.
@@ -912,3 +914,9 @@ Razlog zašto se pokazivač ne može promeniti je taj što kompajler čuva adres
 #### 6.2.1.8 Izjave o izuzetku
 
 Besplatni Pascal podržava izuzetke. Izuzeci pružaju zgodan način za programiranje grešaka i mehanizama za oporavak od grešaka, i usko su povezani sa klasama. Podrška za izuzetke je objašnjena u poglavlju 17, stranica 935.
+
+[prev][f5] [content][f0] [next][f7]
+
+[f0]: 00_sadrzaj.md
+[f5]: 05_izrazi.md
+[f7]: 07_procedure_i_funkcije.md

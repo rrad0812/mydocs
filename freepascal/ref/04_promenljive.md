@@ -1,7 +1,7 @@
 
 # 4 Variables
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f3] [content][f0] [next][f5]
 
 ## 4.1 Definicija
 
@@ -357,8 +357,8 @@ Implementation
 end.
 ```
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f3] [content][f0] [next][f5]
 
-[f1]: 03_types.md
-[f0]: 00_contents.md
-[f2]: 06_classes.md
+[f0]: 00_sadrzaj.md
+[f3]: 03_tipovi.md
+[f5]: 05_izrazi.md

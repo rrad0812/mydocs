@@ -1,7 +1,7 @@
 
 # 12 Generics
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f13] [content][f0] [next][f15]
 
 ## 12.1 Introduction
 
@@ -974,8 +974,8 @@ end.
 
 Support for this construct is expected in a future version of Free Pascal.
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f13] [content][f0] [next][f15]
 
-[f1]: 07_interfaces.md
-[f0]: 00_contents.md
-[f2]: 09_.md
+[f0]: 00_sadrzaj.md
+[f13]: 13_interfejsi.md
+[f15]: 15_programi_uniti_blokovi.md

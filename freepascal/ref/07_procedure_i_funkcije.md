@@ -1,6 +1,8 @@
 
 # 7 Korišćenje funkcija i procedura
 
+[prev][f6] [content][f0] [next][f8]
+
 Slobodni Paskal podržava upotrebu funkcija i procedura. Podržava
 
 - Preopterećenje funkcija, tj. funkcije sa istim imenom, ali različitim listama parametara.
@@ -635,3 +637,9 @@ begin
   Writeln('After function : ',SRefCount(Pointer(S)));  
 end.
 ```
+
+[prev][f6] [content][f0] [next][f8]
+
+[f0]: 00_sadrzaj.md
+[f6]: 06_izjave.md
+[f8]: 08_propterećenje_operatora.md

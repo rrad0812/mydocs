@@ -1,7 +1,7 @@
 
 # 3 Tipovi
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f2] [content][f0] [next][f4]
 
 Sve varijable imaju tip. Free Pascal podržava iste osnovne tipove kao Turbo Pascal, sa nekim dodatnim tipovima iz Delphija, kao i nekim sopstvenim.
 
@@ -1933,8 +1933,8 @@ Promenljive upravljanih tipova će takođe biti finalizovane: to uopšteno znač
 **Napomena**:
 Imajte na umu da ne treba praviti pretpostavke o tačnom vremenu ove finalizacije. Sve to je zagarantovano da su finalizovani kada izađu iz okvira.
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f2] [content][f0] [next][f4]
 
-[f2]: 04_variables.md
-[f0]: 00_contents.md
-[f1]: 02_constants.md
+[f0]: 00_sadrzaj.md
+[f2]: 02_konstante.md
+[f4]: 04_promenljive.md

@@ -1,6 +1,6 @@
 # 9 Objekti
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f8] [content][f0] [next][f10]
 
 ## 9.1 Deklaracija
 
@@ -812,8 +812,8 @@ Vidi detaljnije u [Classes](08_classes.md).
 - Potrebna kompatibilnost sa starijim kodom
 - Rad sa low-level sistemskim kodom
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f8] [content][f0] [next][f10]
 
-[f1]: 04_variables.md
-[f0]: 00_contents.md
-[f2]: 06_classes.md
+[f0]: 00_sadrzaj.md
+[f8]: 08_propterećenje_operatora.md
+[f10]: 10_klase.md

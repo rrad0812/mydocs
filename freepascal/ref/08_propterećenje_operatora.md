@@ -1,5 +1,7 @@
 # 8 Preopterećenje operatora
 
+[prev][f7] [content][f0] [next][f9]
+
 ## 8.1 Uvod
 
 Fri Paskal podržava preopterećenje operatora. To znači da je moguće definisati dejstvo nekih operatora na samodefinisanim tipovima i time omogućiti upotrebu ovih tipova u matematičkim izrazima.
@@ -624,3 +626,9 @@ end.
 ```
 
 Petlja će ispisati sve parne brojeve različite od nule, manje ili jednake nabrojivoj vrednosti. (2 i 4 u slučaju primera).
+
+[prev][f7] [content][f0] [next][f9]
+
+[f0]: 00_sadrzaj.md
+[f7]: 07_procedure_i_funkcije.md
+[f9]: 09_objekti.md

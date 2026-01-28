@@ -1,7 +1,7 @@
 
 # 2 Konstante
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f1] [content][f0] [next][f3]
 
 ## 2.1 Obične konstante
 
@@ -122,8 +122,8 @@ end.
 
 Ovo će odštampati „Da“. ili „Ne“. u zavisnosti od vrednosti B, čak i ako su konstante Da i Ne lokalizovane nekim mehanizmom lokalizacije.
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f1] [content][f0] [next][f3]
 
-[f1]: 01_pascal_tokens.md
-[f0]: 00_contents.md
-[f2]: 03_types.md
+[f0]: 00_sadrzaj.md
+[f1]: 01_tokeni.md
+[f3]: 03_tipovi.md

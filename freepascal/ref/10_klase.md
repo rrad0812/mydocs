@@ -1,7 +1,7 @@
 
 # 10 Klase
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f9] [content][f0] [next][f11]
 
 U Delfiju mogućnosti OOP-a uglavnom se vrte oko koncepta “Classes”. Klasa može biti razmatrana kao pokazivač na objekat, ili pokazivač na zapis, sa pridruženim metodama.
 
@@ -1796,8 +1796,8 @@ Bird := TBird.CreateAnimal;  // Self = TBird
 
 **Pravilo:** Ako metod zavisi od **toga koja klasa ga poziva**, treba Self (ne-static class metod). Ako ne zavisi, koristi static.
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f9] [content][f0] [next][f11]
 
-[f1]: 05_objects.md
-[f0]: 00_contents.md
-[f2]: 07_.md
+[f0]: 00_sadrzaj.md
+[f9]: 09_objekti.md
+[f11]: 11_prošireni_zapisi.md

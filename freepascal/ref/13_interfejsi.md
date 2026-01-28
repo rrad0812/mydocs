@@ -1,7 +1,7 @@
 
 # 11 Interface
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f12] [content][f0] [next][f14]
 
 ## 11.1 Definition
 
@@ -422,8 +422,8 @@ Assume the interface intf is reference counted. When the compiler evaluates B.In
 
 Additionally, function results may point to a non-nil valid COM interface on entry: this is because the function result is treated as a var parameter.
 
-[prev][f1] [content][f0] [next][f2]
+[prev][f12] [content][f0] [next][f14]
 
-[f1]: 06_classes.md
-[f0]: 00_contents.md
-[f2]: 08_generics.md
+[f0]: 00_sadrzaj.md
+[f12]: 12_pomoćnici.md
+[f14]: 14_generici.md

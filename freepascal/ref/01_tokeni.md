@@ -363,5 +363,5 @@ Moguće je koristiti druge skupove znakova u stringovima; u tom slučaju kodna s
 
 [content][f0] [next][f2]
 
-[f0]: 00_contents.md
-[f2]: 02_constants.md
+[f0]: 00_sadrzaj.md
+[f2]: 02_konstante.md
