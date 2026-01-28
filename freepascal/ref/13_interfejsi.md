@@ -1,29 +1,25 @@
 
-# 11 Interface
+# 13 Interfejs
 
 [prev][f12] [content][f0] [next][f14]
 
-## 11.1 Definition
+## 13.1 Definicija
 
-As of version 1.1, FPC supports interfaces. Interfaces are an alternative to multiple inheritance (where a class can have multiple parent classes) as implemented for instance in C++. An interface is basically a named set of methods and properties: a class that implements the interface provides all the methods as they are enumerated in the Interface definition. It is not possible for a class to implement only part of the interface: it is all or nothing.
+Od verzije 1.1, FPC podržava interfejse. Interfejsi su alternativa višestrukom nasleđivanju (gde klasa može imati više roditeljskih klasa) kao što je implementirano, na primer, u C++. Interfejs je u osnovi imenovani skup metoda i svojstava: klasa koja implementira interfejs pruža sve metode onako kako su navedene u definiciji interfejsa. Nije moguće da klasa implementira samo deo interfejsa: to je sve ili ništa.
 
-Interfaces can also be ordered in a hierarchy, exactly as classes: an interface definition that inherits from another interface definition contains all the methods from the parent interface, as well as the methods explicitly named in the interface definition. A class implementing an interface must then implement all members of the interface as well as the methods of the parent interface(s).
+Interfejsi se takođe mogu uporediti u hijerarhiji, tačno kao klase: definicija interfejsa koja nasleđuje drugu definiciju interfejsa sadrži sve metode iz roditeljskog interfejsa, kao i metode eksplicitno navedene u definiciji interfejsa. Klasa koja implementira interfejs zatim mora implementirati sve članove interfejsa, kao i metode roditeljskog interfejsa (interfejsa).
 
-An interface can be uniquely identified by a GUID. GUID is an acronym for Globally Unique Identifier, a 128-bit integer guaranteed always to be unique1. Especially on Windows systems, the GUID of an interface can and must be used when using COM.
+Interfejs može biti jedinstveno identifikovan pomoću GUID-a. GUID je skraćenica za Globalno jedinstveni identifikator, 128-bitni ceo broj koji je garantovano uvek jedinstven .Posebno na Windows sistemima, GUID interfejsa može i mora se koristiti kada se koristi COM.
 
-Along with this definition the following must be noted:
+Uz ovu definiciju treba napomenuti i sledeće:
 
-- Interfaces can only be used in DELPHI mode or in OBJFPC mode.
-- There are no visibility specifiers. All members are public (indeed, it would
-  make little sense to make them private or protected).
-- The properties declared in an interface can only have methods as read and write
-  specifiers.
-- There are no constructors or destructors. Instances of interfaces cannot be
-  created directly: instead, an instance of a class implementing the interface must be created.
-- Only calling convention modifiers may be present in the definition of a method.
-  Modifiers as virtual, abstract or dynamic, and hence also override cannot be present in the interface definition.
+- Interfejsi se mogu koristiti samo u DELPHI režimu ili u OBJFPC režimu.
+- Ne postoje specifikatori vidljivosti. Svi članovi su javni (zaista, ne bi imalo mnogo smisla učiniti ih privatnim ili zaštićenim).
+- Svojstva deklarisana u interfejsu mogu imati metode samo kao specifikatore za čitanje i pisanje.
+- Ne postoje konstruktori niti destruktori. Instance interfejsa ne mogu biti direktno kreirane: umesto toga, mora se kreirati instanca klase koja implementira interfejs.
+- Samo modifikatori konvencije pozivanja mogu biti prisutni u definiciji metode. Modifikatori kao što su `virtuel`, `abstract` ili `dynamic`, pa samim tim ni `override`, ne mogu biti prisutni u definiciji interfejsa.
 
-The following are examples of interfaces:
+Sledeći su primeri interfejsa:
 
 ```pascal
 IUnknown = interface ['{00000000-0000-0000-C000-000000000046}']  
@@ -39,43 +35,42 @@ IMyInterface = Interface
 end;
 ```
 
-As can be seen, the GUID identifying the interface is optional.
+Kao što se može videti, GUID koji identifikuje interfejs je opcionalan.
 
-## 11.2 Interface identification: A GUID
+## 13.2 Identifikacija interfejsa: GUID
 
-An interface can be identified by a GUID. This is a 128-bit number, which is represented in a text representation (a string literal):
-`['{HHHHHHHH-HHHH-HHHH-HHHH-HHHHHHHHHHHH}']`
+Interfejs se može identifikovati pomoću GUID-a. To je 128-bitni broj, koji je predstavljen u tekstualnom obliku (stročni literal): `['{HHHHHHHH-HHHH-HHHH-HHHH-HHHHHHHHHHHH}']`
 
-Each H character represents a hexadecimal number (0–9, A–F). The format contains 8-4-4-4-12 numbers. A GUID can also be represented by the following record, defined in the objpas unit (included automatically when in DELPHI or OBJFPC mode):
+Svaki znak H predstavlja heksadecimalni broj (0–9, A–F). Format sadrži 8-4-4-4-12 brojeva. GUID takođe može biti predstavljen sledećim zapisom, definisanim u jedinici objpas (automatski se uključuje u DELPHI ili OBJFPC režimu):
 
 ```pascal
 PGuid = ^TGuid;  
 TGuid = packed record  
-   case integer of  
-      1 : (  
-           Data1 : DWord;  
-           Data2 : word;  
-           Data3 : word;  
-           Data4 : array[0..7] of byte;  
-          );  
-      2 : (  
-           D1 : DWord;  
-           D2 : word;  
-           D3 : word;  
-           D4 : array[0..7] of byte;  
-          );  
-      3 : ( { uuid fields according to RFC4122 }  
-           time_low : dword;  
-           time_mid : word;  
-           time_hi_and_version : word;  
-           clock_seq_hi_and_reserved : byte;  
-           clock_seq_low : byte;  
-           node : array[0..5] of byte;  
-           );  
+  case integer of  
+    1 : (  
+      Data1 : DWord;  
+      Data2 : word;  
+      Data3 : word;  
+      Data4 : array[0..7] of byte;  
+    );  
+    2 : (  
+      D1 : DWord;  
+      D2 : word;  
+      D3 : word;  
+      D4 : array[0..7] of byte;  
+    );  
+    3 : (               { uuid fields according to RFC4122 }  
+      time_low : dword;  
+      time_mid : word;  
+      time_hi_and_version : word;  
+      clock_seq_hi_and_reserved : byte;  
+      clock_seq_low : byte;  
+      node : array[0..5] of byte;  
+    );  
 end;
 ```
 
-A constant of type TGUID can be specified using a string literal:
+Konstanta tipa TGUID može se odrediti korišćenjem string literala:
 
 ```pascal
 {$mode objfpc}  
@@ -88,11 +83,11 @@ begin
 end.
 ```
 
-Normally, the GUIDs are only used in Windows, when using COM interfaces. More on this in the next section.
+Obično se GUID-ovi koriste samo u Windows-u, kada se koriste COM interfejsi.
 
-## 11.3 Interface implementations
+## 13.3 Implementacije interfejsa
 
-When a class implements an interface, it should implement all methods of the interface. If a method of an interface is not implemented, then the compiler will give an error. For example:
+Kada klasa implementira interfejs, trebalo bi da implementira sve metode tog interfejsa. Ako metod interfejsa nije implementiran, kompajler će javiti grešku. Na primer:
 
 ```pascal
 Type  
@@ -107,28 +102,26 @@ Type
   end;  
  
 Function TMyClass.MyFunc : Integer;  
- 
 begin  
   Result:=23;  
 end;  
  
 Function TMyClass.MyOtherFunc : Integer;  
- 
 begin  
   Result:=24;  
-end;
+end; 
 ```
 
-will result in a compiler error:
+rezultovaće u grešci:
 
 ```sh
 Error: No matching implementation for interface method  
 "IMyInterface.MySecondFunc:LongInt" found
 ```
 
-Normally, the names of the methods that implement an interface, must equal the names of the methods in the interface definition. The compiler will look for matching methods in all visible methods: the methods of the class, and in parent classes methods with visibility protected or higher.
+Normalno, imena metoda koje implementiraju interfejs moraju biti jednaka imenima metoda u definiciji interfejsa. Kompilator će tražiti odgovarajuće metode u svim vidljivim metodama: metodama klase i metodama roditeljskih klasa sa zaštićenom ili višom vidljivošću.
 
-However, it is possible to provide aliases for methods that make up an interface: that is, the compiler can be told that a method of an interface is implemented by an existing method with a different name. This is done as follows:
+Međutim, moguće je obezbediti alijase za metode koje čine interfejs: to jest, kompajleru se može reći da je metod interfejsa implementiran postojećom metodom sa drugim imenom. To se radi na sledeći način:
 
 ```pascal
 Type  
@@ -139,14 +132,14 @@ Type
   TMyClass = Class(TInterfacedObject,IMyInterface)  
     Function MyOtherFunction : Integer;  
     Function IMyInterface.MyFunc = MyOtherFunction;  
-  end;
+  end; 
 ```
 
-This declaration tells the compiler that the MyFunc method of the IMyInterface interface is implemented in the MyOtherFunction method of the TMyClass class.
+Ova deklaracija govori kompajleru da je metoda MyFunc interfejsa IMyInterface implementirana u metodi MyOtherFunction klase TMyClass.
 
-## 11.4 Interface inheritance
+## 13.4 Nasledjivanje interfejsa
 
-It is possible to let one interface be a descendent from another interface:
+Moguće je dozvoliti da jedan interfejs bude potomak drugog interfejsa:
 
 ```pascal
 IParentInterface = interface  
@@ -157,10 +150,10 @@ end;
 IChildInterface = interface(IParentInterface)  
   ['{1AB2EB85-6843-462E-8CE4-32ECC065011E}']  
   procedure Bar;  
-end;
+end; 
 ```
 
-IChildInterface will have two methods: foo and bar. Any class implementing this interface will therefore need to implement both interfaces:
+`IChildInterface` će imati dve metode: foo i bar. Svaka klasa koja implementira ovaj interfejs će stoga morati da implementira oba interfejsa:
 
 ```pascal
 TImplementor = class(TInterfacedObject, IChildInterface)  
@@ -177,10 +170,10 @@ end;
 procedure TImplementor.Bar;  
 begin  
  
-end;
+end; 
 ```
 
-Note that when a class declares a child interface, it can be assigned to a variable with the child interface. Given the above declarations, the following will compile:
+Imajte na umu da kada klasa deklariše podređeni interfejs, on se može dodeliti promenljivoj sa tim podređenim interfejsom. S obzirom na gore navedene deklaracije, sledeće će se kompajlirati:
 
 ```pascal
 var  
@@ -190,7 +183,7 @@ begin
   Child := TImplementor.Create;
 ```
 
-But this does not imply that it automatically also is assignment compatible with a variable with the type of parent interface. The following will not compile:
+Ali to ne znači da je automatski kompatibilno i sa dodelom promenljive tipa roditeljskog interfejsa. Sledeće se neće kompajlirati:
 
 ```pascal
 var  
@@ -200,7 +193,7 @@ begin
   Parent := TImplementor.Create;
 ```
 
-To make this compile, it is necessary to declare the class as:
+Da bi se ovo kompajliralo, potrebno je deklarisati klasu kao:
 
 ```pascal
 TImplementor = class(TInterfacedObject,  
@@ -212,15 +205,15 @@ public
 end;
 ```
 
-The reason for this is that although the class actually implements the methods of IParentInterface, the compiler checks only actually declared interfaces when checking assignment compatibility: all declared interfaces are put in a table and only the contents of this table is checked.
+Razlog za to je što iako klasa zapravo implementira metode IParentInterface-a , kompajler proverava samo stvarno deklarisane interfejse prilikom provere kompatibilnosti dodele: svi deklarisani interfejsi se stavljaju u tabelu i proverava se samo sadržaj te tabele.
 
-The same check is performed at runtime: the compiler generates a table of all interfaces a class declares, and this table is checked at runtime. That means that although the following will compile if only IChildInterface is declared:
+Ista provera se vrši tokom izvršavanja programa: kompajler generiše tabelu svih interfejsa koje klasa deklariše, a ova tabela se proverava tokom izvršavanja programa. To znači da će se sledeće kompajlirati ako je deklarisan samo IChildInterface :
 
 ```pascal
-  ParentImplementorInstance := (TImplementor.Create as IParentInterface);
+ParentImplementorInstance := (TImplementor.Create as IParentInterface); 
 ```
 
-it will still fail with a run-time error:
+i dalje će dovesti do greške tokom izvršavanja:
 
 ```sh
 home:~> ./ti  
@@ -229,13 +222,13 @@ EInvalidCast: Invalid type cast
 $0000000000411A27
 ```
 
-## 11.5 Interface delegation
+## 13.5 Delegiranje interfejsa
 
-Sometimes, the methods of an interface are implemented by a helper (or delegate) object, or the class instance has obtained an interface pointer for this interface and that should be used. This can be for instance when an interface must be added to a series of totally unrelated classes: the needed interface functionality is added to a separate class, and each of these classes uses an instance of the helper class to implement the functionality.
+Ponekad se metode interfejsa implementiraju pomoću pomoćnog (ili delegatskog) objekta, ili je instanca klase dobila pokazivač interfejsa za ovaj interfejs i to treba koristiti. To može biti, na primer, kada se interfejs mora dodati nizu potpuno nepovezanih klasa: potrebna funkcionalnost interfejsa se dodaje posebnoj klasi, a svaka od ovih klasa koristi instancu pomoćne klase za implementaciju funkcionalnosti.
 
-In such a case, it is possible to instruct the compiler that the interface is not implemented by the object itself, but actually resides in a helper class or interface. This can be done with the implements property modifier.
+U takvom slučaju, moguće je naložiti kompajleru da interfejs nije implementiran samim objektom, već da se zapravo nalazi u pomoćnoj klasi ili interfejsu. To se može uraditi pomoću modifikatora svojstva implements .
 
-If the class has a pointer to the desired interface, the following will instruct the compiler that when the IMyInterface interface is requested, it should use the reference in the field:
+Ako klasa ima pokazivač na željeni interfejs, sledeće će naložiti kompajleru da kada se zahteva IMyInterface interfejs, treba da koristi referencu u polju:
 
 ```pascal
 type  
@@ -252,9 +245,9 @@ type
   end;
 ```
 
-The interface should not necessarily be in a field, any read identifier can be used.
+Interfejs ne mora nužno biti u polju, može se koristiti bilo koji identifikator za čitanje.
 
-If the interface is implemented by a delegate object, (a helper object that actually implements the interface) then it can be used as well with the implements keyword:
+Ako je interfejs implementiran pomoću objekta delegata (pomoćnog objekta koji zapravo implementira interfejs), onda se može koristiti i sa ključnom reči implements :
 
 ```pascal
 {$interfaces corba}  
@@ -278,9 +271,9 @@ type
   end;
 ```
 
-Note that in difference with Delphi, the delegate class must explicitly specify the interface: the compiler will not search for the methods in the delegate class, it will simply check if the delegate class implements the specified interface.
+Treba napomenuti da, za razliku od Delfija, klasa delegata mora eksplicitno da navede interfejs: kompajler neće tražiti metode u klasi delegata, već će jednostavno proveriti da li klasa delegata implementira navedeni interfejs.
 
-It is possible to implement multiple interfaces using a single delegated object:
+Moguće je implementirati više interfejsa koristeći jedan delegirani objekat:
 
 ```pascal
 {$interfaces corba}  
@@ -308,7 +301,7 @@ type
   end;
 ```
 
-It is not possible to mix method resolution and interface delegation. That means, it is not possible to implement part of an interface through method resolution and implement part of the interface through delegation. The following attempts to implement IMyInterface partly through method resolution (P1), and partly through delegation. The compiler will not accept the following code:
+Nije moguće mešati rešavanje metoda i delegiranje interfejsa. To znači da nije moguće implementirati deo interfejsa putem rešavanja metoda, a deo interfejsa putem delegiranja. Sledeći pokušaji implementacije IMyInterface- a delimično putem rešavanja metoda (P1), a delimično putem delegiranja. Kompilator neće prihvatiti sledeći kod:
 
 ```pascal
 {$interfaces corba}  
@@ -328,14 +321,14 @@ type
   end;
 ```
 
-The compiler will throw an error:
+Kompilator će izbaciti grešku:
 
 ```sh
 Error: Interface "IMyInterface" can't be delegated by "TMyClass",  
 it already has method resolutions
 ```
 
-However, it is possible to implement one interface through method resolution, and another through delegation:
+Međutim, moguće je implementirati jedan interfejs putem rešavanja metoda, a drugi putem delegiranja:
 
 ```pascal
 {$interfaces corba}  
@@ -361,7 +354,7 @@ type
   end;
 ```
 
-Note that interface delegation can be used to specify that a class implements parent interfaces:
+Imajte na umu da se delegiranje interfejsa može koristiti da bi se navelo da klasa implementira nadređene interfejse:
 
 ```pascal
 IGMGetFileName = interface(IUnknown)  
@@ -387,25 +380,25 @@ TIntfDelegator = class(TInterfacedObject, IGMGetFileName, IGMGetSetFileName)
 end; 
 ```
 
-## 11.6 Interfaces and COM
+## 13.6 Interfejsi i COM
 
-When using interfaces on Windows which should be available to the COM subsystem, the calling convention should be stdcall – this is not the default Free Pascal calling convention, so it should be specified explicitly.
+Kada se koriste interfejsi na Windows-u koji bi trebalo da budu dostupni COM podsistemu, konvencija pozivanja treba da bude stdcall  – ovo nije podrazumevana konvencija pozivanja Free Pascal-a, tako da bi trebalo da bude eksplicitno navedena.
 
-COM does not know properties. It only knows methods. So when specifying property definitions as part of an interface definition, be aware that the properties will only be known in the Free Pascal compiled program: other Windows programs will not be aware of the property definitions.
+COM ne poznaje svojstva. Poznaje samo metode. Zato, kada navodite definicije svojstava kao deo definicije interfejsa, imajte na umu da će svojstva biti poznata samo u programu kompajliranom u Free Pascal-u: drugi Windows programi neće biti svesni definicija svojstava.
 
-## 11.7 CORBA and other Interfaces
+## 13.7  CORBA i drugi interfejsi
 
-COM is not the only architecture where interfaces are used. CORBA knows interfaces, UNO (the OpenOffice API) uses interfaces, and Java as well. These languages do not know the IUnknown interface used as the basis of all interfaces in COM. It would therefore be a bad idea if an interface automatically descended from IUnknown if no parent interface was specified. Therefore, a directive {$INTERFACES} was introduced in Free Pascal: it specifies what the parent interface is of an interface, declared without parent. More information about this directive can be found in the Programmer’s Guide.
+COM nije jedina arhitektura gde se koriste interfejsi. CORBA poznaje interfejse, UNO (OpenOffice API) koristi interfejse, kao i Java. Ovi jezici ne poznaju IUnknown interfejs koji se koristi kao osnova svih interfejsa u COM-u. Stoga bi bila loša ideja da interfejs automatski proizilazi iz IUnknown-a ako nije naveden roditeljski interfejs. Stoga je u Free Pascal-u uvedena direktiva { $ INTERFACES } : ona određuje šta je roditeljski interfejs interfejsa, deklarisanog bez roditelja. Više informacija o ovoj direktivi možete pronaći u Programerskom vodiču .
 
-Note that COM interfaces are by default reference counted, because they descend from IUnknown.
+Imajte na umu da se COM interfejsi podrazumevano broje kao reference, jer potiču od IUnknown .
 
-Corba interfaces are identified by a simple string so they are assignment compatible with strings and not with TGUID. The compiler does not do any automatic reference counting for the CORBA interfaces, so the programmer is responsible for any reference bookkeeping.
+Corba interfejsi se identifikuju jednostavnim stringom, tako da su kompatibilni sa dodelom sa stringovima, a ne sa TGUID-om . Kompilator ne vrši automatsko brojanje referenci za CORBA interfejse, tako da je programer odgovoran za vođenje knjigovodstva referenci.
 
-## 11.8 Reference counting
+## 13.8 Brojanje referenci
 
-All COM interfaces use reference counting. This means that whenever an interface is assigned to a variable, its reference count is updated. Whenever the variable goes out of scope, the reference count is automatically decreased. When the reference count reaches zero, usually the instance of the class that implements the interface, is freed.
+Svi COM interfejsi koriste brojanje referenci. To znači da kad god se interfejs dodeli promenljivoj, njegov broj referenci se ažurira. Kad god promenljiva izađe iz opsega važenja, broj referenci se automatski smanjuje. Kada broj referenci dostigne nulu, obično se oslobađa instanca klase koja implementira interfejs.
 
-Care must be taken with this mechanism. The compiler may or may not create temporary variables when evaluating expressions, and assign the interface to a temporary variable, and only then assign the temporary variable to the actual result variable. No assumptions should be made about the number of temporary variables or the time when they are finalized – this may (and indeed does) differ from the way other compilers (e. g. Delphi) handle expressions with interfaces. E. g. a type cast is also an expression:
+Mora se voditi računa o ovom mehanizmu. Kompilator može, ali i ne mora da kreira privremene promenljive prilikom izvršavanja izraza i dodeli interfejs privremenoj promenljivoj, a tek onda dodeli privremenu promenljivu stvarnoj rezultujućoj promenljivoj. Ne treba praviti nikakve pretpostavke o broju privremenih promenljivih ili vremenu kada su finalizovane – ovo se može (i zaista se razlikuje) od načina na koji drugi kompilatori (npr. Delphi) obrađuju izraze sa interfejsima. Npr. pretvaranje tipa je takođe izraz:
 
 ```pascal
 Var  
@@ -418,9 +411,9 @@ begin
 end;
 ```
 
-Assume the interface intf is reference counted. When the compiler evaluates B.Intf, it creates a temporary variable. This variable may be released only when the procedure exits: it is therefore invalid to e. g. free the instance B prior to the exit of the procedure, since when the temporary variable is finalized, it will attempt to free B again.
+Pretpostavimo da se interfejs intf broji po referencama. Kada kompajler izvršava B.Intf , on kreira privremenu promenljivu. Ova promenljiva može biti oslobođena samo kada se procedura završi: stoga je nevažeće, na primer, osloboditi instancu B pre izlaska iz procedure, jer kada se privremena promenljiva finalizuje, pokušaće se ponovo osloboditi B.
 
-Additionally, function results may point to a non-nil valid COM interface on entry: this is because the function result is treated as a var parameter.
+Pored toga, rezultati funkcije mogu pri unosu ukazivati na validan COM interfejs koji nije nil: to je zato što se rezultat funkcije tretira kao var parametar.
 
 [prev][f12] [content][f0] [next][f14]
 

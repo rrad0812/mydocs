@@ -1,30 +1,28 @@
 
-# 12 Generics
+# 12 Generici
 
 [prev][f13] [content][f0] [next][f15]
 
-## 12.1 Introduction
+## 12.1 Uvod
 
-Generics are templates for generating other types. These can be classes, objects, interfaces and even functions, arrays, records. It is a concept that comes from C++, where it is deeply integrated in the language. As of version 2.2, Free Pascal also officially has support for templates or Generics. They are implemented as a kind of macro which is stored in the unit files that the compiler generates, and which is replayed as soon as a generic class is specialized.
+Generici su šabloni za generisanje drugih tipova. To mogu biti klase, objekti, interfejsi, pa čak i funkcije, nizovi, zapisi. To je koncept koji dolazi iz C++, gde je duboko integrisan u jezik. Od verzije 2.2, Free Pascal takođe zvanično ima podršku za šablone ili generike. Oni su implementirani kao vrsta makroa koji se čuva u jediničnim datotekama koje kompajler generiše i koji se reprodukuje čim se generička klasa specijalizuje.
 
-Creating and using generics is a 2-phase process.
+Kreiranje i korišćenje generičkih lekova je proces u dve faze.
 
-- The definition of the generic is defined as a new type: this is a code
-  template, a macro which can be replayed by the compiler at a later stage.
-- A generic type is specialized: this defines a second type, which is a specific
-  implementation of the generic type: the compiler replays the macro which was stored when the generic type was defined.
+- Definicija generičkog tipa je definisana kao novi tip: ovo je šablon koda, makro koji kompajler može ponovo da reprodukuje u kasnijoj fazi.
+- Generički tip je specijalizovan: ovo definiše drugi tip, koji je specifična implementacija generičkog tipa: kompajler reprodukuje makro koji je sačuvan kada je generički tip definisan.
 
-There are several units distributed with free pascal that implement generic containers and classes. For example the fgl unit.
+Postoji nekoliko jedinica distribuiranih sa besplatnim Paskalom koje implementiraju generičke kontejnere i klase. Na primer, jedinica fgl .
 
-## 12.2 Generic type definition
+## 12.2  Definicija generičkog tipa
 
-A generic type definition is much like a type definition, with the exception that it contains a list of placeholders for types.
+Generička definicija tipa je veoma slična definiciji tipa, s tim što sadrži listu rezervisanih mesta za tipove.
 
-For classes, objects, procedural types and extended records, the generic type declaration should be followed by a type implementation. It is the same as a normal class implementation with a single exception, namely that any identifier with the same name as one of the template identifiers must be a type identifier.
+Za klase, objekte, proceduralne tipove i proširene zapise, deklaraciju generičkog tipa treba da prati implementacija tipa. To je isto kao i normalna implementacija klase sa jednim izuzetkom, naime, svaki identifikator sa istim imenom kao jedan od identifikatora šablona mora biti identifikator tipa.
 
-So, the generic type declaration is much like a normal type declaration, except that there is an as yet unknown type present. The unknown types are listed in the placeholder list, and they are unknown until the class is specialized.
+Dakle, deklaracija generičkog tipa je veoma slična normalnoj deklaraciji tipa, osim što je prisutan još uvek nepoznati tip. Nepoznati tipovi su navedeni u listi čuvara mesta i nepoznati su dok se klasa ne specijalizuje.
 
-The following is a valid generic class definition:
+Sledeća je validna generička definicija klase:
 
 ```pascal
 Type  
@@ -39,7 +37,7 @@ Type
   end;
 ```
 
-This class could be followed by an implementation as follows:
+Ovu klasu bi mogla da prati sledeća implementacija:
 
 ```pascal
 procedure TList.Add(item: _T);  
@@ -54,10 +52,9 @@ begin
 end;
 ```
 
-There are some noteworthy things about this declaration and implementation:
+Postoje neke značajne stvari u vezi sa ovom deklaracijom i implementacijom:
 
-- There is a single placeholder `_T`. It will be substituted by a type identifier
-  when the generic class is specialized. The identifier `_T` may not be used for anything else than a type placeholder. This means that the following would be invalid:
+- Postoji samo jedan privremeni znak `_T`. Biće zamenjen identifikatorom tipa kada je generička klasa specijalizovana. Identifikator `_T` se ne sme koristiti ni za šta drugo osim za privremeni znak tipa. To znači da sledeće ne bi bilo validno:
   
   ```pascal
   procedure TList.Sort(compare: TCompareFunc);  
@@ -70,9 +67,9 @@ There are some noteworthy things about this declaration and implementation:
   end;
   ```
 
-  The local type block contains a single type TCompareFunc. Note that the actual type is not yet known inside the generic class definition: the definition contains a reference to the placeholder _T. All other identifier references must be known when the generic class is defined, not when the generic class is specialized.  
+- Lokalni blok tipa sadrži jedan tip TCompareFunc . Treba napomenuti da stvarni tip još nije poznat unutar definicije generičke klase: definicija sadrži referencu na privremeni element _T . Sve ostale reference identifikatora moraju biti poznate kada je generička klasa definisana, a ne kada je generička klasa specijalizovana.
   
-  The local variable block is equivalent to the following:
+- Blok lokalnih promenljivih je ekvivalentan sledećem:
   
   ```pascal
   generic TList<_T>=class(TObject)  
@@ -86,9 +83,9 @@ There are some noteworthy things about this declaration and implementation:
     end;
   ```
 
-Note that the type parameter names in declaration and implementation must be the same.
+- Imajte na umu da imena parametara tipa u deklaraciji i implementaciji moraju biti ista.
 
-Not only generic classes can be defined, but also other types:
+Ne mogu se definisati samo generičke klase, već i drugi tipovi:
 
 ```pascal
 {$mode objfpc}  
@@ -142,7 +139,7 @@ type
 ```
 
 **Napomena**  
-A word on visibility: the template types `T` or `_T` are available as strict private types. That means that the types are not available in the descendent classes, unless they are made available through some protected or private mechanism, as in the following example:
+Reč o vidljivosti: tipovi šablona T ili _T su dostupni kao striktno privatni tipovi. To znači da tipovi nisu dostupni u potomačkim klasama, osim ako nisu dostupni putem nekog zaštićenog ili privatnog mehanizma, kao u sledećem primeru:
 
 ```pascal
   generic TList<_T>=class(TObject)  
@@ -151,13 +148,13 @@ A word on visibility: the template types `T` or `_T` are available as strict pri
   end;
 ```
 
-## 12.3 Generic type specialization
+## 12.3 Specijalizacija generičkih tipova
 
-Once a generic type is defined, it can be used to generate other types: this is like replaying the definition of the types, with the template placeholders filled in with actual type definitions.
+Kada se generički tip definiše, može se koristiti za generisanje drugih tipova: ovo je kao ponavljanje definicije tipova, sa šablonskim rezervisanim mestima popunjenim stvarnim definicijama tipova.
 
-This can be done in any Type definition block.
+Ovo se može uraditi u bilo kom bloku definicije tipa.
 
-Which is a very simple definition. Given the declaration of TList in the previous section, the following would be a valid type definition:
+S obzirom na deklaraciju TList-a u prethodnom odeljku, sledeće bi bila validna definicija tipa:
 
 ```pascal
 Type  
@@ -165,16 +162,16 @@ Type
   TIntegerList = specialize TList<Integer>;
 ```
 
-As of version 3.0 of Free Pascal, the specialize keyword can also be used in a variable declaration:
+Od verzije 3.0 Fri Paskala, ključna reč specialize se takođe može koristiti u deklaraciji promenljive:
 
 ```pascal
 Var  
   P : specialize TList<Pointer>;
 ```
 
-The specialize keyword is part of the specialized type, so when using fully qualified names, the specialize keyword must be after the unit name and parent type names.
+Ključna reč specialized je deo specialized tipa, tako da kada se koriste potpuno kvalifikovana imena, ključna reč specialized mora biti posle imena jedinice i imena matičnog tipa.
 
-The type in the specialize statement must be known, except in another generic type definition. Given the two generic class definitions:
+Tip u izrazu specialized mora biti poznat, osim u drugoj generičkoj definiciji tipa. S obzirom na dve generičke definicije klase:
 
 ```pascal
 type  
@@ -182,20 +179,20 @@ type
   Generic TMySecondType<T2> = Class(TMyOtherObject);
 ```
 
-Then the following specialization is not valid:
+Onda sledeća specijalizacija nije validna:
 
 ```pascal
 type  
   TMySpecialType = specialize TMySecondType<TMyFirstType>;
 ```
 
-because the type TMyFirstType is a generic type, and thus not fully defined. The compiler will complain:
+jer je tip TMyFirstType generički tip i stoga nije u potpunosti definisan. Kompilator će se žaliti:
 
 ```sh
 Error: Generics cannot be used as parameters when specializing generics
 ```
 
-However, the following is allowed:
+Međutim, sledeće je dozvoljeno:
 
 ```pascal
 type  
@@ -203,24 +200,24 @@ type
   TB = specialize TMySecondType<TA>;
 ```
 
-because TA is already fully defined when TB is specialized.
+jer je TA već u potpunosti definisana kada je TB specijalizovana.
 
-However, the specialize keyword can be used in another generic type definition as shown in the example above:
+Međutim, ključna reč specialize može se koristiti u drugoj generičkoj definiciji tipa kao što je prikazano u gornjem primeru:
 
 ```pascal
   generic TList<_T>=class(TObject, specialize IList<_T>)
 ```
 
-and
+i
 
 ```pascal
   generic TPointSet<t> = array of specialize PlanarCoordinate<t>;
 ```
 
-In these definitions, the specialization is only performed when the generic type itself is specialized, and at that time, the types are known.
+U ovim definicijama, specijalizacija se vrši samo kada je sam generički tip specijalizovan, i tada su tipovi poznati.
 
 **Napomena**  
-It is not possible to make a forward definition of a class which is a specialization of a generic, i.e. the following will not compile:
+Nije moguće napraviti unapred definiciju klase koja je specijalizacija generičke klase, tj. sledeće se neće kompajlirati:
 
 ```pascal
   TMyClass = Class;  
@@ -230,9 +227,9 @@ It is not possible to make a forward definition of a class which is a specializa
   TMyClass = specialize TList<T>;
 ```
 
-## 12.4 Generic type restrictions
+## 12.4 Ograničenje generičkih tipova
 
-The diagram in section 8.1, page 432 shows that the type template list can have extra specifiers for the types. This is especially useful for object types: if the template type must descend from a certain class, then this can be specified in the template list:
+Lista šablona tipova može imati dodatne specifikatore za tipove. Ovo je posebno korisno za tipove objekata: ako tip šablona mora poticati iz određene klase, onda se to može navesti u listi šablona:
 
 ```pascal
 {$mode objfpc}{$h+}  
@@ -250,41 +247,41 @@ Type
 end;
 ```
 
-Given the above definition, the following will compile:
+S obzirom na gornju definiciju, sledeće će se kompajlirati:
 
 ```pascal
 TPersistentList = specialize TList<TComponent>;
 ```
 
-But this will not compile
+Ali ovo se neće kompajlirati
 
 ```pascal
 TPersistentList = specialize TList<TPersistent>;
 ```
 
-The compiler will return an error:
+Kompilator će vratiti grešku:
 
 ```sh
 Error: Incompatible types: got "TPersistent" expected "TComponent"
 ```
 
-Multiple types can be grouped together:
+Više tipova se može grupisati zajedno:
 
 ```pascal
 Type  
   generic TList<Key1,Key2 : TComponent; Value1 : TObject> = class(TObject)
 ```
 
-Additionally, it is possible to specify more than one type identifier for class and interface type restrictions. If a class is specified, then the type used for the template must be equal to or descend from the indicated type:
+Pored toga, moguće je navesti više od jednog identifikatora tipa za ograničenja tipa klase i interfejsa. Ako je navedena klasa, onda tip koji se koristi za šablon mora biti jednak ili potomak naznačenog tipa:
 
 ```pascal
 Type  
   generic TList<T: TComponent, IEnumerable> = class(TObject)
 ```
 
-A class used to specialize T must descend from TComponent and must implement IEnumerable.
+Klasa koja se koristi za specijalizaciju T mora biti poreklo od TComponent i mora implementirati IEnumerable .
 
-If an interface is specified, then the template type must implement at least this interface, but it can also be a descendent interface from this interface:
+Ako je naveden interfejs, onda tip šablona mora da implementira barem ovaj interfejs, ali može biti i potomak ovog interfejsa:
 
 ```pascal
 Type  
@@ -298,11 +295,11 @@ Type
   TSomeList = Specialize TGenList<TList>;
 ```
 
-Multiple interfaces can be specified, in that case the class type must implement all listed interfaces: It is possible to mix one class name with several interface names.
+Može se navesti više interfejsa, u tom slučaju tip klase mora implementirati sve navedene interfejse: Moguće je kombinovati jedno ime klase sa nekoliko imena interfejsa.
 
-If no type restrictions are in effect, the compiler will assume that template types are not assignment compatible.
+Ako nisu na snazi ograničenja tipa, kompajler će pretpostaviti da tipovi šablona nisu kompatibilni sa dodelom.
 
-This is specially important when the generic class contains overloaded methods. Given the following generic type declaration:
+Ovo je posebno važno kada generička klasa sadrži preopterećene metode. Data je sledeća deklaracija generičkog tipa:
 
 ```pascal
 type  
@@ -313,28 +310,29 @@ type
   end;
 ```
 
-Specializing the above will compile if T1 and T2 are of two different types and neither is also LongInt. The following will compile:
+Specijalizacija gore navedenog će se kompajlirati ako su T1 i T2 dva različita tipa i nijedan nije takođe LongInt . Sledeće će se kompajlirati:
 
 ```pascal
 T1 = specialize TTest<String, TObject>;
 
-But the following two will not compile:
+Ali sledeća dva se neće kompajlirati:
+
 T2 = specialize TTest<String, String>;
 ```
 
-or
+ili
 
 ```pascal
 T2 = specialize TTest<String, Longint>;
 ```
 
-## 12.5 Delphi compatibility
+## 12.5  Kompatibilnost sa Delfijem
 
-FPC’s generics support is implemented somewhat different from Delphi. In this section the main differences are highlighted.
+Podrška za generike u FPC-u je implementirana donekle drugačije nego u Delphi-ju. U ovom odeljku su istaknute glavne razlike.
 
-### 12.5.1 Syntax elements
+### 12.5.1  Sintaksni elementi
 
-The syntax shown in the syntax diagrams is the syntax required in the ObjFPC mode of the compiler. However, in Delphi mode, the specialize and generic keywords must not be used, as shown in the following example:
+Sintaksa prikazana na sintaksnim dijagramima je sintaksa potrebna u ObjFPC režimu kompajlera. Međutim, u Delphi režimu, ključne reči specialize i generic ne smeju se koristiti, kao što je prikazano u sledećem primeru:
 
 ```pascal
 Type  
@@ -348,7 +346,7 @@ Type
   TIntegerTest = TTest<Integer>;
 ```
 
-In difference with Mode Objfpc, the template type names must be repeated in method definitions.
+Za razliku od režima Objfpc, imena tipova šablona moraju se ponoviti u definicijama metoda.
 
 ```pascal
 Type  
@@ -366,11 +364,11 @@ begin
 end;
 ```
 
-This requirement is directly related to the generic type overload capability mentioned in the next section.
+Ovaj zahtev je direktno povezan sa mogućnošću preopterećenja generičkog tipa pomenutom u sledećem odeljku.
 
-### 12.5.2 Record type restrictions
+### 12.5.2 Ograničenja tipa zapisa
 
-In Delphi mode, the record type restrictions will also allow the use of simple types:
+U Delfi režimu, ograničenja tipa zapisa će takođe dozvoliti upotrebu jednostavnih tipova:
 
 ```pascal
 Type  
@@ -386,9 +384,9 @@ Type
 TIntList = TList<Integer>;
 ```
 
-The restriction is enforced when specializing the type. That means that the mode active when specializing a type determines whether a simple type can be used or not: if the restriction to record was compiled using ObjFPC mode, code written in Delphi mode can specialize it with a simple type anyway.
+Ograničenje se primenjuje prilikom specijalizacije tipa. To znači da režim aktivan prilikom specijalizacije tipa određuje da li se jednostavan tip može koristiti ili ne: ako je ograničenje na snimanje kompajlirano korišćenjem ObjFPC režima, kod napisan u Delphi režimu može ga specijalizovati jednostavnim tipom u svakom slučaju.
 
-For example:
+Na primer:
 
 ```pascal
 unit tg;  
@@ -422,7 +420,7 @@ end;
 end.
 ```
 
-can be used in {$MODE Delphi} for:
+može se koristiti u { $ MODE Delphi } za:
 
 ```pascal
 {$mode delphi}  
@@ -434,9 +432,9 @@ begin
 end. 
 ```
 
-### 12.5.3 Type overloads
+### 12.5.3  Preopterećenja tipa
 
-Delphi mode allows generic type overloads. This means that it is possible to declare the same generic class with different template type lists. The following declarations are therefore possible:
+Delfi režim dozvoljava preopterećenja generičkih tipova. To znači da je moguće deklarisati istu generičku klasu sa različitim listama tipova šablona. Stoga su moguće sledeće deklaracije:
 
 ```pascal
 Type  
@@ -457,9 +455,9 @@ Type
   end; 
 ```
 
-### 12.5.4 Name space considerations
+### 12.5.4 Razmatranja imenskog prostora
 
-In Delphi mode, the generics do not interfere with the namespace for variables, this means that the following will also compile:
+U Delfi režimu, generički tipovi ne ometaju imenski prostor za promenljive, što znači da će se sledeće takođe kompajlirati:
 
 ```pascal
 Type  
@@ -474,13 +472,13 @@ Var
   TTest : Integer;
 ```
 
-However, this does not work for constants and functions.
+Međutim, ovo ne funkcioniše za konstante i funkcije.
 
-## 12.6 Type compatibility
+## 12.6 Kompatibilnost tipova
 
-Whenever a generic class is specialized, this results in a new, distinct type. These types are assignment compatible if the same template types are used.
+Kad god je generička klasa specijalizovana, to rezultira novim, posebnim tipom. Ovi tipovi su kompatibilni sa dodeljivanjem ako se koriste isti tipovi šablona.
 
-Take the following generic definition:
+Uzmite sledeću generičku definiciju:
 
 ```pascal
 {$mode objfpc}  
@@ -504,7 +502,7 @@ end;
 end.
 ```
 
-And the following specializations:
+I sledeće specijalizacije:
 
 ```pascal
 {$mode objfpc}  
@@ -522,7 +520,7 @@ implementation
 end.
 ```
 
-the following specializations is identical, but appears in a different unit:
+Sledeće specijalizacije su identične, ali se pojavljuju u drugoj jedinici:
 
 ```pascal
 {$mode objfpc}  
@@ -540,7 +538,7 @@ implementation
 end.
 ```
 
-The following will then compile:
+Sledeće će se zatim kompajlirati:
 
 ```pascal
 {$mode objfpc}  
@@ -561,7 +559,7 @@ begin
 end.
 ```
 
-The types ub.TB and uc.TB are assignment compatible. It does not matter that the types are defined in different units. They could be defined in the same unit as well:
+Tipovi ub.TB i uc.TB su kompatibilni sa dodelom. Nije bitno što su tipovi definisani u različitim jedinicama. Mogu biti definisani i u istoj jedinici:
 
 ```pascal
 {$mode objfpc}  
@@ -587,9 +585,9 @@ begin
 end.
 ```
 
-Each specialization of a generic class with the same types as parameters is a new, distinct type, but these types are assignment compatible if the template types used to specialize them are equal.
+Svaka specijalizacija generičke klase sa istim tipovima kao parametri je novi, poseban tip, ali ovi tipovi su kompatibilni sa dodelom ako su tipovi šablona koji se koriste za njihovu specijalizaciju jednaki.
 
-If the specialization is with a different template type, the types are still distinct, but no longer assignment compatible. i. e. the following will not compile:
+Ako je specijalizacija sa različitim tipom šablona, tipovi su i dalje različiti, ali više nisu kompatibilni sa dodeljivanjem. tj. sledeće se neće kompajlirati:
 
 ```pascal
 {$mode objfpc}  
@@ -614,14 +612,15 @@ begin
   B:=C;  
 end.
 
-When compiling, an error will result:
+Prilikom kompajliranja, doći će do greške:
+
 Error: Incompatible types: got "TMyClass<System.LongInt>"  
                            expected "TMyClass<System.ShortString>" 
 ```
 
-## 12.7 Using the default intrinsic
+## 12.7 Korišćenje podrazumevane intrinzične funkcije
 
-When writing generic routines, sometimes a variable must be initialized whose type is not known during the declaration of the generic. This is where the Default intrinsic (section 4.5, page 243) also comes into play. Given the following generic declaration:
+Prilikom pisanja generičkih rutina, ponekad se mora inicijalizovati promenljiva čiji tip nije poznat tokom deklaracije generičke promenljive. Ovde do izražaja dolazi i podrazumevana intrinzična promena (odeljak 4.5 , strana 243 ). Data je sledeća generička deklaracija:
 
 ```pascal
 type  
@@ -629,7 +628,8 @@ type
     procedure Test;  
   end;
 
-The following code will correctly initialize the variable myt during specialization:
+Sledeći kod će pravilno inicijalizovati promenljivu myt tokom specijalizacije:
+
 procedure TTest.Test;  
 var  
   myt: T;  
@@ -639,13 +639,13 @@ begin
 end;
 ```
 
-## 12.8 A word about scope
+## 12.8 Reč o opsegu
 
-It should be stressed that all identifiers other than the template placeholders should be known when the generic class is declared. At the same time, nothing can be assumed about the template type (unless a restriction is placed on it).
+Treba naglasiti da svi identifikatori osim čuvara mesta šablona treba da budu poznati kada se generička klasa deklariše. Istovremeno, ništa se ne može pretpostaviti o tipu šablona (osim ako se na njega ne postavi ograničenje).
 
-This works in several ways.
+Ovo funkcioniše na nekoliko načina.
 
-In the absence of type restrictions, the generic code cannot make assumptions about the template type T. Consider the following unit:
+U odsustvu ograničenja tipa, generički kod ne može da pravi pretpostavke o tipu šablona T. Razmotrite sledeću jedinicu:
 
 ```pascal
 unit ts;  
@@ -683,22 +683,21 @@ begin
   lst_save := nil;  
 end;  
  
- 
 Type  
  TMyListEnum = specialize LstEnumerator<TListEl>;  
  
 end.
 ```
 
-The compiler will throw an error because when it compiles the generic definition, it cannot verify that
+Kompilator će izbaciti grešku jer kada kompajlira generičku definiciju, ne može da proveri da
 
 ```pascal
    lst:=lst^.next;
 ```
 
-is correct. lst is of type T, but the compiler does not (yet) know what T is, and hence cannot know it has a field next.
+je tačno. lst je tipa T , ali kompajler (još) ne zna šta je T , i stoga ne može znati da ima polje next .
 
-This problem can be solved with type restrictions:
+Ovaj problem se može rešiti ograničenjima tipa:
 
 ```pascal
 unit ts;  
@@ -747,9 +746,9 @@ Type
  TMyRecord2Enum = TLstEnumerator<TMyRecord2>;
 ```
 
-Here, the compiler knows that lst is at least of type TListEl, and hence contains members Prev and Next.
+Ovde, kompajler zna da je lst barem tipa TListEl, i stoga sadrži članove Prev i Next .
 
-Beside the template type, all other types used in the generic declaration must be known. This means that a type identifier with the same name must exist. The following unit will produce an error:
+Pored tipa šablona, svi ostali tipovi koji se koriste u generičkoj deklaraciji moraju biti poznati. To znači da mora postojati identifikator tipa sa istim imenom. Sledeća jedinica će proizvesti grešku:
 
 ```pascal
 {$mode objfpc}  
@@ -777,7 +776,7 @@ end;
 end.
 ```
 
-The above code will result in an error, because the type TSomeType is not known when the declaration is parsed:
+Gornji kod će rezultirati greškom, jer tip TSomeType nije poznat kada se deklaracija analizira:
 
 ```sh
 home: >fpc myunit.pp  
@@ -785,7 +784,7 @@ myunit.pp(8,47) Error: Identifier not found "TSomeType"
 myunit.pp(11,1) Fatal: There were 1 errors compiling module, stopping
 ```
 
-A second way in which this is visible, is the following. Assume a unit
+Drugi način na koji je ovo vidljivo je sledeći. Pretpostavimo jedinicu
 
 ```pascal
 {$mode objfpc}  
@@ -817,13 +816,13 @@ end;
 end.
 ```
 
-The compiler will not allow to compile this unit, since the DoLocalThings function will not be visible when the generic type is specialized:
+Kompilator neće dozvoliti kompajliranje ove jedinice, jer funkcija DoLocalThings neće biti vidljiva kada je generički tip specijalizovan:
 
 ```sh
 Error: Global Generic template references static symtable
 ```
 
-Now, if the unit is modified, and the DoLocalThings function is moved to the interface section, the unit will compile. When using this generic in a program:
+Sada, ako se jedinica modifikuje i funkcija DoLocalThings se premesti u sekciju interfejsa, jedinica će se kompajlirati. Kada se ovaj generički kod koristi u programu:
 
 ```pascal
 {$mode objfpc}  
@@ -849,7 +848,7 @@ begin
 end.
 ```
 
-Despite the fact that generics act as a macro which is replayed at specialization time, the reference to DoLocalThings is resolved when TMyClass is defined, not when TB is defined. This means that the output of the program is:
+Uprkos činjenici da generički tipovi deluju kao makro koji se reprodukuje tokom specijalizacije, referenca na DoLocalThings se rešava kada se definiše TMyClass , a ne kada se definiše TB. To znači da je izlaz programa:
 
 ```sh
 home: >fpc -S2 myb.pp  
@@ -857,18 +856,15 @@ home: >myb
 mya.DoLocalThings
 ```
 
-This behavior is dictated by safety and necessity:
+Ovakvo ponašanje je propisano bezbednošću i nužnošću:
 
-- A programmer specializing a class has no way of knowing which local procedures
-  are used, so he cannot accidentally “override” it.
-- A programmer specializing a class has no way of knowing which local procedures
-  are used, so he cannot implement it either, since he does not know the parameters.
-- If implementation procedures are used as in the example above, they cannot be
-  referenced from outside the unit. They could be in another unit altogether, and the programmer has no way of knowing he should include them before specializing his class.
+- Programer koji se specijalizuje za neku klasu nema načina da zna koje se lokalne procedure koriste, tako da je ne može slučajno „prepisati“.
+- Programer koji se specijalizuje za neku klasu nema načina da zna koje se lokalne procedure koriste, pa je ne može ni implementirati, jer ne zna parametre.
+- Ako se implementacione procedure koriste kao u gornjem primeru, na njih se ne može pozivati izvan jedinice. Mogle bi biti u potpuno drugoj jedinici, a programer nema načina da zna da li treba da ih uključi pre nego što specijalizuje svoju klasu.
 
-## 12.9 Operator overloading and generics
+## 12.9  Preopterećenje operatora i generički tipovi
 
-Operator overloading (chapter 15, page 846) and generics are closely related. Imagine a generic class that has the following definition:
+Preopterećenje operatora (poglavlje 15 , strana 846 ) i generičke klase su usko povezani. Zamislite generičku klasu koja ima sledeću definiciju:
 
 ```pascal
 {$mode objfpc}  
@@ -892,13 +888,13 @@ end;
 end.
 ```
 
-When the compiler replays the generics macro, the addition must be possible. For a specialization like this:
+Kada kompajler ponovo reprodukuje generički makro, dodavanje mora biti moguće. Za specijalizaciju poput ove:
 
 ```pascal
 TMyIntegerClass = specialize TMyClass<integer>;
 ```
 
-This is not a problem, as the Add method would become:
+Ovo nije problem, jer bi metoda Dodaj postala:
 
 ```pascal
 Procedure TMyIntegerClass.Add(A,B : Integer) : Integer;  
@@ -908,7 +904,7 @@ begin
 end;
 ```
 
-The compiler knows how to add two integers, so this code will compile without problems. But the following code:
+Kompilator zna kako da sabere dva cela broja, tako da će se ovaj kod kompajlirati bez problema. Ali sledeći kod:
 
 ```pascal
 Type  
@@ -920,7 +916,7 @@ Type
   TMyIntegerClass = specialize TMyClass<TComplex>;
 ```
 
-Will not compile, unless the addition of two TComplex types is defined. This can be done using record operators:
+Neće se kompajlirati, osim ako nije definisano dodavanje dva TComplex tipa. To se može uraditi korišćenjem operatora zapisa:
 
 ```pascal
 {$modeswitch advancedrecords}  
@@ -947,7 +943,7 @@ begin
 end.
 ```
 
-Currently, due to an implementation restriction, it will not work using a global operator, i. e. the following does not work yet:
+Trenutno, zbog ograničenja implementacije, neće raditi korišćenje globalnog operatora, tj. sledeće još uvek ne radi:
 
 ```pascal
 uses mya;  
@@ -972,7 +968,7 @@ begin
 end.
 ```
 
-Support for this construct is expected in a future version of Free Pascal.
+Očekuje se podrška za ovu konstrukciju u budućoj verziji FreePaskala.
 
 [prev][f13] [content][f0] [next][f15]
 
