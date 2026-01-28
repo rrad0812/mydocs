@@ -1,5 +1,5 @@
 
-# 4 Variables
+# 4 Promenljive
 
 [prev][f3] [content][f0] [next][f5]
 

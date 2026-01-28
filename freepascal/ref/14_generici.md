@@ -1,9 +1,9 @@
 
-# 12 Generici
+# 14 Generici
 
 [prev][f13] [content][f0] [next][f15]
 
-## 12.1 Uvod
+## 14.1 Uvod
 
 Generici su šabloni za generisanje drugih tipova. To mogu biti klase, objekti, interfejsi, pa čak i funkcije, nizovi, zapisi. To je koncept koji dolazi iz C++, gde je duboko integrisan u jezik. Od verzije 2.2, Free Pascal takođe zvanično ima podršku za šablone ili generike. Oni su implementirani kao vrsta makroa koji se čuva u jediničnim datotekama koje kompajler generiše i koji se reprodukuje čim se generička klasa specijalizuje.
 
@@ -14,7 +14,7 @@ Kreiranje i korišćenje generičkih lekova je proces u dve faze.
 
 Postoji nekoliko jedinica distribuiranih sa besplatnim Paskalom koje implementiraju generičke kontejnere i klase. Na primer, jedinica fgl .
 
-## 12.2  Definicija generičkog tipa
+## 14.2  Definicija generičkog tipa
 
 Generička definicija tipa je veoma slična definiciji tipa, s tim što sadrži listu rezervisanih mesta za tipove.
 
@@ -148,7 +148,7 @@ Reč o vidljivosti: tipovi šablona T ili _T su dostupni kao striktno privatni t
   end;
 ```
 
-## 12.3 Specijalizacija generičkih tipova
+## 14.3 Specijalizacija generičkih tipova
 
 Kada se generički tip definiše, može se koristiti za generisanje drugih tipova: ovo je kao ponavljanje definicije tipova, sa šablonskim rezervisanim mestima popunjenim stvarnim definicijama tipova.
 
@@ -227,7 +227,7 @@ Nije moguće napraviti unapred definiciju klase koja je specijalizacija generič
   TMyClass = specialize TList<T>;
 ```
 
-## 12.4 Ograničenje generičkih tipova
+## 14.4 Ograničenje generičkih tipova
 
 Lista šablona tipova može imati dodatne specifikatore za tipove. Ovo je posebno korisno za tipove objekata: ako tip šablona mora poticati iz određene klase, onda se to može navesti u listi šablona:
 
@@ -326,11 +326,11 @@ ili
 T2 = specialize TTest<String, Longint>;
 ```
 
-## 12.5  Kompatibilnost sa Delfijem
+## 14.5  Kompatibilnost sa Delfijem
 
 Podrška za generike u FPC-u je implementirana donekle drugačije nego u Delphi-ju. U ovom odeljku su istaknute glavne razlike.
 
-### 12.5.1  Sintaksni elementi
+### 14.5.1  Sintaksni elementi
 
 Sintaksa prikazana na sintaksnim dijagramima je sintaksa potrebna u ObjFPC režimu kompajlera. Međutim, u Delphi režimu, ključne reči specialize i generic ne smeju se koristiti, kao što je prikazano u sledećem primeru:
 
@@ -366,7 +366,7 @@ end;
 
 Ovaj zahtev je direktno povezan sa mogućnošću preopterećenja generičkog tipa pomenutom u sledećem odeljku.
 
-### 12.5.2 Ograničenja tipa zapisa
+### 14.5.2 Ograničenja tipa zapisa
 
 U Delfi režimu, ograničenja tipa zapisa će takođe dozvoliti upotrebu jednostavnih tipova:
 
@@ -432,7 +432,7 @@ begin
 end. 
 ```
 
-### 12.5.3  Preopterećenja tipa
+### 14.5.3  Preopterećenja tipa
 
 Delfi režim dozvoljava preopterećenja generičkih tipova. To znači da je moguće deklarisati istu generičku klasu sa različitim listama tipova šablona. Stoga su moguće sledeće deklaracije:
 
@@ -455,7 +455,7 @@ Type
   end; 
 ```
 
-### 12.5.4 Razmatranja imenskog prostora
+### 14.5.4 Razmatranja imenskog prostora
 
 U Delfi režimu, generički tipovi ne ometaju imenski prostor za promenljive, što znači da će se sledeće takođe kompajlirati:
 
@@ -474,7 +474,7 @@ Var
 
 Međutim, ovo ne funkcioniše za konstante i funkcije.
 
-## 12.6 Kompatibilnost tipova
+## 14.6 Kompatibilnost tipova
 
 Kad god je generička klasa specijalizovana, to rezultira novim, posebnim tipom. Ovi tipovi su kompatibilni sa dodeljivanjem ako se koriste isti tipovi šablona.
 
@@ -618,7 +618,7 @@ Error: Incompatible types: got "TMyClass<System.LongInt>"
                            expected "TMyClass<System.ShortString>" 
 ```
 
-## 12.7 Korišćenje podrazumevane intrinzične funkcije
+## 14.7 Korišćenje podrazumevane intrinzične funkcije
 
 Prilikom pisanja generičkih rutina, ponekad se mora inicijalizovati promenljiva čiji tip nije poznat tokom deklaracije generičke promenljive. Ovde do izražaja dolazi i podrazumevana intrinzična promena (odeljak 4.5 , strana 243 ). Data je sledeća generička deklaracija:
 
@@ -639,7 +639,7 @@ begin
 end;
 ```
 
-## 12.8 Reč o opsegu
+## 14.8 Reč o opsegu
 
 Treba naglasiti da svi identifikatori osim čuvara mesta šablona treba da budu poznati kada se generička klasa deklariše. Istovremeno, ništa se ne može pretpostaviti o tipu šablona (osim ako se na njega ne postavi ograničenje).
 
@@ -862,7 +862,7 @@ Ovakvo ponašanje je propisano bezbednošću i nužnošću:
 - Programer koji se specijalizuje za neku klasu nema načina da zna koje se lokalne procedure koriste, pa je ne može ni implementirati, jer ne zna parametre.
 - Ako se implementacione procedure koriste kao u gornjem primeru, na njih se ne može pozivati izvan jedinice. Mogle bi biti u potpuno drugoj jedinici, a programer nema načina da zna da li treba da ih uključi pre nego što specijalizuje svoju klasu.
 
-## 12.9  Preopterećenje operatora i generički tipovi
+## 14.9  Preopterećenje operatora i generički tipovi
 
 Preopterećenje operatora (poglavlje 15 , strana 846 ) i generičke klase su usko povezani. Zamislite generičku klasu koja ima sledeću definiciju:
 
