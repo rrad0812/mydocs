@@ -1,8 +1,8 @@
-# 5 Objekti
+# 9 Objekti
 
 [prev][f1] [content][f0] [next][f2]
 
-## 5.1 Deklaracija
+## 9.1 Deklaracija
 
 FreePaskal podržava objektno orijentisano programiranje. U stvari, veći deo kompajlera je napisan pomoću objekata. Ovde predstavljamo neka tehnička pitanja u vezi sa objektno orijentisanim programiranjem u FreePaskalu.
 
@@ -51,7 +51,7 @@ Var PP : Pobj;
 
 Slično, direktiva `{$PackRecords}` deluje i na objekte.
 
-## 5.2 Apstraktni i zapečaćeni objekti
+## 9.2 Apstraktni i zapečaćeni objekti
 
 Objekat se može proglasiti zapečaćenim. U tom slučaju nije moguće deklarisati descendentni objekat. Prevodilac će vratiti grešku ako naiđe na deklaraciju potomka:
 
@@ -77,7 +77,7 @@ Error: Cannot create a descendant of the sealed class "TMyClass"
 
 Apstraktna klasa je klasa koja se ne može direktno koristiti. Umesto toga, uvek se mora koristiti klasa potomaka. Međutim, radi Delphi kompatibilnosti, kompajler ignoriše ovu direktivu.
 
-## 5.3 Polja
+## 9.3 Polja
 
 Polja objekata su kao polja zapisa. Njima se pristupa na isti način kao što bi se pristupilo polju zapisa: korišćenjem kvalifikovanog identifikatora. S obzirom na sledeću izjavu:
 
@@ -133,7 +133,7 @@ With AnObject do
 
 U ovom primeru, između `begin` i `end`, to je kao da je `AnObject` dodat pred identifikatorima `AField` i `AMethod`.
 
-## 5.4 Class ili static polja
+## 9.4 Class ili static polja
 
 Objekat može da sadrži polja `class` ili `static`: ova polja su globalna za tip objekta i ponašaju se kao globalne promenljive, ali su poznata samo u opsegu važenja objekta. Razlika između `static` i `class` promenljivih je isključivo u načinu na koji rade: ključna reč `static` će uvek raditi, ključna reč `class` će zahtevati `{ $ MODE DELPHI }` ili `{ $ MODE OBJFPC }`.
 
@@ -183,7 +183,7 @@ Class
 
 Imajte na umu da poslednji red koda upućuje na sam tip objekta (cl), a ne na instancu objekta (cl1 ili cl2).
 
-## 5.5 Konstruktori i destruktori
+## 9.5 Konstruktori i destruktori
 
 Free Pascal podržava konstruktore i destruktore. Programer je odgovoran za eksplicitno pozivanje konstruktora i destruktora kada se koriste objekti.
 
@@ -223,11 +223,11 @@ U poslednjem slučaju, kompajler će izdati upozorenje da se proširena sintaksa
 
 S obzirom na upozorenje kompajlera, sledeće poglavlje predstavlja Delphi pristup objektno orijentisanom programiranju i može se smatrati prirodnijim načinom objektno orijentisanog programiranja.
 
-## 5.6 Metode
+## 9.6 Metode
 
 Objektne metode su kao obične procedure ili funkcije, samo što imaju implicitni dodatni parametar: `self`. `Self` ukazuje na objekat sa kojim je metoda pozvana. Prilikom implementacije metoda, potpuno kvalifikovani identifikator mora biti dat u zaglavlju funkcije. Kada se deklarišu metode, mora se dati normalan identifikator.
 
-### 5.6.1 Deklaracija
+### 9.6.1 Deklaracija
 
 Deklaracija metode je kao normalna deklaracija funkcije ili procedure, sa nekim dodatnim specifikacijama, koji su deo deklaracije objekta: sa stanovišta deklaracija, definicije metoda su deklaracije normalne funkcije ili procedure. Za razliku od TP i Delphija, polja se mogu deklarisati nakon metoda u istom bloku, tj. sledeće će generisati grešku prilikom kompajliranja sa Delphi ili Turbo Pascal, ali ne i sa FPC:
 
@@ -239,11 +239,11 @@ Type
   end;
 ```
 
-### 5.6.2 Ppozivanje metoda
+### 9.6.2 Ppozivanje metoda
 
 Metode se pozivaju isto kao što se pozivaju i normalne procedure, samo što se ispred njih dodaje identifikator instance objekta. Da bi se utvrdilo koja se metoda poziva, potrebno je znati tip metode. U nastavku ćemo obraditi različite tipove.
 
-#### 5.6.2.1 Obične ili statičke metode
+#### 9.6.2.1 Obične ili statičke metode
 
 Normalne (statičke - u smislu da se poziv odredjuje za vreme compile-time) metode su metode koje nisu deklarisane bez `apstract` ili `virtual` ključne reči. Prilikom pozivanja obične metode, koristi se deklarisana (tj. metoda vremena kompajliranja) objekta. Na primer, razmotrite sledeće deklaracije:
 
@@ -282,7 +282,7 @@ begin
 
 Od tri poziva metode Doit, samo poslednji će pozvati TChild.Doit, dok će druga dva poziva pozvati TParent.Doit. To je zato što kod običnih metoda, kompajler u vreme kompajliranja određuje koja metoda treba da se pozove. Pošto je ParentB tipa TParent, kompajler odlučuje da se mora pozvati sa TParent.Doit, iako će biti kreiran kao TChild. Može postojati situacija kada metoda koja se zapravo poziva treba da zavisi od stvarnog tipa objekta u vreme izvršavanja. Ako je tako, metoda ne može biti obična metoda, već mora biti virtuelna metoda.
 
-#### 5.6.2.2 Virtuelne metode
+#### 9.6.2.2 Virtuelne metode
 
 Da bi se rešila situacija iz prethodnog odeljka, kreiraju se virtuelne metode. To se jednostavno radi dodavanjem modifikatora `virtual` deklaraciji metode. Nasledni objekat zatim može da prepiše metodu novom implementacijom ponovnim deklarisanjem metode (sa istom listom parametara) koristeći ključnu reč `virtual`.
 
@@ -342,7 +342,7 @@ Da bi ovo mogao da uradi, kompajler čuva – za svaki tip objekta – tabelu sa
 
 Kao što je ranije napomenuto, objekti koji imaju VMT moraju biti inicijalizovani konstruktorom: objektna promenljiva mora biti inicijalizovana pokazivačem na VMT stvarnog tipa sa kojim je kreirana.
 
-#### 5.6.2.3 Apstraktne metode
+#### 9.6.2.3 Apstraktne metode
 
 Apstraktna metoda je posebna vrsta virtuelne metode. Metoda koja je deklarisana kao apstraktna nema implementaciju za ovu metodu. Na nasleđenim objektima je da je prepišu i implementiraju.
 
@@ -391,7 +391,7 @@ testo.pp(32,3) Greška: Apstraktne metode se ne mogu direktno pozivati
 
 Ako se, putem nekog mehanizma, apstraktna metoda pozove tokom izvršavanja, doći će do greške tokom izvršavanja. (preciznije, greška tokom izvršavanja 211)
 
-#### 5.6.2.4 Class ili static metode
+#### 9.6.2.4 Class ili static metode
 
 `Class` metode ili `static` metode su metode koje su globalne za tip objekta. Kada se pozovu, implicitni pokazivač „self“ nije dostupan. To znači da se normalne metode ne mogu pozvati iz njih i da se ne može pristupiti nijednom polju objekta. Međutim, mogu se koristiti promenljive klase.
 
@@ -456,7 +456,7 @@ ocv.pp(32,6) Error: Only class methods, class properties and
   class variables can be accessed in class methods
 ```
 
-## 5.7 Pregled vrsta metoda
+## 9.7 Pregled vrsta metoda
 
 Tabela ispod sumira sve vrste metoda koje su dostupne u **Object** tipu podataka:
 
@@ -467,7 +467,7 @@ Tabela ispod sumira sve vrste metoda koje su dostupne u **Object** tipu podataka
  **Abstract** | `procedure Doit; virtual; abstract;` | Mora biti `virtual`. Nema implementaciju.  Mora se implementirati u potomku. Ne može se kreirati instanca objekta sa abstract metodama | Interfejsi, šablonski obrazac |
  **Class/Static** | `class procedure Doit`; ili `procedure Doit; static;` | Nema pristup `Self`. Nema pristup običnim poljima. Ima pristup class poljima. Može se dodeli proceduralnoj promenljivoj | Pomoćne funkcije bez potrebe za instancom |
 
-### 5.7.1 Važne razlike u odnosu na C++ i Classes
+### 9.7.1 Važne razlike u odnosu na C++ i Classes
 
 #### Virtuelne metode u Objects vs Classes
 
@@ -484,7 +484,7 @@ Type
   end;
 ```
 
-U **Classes** (pogledaj [06_classes.md](06_classes.md)):
+U **Classes** (pogledaj [Classes](08_classes.md):
 
 ```pascal
 Type
@@ -511,7 +511,7 @@ Type
  **Interfejsi** | Ne | Da |
  **Property** | Ograničeno | Potpuno |
 
-### 5.7.2 Pojašnjenje: Obične (Statičke) vs Class/Static
+### 9.7.2 Pojašnjenje: Obične (Statičke) vs Class/Static
 
 **VAŽNO: Terminološka zabuna!**
 
@@ -553,7 +553,7 @@ begin
 end;
 ```
 
-### 5.7.3 Kako rade obične (statičke) metode u nasleđivanju
+### 9.7.3 Kako rade obične (statičke) metode u nasleđivanju
 
 - **Ključno razumevanje**: TIP PROMENLJIVE određuje koja se metoda poziva, NE stvarni tip objekta!  
 - **Radi kao u Pythonu** - poziv se određuje u vreme kompajliranja:
@@ -635,7 +635,7 @@ I am a dog
 
 Ovo je **kao u Pythonu**, ali u Pascalu se to zove "static binding" vs "dynamic binding".
 
-### 5.7.4 Virtual metode mogu (ali ne moraju) biti override-ovane
+### 9.7.4 Virtual metode mogu (ali ne moraju) biti override-ovane
 
 Virtual metod u roditelju **IMA implementaciju**. Potomak može:
 
@@ -688,7 +688,7 @@ Virtual metod u roditelju **IMA implementaciju**. Potomak može:
    end;
    ```
 
-### 5.7.5 RTTI = Run-Time Type Information
+### 9.7.5 RTTI = Run-Time Type Information
 
 RTTI omogućava proveru i manipulaciju tipova u vreme izvršavanja:
 
@@ -721,7 +721,7 @@ end;
 - **Objects**: Ograničen RTTI (samo osnovne provere)
 - **Classes**: Pun RTTI (streaming, reflection, property inspection)
 
-### 5.7.6 Pregled: Kako se pozivi metoda određuju
+### 9.7.6 Pregled: Kako se pozivi metoda određuju
 
  Tip metoda | Određivanje poziva | Vreme određivanja | Primer |
  ---------- | ------------------ | ----------------- | ------- |
@@ -729,7 +729,7 @@ end;
  **Virtual** | Po **stvarnom tipu objekta** | **Run-time** (VMT) | `AnimalPtr^.Method` → `TDog.Method` |
  **Class/Static** | Po **klasi** (ne instanci) | **Compile-time** | `TAnimal.ClassMethod` |
 
-### 5.7.7 Praktični savet: Kada koristiti šta
+### 9.7.7 Praktični savet: Kada koristiti šta
 
   Scenario | Preporuka | Razlog |
   -------- | --------- | ------- |
@@ -739,7 +739,7 @@ end;
  Treba pristup poljima | Static (Normal) | Ima Self |
  Interfejs koji potomci implementiraju | Abstract | Forsira implementaciju |
 
-### 5.7.8 Kompletan primer: Static vs Virtual
+### 9.7.8 Kompletan primer: Static vs Virtual
 
 ```pascal
 program CompleteDemo;
@@ -795,7 +795,7 @@ begin
 end.
 ```
 
-### 5.7.9 Preporuka
+### 9.7.9 Preporuka
 
 Za **novi kod**, razmotri korišćenje **Classes** umesto **Objects**:
 
@@ -804,7 +804,7 @@ Za **novi kod**, razmotri korišćenje **Classes** umesto **Objects**:
 - Bolja podrška za RTTI i interfejse
 - Kompatibilno sa Delphi kodom
 
-Vidi detaljnije u [Classes (06_classes.md)](06_classes.md).
+Vidi detaljnije u [Classes](08_classes.md).
 
 **Objects** se i dalje koriste kada je:
 

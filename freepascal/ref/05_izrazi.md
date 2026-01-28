@@ -1,4 +1,4 @@
-# 6 Izrazi
+# 5 Izrazi
 
 Izrazi se javljaju u naredbama dodele ili u testovima.
 
@@ -6,9 +6,9 @@ Izrazi se sastoje od dve komponente: operatora i njihovih operanda. Većina oper
 
 Izraz se pretvara u vrednost određenog tipa. Rezultujući tip je određen tipovima vrednosti u izrazu i operatorima u izrazu.
 
-Kada se u izrazu koristi više operanda, koriste se pravila prioriteta iz tabele ( 6.11 ).
+Kada se u izrazu koristi više operanda, koriste se pravila prioriteta iz tabele ( 5.1 ).
 
-Tabela 6.11: Prioritet operatora
+Tabela 5.1: Prioritet operatora
 
  Operator | Precedence | Category |
  -------- | ---------- | -------- |
@@ -53,7 +53,7 @@ True or True and False
 True ili (True and False) 
 ```
 
-## 6.1 Sintaksa izraza
+## 5.1 Sintaksa izraza
 
 Izraz primenjuje relacione operatore na jednostavne izraze. Jednostavni izrazi su nizovi termina (šta je termin, objašnjeno je u nastavku), spojenih operatorom sabiranja.
 
@@ -85,7 +85,7 @@ A Div B
 
 Faktori su sve ostale konstrukcije.
 
-## 6.2 Pozivi funkcija
+## 5.2 Pozivi funkcija
 
 Pozivi funkcija su deo izraza (mada, koristeći proširenu sintaksu, mogu biti i iskazi).
 
@@ -172,7 +172,7 @@ If F()=Addone then
 
 Imajte na umu da ovo poslednje ponašanje nije kompatibilno sa Delfi sintaksom. Uključivanje Delfi režima će vam omogućiti da koristite Delfi sintaksu.
 
-## 6.3 Konstruktori setova
+## 5.3 Konstruktori setova
 
 Kada se konstanta tipa seta mora uneti u izraz, mora se navesti konstruktor seta. U suštini, ovo je isto kao kada je tip definisan, samo što nema identifikatora za identifikaciju seta. Konstruktor seta je lista izraza odvojenih zarezima, zatvorena u uglaste zagrade.
 
@@ -187,7 +187,7 @@ Sve grupe setova i elementi skupa moraju biti istog rednog tipa. Prazan set se o
 **Napomena**  
 Ako prvi specifikator opsega ima veću rednu vrednost od drugog, rezultujući skup će biti prazan, npr. ['Z'..'A'] označava prazan skup. Treba biti oprezan pri označavanju opsega.
 
-## 6.4 Typecast vrednosti
+## 5.4 Typecast vrednosti
 
 Ponekad je potrebno promeniti tip izraza, ili dela izraza, da bi bio kompatibilan sa dodelom. To se radi putem pretvaranja (typecast) tipa vrednosti.
 
@@ -211,7 +211,7 @@ Word(@Buffer);
 
 Ovo je kompatibilno sa ponašanjem Delfija ili Turbo Paskala.
 
-## 6.5 Typecast promenljivih
+## 5.5 Typecast promenljivih
 
 Promenljiva se može smatrati jednim faktorom u izrazu. Stoga se može i typecast-ovati. Promenljiva se može typecast-ovati u bilo koji tip, pod uslovom da tip ima istu veličinu kao i originalna promenljiva.
 
@@ -248,7 +248,7 @@ begin
   S:=TObject(P).ClassName;
 ...
 
-## 6.6 Neporavnati typecast
+## 5.6 Neporavnati typecast
 
 Specijalni typecast je `Unaligned typecast` promenljive ili izraza. Ovo nije pravo pretvaranje tipa u tip, već je pre nagoveštaj za kompajler da izraz može biti pogrešno poravnat (tj. nije na poravnatoj memorijskoj adresi). Neki procesori ne dozvoljavaju direktan pristup pogrešno poravnatim strukturama podataka i stoga moraju pristupati podacima bajt po bajt.
 
@@ -270,7 +270,7 @@ begin
   I:=PInteger(Unaligned(@A[13]))^;  
 end.
 
-## 6.7 Operator @
+## 5.7 Operator @
 
 Operator adrese @ vraća adresu promenljive, procedure ili funkcije.
 
@@ -310,15 +310,15 @@ end;
 
 Podrazumevano, operator adrese mora se koristiti ako vrednost mora biti dodeljena promenljivoj proceduralnog tipa. Ovo ponašanje se može izbeći korišćenjem prekidača -Mtp ili -MDelphi , što rezultira kompatibilnijom sintaksom Delphi ili Turbo Pascal jezika.
 
-## 6.8 Operatori
+## 5.8 Operatori
 
 Operatori se mogu klasifikovati prema tipu izraza na kome operišu. Razmotrićemo ih tip po tip.
 
-### 6.8.1 Aritmetički operatori
+### 5.8.1 Aritmetički operatori
 
-Aritmetički operatori se javljaju u aritmetičkim operacijama, tj. u izrazima koji sadrže cele ili realne brojeve. Postoje dve vrste operatora: binarni i unarni aritmetički operatori. Binarni operatori su navedeni u tabeli ( 6.12 ), unarni operatori su navedeni u tabeli ( 6.13 ).
+Aritmetički operatori se javljaju u aritmetičkim operacijama, tj. u izrazima koji sadrže cele ili realne brojeve. Postoje dve vrste operatora: binarni i unarni aritmetički operatori. Binarni operatori su navedeni u tabeli ( 5.2 ), unarni operatori su navedeni u tabeli ( 5.3 ).
 
-Tabela 6.12: Binarni aritmetički operatori
+Tabela 5.2: Binarni aritmetički operatori
 
  Operator | Operacija |
  -------- | --------- |
@@ -339,7 +339,7 @@ Za binarne operatore, tip rezultata će biti ceo broj ako su oba operanda izrazi
 
 Izuzetno, deljenje ( `/` ) uvek rezultira realnim vrednostima.
 
-Tabela 6.13: Unarni aritmetički operatori
+Tabela 5.3: Unarni aritmetički operatori
 
  Operator | Operacija |
  -------- | --------- |
@@ -356,11 +356,11 @@ I mod J = I - (I div J) * J
 
 Ali se izvršava brže od izraza sa desne strane.
 
-### 6.8.2 Logički operatori
+### 5.8.2 Logički operatori
 
-Logički bitwise operatori deluju na pojedinačne bitove ordinalnih izraza. Logički operatori zahtevaju operande koji su celobrojnog tipa i proizvode rezultat celobrojnog tipa. Mogući logički operatori su navedeni u tabeli ( 6.14 ).
+Logički bitwise operatori deluju na pojedinačne bitove ordinalnih izraza. Logički operatori zahtevaju operande koji su celobrojnog tipa i proizvode rezultat celobrojnog tipa. Mogući logički operatori su navedeni u tabeli ( 5.4 ).
 
-Tabela 6.14: Logički bitwise operatori
+Tabela 5.4: Logički bitwise operatori
 
  Operator | Operacija |
  -------- | --------- |
@@ -383,11 +383,11 @@ B shl 2  { same as B * 4 for integers }
 1 or 2   { equals 3 }  
 3 xor 1  { equals 2 }
 
-### 6.8.3 Bulovi operatori
+### 5.8.3 Bulovi operatori
 
-Bulove operacije se mogu smatrati logičkim operacijama na tipu veličine 1 bita. Stoga, `shl` i `shr` operacije nemaju mnogo smisla. Bulove operacije mogu imati samo operandove bulovog tipa, a rezultujući tip je uvek bulov. Mogući operatori su navedeni u tabeli ( 6.15 ).
+Bulove operacije se mogu smatrati logičkim operacijama na tipu veličine 1 bita. Stoga, `shl` i `shr` operacije nemaju mnogo smisla. Bulove operacije mogu imati samo operandove bulovog tipa, a rezultujući tip je uvek bulov. Mogući operatori su navedeni u tabeli ( 5.5 ).
 
-Tabela 6.15: Bulovi operatori
+Tabela 5.5: Bulovi operatori
 
  Operator | Operacija |
  -------- | --------- |
@@ -405,7 +405,7 @@ B := True ili MaybeTrue;
 
 Kompilator nikada neće pogledati vrednost MaybeTrue, jer je očigledno da će izraz uvek biti True. Kao rezultat ove strategije, ako je MaybeTrue funkcija, ona neće biti pozvana! (Ovo može imati iznenađujuće efekte kada se koristi zajedno sa svojstvima)!
 
-### 6.8.4 Operatori stringova
+### 5.8.4 Operatori stringova
 
 Postoji samo jedan operator za stringove: `+` . Njegova akcija je da spaja sadržaj dva stringa (ili znaka) na koje deluje. Ne može se koristiti za spajanje stringova koji se završavaju nulom ( `PChar` ). Sledeće su validne operacije za stringove:
 
@@ -433,7 +433,7 @@ Ako izraz sadrži mešavinu AnsiStringova i ShortStringova, rezultat je AnsiStri
 
 Vrednost prekidača `{ $H }` može se koristiti za kontrolu tipa konstantnih stringova; podrazumevano su to ShortString-ovi (i stoga ograničeni na 255 znakova).
 
-### 6.8.5 Operatori dinamičkih stringova
+### 5.8.5 Operatori dinamičkih stringova
 
 Postoji samo jedan dinamički operator stringa: `+` . Ovaj operator je dostupan u Delphi režimu, ali mora biti eksplicitno omogućen korišćenjem operatora `{$modeswitch arrayoperators}` u `objfpc` režimu:
 
@@ -520,11 +520,11 @@ begin
 
 Kompilator će javiti grešku prilikom kompajliranja ovog koda.
 
-### 6.8.6 Operatori setova
+### 5.8.6 Operatori setova
 
-Sledeće operacije nad setovima mogu se izvoditi pomoću operatora: `Union`, `Difference`, `SimmetricDifference`, `Inclusion` i `Intersection`. Elementi se mogu dodavati ili uklanjati iz seta pomoću operatora `Include` ili Exclude`. Operatori potrebni za ovo su navedeni u tabeli ( 6.16 ).
+Sledeće operacije nad setovima mogu se izvoditi pomoću operatora: `Union`, `Difference`, `SimmetricDifference`, `Inclusion` i `Intersection`. Elementi se mogu dodavati ili uklanjati iz seta pomoću operatora `Include` ili Exclude`. Operatori potrebni za ovo su navedeni u tabeli ( 5.6 ).
 
-Tabela 6.16: Operatori setova
+Tabela 5.6: Operatori setova
 
  Operator | Akcija |
  -------- | ------ |
@@ -619,11 +619,11 @@ W:=W - [wed];
 
 Operacija `In` rezultira vrednošću True ako je levi operand (element) uključen u desni operand (set), u suprotnom rezultat će biti False.
 
-### 6.8.7 Relacioni operatori
+### 5.8.7 Relacioni operatori
 
-Relacioni operatori su navedeni u tabeli ( 12.7 )
+Relacioni operatori su navedeni u tabeli ( 5.7 )
 
-Tabela 6.7: Relacioni operatori
+Tabela 5.7: Relacioni operatori
 
  Operator | Akcija |
  -------- | ------- |
@@ -645,11 +645,11 @@ Poređenje stringova se vrši na osnovu njihove reprezentacije karakternog koda.
 
 Prilikom upoređivanja pokazivača, upoređuju se adrese na koje oni ukazuju. Ovo važi i za pokazivače tipa `PChar`. Da bi se uporedili stringovi na koje `PChar` pokazuje, mora se koristiti funkcija `StrComp` iz unita `String`. Funkcija `in` vraća True ako je levi operand (koji mora imati isti ordinalni tip kao i tip skupa i koji mora biti u opsegu 0..255) element skupa koji je desni operand, u suprotnom vraća False.
 
-### 6.8.8 Operatori klase
+### 5.8.8 Operatori klase
 
-Operatori klase se malo razlikuju od gore navedenih operatora u smislu da se mogu koristiti samo u izrazima klase koji vraćaju klasu. Postoje samo dva operatora klase, kao što se može videti u tabeli ( 6.8 ).
+Operatori klase se malo razlikuju od gore navedenih operatora u smislu da se mogu koristiti samo u izrazima klase koji vraćaju klasu. Postoje samo dva operatora klase, kao što se može videti u tabeli ( 5.8 ).
 
-Tabela 6.8: Operatori klase
+Tabela 5.8: Operatori klase
 
  Operator | Akcija |
  -------- | ------ |

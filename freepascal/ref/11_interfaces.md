@@ -1,9 +1,9 @@
 
-# 7 Interface
+# 11 Interface
 
 [prev][f1] [content][f0] [next][f2]
 
-## 7.1 Definition
+## 11.1 Definition
 
 As of version 1.1, FPC supports interfaces. Interfaces are an alternative to multiple inheritance (where a class can have multiple parent classes) as implemented for instance in C++. An interface is basically a named set of methods and properties: a class that implements the interface provides all the methods as they are enumerated in the Interface definition. It is not possible for a class to implement only part of the interface: it is all or nothing.
 
@@ -41,7 +41,7 @@ end;
 
 As can be seen, the GUID identifying the interface is optional.
 
-## 7.2 Interface identification: A GUID
+## 11.2 Interface identification: A GUID
 
 An interface can be identified by a GUID. This is a 128-bit number, which is represented in a text representation (a string literal):
 `['{HHHHHHHH-HHHH-HHHH-HHHH-HHHHHHHHHHHH}']`
@@ -90,7 +90,7 @@ end.
 
 Normally, the GUIDs are only used in Windows, when using COM interfaces. More on this in the next section.
 
-## 7.3 Interface implementations
+## 11.3 Interface implementations
 
 When a class implements an interface, it should implement all methods of the interface. If a method of an interface is not implemented, then the compiler will give an error. For example:
 
@@ -144,7 +144,7 @@ Type
 
 This declaration tells the compiler that the MyFunc method of the IMyInterface interface is implemented in the MyOtherFunction method of the TMyClass class.
 
-## 7.4 Interface inheritance
+## 11.4 Interface inheritance
 
 It is possible to let one interface be a descendent from another interface:
 
@@ -229,7 +229,7 @@ EInvalidCast: Invalid type cast
 $0000000000411A27
 ```
 
-## 7.5 Interface delegation
+## 11.5 Interface delegation
 
 Sometimes, the methods of an interface are implemented by a helper (or delegate) object, or the class instance has obtained an interface pointer for this interface and that should be used. This can be for instance when an interface must be added to a series of totally unrelated classes: the needed interface functionality is added to a separate class, and each of these classes uses an instance of the helper class to implement the functionality.
 
@@ -387,13 +387,13 @@ TIntfDelegator = class(TInterfacedObject, IGMGetFileName, IGMGetSetFileName)
 end; 
 ```
 
-## 7.6 Interfaces and COM
+## 11.6 Interfaces and COM
 
 When using interfaces on Windows which should be available to the COM subsystem, the calling convention should be stdcall – this is not the default Free Pascal calling convention, so it should be specified explicitly.
 
 COM does not know properties. It only knows methods. So when specifying property definitions as part of an interface definition, be aware that the properties will only be known in the Free Pascal compiled program: other Windows programs will not be aware of the property definitions.
 
-## 7.7 CORBA and other Interfaces
+## 11.7 CORBA and other Interfaces
 
 COM is not the only architecture where interfaces are used. CORBA knows interfaces, UNO (the OpenOffice API) uses interfaces, and Java as well. These languages do not know the IUnknown interface used as the basis of all interfaces in COM. It would therefore be a bad idea if an interface automatically descended from IUnknown if no parent interface was specified. Therefore, a directive {$INTERFACES} was introduced in Free Pascal: it specifies what the parent interface is of an interface, declared without parent. More information about this directive can be found in the Programmer’s Guide.
 
@@ -401,7 +401,7 @@ Note that COM interfaces are by default reference counted, because they descend 
 
 Corba interfaces are identified by a simple string so they are assignment compatible with strings and not with TGUID. The compiler does not do any automatic reference counting for the CORBA interfaces, so the programmer is responsible for any reference bookkeeping.
 
-## 7.8 Reference counting
+## 11.8 Reference counting
 
 All COM interfaces use reference counting. This means that whenever an interface is assigned to a variable, its reference count is updated. Whenever the variable goes out of scope, the reference count is automatically decreased. When the reference count reaches zero, usually the instance of the class that implements the interface, is freed.
 

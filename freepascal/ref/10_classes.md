@@ -1,5 +1,5 @@
 
-# 6 Klase
+# 10 Klase
 
 [prev][f1] [content][f0] [next][f2]
 
@@ -27,7 +27,7 @@ U ranijim verzijama Free Pascala bilo je obavezno, da bi koristili klase, da pos
 
 U stvari, kompajler će dati upozorenje ako pronađe `objpas` unit u `uses` klauzuli.
 
-## 6.1 Definicija klase
+## 10.1 Definicija klase
 
 Prototip deklaracije klase je kao što sledi:
 
@@ -130,7 +130,7 @@ end;
 
 Gornji primer će podići izuzetak ako prosledjena instanca nije nasledjena iz `TMinClass` ili `TMaxClass`.
 
-## 6.2 Abstraktne i zapečaćene klase
+## 10.2 Abstraktne i zapečaćene klase
 
 Klasa može biti deklarisana kao `sealed`. U tom slučaju nije moguće deklarisanje nasledjenih klasa. Kompajler će vratiti grešku:
 
@@ -159,11 +159,11 @@ Error: Cannot create a descendant of the sealed class "TMyClass"
 
 Abstraktna klasa je klasa koja se ne može instancirati direktno. Umesto toga nasledna klasa mora uvek biti instancirana.
 
-## 6.3 Normalna i statička polja
+## 10.3 Normalna i statička polja
 
 Klase mogu imati polja. U zavisnosti od toga kako su definisana, polja sadrže podatke specifične za instancu klase. Bez obzira kako su definisana, polja mogu imati nametnuta pravila vidljivosti kao i drugi članovi klase.
 
-### 6.3.1 Normalna polja/varijable
+### 10.3.1 Normalna polja/varijable
 
 Postoji dva načina za deklaraciju normalnih polja. Prvi je klasičan način, sličan definiciji objekta:
 
@@ -213,7 +213,7 @@ Ova definicija je ekvivalentna prehodnoj.
 **Napomena**  
 Od verzije 3.0 kompajlera, kompajler može preurediti poredak polja u memoriji ako to vodi boljem poravnjavanju i manjoj instanci. To znači, da u instanci polja ne moraju da se pojave u istom poretku kao u deklaraciji. RTTI generisan za klasu će reflektovati ovu promenu.
 
-### 6.3.2 Polja/varijable klase
+### 10.3.2 Polja/varijable klase
 
 Slično objektima, klasa može da sadrži statička polja ili promenljive klase: ova polja ili promenljive su globalne za klasu i deluju kao globalne promenljive, ali su poznate samo kao deo klase. Na njih se može referencirati unutar metoda klasa, ali se mogu referencirati i izvan klase davanjem potpunog kvalifikovanog imena.
 
@@ -325,7 +325,7 @@ It will print the following:
 
 Medjutim, u OBJFPC modu to se neće kompajlirati, i daće `duplicate identifier error`.
 
-## 6.4 Instanciranje
+## 10.4 Instanciranje
 
 Klase moraju biti kreirane pomoću jednog od njihovih konstruktora (može biti više konstruktora). Zapamtite da je instanca klase pokazivač na objekat na heapu. Kada se deklariše promenljiva neke klase, kompajler samo dodeljuje prostor za ovaj pokazivač, a ne za ceo objekat. Konstruktor klase vraća pokazivač na inicijalizovanu instancu objekta na heapu. Dakle, da biste inicijalizovali instancu neke klase, uradili bi sledeće:
 
@@ -347,7 +347,7 @@ Posle toga, kod konstrujtora je izvršen. Konstruktor ima pokazivač na svoje po
   Da dobijete veličinu instance podataka, korišćenjem `TObject.InstanceSize` metoda.
 - Ako se pojavi izuzetak za vreme izvršenja konstruktora, destruktor će biti pozvan automatski.
 
-## 6.5 Destrukcija instance
+## 10.5 Destrukcija instance
 
 Instance klase moraju biti uništene korišćenjem destructor. Za razliku od konstruktor, nema izbora za destruktor: destruktor mora imati ime `Destroy`, on mora preklopiti `Destroy` destruktor deklarisan u `TObject`, ne može imati argumente, i nasledjeni destruktor mora uvek biti pozvon.
 
@@ -398,15 +398,15 @@ A is still assigned: FALSE
 **Napomena**  
 Ako se pojavi izuzetak za vreme izvršavanje konstruktora, destruktor će biti pozvan automatski.
 
-## 6.6 Metode
+## 10.6 Metode
 
-### 6.6.1 Deklaracija
+### 10.6.1 Deklaracija
 
 Deklaracija metoda klase prati neka pravila kao deklaracija metoda u objektima.
 
 Jedina razlika je `override`, `reintroduce` i `message` direktive.
 
-### 6.6.2 Pozivanje metoda
+### 10.6.2 Pozivanje metoda
 
 Pozivanje metoda u klasama nije drugačije od objekata:
 
@@ -419,7 +419,7 @@ begin
   ANobject.AMethod;
 ```
 
-### 6.6.3 Virtuelne metode
+### 10.6.3 Virtuelne metode
 
 Klase imaju virtuelne metode, baš kao i objekti. Međutim, postoji razlika između to dvoje. Za objekte, dovoljno je ponovo deklarisati isti metod u objektu potomka sa ključnom rečju `virtual` da bi se on zamenio. Za klase je situacija drugačija: virtuelne metode moraju biti zamenjene ključnom reči `override`. Ako to ne uradite, pokrenuće se nova serija virtuelnih metoda, skrivajući prethodnu. Ključna reč `Inherited` neće skočiti na nasleđeni metod, ako je korišćen u virtuelnom.
 
@@ -479,7 +479,7 @@ Da bi se ovo omogućilo, kompajler pravi po klasi ( po tipu ) – tabelu sa virt
 **Napomena**  
 Ključna reč `virtual` može biti prepisan sa `dynamic` ključnom reči: `dynamic` metode se ponašaju kao virtualne metode. Za razliku od Delphi, u FPC implementatcija `dynamic` metode su jednake za implementaciju kao virtuelne metode.
 
-### 6.6.4 Class metode
+### 10.6.4 Class metode
 
 `Class metode` se identifikuju sa ključnom reči `Class` ispred procedure ili function deklaracije:
 
@@ -519,7 +519,7 @@ Primetimo, da class metode mogu biti `virtual`, i mogu biti `override`.
 
 Class metode mogu biti korišćene kao `read` ili `write` specifikatori za regularan property, ali prirodno, taj property će imati istu vrednost za sve instance klase, pošto instance nisu raspoložive u class metodama.
 
-### 6.6.5 Konstruktori i destruktori klase
+### 10.6.5 Konstruktori i destruktori klase
 
 Takođe se može kreirati konstruktor ili destruktor klase. Oni služe da instanciraju neke promenljive klase ili svojstva klase koja moraju biti inicijalizovana pre nego što se klasa može koristiti. Ovi konstruktori se pozivaju automatski pri pokretanju programa: konstruktor se poziva pre odeljka za inicijalizaciju unita u kome je deklarisan, destruktor se poziva posle sekcije finalizacije unita u kome je deklarisan.
 
@@ -590,7 +590,7 @@ Class constructor TA
 Class destructor TA
 ```
 
-### 6.6.6 Statičke (class) metode
+### 10.6.6 Statičke (class) metode
 
 FPC poznaje static class metode u klasama: to su metode klase koje imaju Static ključnu reč na kraju deklaracije. Ove metode se ponašaju kao regularne procedure ili funkcije. To znači da:
 
@@ -688,7 +688,7 @@ TB.Doit : TB
 
 Za metod statičke klase, iako je pozvan pomoću TB, klasa (Self, ako je bila dostupna) je postavljena na TA, klasu u kojoj je statička metoda definisana. Za metod klase, klasa je postavljena na stvarnu klasu koja se koristi za pozivanje metode (TB).
 
-### 6.6.7 Message metode
+### 10.6.7 Message metode
 
 Novo u klasama su `message` metode. Pokazivači na `message` metode su smešteni u posebnoj tabeli, zajedno sa integer ili string konstantantom sa kojima su deklarisani. Primarno su namenjeni za lakše programiranje `callback` funkcija u nekim GUI alatima, kao što su Win32 ili GTK. Za razliku od Delfija, Free Pascal prihvata i stringove kao identifikatore poruka. Message metode su uvek virtualne.
 
@@ -751,7 +751,7 @@ Ako takav metod nije nađen, `DefaultHandlerStr` je pozvan. `DefaultHandlerStr` 
   procedure DefaultHandlerStr(var message);virtual;
 ```
 
-### 6.6.8 Korišćenje inherited klauzule
+### 10.6.8 Korišćenje inherited klauzule
 
 U preklopljenom metodu, često je neophodno pozvati implementaciju virtuelnog metoda iz roditeljske klase. To može biti urađeno sa `inherited` ključnom reči. Slično, `inherited` ključna reč može biti korišćen za poziv bilo koje metode roditeljske klase.
 
@@ -802,9 +802,9 @@ Ako ne postoji metod sa takvim imenom u parent klasi, kompajler će izdati greš
 
 Iako su primeri dati korišćenjem konstruktora, korišćenje `inherited` klauzule nije ograničeno na konstruktore, to može biti korišćeno za bilo koju proceduru ili funkciju ili destruktor isto tako.
 
-## 6.7 Propertiji
+## 10.7 Propertiji
 
-### 6.7.1 Definicija
+### 10.7.1 Definicija
 
 Klase mogu sadržati propertije kao deo njihove liste polja. Properti je kao normalno polje, tj. njegova vrednost može biti vraćeno ili postavljeno, ali oni omogućavaju redirekciju pristupa polja kroz funkcije ili procedure. Oni obezbeđuju način da se properti poveže sa pisanjem ili čitanjem iz klase „polja“. Ovo omogućava tzv. proveru da li je vrednost važeća prilikom dodeljivanja, ili, prilikom čitanja, omogućava konstruisanje vrednosti u hodu. Štaviše, propertiji mogu biti samo za čitanje ili samo za pisanje.
 
@@ -861,7 +861,7 @@ Ono što se dešava u gornjim izjavama je da kada vrednost treba da se pročita,
 
 Zbog ovog mehanizma, svojstva se ne mogu prosleđivati kao var argumenti funkciji ili proceduri, pošto ne postoji poznata adresa svojstva (barem, ne uvek).
 
-### 6.7.2 Indeksirani properti
+### 10.7.2 Indeksirani properti
 
 Ako definicija propertij sadrži indeks, tada Read i Write specifikatori motaju biti metode. Štaviše, te metode zahtevaju dodatni parametar: integer parametar. To mogućava da read ili write ima nekoliko prpertia sa istom metodom. Zbog toga propertiji moraju imati isti tip.
 
@@ -912,7 +912,7 @@ end.
 
 Kada kompajler naiđe na dodeljivanje X-u, tada se SetCoord poziva sa kao prvim parametrom indeksom (1 u gornjem slučaju) i kao drugim parametrom sa vrednošću koju treba postaviti. Suprotno tome, kada čita vrednost X, kompajler poziva GetCoord i prosleđuje mu indeks 1. Indeksi mogu biti samo celobrojne vrednosti.
 
-### 6.7.3 Niz properti
+### 10.7.3 Niz properti
 
 Niz properti takođe postoje. Ovo su propertiji koja prihvataju indeks, baš kao što to čini niz. Indeks može biti jednodimenzionalan ili višedimenzionalan. Za razliku od normalnih (statičkih ili dinamičkih) nizova, indeks niz propertija ne mora biti redni tip, ali može biti bilo koji tip.
 
@@ -970,7 +970,7 @@ Type
 
 Ako postoji N dimenzija, onda tipovi prvih N argumenata getera i setera moraju odgovarati tipovima N indeksnih specifikacija u definiciji svojstva niza.
 
-### 6.7.4 Default propertii
+### 10.7.4 Default propertiji
 
 Niz propertii mogu biti deklarisani kao podrazumevani propertii. To znači da nije potrebno navesti ime propertija prilikom dodeljivanja ili čitanja. U prethodnom primeru, ako bi definicija propertija stavke bila
 
@@ -992,7 +992,7 @@ AIntList[26] := 1;
 
 Samo jedan podrazumevani properti po klasi je dozvoljen, ali izvedene klase mogu redeklarisati podrzumevani properti.
 
-### 6.7.5 Objavljena svojstva
+### 10.7.5 Objavljena svojstva
 
 Klase kompajlirane u stanju {$M+} (kao što je TPersistent iz unita class) mogu imati `Published` odeljak. Za metode, polja i svojstva u odeljku `Published`, kompajler generiše RTTI informacije (Informacije o tipu vremena rada), koje se mogu koristiti za ispitivanje definisanih metoda, polja i svojstava u objavljenim odeljcima. Unit `typeinfo` sadrži neophodne rutine za ispitivanje ovih informacija, a ovaj unit se koristi u sistemu strimovanja u FPC u unitu `class`.
 
@@ -1002,7 +1002,7 @@ Mogu se objaviti samo polja tipizirana u klasi. Za propertije, svaki jednostavni
 
 Iako su informacije o tipu vremena izvršavanja dostupne za druge tipove, ovi tipovi se ne mogu koristiti za definiciju svojstva ili polja u objavljenom odeljku. Informacije su prisutne da opisuju, na primer, argumente procedura ili funkcija.
 
-### 6.7.6 Informacije o skladištenju
+### 10.7.6 Informacije o skladištenju
 
 Kompajler nudi dva specifikatora za kontrolu da li se properti strimuje pomoću mehanizma strimovanja, kao što je onaj koji je implementiran u unitu class. Ovi specifikatori pišu dodatne informacije u generisani RTTI, koji se kasnije koristi u sistemu za striming:
 
@@ -1041,7 +1041,7 @@ Ako je procena `Stored` dovela do True, podrazumevana vrednost svojstva se smatr
 - Mehanizam striminga koji je ovde opisan je onaj koji je implementiran u klasama unita RTL-a.
   Mogu se implementirati i drugi mehanizmi striminga, koji mogu koristiti RTTI informacije na drugačiji način.
 
-### 6.7.7 Overriding and redeclaring properties
+### 10.7.7 Overriding and redeclaring properties
 
 Properties can be both overridden and redeclared in descendent classes.
 
@@ -1049,7 +1049,7 @@ Property redeclaration takes action if the property type is declared, otherwise 
 
 The example below demonstrates the difference between property override and redeclaration.
 
-### 6.7.7 Preklapanje i ponovno deklarisanje propertija
+### 10.7.7 Preklapanje i ponovno deklarisanje propertija
 
 Propertiji se mogu i preklopiti i ponovo deklarisati u klasama potomaka.
 
@@ -1173,7 +1173,7 @@ begin
 end;
 ```
 
-## 6.8 Klasni propertiji
+## 10.8 Klasni propertiji
 
 Class properties are very much like global property definitions. They are associated with the class, not with an instance of the class.
 
@@ -1206,7 +1206,7 @@ end;
 
 Razlog za zahtev je da je svojstvo klase povezano sa određenom klasom u kojoj je definisano, ali ne i sa klasama potomcima. Pošto metode klase mogu biti virtuelne, to bi omogućilo klasama potomaka da zamene metod, čineći ih neprikladnim za pristup svojstvima klase.
 
-## 6.9 Ugnežđeni tipovi, konstante i promenljive
+## 10.9 Ugnežđeni tipovi, konstante i promenljive
 
 Definicija klase može da sadrži type sekciju, const sekciju i var sekciju. Sekcije type i const deluju kao obični odeljak type koji se nalazi u implementaciji jedinice ili metode/funkcije/procedure. Var deluju kao redovna polja klase, osim ako se ne nalaze u sekciji var klase, u kom slučaju se ponašaju kao da su definisane na nivou unita, unutar imenskog prostora klase (odeljak 6.3, strana 308).
 
@@ -1323,7 +1323,7 @@ end.
  0 1 2
 ```
 
-## 6.15 Pregled vrsta metoda u Classes
+## 10.15 Pregled vrsta metoda u Classes
 
 Classes nude različite vrste metoda, sličnih onima u Objects, ali sa važnim razlikama:
 
@@ -1339,7 +1339,7 @@ Classes nude različite vrste metoda, sličnih onima u Objects, ali sa važnim r
  **Class Destructor** | `class destructor Destroy;` | Poziva se nakon finalization sekcije.Samo jedan po klasi. Bez parametara. Ne može biti virtual | Čišćenje class resursa |
  **Message Method** | `procedure Handler(var Msg); message 1;` | Automatski virtual. Poziva se preko Dispatch(). Jedan var parametar. Integer ili string ID | GUI callback funkcije |
 
-### 6.15.1 Ključna razlika: Objects vs Classes
+### 10.15.1 Ključna razlika: Objects vs Classes
 
 Najvažnija razlika u sintaksi virtuelnih metoda:
 
@@ -1375,7 +1375,7 @@ Ako u Classes koristiš `virtual` umesto `override`, dobićeš **warning**:
 Warning: An inherited method is hidden by TCHILD.DOIT
 ```
 
-### 6.15.2 Primer: Razlika između različitih tipova metoda
+### 10.15.2 Primer: Razlika između različitih tipova metoda
 
 ```pascal
 {$mode objfpc}
@@ -1514,7 +1514,7 @@ Static class method
 Class destructor called
 ```
 
-### 6.15.3 Kada koristiti koju vrstu metoda
+### 10.15.3 Kada koristiti koju vrstu metoda
 
  Situacija | Preporučena vrsta |
  ---------- | ----------------- |
@@ -1527,7 +1527,7 @@ Class destructor called
  GUI event handler | Message method |
  Factory pattern | Class method (virtual) |
 
-### 6.15.4 Česte greške i kako ih izbegavati
+### 10.15.4 Česte greške i kako ih izbegavati
 
 **1. Zaboravljen override:**
 
@@ -1568,7 +1568,7 @@ begin
 end;
 ```
 
-### 6.15.5 Zašto Classes, a ne Objects?
+### 10.15.5 Zašto Classes, a ne Objects?
 
  Prednost Classes | Objašnjenje |
  ----------------- | ----------- |
@@ -1586,11 +1586,11 @@ end;
 
 Detaljnije o Objects-ima vidi u [05_objects.md](05_objects.md).
 
-## 6.16 Self u Class metodama - praktična upotreba
+## 10.16 Self u Class metodama - praktična upotreba
 
 Kada class metoda (bez `static`) ima Self parametar, Self pokazuje na **VMT (Virtual Method Table)** te klase, što omogućava moćne programske obrasce.
 
-### 6.16.1 Self u različitim kontekstima
+### 10.16.1 Self u različitim kontekstima
 
  Vrsta metode | Self pokazuje na |
  ------------ | ---------------- |
@@ -1598,7 +1598,7 @@ Kada class metoda (bez `static`) ima Self parametar, Self pokazuje na **VMT (Vir
  **Class metoda** | **VMT (Virtual Method Table)** - class pointer, metapodatke klase |
  **Static class metoda** | **Nema Self** - ili se tretira kao hardcoded klasa |
 
-### 6.16.2 Primer razlike u Self-u
+### 10.16.2 Primer razlike u Self-u
 
 ```pascal
 Type
@@ -1631,7 +1631,7 @@ begin
 end;
 ```
 
-### 6.16.3 Praktična upotreba
+### 10.16.3 Praktična upotreba
 
 1. **Factory Pattern**
 
@@ -1734,7 +1734,7 @@ end;
    end;
    ```
 
-### 6.16.4 Poređenje: Sa i bez Self-a
+### 10.16.4 Poređenje: Sa i bez Self-a
 
 **Bez Self-a (LOŠE - ponavljanje koda):**
 
@@ -1765,7 +1765,7 @@ Cat := TCat.CreateAnimal;    // Self = TCat
 Bird := TBird.CreateAnimal;  // Self = TBird
 ```
 
-### 6.16.5 VMT (Virtual Method Table) - šta sadrži?
+### 10.16.5 VMT (Virtual Method Table) - šta sadrži?
 
 **VMT sadrži metapodatke o klasi**:
 
@@ -1783,7 +1783,7 @@ Bird := TBird.CreateAnimal;  // Self = TBird
 - Kreirati instance prave klase (Self.Create)
 - **ALI NE MOŽE pristupiti poljima poljima** (jer Self nije instanca)
 
-### 6.16.6 Kada koristiti Self u class metodi?
+### 10.16.6 Kada koristiti Self u class metodi?
 
  Situacija | Da li treba Self? | Koristi |
  ---------- | ----------------- | ------- |

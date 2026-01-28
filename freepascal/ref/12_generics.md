@@ -1,9 +1,9 @@
 
-# 8 Generics
+# 12 Generics
 
 [prev][f1] [content][f0] [next][f2]
 
-## 8.1 Introduction
+## 12.1 Introduction
 
 Generics are templates for generating other types. These can be classes, objects, interfaces and even functions, arrays, records. It is a concept that comes from C++, where it is deeply integrated in the language. As of version 2.2, Free Pascal also officially has support for templates or Generics. They are implemented as a kind of macro which is stored in the unit files that the compiler generates, and which is replayed as soon as a generic class is specialized.
 
@@ -16,7 +16,7 @@ Creating and using generics is a 2-phase process.
 
 There are several units distributed with free pascal that implement generic containers and classes. For example the fgl unit.
 
-## 8.2 Generic type definition
+## 12.2 Generic type definition
 
 A generic type definition is much like a type definition, with the exception that it contains a list of placeholders for types.
 
@@ -151,7 +151,7 @@ A word on visibility: the template types `T` or `_T` are available as strict pri
   end;
 ```
 
-## 8.3 Generic type specialization
+## 12.3 Generic type specialization
 
 Once a generic type is defined, it can be used to generate other types: this is like replaying the definition of the types, with the template placeholders filled in with actual type definitions.
 
@@ -230,7 +230,7 @@ It is not possible to make a forward definition of a class which is a specializa
   TMyClass = specialize TList<T>;
 ```
 
-## 8.4 Generic type restrictions
+## 12.4 Generic type restrictions
 
 The diagram in section 8.1, page 432 shows that the type template list can have extra specifiers for the types. This is especially useful for object types: if the template type must descend from a certain class, then this can be specified in the template list:
 
@@ -328,11 +328,11 @@ or
 T2 = specialize TTest<String, Longint>;
 ```
 
-## 8.5 Delphi compatibility
+## 12.5 Delphi compatibility
 
 FPC’s generics support is implemented somewhat different from Delphi. In this section the main differences are highlighted.
 
-### 8.5.1 Syntax elements
+### 12.5.1 Syntax elements
 
 The syntax shown in the syntax diagrams is the syntax required in the ObjFPC mode of the compiler. However, in Delphi mode, the specialize and generic keywords must not be used, as shown in the following example:
 
@@ -368,7 +368,7 @@ end;
 
 This requirement is directly related to the generic type overload capability mentioned in the next section.
 
-### 8.5.2 Record type restrictions
+### 12.5.2 Record type restrictions
 
 In Delphi mode, the record type restrictions will also allow the use of simple types:
 
@@ -434,7 +434,7 @@ begin
 end. 
 ```
 
-### 8.5.3 Type overloads
+### 12.5.3 Type overloads
 
 Delphi mode allows generic type overloads. This means that it is possible to declare the same generic class with different template type lists. The following declarations are therefore possible:
 
@@ -457,7 +457,7 @@ Type
   end; 
 ```
 
-### 8.5.4 Name space considerations
+### 12.5.4 Name space considerations
 
 In Delphi mode, the generics do not interfere with the namespace for variables, this means that the following will also compile:
 
@@ -476,7 +476,7 @@ Var
 
 However, this does not work for constants and functions.
 
-## 8.6 Type compatibility
+## 12.6 Type compatibility
 
 Whenever a generic class is specialized, this results in a new, distinct type. These types are assignment compatible if the same template types are used.
 
@@ -619,7 +619,7 @@ Error: Incompatible types: got "TMyClass<System.LongInt>"
                            expected "TMyClass<System.ShortString>" 
 ```
 
-## 8.7 Using the default intrinsic
+## 12.7 Using the default intrinsic
 
 When writing generic routines, sometimes a variable must be initialized whose type is not known during the declaration of the generic. This is where the Default intrinsic (section 4.5, page 243) also comes into play. Given the following generic declaration:
 
@@ -639,7 +639,7 @@ begin
 end;
 ```
 
-## 8.8 A word about scope
+## 12.8 A word about scope
 
 It should be stressed that all identifiers other than the template placeholders should be known when the generic class is declared. At the same time, nothing can be assumed about the template type (unless a restriction is placed on it).
 
@@ -866,7 +866,7 @@ This behavior is dictated by safety and necessity:
 - If implementation procedures are used as in the example above, they cannot be
   referenced from outside the unit. They could be in another unit altogether, and the programmer has no way of knowing he should include them before specializing his class.
 
-## 8.9 Operator overloading and generics
+## 12.9 Operator overloading and generics
 
 Operator overloading (chapter 15, page 846) and generics are closely related. Imagine a generic class that has the following definition:
 

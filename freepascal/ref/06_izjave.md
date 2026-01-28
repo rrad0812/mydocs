@@ -1,10 +1,10 @@
-# 13 Izjave
+# 6 Izjave
 
 Srž svakog algoritma su akcije koje on preduzima. Ove akcije su sadržane u naredbama programa ili unita. Svaka naredba može biti označena i na nju se može skočiti (unutar određenih ograničenja) pomoću naredbi Goto.
 
 Oznaka može biti identifikator ili cela cifra.
 
-## 13.1 Jednostavne izjave
+## 6.1 Jednostavne izjave
 
 Jednostavna izjava se ne može razložiti na odvojene izjave. Postoje u osnovi četiri vrste jednostavnih izjava:
 
@@ -15,13 +15,13 @@ Jednostavna izjava se ne može razložiti na odvojene izjave. Postoje u osnovi �
 
 Od izjava raise biće objašnjena u poglavlju o izuzecima.
 
-### 13.1.1 Izjave dodele
+### 6.1.1 Izjave dodele
 
 Dodele daju vrednost promenljivoj, zamenjujući bilo koju prethodnu vrednost koju je promenljiva mogla imati.
 
-Pored standardnog operatora dodele u Paskalu ( := ), koji jednostavno zamenjuje vrednost promenljive vrednošću koja je rezultat izraza desno od operatora := , FreePaskal podržava neke konstrukcije u C stilu. Sve dostupne konstrukcije su navedene u tabeli ( 13.1 ).
+Pored standardnog operatora dodele u Paskalu ( := ), koji jednostavno zamenjuje vrednost promenljive vrednošću koja je rezultat izraza desno od operatora := , FreePaskal podržava neke konstrukcije u C stilu. Sve dostupne konstrukcije su navedene u tabeli ( 6.1 ).
 
-Tabela 13.1: Dozvoljene C konstrukcije u Free Pascal-u
+Tabela 6.1: Dozvoljene C konstrukcije u Free Pascal-u
 
  Dodela | Rezultat |
 ------- | -------- |
@@ -57,7 +57,7 @@ begin
 
 Obratite pažnju na dvostruko dereferenciranje u drugoj dodeli.
 
-#### 13.1.2 Izjave proceduralne
+### 6.1.2 Izjave proceduralne
 
 Proceduralne izjave su pozivi potprograma. Postoje različite mogućnosti za pozive procedura:
 
@@ -75,7 +75,7 @@ Doit();
 **Napomena**  
 Kada se traži funkcija koja odgovara listi parametara poziva, tipovi parametara treba da budu kompatibilni sa dodelom za parametre value i const i treba da se tačno podudaraju za parametre koji se prosleđuju referencom.
 
-13.1.3 Izjava goto
+### 6.1.3 Izjava goto
 
 FreePaskal podržava goto izjavu.
 
@@ -101,7 +101,7 @@ Goto jumpto;
 ... 
 ```
 
-## 13.2 Strukturirane izjave
+## 6.2 Strukturirane izjave
 
 Strukturirane izjave mogu se razbiti na manje jednostavne izjave, koje treba izvršavati više puta, uslovno ili sekvencijalno:
 
@@ -124,11 +124,11 @@ Ponavljajuće izjave dolaze u četiri oblika:
 
 Sledeći odeljci se bave svakom od ovih izjava.
 
-### 13.2.1 Složene izjave
+### 6.2.1 Složene izjave
 
 Složene izjave su grupa izjava, odvojenih tačkama-zarezima, koje su okružene ključnim rečima Begin i End . Poslednja izjava – pre ključne reči End – ne mora biti praćena tačkom-zarezom, iako je dozvoljen. Složena izjava je način grupisanja izjava, izvršavajući izjave sekvencijalno. Oni se tretiraju kao jedna izjava u slučajevima kada sintaksa Paskal jezika očekuje jednu izjavu, kao što je slučaj sa if...then...else izjavama.
 
-#### 13.2.1.1 Case izjava
+#### 6.2.1.1 Case izjava
 
 FreePaskal podržava `case` izjavu.
 
@@ -230,7 +230,7 @@ if (value >= beginrange) and (value <= endrange) then
   end;
 ```
 
-#### 13.2.1.2 Izjava If..then..else​
+#### 6.2.1.2 Izjava If..then..else​
 
 Izraz između ključnih reči `if` i `then` mora imati tip rezultata Boolean. Ako se izraz evaluira kao True, onda se izvršava naredba koja sledi ključnu reč `then`.
 Ako se izraz evaluira kao False , onda se izvršava naredba koja sledi ključnu reč `else`, ako je prisutna.
@@ -243,14 +243,17 @@ Neke tačke koje treba napomenuti:
 
 Na primer:
 
+```pascal
 If exp1 Then  
   If exp2 then  
     Stat1  
 else  
   stat2;
+```
 
 Uprkos svom izgledu, iskaz je sintaksički ekvivalentan
 
+```pascal
 If exp1 Then  
   begin  
   If exp2 then  
@@ -258,9 +261,11 @@ If exp1 Then
   else  
     stat2  
   end;
+```
 
 a ne:
 
+```pascal
 { NOT EQUIVALENT }  
 If exp1 Then  
   begin  
@@ -269,17 +274,20 @@ If exp1 Then
   end  
 else  
   stat2;
+```
 
 Ako je potrebna ova poslednja konstrukcija, ključne reči begin i end moraju biti prisutne. U slučaju sumnje, bolje je dodati ih.
 
 Sledeća izjava je validna:
 
+```pascal
 If Today in [Monday..Friday] then  
   WriteLn ('Must work harder')  
 else  
   WriteLn ('Take a day off.');
+```
 
-#### 13.2.1.3 Izjava For..to / downto..do
+#### 6.2.1.3 Izjava For..to / downto..do
 
 FreePaskal podržava konstrukciju `For` petlje. `For` petlja se koristi u slučaju da se nešto želi izračunati fiksni broj puta.
 
@@ -372,7 +380,7 @@ end
 
 Ako je iskaz složeni iskaz, onda se sistemske rutine Break i Continue mogu koristiti za skok na kraj ili odmah posle kraja iskaza For . Imajte na umu da Break i Continue nisu rezervisane reči i stoga mogu biti preopterećene.
 
-#### 13.2.1.4 Naredba For..in..do​
+#### 6.2.1.4 Naredba For..in..do​
 
 Od verzije 2.4.2, FreePaskal podržava konstrukciju petlje For..in . Petlja for..in se koristi u slučaju da neko želi da izračuna nešto fiksni broj puta sa nabrojivom promenljivom petlje.
 
@@ -479,6 +487,7 @@ end.
 
 Ovo će takođe ispisati sve dane u nedelji, što je ekvivalentno
 
+```pascal
 var  
   a : Array[1..7] of string  
     = ('monday','tuesday','wednesday','thursday',  
@@ -491,6 +500,7 @@ begin
   for i:=Low(a) to high(a) do  
     Writeln(a[i]);  
 end.
+```
 
 Tip string je ekvivalentan nizu tipa char i stoga se string može koristiti u petlji for..in. Sledeći kod će ispisati sva slova abecede, svako slovo u posebnom redu:
 
@@ -757,7 +767,7 @@ Ako klasa nije nabrojiva, kompajler će prijaviti grešku kada se na nju naiđe 
 
 Napomena Kao i kod petlje for..to , nije dozvoljeno menjati (tj. dodeljivati vrednost) vrednost kontrolne promenljive petlje unutar same petlje.
 
-#### 13.2.1.5 Repeat..until izjava
+#### 6.2.1.5 Repeat..until izjava
 
 Izjava repeat se koristi za izvršavanje naredbe dok se ne postigne određeni uslov. Izjava će biti izvršena najmanje jednom. Sintaksa prototipa naredbe Repeat..until je
 
@@ -782,7 +792,7 @@ Imajte na umu da poslednja izjava pre ključne reči `do` ne zahteva završnu ta
 
 Sistemske rutine `break` i `continue` se mogu koristiti za prelazak na kraj ili odmah nakon završetka ponavljanja .. `do` naredbe. Imajte na umu da `break` i `continue` nisu rezervisane reči i stoga mogu biti preopterećene.
 
-#### 13.2.1.6 While..do izjava
+#### 6.2.1.6 While..do izjava
 
 Naredba while se koristi za izvršavanje naredbe sve dok postoji određeni uslov. Za razliku od petlje ponavljanja, ovo može značiti da se naredba nikada ne izvršava.
 
@@ -808,7 +818,7 @@ Oni odgovaraju petljama primera za naredbe ponavljanja.
 
 Ako je izjava složena naredba, onda rezervisane reči Prekini i Nastavi mogu da se koriste za prelazak na kraj ili neposredno posle kraja izjave Vhile. Imajte na umu da Prekini i Nastavi nisu rezervisane reči i stoga mogu biti preopterećene.
 
-#### 13.2.1.7 With izjava
+#### 6.2.1.7 With izjava
 
 Izjava `with` služi za pristup elementima zapisa ili objekta ili klase, bez potrebe da svaki put navedete ime elementa. Sintaksa za vith naredbu je
 
@@ -899,6 +909,6 @@ begin
 
 Razlog zašto se pokazivač ne može promeniti je taj što kompajler čuva adresu u privremenom registru. Promena pokazivača neće promeniti privremenu adresu. Isto važi i za časove.
 
-#### 13.2.1.8 Izjave o izuzetku
+#### 6.2.1.8 Izjave o izuzetku
 
 Besplatni Pascal podržava izuzetke. Izuzeci pružaju zgodan način za programiranje grešaka i mehanizama za oporavak od grešaka, i usko su povezani sa klasama. Podrška za izuzetke je objašnjena u poglavlju 17, stranica 935.
