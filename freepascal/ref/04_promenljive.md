@@ -7,9 +7,10 @@
 
 Promenljive su eksplicitno imenovane memorijske lokacije određenog tipa. Prilikom dodeljivanja vrednosti promenljivim, kompajler Free Pascal-a generiše mašinski kod za premeštanje vrednosti na memorijsku lokaciju rezervisanu za ovu promenljivu. Gde se ova promenljiva čuva zavisi od toga gde je deklarisana:
 
-- **Globalne promenljive** su promenljive deklarisane u jedinici ili programu, ali ne unutar procedure ili funkcije. One se čuvaju na fiksnim memorijskim lokacijama i
-  dostupne su tokom celog vremena izvršavanja programa.
-- **Lokalne promenljive** se deklarišu unutar procedure ili funkcije. NJihova vrednost se čuva na programskom steku, tj. ne na fiksnim lokacijama.
+- **Globalne promenljive** su promenljive deklarisane u jedinici ili programu, ali ne unutar
+  procedure ili funkcije. One se čuvaju na fiksnim memorijskim lokacijama i dostupne su tokom celog vremena izvršavanja programa.
+- **Lokalne promenljive** se deklarišu unutar procedure ili funkcije. NJihova vrednost se čuva na
+  programskom steku, tj. ne na fiksnim lokacijama.
 
 Kompilator FreePaskala transparentno obrađuje alokaciju ovih memorijskih lokacija, iako se na ovu lokaciju može uticati u deklaraciji.
 
@@ -47,25 +48,32 @@ Razlika između ovih deklaracija je sledeća:
 
 - Prvi oblik ( curterm1 ) definiše regularnu promenljivu. Kompilator sve sam upravlja.
 
-- Drugi oblik ( curterm2 ) takođe deklariše regularnu promenljivu, ali navodi da je asemblersko ime za ovu promenljivu jednako imenu promenljive kako je napisano u izvornom kodu.
+- Drugi oblik ( curterm2 ) takođe deklariše regularnu promenljivu, ali navodi da je asemblersko ime
+  za ovu promenljivu jednako imenu promenljive kako je napisano u izvornom kodu.
 
-- Treći oblik ( curterm3 ) deklariše promenljivu koja se nalazi eksterno: kompajler će pretpostaviti da se memorija nalazi negde drugde i da je asemblersko ime ove lokacije određeno imenom promenljive, kao što je napisano u izvornom kodu. Ime se ne sme navesti.
+- Treći oblik ( curterm3 ) deklariše promenljivu koja se nalazi eksterno: kompajler će pretpostaviti
+  da se memorija nalazi negde drugde i da je asemblersko ime ove lokacije određeno imenom promenljive, kao što je napisano u izvornom kodu. Ime se ne sme navesti.
 
-- Četvrti oblik je potpuno ekvivalentan trećem, deklariše promenljivu koja se čuva eksterno i eksplicitno daje asemblerski naziv lokacije. Ako se cvar ne koristi, naziv mora biti naveden.
+- Četvrti oblik je potpuno ekvivalentan trećem, deklariše promenljivu koja se čuva eksterno i
+  eksplicitno daje asemblerski naziv lokacije. Ako se cvar ne koristi, naziv mora biti naveden.
 
-- Peti oblik je varijanta četvrtog oblika, samo je navedeno i ime biblioteke u kojoj je memorija rezervisana.
+- Peti oblik je varijanta četvrtog oblika, samo je navedeno i ime biblioteke u kojoj je memorija
+  rezervisana.
 
-- Šesti oblik deklariše promenljivu ( curterm6 ) i govori kompajleru da je ona sačuvana na istoj lokaciji kao i druga promenljiva ( curterm1 ).
+- Šesti oblik deklariše promenljivu ( curterm6 ) i govori kompajleru da je ona sačuvana na istoj
+  lokaciji kao i druga promenljiva ( curterm1 ).
 
-- Sedmi oblik deklariše promenljivu ( curterm7 ) i govori kompajleru da asemblerska oznaka ove promenljive treba da bude ime promenljive (razlikuje velika i mala slova) i da mora biti javna, tj. može se pozivati na nju iz drugih objektnih datoteka.
+- Sedmi oblik deklariše promenljivu ( curterm7 ) i govori kompajleru da asemblerska oznaka ove
+  promenljive treba da bude ime promenljive (razlikuje velika i mala slova) i da mora biti javna, tj. može se pozivati na nju iz drugih objektnih datoteka.
 
 - Osmi oblik ( curterm8 ) je ekvivalentan sedmom: „public“ je pseudonim za „export“.
 
 - Deveti i deseti oblik su ekvivalentni: oni određuju asemblersko ime promenljive.
 
-- Jedanaesti oblik deklariše promenljivu ( curterm11 ) i inicijalizuje je vrednošću (1 u gornjem slučaju).
+- Jedanaesti oblik deklariše promenljivu ( curterm11 ) i inicijalizuje je vrednošću (1 u gornjem
+  slučaju).
 
-Imajte na umu da asemblerska imena moraju biti jedinstvena. Nije moguće deklarisati ili eksportovati dve promenljive sa istim asemblerskim imenom. Posebno, ne pokušavajte da eksportujete promenljive sa javnim imenom koje počinje sa FPC _ ; kompajler koristi neke interne sistemske rutine sa ovim imenom.
+Imajte na umu da asemblerska imena moraju biti jedinstvena. Nije moguće deklarisati ili eksportovati dve promenljive sa istim asemblerskim imenom. Posebno, ne pokušavajte da eksportujete promenljive sa javnim imenom koje počinje sa FPC_ ; kompajler koristi neke interne sistemske rutine sa ovim imenom.
 
 ## 4.3 Opseg
 
@@ -83,7 +91,8 @@ Podrazumevano, jednostavne promenljive u Paskalu se ne inicijalizuju nakon njiho
 **Napomena**  
 Postoje 2 izuzetka od ovog pravila:
 
-- Upravljani tipovi su izuzetak od ovog pravila: Upravljani tipovi se uvek inicijalizuju podrazumevanom vrednošću: generalno, to znači postavljanje brojača referenci na nulu ili postavljanje vrednosti pokazivača tipa na Nil.
+- Upravljani tipovi su izuzetak od ovog pravila: Upravljani tipovi se uvek inicijalizuju
+  podrazumevanom vrednošću: generalno, to znači postavljanje brojača referenci na nulu ili postavljanje vrednosti pokazivača tipa na Nil.
 
 - Globalne promenljive se inicijalizuju ekvivalentom nule.
 
@@ -239,8 +248,10 @@ Radi za sve tipove, osim za različite tipove datoteka (ili složene tipove koji
 
 **Napomena**:
 
-- Za generike, upotreba `Default` je posebno korisna, jer tip promenljive možda nije poznat tokom deklaracije generika.
-- Rezultati funkcija su dostupni kao identifikator `Result` i kao takvi podsećaju na promenljive. One nisu promenljive, već se tretiraju kao parametri prosleđeni referencom. Stoga nisu inicijalizovani.
+- Za generike, upotreba `Default` je posebno korisna, jer tip promenljive možda nije poznat tokom
+  deklaracije generika.
+- Rezultati funkcija su dostupni kao identifikator `Result` i kao takvi podsećaju na promenljive.
+  One nisu promenljive, već se tretiraju kao parametri prosleđeni referencom. Stoga nisu inicijalizovani.
 
 ## 4.6 Thread promenljive
 

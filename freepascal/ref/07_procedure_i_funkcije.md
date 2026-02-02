@@ -3,15 +3,16 @@
 
 [prev][f6] [content][f0] [next][f8]
 
-Slobodni Paskal podržava upotrebu funkcija i procedura. Podržava
+FreePaskal podržava upotrebu funkcija i procedura. Podržava
 
 - Preopterećenje funkcija, tj. funkcije sa istim imenom, ali različitim listama parametara.
-- Konstantni parametri.
-- Otvoreni nizovi (tj. nizovi bez granica).
+- Konstantne parametre.
+- Otvorene nizove (tj. nizovi bez granica).
 - Promenljivi broj argumenata kao u C-u.
-- Konstrukcija slična Return-u kao u C-u, kroz ključnu reč Exit .
+- Konstrukcija slična Return-u kao u C-u, kroz ključnu reč `Exit`.
 
-Napomena U mnogim narednim pasusima reči procedura i funkcija će se koristiti naizmenično. Navedene izjave važe za obe, osim ako nije drugačije naznačeno.
+**Napomena**  
+U mnogim narednim pasusima reči procedura i funkcija će se koristiti naizmenično. Navedene izjave važe za obe, osim ako nije drugačije naznačeno.
 
 ## 7.1 Deklaracija
 
@@ -55,7 +56,7 @@ begin
 end;
 ```
 
-Kao proširenje Delfi sintakse, ObjFPC režim takođe podržava posebno proširenje procedure `Exit` :
+Kao proširenje Delfi sintakse, ObjFPC režim takođe podržava posebno proširenje procedure ključnom reči `Exit` :
 
 ```pascal
 Function MyFunction : Integer;  
@@ -81,7 +82,7 @@ Od verzije 1.1, FreePascal podržava podrazumevane vrednosti i za konstantne par
 
 Kada se parametri deklarišu kao vrednosni parametri, procedura dobija kopiju parametara koje prosleđuje pozivajući izraz. Bilo kakve izmene ovih parametara su isključivo lokalne za blok procedure i ne šire se nazad na pozivajući blok.
 
-Blok koji želi da pozove proceduru sa vrednosnim parametrima mora da prosledi proceduri parametre kompatibilne sa dodelom.To znači da tipovi ne bi trebalo da se potpuno podudaraju, već se mogu konvertovati u stvarne tipove parametara. Ovaj kod za konverziju ubacuje sam kompajler.
+Blok koji želi da pozove proceduru sa vrednosnim parametrima mora da prosledi proceduri parametre kompatibilne sa dodelom. To znači da tipovi ne bi trebalo da se potpuno podudaraju, već se mogu konvertovati u stvarne tipove parametara. Ovaj kod za konverziju ubacuje sam kompajler.
 
 **Napomena**  
 Mora se voditi računa pri korišćenju vrednosnih parametara: vrednosni parametri intenzivno koriste stek, posebno kada se koriste veliki parametri. Ukupna veličina svih parametara u formalnoj listi parametara treba da bude manja od 32K radi prenosivosti (Intelova verzija ovo ograničava na 64K).
@@ -120,8 +121,11 @@ Otvoreni nizovi se mogu prosleđivati kao promenljivi parametri.
 
 **Primedba**  
 
-- Imajte na umu da podrazumevane vrednosti nisu podržane za promenljive parametre. Ovo ne bi imalo mnogo smisla jer poništava svrhu mogućnosti vraćanja vrednosti pozivaocu.
-- Rezultat funkcije se interno tretira kao promenljivi parametar i može imati početnu vrednost različitu od nule (ili ne-nil). Ovo je posebno važno za upravljane tipove.
+Imajte na umu da podrazumevane vrednosti nisu podržane za promenljive parametre. Ovo ne bi imalo
+mnogo smisla jer poništava svrhu mogućnosti vraćanja vrednosti pozivaocu.
+
+Rezultat funkcije se interno tretira kao promenljivi parametar i može imati početnu vrednost
+različitu od nule (ili ne-nil). Ovo je posebno važno za upravljane tipove.
 
 ### 7.4.3 Izlazni parametri
 
@@ -231,7 +235,7 @@ bilo bi ekvivalentno
 Row : Array[0..N-1] of Integer; 
 ```
 
-Gde bi N bila stvarna veličina niza koja se prosleđuje funkciji. N-1 se može izračunati kao High(Row) .
+Gde bi N bila stvarna veličina niza koja se prosleđuje funkciji. N-1 se može izračunati kao `High(Row)`.
 
 Konkretno, ako se prosleđuje prazan niz, onda High(Parameter) vraća -1, dok low(Parameter) vraća 0.
 
@@ -273,9 +277,9 @@ Writeln('Average of last  50 numbers: ',Average(A[51..100]));
 
 ### 7.4.6 Niz konstanti
 
-U Objekatskom Paskalu ili Delfi režimu, Fri Paskal podržava konstrukciju niza konstanti (Array of Const) za prosleđivanje parametara potprogramu (This content content contents) unapred.
+U ObjPas ili Delphi režimu, FreePaskal podržava konstrukciju niza konstanti (Array of Const) za prosleđivanje parametara potprogramu unapred.
 
-Ovo je poseban slučaj konstrukcije otvorenog niza , gde je dozvoljeno proslediti bilo koji izraz u nizu funkciji ili proceduri. Izraz mora imati jednostavan tip rezultata: strukture se ne mogu proslediti kao argument. To znači da se mogu proslediti svi ordinalni, float ili string tipovi, kao i pokazivači, klase i interfejsi (pošto su poslednja dva zapravo pokazivači).
+Ovo je poseban slučaj konstrukcije otvorenog niza, gde je dozvoljeno proslediti bilo koji izraz u nizu funkciji ili proceduri. Izraz mora imati jednostavan tip rezultata: strukture se ne mogu proslediti kao argument. To znači da se mogu proslediti svi ordinalni, float ili string tipovi, kao i pokazivači, klase i interfejsi (pošto su poslednja dva zapravo pokazivači).
 
 Elementi niza const se konvertuju u poseban zapis varijante:
 
@@ -369,7 +373,7 @@ Testit ([1.234,1.234]);
 TestIt ([AClass]);
 ```
 
-Ako je procedura deklarisana sa modifikatorom cdecl , onda će kompajler proslediti niz kao što bi ga prosledio C kompajler. Ovo, u stvari, emulira C konstrukciju promenljivog broja argumenata, kao što će pokazati sledeći primer:
+Ako je procedura deklarisana sa modifikatorom cdecl, onda će kompajler proslediti niz kao što bi ga prosledio C kompajler. Ovo, u stvari, emulira C konstrukciju promenljivog broja argumenata, kao što će pokazati sledeći primer:
 
 ```pascal
 program testaocc;  
@@ -377,14 +381,13 @@ program testaocc;
 
 Const  
   P : PChar = 'example';  
-  Fmt : PChar =  
-        'This %s uses printf to print numbers (%d) and strings.'#10;  
+  Fmt : PChar = 'This %s uses printf to print numbers (%d) and strings.'#10;  
 
 // Declaration of standard C function printf:  
 procedure printf (fm : pchar; args : array of const);cdecl; external 'c';  
 
 begin  
- printf(Fmt,[P,123]);  
+  printf(Fmt, [P,123]);  
 end.
 ```
 
@@ -392,11 +395,11 @@ end.
 Treba napomenuti da ovo ne važi za Delfi, tako da kod koji se oslanja na ovu funkciju neće biti prenosiv.
 
 **Napomena**  
-Imajte na umu da ne postoji podrška za DWord (ili kardinalne) argumente u nizu const . Oni se konvertuju u vtInteger / vtLongint . Ovo je radi kompatibilnosti sa Delphi-jem, a kompajler će ignorisati sve rezultujuće provere opsega kada je u Delphi režimu.
+Imajte na umu da ne postoji podrška za DWord (ili Cardinal) argumente u nizu const. Oni se konvertuju u vtInteger / vtLongint . Ovo je radi kompatibilnosti sa Delphi-jem, a kompajler će ignorisati sve rezultujuće provere opsega kada je u Delphi režimu.
 
 ### 7.4.7 Netipizovani parametri
 
-Parametri Variable, Out i konstanta mogu biti netipizovani. U tom slučaju, promenljiva nema tip u proceduri funkcije i stoga je nekompatibilna sa svim ostalim tipovima: Kompilator jednostavno prosleđuje adresu prosleđene promenljive rutini, tako da je sve što je dostupno u pozvanoj rutini adresa, bez ikakvih informacija o tipu. Ovo važi i za konstantne parametre.
+Parametri `Var`, `Out` i `Const` mogu biti netipizovani. U tom slučaju, promenljiva nema tip u proceduri funkcije i stoga je nekompatibilna sa svim ostalim tipovima: Kompilator jednostavno prosleđuje adresu prosleđene promenljive rutini, tako da je sve što je dostupno u pozvanoj rutini adresa, bez ikakvih informacija o tipu. Ovo važi i za konstantne parametre.
 
 Korišćenje analogije
 

@@ -14,16 +14,19 @@ Tabela 5.1: Prioritet operatora
 
  Operator | Precedence | Category |
  -------- | ---------- | -------- |
- Not, unary +, unary -, @, ** | Highest (first) | Unary operators, power |
-*, /, div, mod, and, shl, shr, as, <<, >> | Second | Multiplying operators |
-+, -, or, xor, >< | Third | Adding operators |
-=, <>, <, >, <=, >=, in, is | Lowest (Last) | relational operators |
+ `not`, `unary +`, `unary -`, `@`, `**` | Highest (first) | Unary operators, power |
+`*`, `/`, `div`, `mod`, `and`, `shl`, `shr`, `as`, `<<`, `>>` | Second | Multiplying operators |
+`+`, `-`, `or`, `xor`, `><` | Third | Adding operators |
+`=`, `<>`, `<`, `>`, `<=`, `>=`, `in`, `is` | Lowest (Last) | relational operators |
 
 Prilikom određivanja prioriteta, kompajler koristi sledeća pravila:
 
-- Kod operacija sa nejednakim prioritetima, operandi pripadaju operatoru sa najvećim prioritetom. Na primer, u 5*3+7 , množenje ima veći prioritet od sabiranja, tako da se ono prvo izračunava. Rezultat bi bio 22.
-- Ako se zagrade koriste u izrazu, njihov sadržaj se prvo izračunava. Dakle, 5*(3+7) bi rezultiralo sa 50.
-- U suprotnom, binarni operatori istog prioriteta su levo-asocijativni. 5 * 3 div 7 će dati rezultat 2, a ne 0.
+- Kod operacija sa nejednakim prioritetima, operandi pripadaju operatoru sa najvećim prioritetom. Na
+  primer, u 5*3+7 , množenje ima veći prioritet od sabiranja, tako da se ono prvo izračunava. Rezultat bi bio 22.
+- Ako se zagrade koriste u izrazu, njihov sadržaj se prvo izračunava. Dakle, 5*(3+7) bi rezultiralo
+  sa 50.
+- U suprotnom, binarni operatori istog prioriteta su levo-asocijativni. 5 * 3 div 7 će dati rezultat
+  2, a ne 0.
 
 **Napomena**  
 Redosled kojim se izrazi istog prioriteta izračunavaju nije garantovano sleva nadesno. Generalno, u takvom slučaju ne treba praviti pretpostavke o tome koji se podizraz prvi izračunava.
@@ -156,7 +159,7 @@ If F = AddOne Then
   DoSomethingHorrible;
 ```
 
-Da li kompajler treba da uporedi adrese F i AddOne , ili treba da pozove obe funkcije i uporedi rezultat? U fpc i objfpc režimu ovo se rešava tako što se proceduralna promenljiva smatra ekvivalentna pokazivaču. Stoga će kompajler dati grešku neusklađenosti tipa, jer se AddOne smatra pozivom funkcije sa celobrojnim rezultatom, a F je pokazivač.
+Da li kompajler treba da uporedi adrese F i AddOne , ili treba da pozove obe funkcije i uporedi rezultat? U Fpc i ObjFpc režimu ovo se rešava tako što se proceduralna promenljiva smatra ekvivalentna pokazivaču. Stoga će kompajler dati grešku neusklađenosti tipa, jer se AddOne smatra pozivom funkcije sa celobrojnim rezultatom, a F je pokazivač.
 
 Kako onda treba proveriti da li F ukazuje na funkciju AddOne ? Da bi se to uradilo, treba koristiti operator adrese @:
 
@@ -489,20 +492,20 @@ Var
   W : Days;  
  
 begin  
-   W:=[mon,tue]+[wed,thu,fri]; // equals [mon,tue,wed,thu,fri]  
-   PrintDays(W);  
-   W:=[mon,tue,wed]-[wed];     // equals [mon,tue]  
-   PrintDays(W);  
-   W:=[mon,tue,wed]-[wed,thu];     // also equals [mon,tue]  
-   PrintDays(W);  
-   W:=[mon,tue,wed]*[wed,thu,fri]; // equals [wed]  
-   PrintDays(W);  
-   W:=[mon,tue,wed]><[wed,thu,fri]; // equals [mon,tue,thu,fri]  
-   PrintDays(W);  
-   if [mon,tue]<=WorkWeek then  
-     Writeln('Must work on monday and tuesday');  
-   if Weekend>=[sun] then  
-     Writeln('Can rest on sunday');  
+  W:=[mon,tue]+[wed,thu,fri]; // equals [mon,tue,wed,thu,fri]  
+  PrintDays(W);  
+  W:=[mon,tue,wed]-[wed];     // equals [mon,tue]  
+  PrintDays(W);  
+  W:=[mon,tue,wed]-[wed,thu];     // also equals [mon,tue]  
+  PrintDays(W);  
+  W:=[mon,tue,wed]*[wed,thu,fri]; // equals [wed]  
+  PrintDays(W);  
+  W:=[mon,tue,wed]><[wed,thu,fri]; // equals [mon,tue,thu,fri]  
+  PrintDays(W);  
+  if [mon,tue]<=WorkWeek then  
+    Writeln('Must work on monday and tuesday');  
+  if Weekend>=[sun] then  
+    Writeln('Can rest on sunday');  
 end.
 ```
 
@@ -536,9 +539,9 @@ Tabela 5.6: Operatori setova
  `><` | Symmetric difference |
  `<=` | Contains |
  `>=` | Left hand side set is a superset of the one on the right |
- include | include an element in the set |
- exclude | exclude an element from the set |
- in | check whether an element is in a set |
+ `include` | include an element in the set |
+ `exclude` | exclude an element from the set |
+ `in` | check whether an element is in a set |
 
 Tip operanda mora biti isti, inače će kompajler generisati grešku.
 
@@ -655,8 +658,8 @@ Tabela 5.8: Operatori klase
 
  Operator | Akcija |
  -------- | ------ |
- is | Proverava tip klase |
- as | Uslovno pretvaranje tipa |
+ `is` | Proverava tip klase |
+ `as` | Uslovno pretvaranje tipa |
 
 Izraz koji sadrži operator `is` rezultira bulovskim tipom. Operator is može se koristiti samo sa referencom klase ili instancom klase. Upotreba ovog operatora je sledeća:
 
@@ -680,8 +683,8 @@ Var
   B : TClass;  
  
 begin  
-  if A is TComponent then ;  
-  If A is B then;  
+  if A is TComponent then ...;  
+  If A is B then ...;  
 end;
 ```
 

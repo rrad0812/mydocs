@@ -128,7 +128,7 @@ Sledeći odeljci se bave svakom od ovih izjava.
 
 ### 6.2.1 Složene izjave
 
-Složene izjave su grupa izjava, odvojenih tačkama-zarezima, koje su okružene ključnim rečima Begin i End . Poslednja izjava – pre ključne reči End – ne mora biti praćena tačkom-zarezom, iako je dozvoljen. Složena izjava je način grupisanja izjava, izvršavajući izjave sekvencijalno. Oni se tretiraju kao jedna izjava u slučajevima kada sintaksa Paskal jezika očekuje jednu izjavu, kao što je slučaj sa if...then...else izjavama.
+Složene izjave su grupa izjava, odvojenih tačkama-zarezima, koje su okružene ključnim rečima Begin i End. Poslednja izjava – pre ključne reči End – ne mora biti praćena tačkom-zarezom, iako je dozvoljen. Složena izjava je način grupisanja izjava, izvršavajući izjave sekvencijalno. Oni se tretiraju kao jedna izjava u slučajevima kada sintaksa Paskal jezika očekuje jednu izjavu, kao što je slučaj sa if...then...else izjavama.
 
 #### 6.2.1.1 Case izjava
 
@@ -166,9 +166,9 @@ Sledeće su validne izjave o padežima:
 
 ```pascal
 Case C of  
- 'a' : WriteLn ('A pressed');  
- 'b' : WriteLn ('B pressed');  
- 'c' : WriteLn ('C pressed');  
+  'a' : WriteLn ('A pressed');  
+  'b' : WriteLn ('B pressed');  
+  'c' : WriteLn ('C pressed');  
 else  
   WriteLn ('unknown letter pressed : ',C);  
 end;
@@ -178,8 +178,8 @@ Ili
 
 ```pascal
 Case C of  
- 'a','e','i','o','u' : WriteLn ('vowel pressed');  
- 'y' : WriteLn ('This one depends on the language');  
+  'a','e','i','o','u' : WriteLn ('vowel pressed');  
+  'y' : WriteLn ('This one depends on the language');  
 else  
   WriteLn ('Consonant pressed');  
 end; 
@@ -187,10 +187,10 @@ end;
 
 ```pascal
 Case Number of  
- 1..10   : WriteLn ('Small number');  
- 11..100 : WriteLn ('Normal, medium number');  
+  1..10   : WriteLn ('Small number');  
+  11..100 : WriteLn ('Normal, medium number');  
 else  
- WriteLn ('HUGE number');  
+  WriteLn ('HUGE number');  
 end;
 ```
 
@@ -198,8 +198,8 @@ Klauzula else može da sadrži više naredbi:
 
 ```pascal
 Case Number of  
- 1..10   : WriteLn ('Small number');  
- 11..100 : WriteLn ('Normal, medium number');  
+  1..10   : WriteLn ('Small number');  
+  11..100 : WriteLn ('Normal, medium number');  
 else  
   WriteLn ('HUGE number');  
   Writeln('How did we get this much ?');  
@@ -210,13 +210,13 @@ FreePaskal dozvojava upotrebu stringova kao oznaka za velika i mala slova, i u t
 
 ```pascal
 Case lowercase(OS) of  
- 'windows',  
- 'dos'   : WriteLn ('Microsoft platform);  
- 'macos',  
- 'darwin' : Writeln('Apple platform');  
- 'linux',  
- 'freebsd',  
- 'netbsd' : Writeln('Community platform');  
+  'windows',  
+  'dos'   : WriteLn ('Microsoft platform);  
+  'macos',  
+  'darwin' : Writeln('Apple platform');  
+  'linux',  
+  'freebsd',  
+  'netbsd' : Writeln('Community platform');  
 else  
   WriteLn ('Other platform');  
 end;
@@ -239,9 +239,12 @@ Ako se izraz evaluira kao False , onda se izvršava naredba koja sledi ključnu 
 
 Neke tačke koje treba napomenuti:
 
-- Imajte na umu da će se Bulov izraz podrazumevano skraćivati, što znači da će se izvršavanje zaustaviti u trenutku kada je ishod poznat sa sigurnošću.
-- Takođe, pre ključne reči `else`, nije dozvoljena tačka-zarez ( `;` ), ali sve izjave mogu biti složene izjave.
-- U ugnežđenim `if.. then .. else` konstrukcijama, može doći do izvesne dvosmislenosti u pogledu toga koja `else` izjave se uparuje sa kojom `if` izjavom. Pravilo je da ključna reč `else` odgovara prvoj `if` ključnoj reči (pretraga unazad) koja već nije podudarana sa ključnom reči `else`.
+- Imajte na umu da će se Bulov izraz podrazumevano skraćivati, što znači da će se izvršavanje
+  zaustaviti u trenutku kada je ishod poznat sa sigurnošću.
+- Takođe, pre ključne reči `else`, nije dozvoljena tačka-zarez ( `;` ), ali sve izjave mogu biti
+  složene izjave.
+- U ugnežđenim `if.. then .. else` konstrukcijama, može doći do izvesne dvosmislenosti u pogledu
+  toga koja `else` izjave se uparuje sa kojom `if` izjavom. Pravilo je da ključna reč `else` odgovara prvoj `if` ključnoj reči (pretraga unazad) koja već nije podudarana sa ključnom reči `else`.
 
 Na primer:
 
@@ -390,18 +393,22 @@ Ovde, Statement može biti složena naredba. Nabrojiva stvar mora biti izraz koj
 
 Nabrojivi izraz može biti jedan od pet slučajeva:
 
-- Identifikator tipa enumeracije. Petlja će tada biti preko svih elemenata tipa enumeracije. Kontrolna promenljiva mora biti tipa enumeracije.
-- Set vrednosti. Petlja će tada biti preko svih elemenata u skupu, kontrolna promenljiva mora biti osnovnog tipa skupa.
-- Vrednost niza. Petlja će se kretati preko svih elemenata u nizu, a kontrolna promenljiva mora biti istog tipa kao element u nizu. Kao poseban slučaj, string se smatra nizom znakova.
-- Instanca nabrojive klase, objekta ili proširenog zapisa. Ovo je instanca bilo kog strukturiranog tipa koji podržava interfejse `IEnumerator` i `IEnumerable`. U ovom slučaju, tip kontrolne promenljive mora biti jednak tipu povratne vrednosti `IEnumerator.GetCurrent`.
-- Bilo koji tip za koji je definisan operator enumeratora. Operator enumeratora mora vratiti strukturirani tip koji implementira interfejs `IEnumerator`. Tip tipa kontrolne promenljive mora biti jednak tipu tipa povratne vrednosti funkcije `GetCurrent` enumeratora.
+- Identifikator tipa enumeracije. Petlja će tada biti preko svih elemenata tipa enumeracije.
+  Kontrolna promenljiva mora biti tipa enumeracije.
+- Set vrednosti. Petlja će tada biti preko svih elemenata u skupu, kontrolna promenljiva mora biti
+  osnovnog tipa skupa.
+- Vrednost niza. Petlja će se kretati preko svih elemenata u nizu, a kontrolna promenljiva mora biti
+  istog tipa kao element u nizu. Kao poseban slučaj, string se smatra nizom znakova.
+- Instanca nabrojive klase, objekta ili proširenog zapisa. Ovo je instanca bilo kog strukturiranog
+  tipa koji podržava interfejse `IEnumerator` i `IEnumerable`. U ovom slučaju, tip kontrolne promenljive mora biti jednak tipu povratne vrednosti `IEnumerator.GetCurrent`.
+- Bilo koji tip za koji je definisan operator enumeratora. Operator enumeratora mora vratiti
+  strukturirani tip koji implementira interfejs `IEnumerator`. Tip tipa kontrolne promenljive mora biti jednak tipu tipa povratne vrednosti funkcije `GetCurrent` enumeratora.
 
 Najjednostavniji slučaj petlje for..in je korišćenje nabrojanog tipa:
 
 ```personal
 Type  
-  TWeekDay = (monday, tuesday, wednesday, thursday,  
-              friday,saturday,sunday);  
+  TWeekDay = (monday, tuesday, wednesday, thursday, friday, saturday, sunday);  
  
 Var  
   d : TWeekday;  
@@ -418,8 +425,7 @@ Gore navedena konstrukcija for..in je ekvivalentna sledećoj for..to petlji:
 
 ```personal
 Type  
-  TWeekDay = (monday, tuesday, wednesday, thursday,  
-              friday,saturday,sunday);  
+  TWeekDay = (monday, tuesday, wednesday, thursday, friday, saturday, sunday);  
  
 Var  
   d : TWeekday;  
@@ -434,8 +440,7 @@ Drugi slučaj petlje for..in je kada je nabrojivi izraz skup, i tada će se petl
 
 ```pascal
  Type  
-  TWeekDay = (monday, tuesday, wednesday, thursday,  
-              friday,saturday,sunday);  
+  TWeekDay = (monday, tuesday, wednesday, thursday, friday, saturday, sunday);  
  
 Var  
   Week : set of TWeekDay  
@@ -454,8 +459,7 @@ Gore navedena konstrukcija for..in je ekvivalentna sledećoj konstrukciji for..t
 
 ```pascal
 Type  
-  TWeekDay = (monday, tuesday, wednesday, thursday,  
-              friday,saturday,sunday);  
+  TWeekDay = (monday, tuesday, wednesday, thursday, friday, saturday, sunday);  
  
 Var  
   Week : set of TWeekDay  
@@ -475,8 +479,7 @@ Treća mogućnost za petlju for..in je kada je nabrojivi izraz niz:
 ```pascal
 var  
   a : Array[1..7] of string  
-    = ('monday','tuesday','wednesday','thursday',  
-       'friday','saturday','sunday');  
+    = ('monday','tuesday','wednesday','thursday', 'friday','saturday','sunday');  
  
 Var  
   S : String;  
@@ -492,8 +495,7 @@ Ovo će takođe ispisati sve dane u nedelji, što je ekvivalentno
 ```pascal
 var  
   a : Array[1..7] of string  
-    = ('monday','tuesday','wednesday','thursday',  
-       'friday','saturday','sunday');  
+    = ('monday','tuesday','wednesday','thursday', 'friday','saturday','sunday');  
 
 Var  
   i : integer;  
@@ -539,7 +541,7 @@ end.
 
 Ovo će preći preko svih dimenzija s leva na desno.
 
-Četvrta mogućnost za petlju for..in je korišćenje klasa. Klasa može implementirati interfejs IEnumerable , koji je definisan na sledeći način:
+Četvrta mogućnost za petlju for..in je korišćenje klasa. Klasa može implementirati interfejs IEnumerable, koji je definisan na sledeći način:
 
 ```pascal
 IEnumerable = interface(IInterface)  
@@ -547,7 +549,7 @@ IEnumerable = interface(IInterface)
 end;
 ```
 
-Stvarni tip povratka GetEnumerator-a ne mora nužno biti IEnumerator interfejs, već može biti klasa koja implementira metode IEnumerator- a :
+Stvarni tip povratka GetEnumerator-a ne mora nužno biti IEnumerator interfejs, već može biti klasa koja implementira metode IEnumerator- a:
 
 ```pascal
 IEnumerator = interface(IInterface)  
@@ -558,16 +560,16 @@ IEnumerator = interface(IInterface)
 end;
 ```
 
-Svojstvo Current i metod MoveNext moraju biti prisutni u klasi koju vraća metod GetEnumerator . Stvarni tip svojstva Current ne mora biti TObject . Kada naiđe na petlju for..in sa instancom klase kao operandom „in“, kompajler će proveriti svaki od sledećih uslova:
+Svojstvo Current i metod MoveNext moraju biti prisutni u klasi koju vraća metod GetEnumerator . Stvarni tip svojstva Current ne mora biti TObject. Kada naiđe na petlju for..in sa instancom klase kao operandom „in“, kompajler će proveriti svaki od sledećih uslova:
 
 - Da li klasa u nabrojivom izrazu implementira metodu GetEnumerator
 - Da li je rezultat funkcije GetEnumerator klasa sa sledećom metodom:
-- Funkcija MoveNext: Bulova vrednost
+  - Funkcija MoveNext: Bulova vrednost
 
-  Da li je rezultat funkcije GetEnumerator klasa sa sledećim svojstvom samo za čitanje:
-  Trenutna vrednost nekretnine: AType;
+- Da li je rezultat funkcije GetEnumerator klasa sa sledećim svojstvom samo za čitanje:
+  - Trenutna vrednost nekretnine: AType;
 
-  Tip svojstva mora da se podudara sa tipom kontrolne promenljive petlje for..in .
+- Tip svojstva mora da se podudara sa tipom kontrolne promenljive petlje for..in .
 
 Ni IEnumerator ni IEnumerable interfejsi ne moraju zapravo biti deklarisani od strane klase enumerable: kompajler će detektovati da li su ovi interfejsi prisutni koristeći gore navedene provere. Interfejsi su definisani samo za kompatibilnost sa Delphi-jem i ne koriste se interno (takođe bi bilo nemoguće nametnuti njihovu ispravnost).
 

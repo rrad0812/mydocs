@@ -5,7 +5,7 @@
 
 ## 2.1 Obične konstante
 
-Deklaracije običnih konstanti se konstruiše korišćenjem imena identifikatora praćenog tokenom "=", a praćenog opcionim izrazom koji se sastoji od legalnih kombinacija brojeva, znakova, logičkih vrednosti ili nabrojanih vrednosti prema potrebi.
+Deklaracije običnih konstanti se konstruiše korišćenjem imena identifikatora praćenog tokenom "=", praćenog opcionim izrazom koji se sastoji od legalnih kombinacija brojeva, znakova, logičkih vrednosti ili nabrojanih vrednosti prema potrebi.
 
 Kompajler mora biti u stanju da proceni izraz u konstantnoj deklaraciji u vreme kompajliranja. To znači da većina funkcija u Run-Time biblioteci ne može da se koristi u konstantnoj deklaraciji. Međutim, mogu se koristiti operatori kao što su `+`, `-`, `*`, `/`, `not`, `and`, `or`, `div`, `mod`, `ord`, `chr`, `sizeof`, `pi`, `int`, `trunc`, `round`, `frac`, `odd`.
 
@@ -57,7 +57,7 @@ Dodeljivanje vrednosti običnoj konstanti nije dozvoljeno. Dakle, s obzirom na p
   s := 'some other string';
 ```
 
-Za konstante niza, tip stringa zavisi od nekih prekidača kompajlera. Ako se želi određeni tip, treba koristiti ukucanu konstantu, kao što je objašnjeno u sledećem odeljku.
+Za konstante niza, tip stringa zavisi od nekih prekidača kompajlera. Ako se želi određeni tip, treba koristiti tipiziranu konstantu, kao što je objašnjeno u sledećem odeljku.
 
 Pre verzije 1.9, Free Pascal nije ispravno podržavao 64-bitne konstante. Od verzije 1.9, mogu se specificirati 64-bitne konstante.
 

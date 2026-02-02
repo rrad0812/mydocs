@@ -3,18 +3,18 @@
 
 [content][f0] [next][f2]
 
-Tokeni su osnovni leksički gradivni blokovi izvornog koda; oni su „reči” jezika; karakteri se kombinuju u tokene prema pravilima programskog jezika. Postoji pet klasa tokena:
+Tokeni su osnovni leksički gradivni blokovi izvornog koda; oni su "reči” jezika; karakteri se kombinuju u tokene prema pravilima programskog jezika. Postoji pet klasa tokena:
 
 - **Rezervisane reči**  
   To su reči koje imaju fiksno značenje u jeziku. Ne mogu se menjati ili redefinisati.
 - **Identifikatori**  
   Ovo su nazivi simbola koje programer definiše. Mogu se menjati i ponovo koristiti. Oni podležu pravilima o opsegu jezika.
-- **Operateri**  
+- **Operatori**  
   To su obično simboli za matematičke ili druge operacije: +, -, * i tako dalje.
 - **Separatori**  
-  Ovo je obično beli prostor.
+  Ovo je obično beli prostori.
 - **Konstante**  
-  Numeričke ili karakterne konstante se koriste za označavanje stvarnih vrednosti u izvornom kodu, kao što su 1 (celobrojna konstanta) ili 2.3 (konstanta sa plutanjem) ili „String konstanta“ (string: deo teksta).
+  Numeričke ili karakterne konstante se koriste za označavanje stvarnih vrednosti u izvornom kodu, kao što su 1 (celobrojna konstanta) ili 2.3 (konstanta sa plutanjem) ili "String konstanta" (string: deo teksta).
 
 U ovom poglavlju opisujemo sve Pascal rezervisane reči, kao i različite načine označavanja nizova, brojeva, identifikatora itd.
 
@@ -60,8 +60,8 @@ Komentar takođe može da obuhvata više redova:
 
 ```pascal
 {  
-   My beautiful function returns an interesting result,  
-   but only if the argument A is less than B.  
+  My beautiful function returns an interesting result,  
+  but only if the argument A is less than B.  
 }  
 Function Beautiful (A,B : Integer): Integer;
 ```
@@ -75,7 +75,7 @@ Function Beautiful : Integer;
 
 Komentar se proteže od znaka `//` do kraja reda. Ovakvu vrstu komentara uveo je Borland u kompajleru Delphi Pascal.
 
-Free Pascal podržava upotrebu ugnežđenih komentara. Sledeće konstrukcije su validni komentari:
+Free Pascal podržava upotrebu ugneždenih komentara. Sledeće konstrukcije su validni komentari:
 
 ```pascal
 (* This is an old style comment *)  
@@ -108,7 +108,7 @@ i ovako daje grešku
     *)
 ```
 
-Kompajler će reagovati sa “invalid character” greškom kada nađe ovakvu konstrukciju, bez obzira na -Mtp prekidač.
+Kompajler će reagovati sa "invalid character” greškom kada nađe ovakvu konstrukciju, bez obzira na -Mtp prekidač.
 
 **Napomena**  
 U TP i Delphi modu, ugnježdeni komentari nisu dozvoljeni. za maksimalnu kompatabilnost sa postojećim kodom tih kompajlera.
@@ -191,7 +191,7 @@ Identifikatori označavaju programski definisana imena za određene:
 
 Sva imena definisana u izvornom kodu – isključujući rezervisane reči – su označena kao identifikatori.
 
-Identifikatori se sastoje od između 1 i 127 značajnih znakova (slova, cifara i donje crte), od kojih prvo mora biti slovo (a–z ili A–Z) ili donja crta (_).
+Identifikatori se sastoje od 1 do 127 značajnih znakova (slova, cifara i donje crte), od kojih prvo mora biti slovo (a–z ili A–Z) ili donja crta (_).
 
 Kao i Pascal rezervisane reči, identifikatori su neosetljivi na velika i mala slova, odnosno i jedno i drugo.
   
@@ -231,16 +231,16 @@ Većina identifikatora (konstante, promenljive, funkcije ili metode, svojstva) m
 
 Kad god prevodilac kasnije naiđe na identifikator označen direktivom nagoveštaja, tada će se prikazati upozorenje koje odgovara navedenom nagoveštaju.
 
-- **zastarelo**
-Upotreba ovog identifikatora je zastarela, umesto toga koristite alternativu. Zastarela ključna reč može biti praćena string konstantom sa porukom. Kompajler će prikazati ovu poruku kad god se naiđe na identifikator.
+- **deprecated**
+Upotreba ovog identifikatora je zastarela, umesto toga koristite alternativu. Deprecated ključna reč može biti praćena string konstantom sa porukom. Kompajler će prikazati ovu poruku kad god se naiđe na identifikator.
 
-- **eksperimentalno**
+- **eksperimental**
 Upotreba ovog identifikatora je eksperimentalna: može se koristiti za označavanje novih funkcija koje bi trebalo koristiti sa oprezom.
 
-- **platforma**
+- **platform**
 Ovo je identifikator zavisan od platforme: možda nije definisan na svim platformama.
 
-- **nepimplementirano**
+- **notimplemented**
 Ovo bi trebalo da se koristi samo za funkcije i procedure. Trebalo bi da se koristi da signalizira da određena funkcija još nije implementirana.
 
 Slede primeri:
@@ -263,7 +263,7 @@ begin
 end.
 ```
 
-This would result in the following output:
+Ovo će rezultovati u sledećem izlazu:
 
 ```sh
 testhd.pp(11,15) Warning: Symbol "p" is not portable  
@@ -278,7 +278,7 @@ testhd.pp(15,3) Warning: Symbol "Something" is experimental
 - `types`,
 - `variables`,
 - `functions`,
-- `procedures` and
+- `procedures` ind
 - `methods`.
 
 ## 1.6 Brojevi
@@ -288,12 +288,12 @@ Brojevi su podrazumevano označeni decimalnim zapisom. Realni (ili decimalni) br
 Za konstante celobrojnog tipa, Free Pascal podržava četiri formata:
 
 - **Decimalni format**, normalni format, (osnova 10). Ovo je standardni format.
-- **Heksadecimalni format** (baza 16), na isti način kao što to radi Turbo Pascal. Da biste odredili
-  konstantu vrednost u heksadecimalnom formatu, dodajte je ispred znaka dolara (`$`). Dakle, heksadecimalno $FF jednako 255 decimalno. Imajte na umu da su mala i mala slova beznačajna kada se koriste heksadecimalne konstante.
-- **Oktalni format**, od verzije 1.0.7, (baza 8) je takođe podržan. Da biste naveli konstantu u
-  oktalnom formatu, dodajte znak ampersanda (`&`). Na primer, 15 je navedeno u oktalnoj notaciji kao &17.
-- **Binarni zapis** (baza 2). Binarni broj se može odrediti tako što se ispred njega stavi procenat
-  znak (`%)`. Dakle, 255 se može navesti u binarnoj notaciji kao %11111111.
+- **Heksadecimalni format** (baza 16), na isti način kao što to radi Turbo
+  Pascal. Da biste odredili konstantu vrednost u heksadecimalnom formatu, dodajte je ispred znaka dolara (`$`). Dakle, heksadecimalno $FF jednako 255 decimalno. Imajte na umu da su mala i mala slova beznačajna kada se koriste heksadecimalne konstante.
+- **Oktalni format**, od verzije 1.0.7, (baza 8) je takođe podržan. Da biste
+  naveli konstantu u oktalnom formatu, dodajte znak ampersanda (`&`). Na primer, 15 je navedeno u oktalnoj notaciji kao &17.
+- **Binarni zapis** (baza 2). Binarni broj se može odrediti tako što se ispred
+  njega stavi procenat znak (`%)`. Dakle, 255 se može navesti u binarnoj notaciji kao %11111111.
 
 **Napomena**:
 `Oktalni` i `Binarni` zapis nisu podržani u TP ili Delphi režimu kompatibilnosti.
@@ -315,7 +315,7 @@ abc;
 
 ## 1.8 Nizovi znakova ili stringovi
 
-Niz znakova (ili skraćeno string) je niz od nula ili više znakova (veličine u bajtu), zatvoren u jednostruke navodnike i u jednom redu izvornog koda programa; u stringu se ne mogu pojaviti literalni znakovi `#CR` ili `#LF`.
+Niz znakova (ili skraćeno string) je niz od nula ili više znakova (veličine u bajtovima), zatvoren u jednostruke navodnike i u jednom redu izvornog koda programa; u stringu se ne mogu pojaviti literalni znakovi `#CR` ili `#LF`.
 
 Skup znakova bez ičega između navodnika (’’) je prazan string.
 
@@ -351,7 +351,7 @@ na Windows OS, ili
   'the string starts here'#10'   and continues here'
 ```
 
-na uniksima uključujući i Mac OS X, i:
+na Uniksima uključujući i Mac OS X, i:
 
 ```pascal
   'the string starts here'#13'   and continues here'

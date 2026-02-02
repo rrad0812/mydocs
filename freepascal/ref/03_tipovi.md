@@ -35,7 +35,7 @@ Tabela 3.1: Predefinisani nteger tipovi
  Integer |
  Shortint |
  SmallInt |
- Longint |
+ LongInt |
  Longword |
  Int64 |
  Byte |
@@ -47,7 +47,7 @@ Tabela 3.1: Predefinisani nteger tipovi
  LongBool |
  QWordBool |
 
-Celobrojni tipovi, i njihovi opsezi i veličine, koji su unapred definisani u Free Pascal-u, navedeni su u tabeli (3.2). Imajte na umu da tipovi qword i int64 nisu pravi redni brojevi, tako da neke Pascal konstrukcije neće raditi sa ova dva tipa celih brojeva.
+Celobrojni tipovi, i njihovi opsezi i veličine, koji su unapred definisani u Free Pascal-u, navedeni su u tabeli (3.2). Imajte na umu da tipovi `qword` i `int64` nisu pravi redni brojevi, tako da neke Pascal konstrukcije neće raditi sa ova dva tipa celih brojeva.
 
 Tabela 3.2: Predefinisani intidžer tipovi
 
@@ -57,9 +57,9 @@ Tabela 3.2: Predefinisani intidžer tipovi
  Shortint | -128 .. 127 | 1 |
  Smallint | -32768 .. 32767 | 2 |
  Word | 0 .. 65535 | 2 |
- Integer | either smallint or longint | size 2 or 4 |
+ Integer | either smallint or LongInt | size 2 or 4 |
  Cardinal | longword | 4 |
- Longint | -2147483648 .. 2147483647 | 4 |
+ LongInt | -2147483648 .. 2147483647 | 4 |
  Longword | 0 .. 4294967295 | 4 |
  Int64 | -9223372036854775808 .. 9223372036854775807 | 8 |
  QWord | 0 .. 18446744073709551615 | 8 |
@@ -67,7 +67,7 @@ Tabela 3.2: Predefinisani intidžer tipovi
 **Napomena**  
 
 - Celobrojni tip (Integer) je pseudonim za tip Smallint u podrazumevanom režimu Free Pascala.
-- Celobrojni tip (Integer) je pseudonim za tip Longint u Delphi ili ObjFPC režimu.
+- Celobrojni tip (Integer) je pseudonim za tip LongInt u Delphi ili ObjFPC režimu.
 - Cardinal tip je trenutno uvek mapiran u tip duge reči (Longword).
 
 **Napomena**  
@@ -81,14 +81,14 @@ Tabela 3.3: Mapiranje integer konstanti
 128..255 | Byte |
 -32768..32767 | Smallint |
 32768..65535 | Word |
--2147483648..2147483647 | longint |
+-2147483648..2147483647 | LongInt |
 2147483648..4294967295 | Cardinal (longword) |
 -9223372036854775808 .. 9223372036854775807 | Int64 |
 
 To znači da su konstante u opsegu -128..127 mapirane u `shortint`, konstante u opsegu 128..255 su mapirane u `byte`, itd. Konstante u opsegu `2147483647..high(cardinal)` se raščlanjuju kao cardinal, a sve decimalne konstante koje se ne uklapaju u bilo koju od gornjih konstanti su parbitne kao konstante iznad.
 
 **Napomena**  
-U novijim verzijama Delphija, `longint` tip zavisi od platforme i CPU-a. Ovo nije tako u FPC-u, gde je `longint` 32-bitni na svim platformama.
+U novijim verzijama Delphija, `LongInt` tip zavisi od platforme i CPU-a. Ovo nije tako u FPC-u, gde je `LongInt` 32-bitni na svim platformama.
 
 Kao pascal kompajler, Free Pascal vrši automatsku konverziju tipova i nadogradnju u izrazima u kojima se koriste različite vrste celih tipova:
 
@@ -100,7 +100,7 @@ Kao pascal kompajler, Free Pascal vrši automatsku konverziju tipova i nadogradn
   - Ako je bar jedan od operanada veći od prirodne veličine celog broja, rezultat se bira da bude najmanji tip koji obuhvata opsege tipova oba operanda. To znači da će mešanje neoznačenog sa manjim ili jednakim predznakom proizvesti potpisani tip koji je veći od oba.
   - Ako oba operanda imaju isti predznak, rezultat je istog tipa kao i oni. Jedini izuzetak je oduzimanje (-): u slučaju neoznačenog - oduzimanje bez predznaka daje rezultat sa znakom u FPC (kao u Delphiju, ali ne i u TP7).
 - Mešanje potpisanih i neoznačenih operanada „nativne“ veličine int daje veći rezultat sa znakom.
-  To znači da će mešanje longinta i longvord na 32-bitnim platformama proizvesti int64. Slično tome, mešanje bajta i shortinta na 8-bitnim platformama (AVR) će proizvesti smallint.
+  To znači da će mešanje LongInta i longvord na 32-bitnim platformama proizvesti int64. Slično tome, mešanje bajta i shortinta na 8-bitnim platformama (AVR) će proizvesti smallint.
 
 #### 3.1.1.2 Boolean tipovi
 
@@ -121,7 +121,7 @@ QWordBool | 8 | Any nonzero value |
 
 Pored jednostavnog tipa „Boolean“, postoje dodatni tipovi „Boolean16“, „Boolean32“ i „Boolean64“. To su u stvari celobrojni tipovi, koji su kompatibilni sa dodeljivanjem sa jednostavnim logičkim tipom. Kao ceo broj, vrednosti za `True` i `False` su `1` i `0`. Ovo se može koristiti za povezivanje sa C kodom koji definiše logički broj ove veličine sa vrednostima `0` i `1`.
 
-Da bi povezivanje sa C bio još lakše, Free Pascal takođe podržava tipove `ByteBool`, `WordBool`, `LongBool` i `QWordBool`. Oni su tipa `Byte`, `Word`, `Longint` ili `Int64`, ali su opet za dodeljivanje kompatibilni sa `Boolean`. Jedina razlika sa tipovima Boolean16/32/64 je u tome koje se vrednosti smatraju `True` ili `False`“: vrednost `False` je ekvivalentna `0` (nula) i svaka vrednost različita od nule se smatra `True` kada se konvertuje u logičku vrednost. Logička vrednost `True` se konvertuje u `Not(0)` u slučaju da je dodeljena promenljivoj tipa `ByteBool`, `WordBool`, `LongBool` ili `QWordBool`.
+Da bi povezivanje sa C bio još lakše, Free Pascal takođe podržava tipove `ByteBool`, `WordBool`, `LongBool` i `QWordBool`. Oni su tipa `Byte`, `Word`, `LongInt` ili `Int64`, ali su opet za dodeljivanje kompatibilni sa `Boolean`. Jedina razlika sa tipovima Boolean16/32/64 je u tome koje se vrednosti smatraju `True` ili `False`“: vrednost `False` je ekvivalentna `0` (nula) i svaka vrednost različita od nule se smatra `True` kada se konvertuje u logičku vrednost. Logička vrednost `True` se konvertuje u `Not(0)` u slučaju da je dodeljena promenljivoj tipa `ByteBool`, `WordBool`, `LongBool` ili `QWordBool`.
 
 Pod pretpostavkom da je B tipa `Boolean`, sledeće su važeće dodele:
 
@@ -168,7 +168,7 @@ Type
   EnumType = (one, two, three, forty = 40, fortyone);
 ```
 
-Poslednja notacija je obavezna u režimu DELPHI.
+Poslednja notacija je obavezna u režimu Delphi.
 
 Kao rezultat, redni broj "forty" je 40, a ne 3, kao što bi bilo kada dodele ’:= 40’ nije bilo. Redna vrednost "fortyone" je tada 41, a ne 4, kao što bi bilo kada zadatak dodele nije bio prisutan. Nakon dodele u nabrojanoj definiciji, kompajler dodaje 1 dodeljenoj vrednosti da bi dodelio sledećoj nabrojanoj vrednosti.
 
@@ -215,7 +215,7 @@ Neki od unapred definisanih tipova celih brojeva su definisani kao tipovi podops
 
 ```pascal
 Type  
-  Longint  = $80000000..$7fffffff;  
+  LongInt  = $80000000..$7fffffff;  
   Integer  = -32768..32767;  
   shortint = -128..127;  
   byte     = 0..255;  
@@ -237,17 +237,17 @@ Type
 
 Free Pascal podržava tip `Char`. `Char` je veličine tačno 1 bajt i sadrži jedan ASCII znak.  
 
-- Znakovna konstanta se može navesti tako što se karakter stavi u jednostruke navodnike, na
-  sledeći način: 'a' ili 'A' su obe karakterne konstante.  
+- Karakter konstanta se može navesti tako što se karakter stavi u jednostruke navodnike, na
+  sledeći način: 'a' ili 'A' su oba karakter konstante.  
 
-- Znak se takođe može navesti njegovom vrednošću karaktera (obično ASCII kod), tako što se
+- karakter se takođe može navesti njegovom vrednošću (obično ASCII kod), tako što se
   ispred redne vrednosti nalazi simbol broja (#). Na primer, navođenje `#65` bi bilo isto kao `A`.  
 
 - Takođe, znak za umetanje (`^`) može da se koristi u kombinaciji sa slovom da se navede znak sa
   ASCII vrednošću manjom od 27. Tako je `^G` jednako `#7` - G je sedmo slovo u abecedi. Prevodilac je prilično aljkav u vezi sa znakovima koji su dozvoljeni nakon kareta, ali generalno treba pretpostaviti samo slova.  
 
 - Kada znak jednostrukog navodnika mora biti predstavljen, treba ga otkucati dva puta uzastopno,
-  tako da `''''` predstavlja znak jednostrukog navodnika.
+  tako da `''''` predstavlja znak jednostrukih navodnika.
 
 #### 3.1.2.2 AnsiChar
 
@@ -255,7 +255,7 @@ Da bi razlikovali `Char` od `WideChar`, `system` unit takođe definiše tip `Ans
 
 #### 3.1.2.3 WideChar
 
-Free Pascal podržava tip `WideChar`. `WideChar` je veličine tačno 2 bajta i sadrži jedan znak `UNICODE` u `UTF-16` kodiranju.
+Free Pascal podržava tip `WideChar`. `WideChar` je veličine tačno 2 bajta i sadrži jedan `UNICODE` znak u `UTF-16` kodiranju.
 
 - Unicode znak se može navesti njegovom vrednošću karaktera (UTF-16 kod), tako što se ispred
   redne vrednosti nalazi simbol broja (`#`).
@@ -433,8 +433,7 @@ Neke činjenice u vezi `AnsiString`-ova:
   
   onda se kopija stringa kreira pre dodele. Ovo je poznato kao `semantika kopiranja na pisanje`.
 
-- Moguće je prisiliti string da ima broj referenci jednak 1 pomoću poziva
-  `UniqueString`:
+- Moguće je prisiliti string da ima broj referenci jednak 1 pomoću poziva `UniqueString`:
 
   ```pascal
     S:=T;  
@@ -464,8 +463,7 @@ Neke činjenice u vezi `AnsiString`-ova:
   
   što je važilo za Turbo Pascal `ShortString`, više nije tačno za `AnsiString`. Kompajler će upozoriti ako se naiđe na takvu konstrukciju.
   
-- Po potrebi kompajler konvertuje `AnsiString`-ove u `ShortString`-ove, što
-  znači da se upotreba `AnsiString`-a i `ShortString`-a može mešati bez problema.
+- Po potrebi kompajler konvertuje `AnsiString`-ove u `ShortString`-ove, što znači da se upotreba `AnsiString`-a i `ShortString`-a može mešati bez problema.
 
 - `AnsiString`-ovi se mogu typecast-ovati na tipove `PChar` ili `Pointer`:
 
@@ -601,17 +599,17 @@ Za tipove višebajtnih stringova, osnovni znak ima veličinu od najmanje 2. To z
 
 #### 3.2.2.1 UnicodeStrings
 
-`UnicodeString`-ovi (koji se koriste za predstavljanje stringova sa unicode znakovima) se implementiraju na isti način kao i `AnsiString`: stringovi koji se broje, null-terminirani nizovi, samo što su implementirani kao `WideChar` stringovi umesto regularnih `AnsiChar`. `WideChar` je znak od dva bajta (element DBCS: Double Byte Character Set). Za `UnicodeStrings` važe uglavnom ista pravila kao i za `AnsiStrings`. Kompajler transparentno konvertuje `UnicodeString`-ove u `AnsiString`-ove i obrnuto.
+`UnicodeString`-ovi (koji se koriste za predstavljanje stringova sa unicode znakovima) se implementiraju na isti način kao i `AnsiString`: stringovi kojima se broje reference, null-terminirani nizovi, samo što su implementirani kao `WideChar` stringovi umesto regularnih `AnsiChar`. `WideChar` je znak od dva bajta (element DBCS: Double Byte Character Set). Za `UnicodeStrings` važe uglavnom ista pravila kao i za `AnsiStrings`. Kompajler transparentno konvertuje `UnicodeString`-ove u `AnsiString`-ove i obrnuto.
 
-Slično tipifikaciji `Ansistring`-a stringa znakova sa nultim završavanjem `PChar`-a, `UnicodeString` se može konvertovati u string znakova sa nultim završavanjem `PUnicodeChar`. Imajte na umu da se string `PUnicodeChar` završava sa 2 nula bajta umesto sa 1, tako da prevođenje tipa na `pchar` nije automatsko.
+Slično tipifikaciji `Ansistring`-a stringa znakova sa nultim završavanjem `PChar`-a, `UnicodeString` se može konvertovati u string znakova sa nultim završavanjem `PUnicodeChar`. Imajte na umu da se string `PUnicodeChar` završava sa 2 nulta bajta umesto sa 1, tako da prevođenje tipa na `pchar` nije automatsko.
 
-Sam kompajler ne pruža podršku za bilo kakvu konverziju iz Unicode-a u AnsiString ili obrnuto. `System` unit ima zapis menadžera `UnicodeString`-a, koji se može inicijalizovati nekim rutinama za rukovanje Unicode specifičnim za OS. Za više informacija pogledajte referencu system unita.
+Sam kompajler ne pruža podršku za bilo kakvu konverziju iz Unicode-a u AnsiString ili obrnuto. `System` unit ima zapis menadžera `UnicodeString`-a, koji se može inicijalizovati nekim rutinama za rukovanje Unicode specifičnim za OS. Za više informacija pogledajte referencu `system` unita.
 
 Unicode string literal se može konstruisati na sličan način kao široki znak:
 
 ```pascal
 Const  
-  ws2: unicodestring = 'phi omega : '#$03A8' '#$03A9;
+  ws2: unicodestring = 'phi omega` : '#$03A8' '#$03A9`;
 ```
 
 #### 3.2.2.2 WideStrings
@@ -622,11 +620,11 @@ U Windows-u, za razliku od `UnicodeString`-a, tip `WideString` se ne računa na 
 
 Za prevođenje i konverziju važe ista pravila kao i za tip `UnicodeString`.
 
-Imajte na umu da se u prozorima, pošto se `WideString` string dodeljuje pomoću posebne funkcije prozora, raspored memorije razlikuje od `UnicodeString`-a. Dužina se, na primer, čuva u bajtovima, a ne u znakovima.
+Imajte na umu da se na Windows, pošto se `WideString` string dodeljuje pomoću posebne funkcije, raspored memorije razlikuje od `UnicodeString`-a. Dužina se, na primer, čuva u bajtovima, a ne u znakovima.
 
 ### 3.2.3 Const stringovi
 
-Da biste naveli konstantni string, on mora biti zatvoren u jednostrukim navodnicima, baš kao tip Char, samo što je sada dozvoljeno više od jednog karaktera. S obzirom da je S tipa String, sledeće su važeće dodele:
+Da biste naveli konstantni string, on mora biti zatvoren u jednostrukim navodnicima, baš kao tip `Char`, samo što je sada dozvoljeno više od jednog karaktera. S obzirom da je S tipa `String`, sledeće su važeće dodele:
 
 ```pascal
 S := 'This is a string.';  
@@ -1207,11 +1205,11 @@ Moguće je ugnezditi varijante delova, kao u:
 ```pascal
 Type  
   MyRec = Record  
-    X : Longint;  
+    X : LongInt;  
       Case byte of  
-        2 : (Y : Longint;  
+        2 : (Y : LongInt;  
       case byte of  
-        3 : (Z : Longint);  
+        3 : (Z : LongInt);  
       );  
       end;
 ```
@@ -1252,7 +1250,7 @@ Veličina zapisa je jednaka zbiru pomaka poslednjeg polja zapisa i veličine ovo
 - Ako je trenutna postavka `{$ALIGN N}` ili `{$PACKRECORDS N}` jednaka C,
   potrebno poravnanje je određeno praćenjem zvaničnih ABI pravila.
 
-#### 3.3.3.2 Remarks and examples
+#### 3.3.3.2 Pakovanje i primeri
 
 Free Pascal takođe podržava "upakovani zapis", koji je zapis u kome su svi elementi poravnati po bajtovima. Kao rezultat, dve sledeće deklaracije su ekvivalentne:
 
@@ -1282,18 +1280,19 @@ S obzirom na platformu zavisnu prirodu načina na koji se zapisi postavljaju u m
 Konkretno, ako se mora pročitati tipizirana datoteka sa zapisima, proizvedena od strane Turbo Pascal programa, onda su šanse da pokušaj ispravnog čitanja te datoteke neće uspeti. Razlog je taj što podrazumevana postavka `{$PACKRECORDS N}` Free Pascal-a nije nužno kompatibilna sa Turbo Pascal-om. Može se promeniti u `{$PACKRECORDS 1}` ili `{$PACKRECORDS 2}` u zavisnosti od podešavanja korišćenog u Turbo Pascal programu koji kreira datoteku (iako i dalje može da ne uspe sa `{$PACKRECORDS 2}` zbog različitih zahteva za usklađivanje tipa između 16-bitnog MSDOS-a i vaše trenutne platforme).
 
 Ista primedba važi i za Delphi: razmena podataka je garantovano moguća samo ako i proizvođač i potrošač koriste upakovani zapis, ili ako su na istoj platformi i koriste istu postavku
-`{$PACKRECORDS Ks}`.
+`{$PACKRECORDS X}`.
 
 ### 3.3.4 Set tipovi
 
-Free Pascal podržava tipove skupova kao u Turbo Pascal-u.
+Free Pascal podržava tip `Set` kao u Turbo Pascal-u.
 
-Svaki od elemenata SetType mora biti tipa TargetType. TargetType može biti bilo koji redni tip sa opsegom između 0 i 255. Set može da sadrži najviše 256 elemenata. Sledeće su važeće deklaracije seta:
+Svaki od elemenata `Set` tipa mora biti tipa `TargetType`. `TargetType` može biti bilo koji redni tip sa opsegom između 0 i 255. `Set` može da sadrži najviše 256 elemenata. Sledeće su važeće deklaracije seta:
 
 ```pascal
 Type  
-  Junk = Set of Char;  
-  Days = (Mon, Tue, Wed, Thu, Fri, Sat, Sun);  
+  Days = Set of Char;  
+
+Days = (Mon, Tue, Wed, Thu, Fri, Sat, Sun);  
  
 Var  
   WorkDays : Set of days;
@@ -1325,11 +1324,11 @@ Type
 
 Interno, datoteke su predstavljene zapisom FileRec, koji je deklarisan u unitima `Dos` ili `SysUtils`.
 
-Poseban tip datoteke je tip tekstualne datoteke, predstavljen `TextRec` zapisom. Datoteka tipa Text koristi posebne ulazno-izlazne rutine. Podrazumevani tipovi ulaznih, izlaznih i StdErr datoteka definisani su u `system` unitu: svi su tipa Text i otvaraju se kodom za inicijalizaciju sistemske jedinice.
+Poseban tip datoteke je tip tekstualne datoteke, predstavljen `TextRec` zapisom. Datoteka tipa `TextRec` koristi posebne ulazno-izlazne rutine. Podrazumevani tipovi ulaznih, izlaznih i StdErr datoteka definisani su u `system` unitu: svi su tipa `Text` i otvaraju se kodom za inicijalizaciju sistemske jedinice.
 
 ## 3.4 Pokazivači
 
-Free Pascal podržava upotrebu pokazivača. Promenljiva tipa pokazivača sadrži adresu u memoriji, gde se mogu čuvati podaci druge promenljive. Tip pokazivača se može definisati na sledeći način:
+Free Pascal podržava upotrebu pokazivača. Promenljiva tipa `pokazivača` sadrži adresu u memoriji, gde se mogu čuvati podaci druge promenljive. Tip pokazivača se može definisati na sledeći način:
 
 Pokazivači su tipizirani, što znači da ukazuju na određenu vrstu podataka. Tip ovih podataka mora biti poznat u vreme kompajliranja.
 
@@ -1369,24 +1368,24 @@ Free Pascal tretira pokazivače na isti način kao i C. To znači da se pokaziva
 Sa ove tačke gledišta, pokazivač tada pokazuje na nulti element ovog niza. Dakle, sledeća deklaracija pokazivača
 
 ```pascal
-Var p : ^Longint;
+Var p : ^LongInt;
 ```
 
 može se smatrati ekvivalentnim sledećoj deklaraciji niza:
 
 ```pascal
-Var p : array[0..Infinity] of Longint;
+Var p : array[0..Infinity] of LongInt;
 ```
 
-Razlika je u tome što prva deklaracija dodeljuje memoriju samo za pokazivač (ne za niz), a druga deklaracija dodeljuje memoriju za ceo niz. Ako se koristi prva, memorija se mora dodeliti ručno, koristeći funkciju `Getmem`. Referenca P^ je tada ista kao p[0]. Sledeći program ilustruje ovo možda jasnije:
+Razlika je u tome što prva deklaracija dodeljuje memoriju samo za pokazivač (ne za niz), a druga deklaracija dodeljuje memoriju za ceo niz. Ako se koristi prva, memorija se mora dodeliti ručno, koristeći funkciju `GetMem`. Referenca P^ je tada ista kao p[0]. Sledeći program ilustruje ovo možda jasnije:
 
 ```pascal
 program PointerArray;  
 
 var 
-  i : Longint;  
-  p : ^Longint;  
-  pp : array[0..100] of Longint;  
+  i : LongInt;  
+  p : ^LongInt;  
+  pp : array[0..100] of LongInt;  
 
 begin  
   for i := 0 to 100 do 
@@ -1395,7 +1394,7 @@ begin
   p := @pp[0];                     { Let p point to pp }  
 
   for i := 0 to 100 do  
-    if p[i]<>pp[i] then  
+    if p[i] <> pp[i] then  
       WriteLn ('Ohoh, problem !')  
 end.
 ```
@@ -1410,19 +1409,19 @@ Dec(P);
 će se povećati, odnosno smanjiti adresa na koju pokazivač pokazuje sa veličinom tipa P na koji je pokazivač. Na primer:
 
 ```pascal
-Var P : ^Longint;  
+Var P : ^LongInt;  
 ...  
  Inc (p);
 ```
 
-povećaće P za 4, jer je 4 veličina longinta. Ako pokazivač nije tipiziran, pretpostavlja se veličina od 1 bajta (tj. kao da je to pokazivač na bajt: ^bajt.)
+povećaće P za 4, jer je 4 veličina LongInta. Ako pokazivač nije tipiziran, pretpostavlja se veličina od 1 bajta (tj. kao da je to pokazivač na bajt: ^Byte.)
 
 Mogu se koristiti i normalni aritmetički operatori na pokazivačima, odnosno sledeće su važeće aritmetičke operacije pokazivača:
 
 ```pascal
 var  
-  p1,p2 : ^Longint;  
-  L : Longint;  
+  p1,p2 : ^LongInt;  
+  L : LongInt;  
 
 begin  
   P1 := @P2;  
@@ -1447,9 +1446,9 @@ Type
   end;
 ```
 
-Kada pokušava da prevede ovo, kompajler će se žaliti da tip TListItem još nije definisan kada naiđe na sledeću deklaraciju: Ovo je tačno, pošto se definicija još uvek raščlanjuje.
+Kada pokušava da prevede ovo, kompajler će se žaliti da tip `TListItem` još nije definisan kada naiđe na sledeću deklaraciju: Ovo je tačno, pošto se definicija još uvek raščlanjuje.
 
-Da biste mogli da imate element Nekt kao otkucani pokazivač, mora se uvesti „Deklaracija tipa unapred“:
+Da biste mogli da imate element Next kao tipizirani pokazivač, mora se uvesti „Deklaracija tipa unapred“:
 
 ```pascal
 Type  
@@ -1466,7 +1465,7 @@ Referentni tip bi trebalo da se uvede kasnije u istom bloku Type. Nijedan drugi 
 
 U većini slučajeva, definicija referentnog tipa će uslediti odmah nakon definicije tipa pokazivača, kao što je prikazano u gornjoj listi. Napred definisani tip se može koristiti u bilo kojoj definiciji tipa nakon njene deklaracije.
 
-Imajte na umu da je deklaracija tipa unapred moguća samo sa tipovima pokazivača i klasama, ne i sa drugim tipovima.
+Imajte na umu da je deklaracija tipa unapred moguća samo sa tipovima pokazivača zapisa i klasa, ne i sa drugim tipovima.
 
 ## 3.6 Proceduralni tipovi
 
@@ -1475,8 +1474,10 @@ Free Pascal ima podršku za proceduralne tipove, iako se malo razlikuje od Turbo
 Dva sledeća primera su važeće deklaracije tipa:
 
 ```pascal
-Type TOneArg = Procedure (Var X : integer);  
+Type 
+  TOneArg = Procedure (Var X : integer);  
   TNoArg = Function : Real;  
+
 var 
   proc : TOneArg;  
   func : TNoArg;
@@ -1486,8 +1487,8 @@ Promenljivoj proceduralnog tipa možete dodeliti sledeće vrednosti:
 
 - Nil, i za pokazivače normalnih procedura i za pokazivače metoda.
 - Promenljiva referenca proceduralnog tipa, tj. drugu promenljivu istog tipa.
-- Globalna adresa procedure ili funkcije, sa odgovarajućim zaglavljem funkcije
-  ili procedure i pozivom konvencija.
+- Globalna adresa procedure ili funkcije, sa odgovarajućim zaglavljem funkcije ili procedure i 
+  pozivom konvencija.
 - Adresa metode.
 
 S obzirom na ove deklaracije, sledeće izjave su važeće:
@@ -1524,7 +1525,7 @@ begin
 end.
 ```
 
-Zato što je tip TOneArgCcall procedura koja koristi konvenciju pozivanja cdecl.
+Zato što je tip TOneArgCcall procedura koja koristi konvenciju pozivanja `cdecl`.
 
 U slučaju da se doda modifikovana ugnežđena, onda se proceduralna varijabla može koristiti sa ugnežđenim procedurama. Ovo zahteva da se izvori kompajliraju u macpas ili ISO režimu, ili da se aktivira prekidač režima `NestedProcVars`:
 
@@ -1559,7 +1560,7 @@ end;
  
 procedure q;  
  
-var qi: longint;  
+var qi: LongInt;  
  
   procedure r;  
   begin  
@@ -1833,7 +1834,7 @@ Var
 
 Imaće isti tip sa tačke gledišta kompajlera (naime: Integer).
 
-Gore navedeno predstavlja način da se tipovi učini nezavisnim od platforme, koristeći samo pseudonime, a zatim definišu ove tipove za svaku platformu pojedinačno. Svaki programer koji zatim koristi ove prilagođene tipove ne mora da brine o veličini osnovnog tipa: za njega je neprozirna. Takođe omogućava korišćenje imena prečica za potpuno kvalifikovana imena tipova. tj. definiše `system.longint` kao `Olongint` i zatim redefiniše `longint`.
+Gore navedeno predstavlja način da se tipovi učini nezavisnim od platforme, koristeći samo pseudonime, a zatim definišu ove tipove za svaku platformu pojedinačno. Svaki programer koji zatim koristi ove prilagođene tipove ne mora da brine o veličini osnovnog tipa: za njega je neprozirna. Takođe omogućava korišćenje imena prečica za potpuno kvalifikovana imena tipova. tj. definiše `system.LongInt` kao `OLongInt` i zatim redefiniše `LongInt`.
 
 Pseudonim se često vidi da ponovo izlaže tip:
 
