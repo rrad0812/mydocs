@@ -17,10 +17,15 @@ Naglašavam reč moderan u modernom Objektu Paskal . To je zato što se Paskal m
 Takođe ima aktivan ekosistem alata i biblioteka. Da navedemo samo neke:
 
 - Paskal ima odličan, prenosivi kompajler otvorenog koda pod nazivom `Free Pascal Compiler`, <http://freepascal.org/>.
+
 - Prateći IDE (editor, debager, biblioteka vizuelnih komponenti, dizajner obrazaca) pod nazivom `Lazarus` <http://lazarus.freepascal.org/>.
+
 - Takođe postoji vlasnički i komercijalni kompajler i IDE `Delphi` <https://www.embarcadero.com/products/Delphi>.
+
 - Dostupno je mnogo biblioteka (i za FPC i za Delphi), pogledajte <https://github.com/Fr0sT-Brutal/awesome-pascal>.
+
 - Takođe podržavamo postojeće editore poput VS Code-a, pogledajte <https://castle-engine.io/vscode>.
+
 - Lično sam tvorac Castle Game Engine-a, <https://castle-engine.io/>, koji je 3D i 2D gejm endžin otvorenog koda i koristi moderni Paskal za kreiranje igara na mnogim platformama (Windows, Linux, FreeBSD, macOS, Android, iOS, Nintendo Switch, WebGL).
 
 ## 2 Osnove
@@ -1165,7 +1170,7 @@ U svakom svojstvu možete deklarisati neke dodatne stvari koje će biti korisne 
 
 - Da li svojstvo uopšte treba čuvati (koristeći `stored` ključnu reč).
 
-### 4.6. Izuzeci - kratak primer
+### 4.6 Izuzeci - kratak primer
 
 Imamo izuzetke. Mogu se uhvatiti pomoću `try …​ except …​ end` klauzula, a imamo i `finally` odeljke poput `try …​ finally …​ end`.
 
@@ -1206,7 +1211,7 @@ Imajte na umu da se `finally` klauzula izvršava čak i ako izađete iz bloka ko
 
 Pogledajte poglavlje Izuzeci za detaljniji opis izuzetaka.
 
-### 4.7. Specifikatori vidljivosti
+### 4.7 Specifikatori vidljivosti
 
 Kao i u većini objektno orijentisanih jezika, imamo specifikatore vidljivosti da bismo sakrili polja / metode / svojstva.
 
@@ -1227,17 +1232,19 @@ Podrazumevano, ako ne navedete vidljivost, onda je vidljivost deklarisanih stvar
 
 Nije svaki tip polja i svojstva dozvoljen u `published` odeljku (ne može se svaki tip strimovati, a samo klase se mogu strimovati iz jednostavnih polja). Koristite ovo `public` ako vam strimovanje nije važno, ali želite da nešto bude dostupno svim korisnicima.
 
-### 4.8. Podrazumevani predak
+### 4.8 Podrazumevani predak
 
 Ako ne deklarišete tip pretka, svaka `class` nasleđuje od `TObject`.
 
-### 4.9. Samostalno
+### 4.9 Self
 
-Ključna reč "special" Selfmože se koristiti unutar implementacije klase da bi se eksplicitno referencirala vaša instanca. Ekvivalentna je ključnoj reči thisiz C++, Jave i sličnih jezika.
-4.10. Pozivanje nasleđene metode
+Ključna reč `Self` može se koristiti unutar implementacije klase da bi se eksplicitno referencirala vaša instanca. Ekvivalentna je ključnoj reči `this` iz C++, Jave i sličnih jezika.
 
-Unutar implementacije metode, ako pozovete drugu metodu, onda podrazumevano pozivate metodu sopstvene klase. U primeru koda ispod, TMyClass2.MyOtherMethodpoziva MyMethod, što na kraju poziva TMyClass2.MyMethod.
+### 4.10 Pozivanje nasleđene metode
 
+Unutar implementacije metode, ako pozovete drugu metodu, onda podrazumevano pozivate metodu sopstvene klase. U primeru koda ispod, "TMyClass2.MyOtherMethod" poziva "MyMethod", što na kraju poziva "TMyClass2.MyMethod".
+
+```pascal
 {$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
 {$ifdef MSWINDOWS} {$apptype CONSOLE} {$endif}
 
@@ -1274,31 +1281,37 @@ begin
   C := TMyClass2.Create;
   try
     C.MyOtherMethod;
-  finally FreeAndNil(C) end;
+  finally FreeAndNil(C) 
+  end;
 end.
+```
 
-Ako metod nije definisan u datoj klasi, onda poziva metod klase pretka. U stvari, kada pozovete MyMethodinstancu klase TMyClass2, onda
+Ako metod nije definisan u datoj klasi, onda poziva metod klase pretka. U stvari, kada pozovete "MyMethod" instance klase "TMyClass2", onda
 
-    Kompilator traži TMyClass2.MyMethod.
+- Kompilator traži TMyClass2.MyMethod.
 
-    Ako se ne pronađe, traži se TMyClass1.MyMethod.
+- Ako se ne pronađe, traži se TMyClass1.MyMethod.
 
-    Ako se ne pronađe, traži se TObject.MyMethod.
+- Ako se ne pronađe, traži se TObject.MyMethod.
 
-    ako se ne pronađe, kompilacija ne uspeva.
+- ako se ne pronađe, kompilacija ne uspeva.
 
-Možete to testirati tako što ćete komentarisati TMyClass2.MyMethoddefiniciju u gornjem primeru. U stvari, TMyClass1.MyMethodbiće pozvana od strane TMyClass2.MyOtherMethod.
+Možete to testirati tako što ćete komentarisati "TMyClass2.MyMethod" definiciju u gornjem primeru. U stvari, "TMyClass1.MyMethod" biće pozvana od strane "TMyClass2.MyOtherMethod".
 
-Ponekad ne želite da pozovete metod sopstvene klase. Želite da pozovete metod pretka (ili pretka pretka, i tako dalje). Da biste to uradili, dodajte ključnu reč inheritedpre poziva metode MyMethod, ovako:
+Ponekad ne želite da pozovete metod sopstvene klase. Želite da pozovete metod pretka (ili pretka pretka, i tako dalje). Da biste to uradili, dodajte ključnu reč `inherited` pre poziva metode "MyMethod", ovako:
 
+```pascal
 inherited MyMethod;
+```
 
-Na ovaj način primoravate kompajler da počne pretragu od klase pretka. U našem primeru, to znači da kompajler traži MyMethodunutar TMyClass1.MyMethod, zatim TObject.MyMethod, a onda odustaje. Čak ni ne razmatra korišćenje implementacije TMyClass2.MyMethod.
-Bakšiš
-	Samo napred, promenite implementaciju TMyClass2.MyOtherMethodiznad da koristite inherited MyMethodi vidite razliku u rezultatu.
+Na ovaj način primoravate kompajler da počne pretragu od klase pretka. U našem primeru, to znači da kompajler traži "MyMethod" unutar "TMyClass1.MyMethod", zatim "TObject.MyMethod", a onda odustaje. Čak ni ne razmatra korišćenje implementacije "TMyClass2.MyMethod".
 
-Poziv inheritedse često koristi za pozivanje metode pretka istog imena. Na ovaj način potomci mogu poboljšati pretke (zadržavajući funkcionalnost pretka, umesto da zamene funkcionalnost pretka). Kao u primeru ispod.
+**Bakšiš**:  
+Samo napred, promenite implementaciju "TMyClass2.MyOtherMethod" iznad da koristite "inherited MyMethod" i vidite razliku u rezultatu.
 
+Poziv `inherited` se često koristi za pozivanje metode pretka istog imena. Na ovaj način potomci mogu poboljšati pretke (zadržavajući funkcionalnost pretka, umesto da zamene funkcionalnost pretka). Kao u primeru ispod.
+
+```pascal
 {$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
 {$ifdef MSWINDOWS} {$apptype CONSOLE} {$endif}
 
@@ -1346,13 +1359,17 @@ begin
     C.MyMethod(123);
   finally FreeAndNil(C) end;
 end.
+```
 
-Pošto je korišćenje inheritedza pozivanje metode sa istim imenom, sa istim argumentima, veoma čest slučaj, postoji posebna prečica za to: možete jednostavno napisati inherited;( inheritedključna reč praćena tačkom-zarezom, umesto imena metode). To znači " pozovite nasleđenu metodu sa istim imenom, prosleđujući joj iste argumente kao trenutnoj metodi ".
-Bakšiš
-	U gornjem primeru, svi inherited …​;pozivi bi mogli biti zamenjeni jednostavnim inherited;.
+Pošto je korišćenje `inherited` za pozivanje metode sa istim imenom, sa istim argumentima, veoma čest slučaj, postoji posebna prečica za to: možete jednostavno napisati inherited; ( `inherited` ključna reč praćena tačkom-zarezom, umesto imena metode). To znači " pozovite nasleđenu metodu sa istim imenom, prosleđujući joj iste argumente kao trenutnoj metodi ".
 
-Napomena 1: inherited;je zapravo samo prečica za pozivanje metode pretka sa istim promenljivim koje su prosleđene u . Ako ste izmenili sopstveni parametar (što je moguće, ako parametar nije const), onda metoda pretka može primiti različite ulazne vrednosti od vašeg potomka. Razmotrite ovo:
+**Bakšiš**:  
+U gornjem primeru, svi inherited …​; pozivi bi mogli biti zamenjeni jednostavnim `inherited;`.
 
+**Napomena 1**:  
+`inherited;` je zapravo samo prečica za pozivanje metode pretka sa istim promenljivim koje su prosleđene u . Ako ste izmenili sopstveni parametar (što je moguće, ako parametar nije const), onda metoda pretka može primiti različite ulazne vrednosti od vašeg potomka. Razmotrite ovo:
+
+```pascal
 procedure TMyClass2.MyMethod(A: Integer);
 begin
   WriteLn('TMyClass2.MyMethod beginning ', A);
@@ -1362,9 +1379,12 @@ begin
   inherited;
   WriteLn('TMyClass2.MyMethod ending ', A);
 end;
+```
 
-Napomena 2: Obično želite da napravite MyMethod virtuelnu metodu kada je definiše više klasa (duž " lanca nasleđivanjainherited "). Više o virtuelnim metodama u odeljku ispod. Ali ključna reč radi bez obzira na to da li je metoda virtuelna ili ne. " inheritedalways" znači da kompajler počinje da traži metodu u pretku, i to ima smisla i za virtuelne i za nevirtuelne metode.
-4.11. Virtuelne metode, zaobilaženje i ponovno uvođenje
+**Napomena 2**:  
+Obično želite da napravite "MyMethod" virtuelnu metodu kada je definiše više klasa ( duž "lanca nasleđivanja"). Više o virtuelnim metodama u odeljku ispod. Ali ključna reč inherited radi bez obzira na to da li je metoda virtuelna ili ne. `inherited always` znači da kompajler počinje da traži metodu u pretku, i to ima smisla i za virtuelne i za nevirtuelne metode.
+
+### 4.11 Virtuelne metode, nadjačavanje i ponovno uvođenje
 
 Podrazumevano, metode nisu virtuelne . Ovo je slično C++-u, a za razliku od Jave.
 
@@ -1372,6 +1392,7 @@ Kada metoda nije virtuelna , kompajler određuje koju metodu da pozove na osnovu
 
 Ideja objektno orijentisanog programiranja je da je potomak klase uvek jednako dobar kao i predak , tako da kompajler dozvoljava korišćenje potomka klase uvek kada se očekuje predak. Kada vaša metoda nije virtuelna, ovo može imati neželjene posledice. Razmotrite primer ispod:
 
+```pascal
 {$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
 {$ifdef MSWINDOWS} {$apptype CONSOLE} {$endif}
 
@@ -1411,27 +1432,31 @@ begin
     DoSomethingWithAFruit(Apple);
   finally FreeAndNil(Apple) end;
 end.
+```
 
 Ovaj primer će se odštampati
 
+```sh
 Imamo voće klase TApple
 Mi ga jedemo:
 Jedenje voća
+```
 
-U stvari, poziv Fruit.Eatje pozvao TFruit.Eatimplementaciju, a ništa ne poziva TApple.Eatimplementaciju.
+U stvari, poziv "Fruit.Eat" je pozvao "TFruit.Eat" implementaciju, a ništa ne poziva "TApple.Eat" implementaciju.
 
 Ako razmislite o tome kako kompajler radi, ovo je prirodno: kada ste napisali Fruit.Eat, Fruitpromenljiva je deklarisana da sadrži klasu TFruit. Dakle, kompajler je tražio metodu koja se poziva Eatunutar TFruitklase. Ako TFruitklasa ne bi sadržala takvu metodu, kompajler bi tražio unutar pretka ( TObjectu ovom slučaju). Ali kompajler ne može da pretražuje unutar potomaka (kao što je TApple) , jer ne zna da li je stvarna klasa , , ili neki drugi potomak (kao što je , što nije prikazano u gornjem primeru).FruitTAppleTFruitTFruitTOrange
 
-Drugim rečima, metoda koja će biti pozvana određuje se tokom kompajliranja .
+Drugim rečima, metoda koja će biti pozvana određuje se tokom kompajliranja.
 
 Korišćenje virtuelnih metoda menja ovo ponašanje. Ako Eatbi metoda bila virtuelna (primer je prikazan ispod), onda se stvarna implementacija koja će se pozivati određuje tokom izvršavanja . Ako Fruitpromenljiva sadrži instancu klase TApple(čak i ako je deklarisana kao TFruit), onda Eatće se metoda prvo pretraživati unutar TAppleklase.
 
 U Object Paskal-u, da biste definisali metodu kao virtuelnu , potrebno je
 
-    Označite njegovu prvu definiciju (u najvišem pretku) ključnom virtualreči.
+- Označite njegovu prvu definiciju (u najvišem pretku) ključnom virtualreči.
 
-    Označite sve ostale definicije (u potomcima) ključnom overridereči . Sve prepisane verzije moraju imati potpuno iste parametre (i vraćati iste tipove, u slučaju funkcija).
+- Označite sve ostale definicije (u potomcima) ključnom overridereči . Sve prepisane verzije moraju imati potpuno iste parametre (i vraćati iste tipove, u slučaju funkcija).
 
+```pascal
 {$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
 {$ifdef MSWINDOWS} {$apptype CONSOLE} {$endif}
 
@@ -1471,83 +1496,95 @@ begin
     DoSomethingWithAFruit(Apple);
   finally FreeAndNil(Apple) end;
 end.
+```
 
 Ovaj primer će se odštampati
 
+```sh
 Imamo voće klase TApple
 Mi ga jedemo:
 Jedenje jabuke
+```
 
 Interno, virtuelne metode funkcionišu tako što imaju takozvanu tabelu virtuelnih metoda povezanu sa svakom klasom. Ova tabela je lista pokazivača na implementacije virtuelnih metoda za ovu klasu. Prilikom pozivanja Eatmetode, kompajler pretražuje tabelu virtuelnih metoda povezanu sa stvarnom klasom Fruiti koristi pokazivač na Eatimplementaciju koja je tamo sačuvana.
 
 Ako ne koristite overrideključnu reč , kompajler će vas upozoriti da skrivate ( zamaskirate) virtuelnu metodu pretka definicijom koja nije virtuelna. Ako ste sigurni da je to ono što želite, možete dodati reintroduceključnu reč. Ali u većini slučajeva, radije ćete želeti da metod ostane virtuelni i da dodate overrideključnu reč , čime ćete osigurati da se uvek ispravno poziva.
 
-## 5. Oslobađanje instanci klase
+## 5 Oslobađanje instanci klase
 
-### 5.1. Ne zaboravite da oslobodite instance klase
+### 5.1 Ne zaboravite da oslobodite instance klase
 
 Instance klase moraju biti ručno oslobođene, u suprotnom dolazi do curenja memorije.
 
 Savetujemo da automatski detektujete curenje memorije koristeći:
 
-    Opcije komandne linije FPC-a-gl -gh
+- Opcije komandne linije FPC-a-gl -gh
 
-    DelfiReportMemoryLeaksOnShutdown := true
+- DelfiReportMemoryLeaksOnShutdown := true
 
-    Zamkov mehanizam igre detect_memory_leaks="true"uCastleEngineManifest.xml
+- Zamkov mehanizam igre detect_memory_leaks="true" u CastleEngineManifest.xml
 
 Više informacija potražite na https://castle-engine.io/memory_leaks .
-Napomena
-	Ne morate da oslobađate instance podignutih izuzetaka. Iako kreirate instancu kada podižete izuzetak (i to je sasvim normalna instanca klase). Ali ova instanca klase se automatski oslobađa.
-5.2. Kako osloboditi
+
+**Napomena**:  
+Ne morate da oslobađate instance podignutih izuzetaka. Iako kreirate instancu kada podižete izuzetak (i to je sasvim normalna instanca klase). Ali ova instanca klase se automatski oslobađa.
+
+### 5.2 Kako osloboditi
 
 Da biste oslobodili instancu klase, najbolje je pozvati FreeAndNil(A)from SysUtilsunit na vašoj instanci klase. Proverava se da li Aje nil, ako nije — poziva se njen destruktor i postavlja se Ana nil. Dakle, pozivanje više puta zaredom nije greška.
 
 To je manje-više prečica za
 
+```pascal
 if A <> nil then
 begin
   A.Destroy;
   A := nil;
 end;
+```
 
 Zapravo, to je preterano pojednostavljivanje, kao i FreeAndNilkoristan trik koji postavlja promenljivu Ana nil pre nego što pozove destruktor na odgovarajućoj referenci. Ovo pomaže u sprečavanju određene klase grešaka — ideja je da "spoljašnji" kod nikada ne bi trebalo da pristupi poluuništenoj instanci klase.
 
 Često ćete videti i ljude koji koriste A.Freemetodu, što je kao da rade
 
+```pascal
 if A <> nil then
   A.Destroy;
+```
 
 Ovo oslobađa A, osim ako nije nil.
 
 Imajte na umu da u normalnim okolnostima nikada ne bi trebalo da pozivate metodu na instanci koja može biti nil. Dakle, poziv A.Freemože izgledati sumnjivo na prvi pogled, ako Amože biti nil. Međutim, Freemetoda je izuzetak od ovog pravila. Ona radi nešto prljavo u implementaciji — naime, proverava da li je Self <> nil.
-Napomena
-	
 
-Ovaj trik (zvanično dozvoljava da se metoda koristi sa Selfequal nil) je moguć samo u nevirtuelnim metodama.
+**Napomena**:
+Ovaj trik (zvanično dozvoljava da se metoda koristi sa `Self equal nil`) je moguć samo u nevirtuelnim metodama.
 
-U implementaciji takve metode, koliko god Self = nilje to moguće, metoda ne može pozivati nijednu virtuelnu metodu niti pristupati bilo kom polju, jer bi to izazvalo grešku kršenja pristupa (greška segmentacije) kada se pozove na nilinstanci. Pogledajte primer koda method_with_self_nil.dpr .
+U implementaciji takve metode, koliko god `Self = nil` je to moguće, metoda ne može pozivati nijednu virtuelnu metodu niti pristupati bilo kom polju, jer bi to izazvalo grešku kršenja pristupa (greška segmentacije) kada se pozove na nilinstanci. Pogledajte primer koda method_with_self_nil.dpr.
 
 Ne preporučujemo korišćenje ovog trika u vašem kodu (za virtuelne ili nevirtuelne metode) jer je kontraintuitivan u odnosu na normalnu upotrebu. Generalno, sve metode instanci trebalo bi da budu u stanju da pretpostave da rade na validnim (ne-nil) instancama i da mogu da pristupe poljima i pozivaju bilo koje druge metode (virtuelne ili ne).
 
-Savetujemo upotrebu metode FreeAndNil(A)always, bez izuzetaka, i nikada direktno pozivanje Freemetode ili Destroydestruktora.
+Savetujemo upotrebu metode FreeAndNil(A)always, bez izuzetaka, i nikada direktno pozivanje `Free` metode ili `Destroy` destruktora.
 
-Castle Game Engine to radi tako. Pomaže u održavanju lepe tvrdnje da su sve reference ili nil ili ukazuju na validne instance . Imajte na umu da korišćenje FreeAndNil(A)ne garantuje ovu tvrdnju, već pomaže samo u ovome. Na primer, ako kopirate referencu instance i pozovete FreeAndNil(A)jednu kopiju, druga kopija će biti viseći pokazivač koji nije nil.
+Castle Game Engine to radi tako. Pomaže u održavanju lepe tvrdnje da su sve reference ili nil ili ukazuju na validne instance . Imajte na umu da korišćenje `FreeAndNil(A)` ne garantuje ovu tvrdnju, već pomaže samo u ovome. Na primer, ako kopirate referencu instance i pozovete `FreeAndNil(A)` kopiju, druga kopija će biti viseći pokazivač koji nije nil.
 
+```pascal
 A := TMyClass.Create;
 B := A;
 FreeAndNil(A);
 // B now contains a dangling pointer
+```
 
-Više o rešavanju ovog problema u kasnijem odeljku o "Besplatnom obaveštenju" .
+Više o rešavanju ovog problema u kasnijem odeljku o "Besplatnom obaveštenju".
 
-Ipak, FreeAndNil(A)bavi se i najtrivijalnijim slučajevima, tako da je dobra navika koristiti ga po mom skromnom mišljenju. Cenićete ga prilikom otklanjanja grešaka, lepo je lako primetiti " Xje već oslobođeno, jer Xje nilsada" .
-5.3. Ručno i automatsko oslobađanje
+Ipak, `FreeAndNil(A)` bavi se i najtrivijalnijim slučajevima, tako da je dobra navika koristiti ga po mom skromnom mišljenju. Cenićete ga prilikom otklanjanja grešaka, lepo je lako primetiti "X je već oslobođeno, jer X je nil sada".
+
+### 5.3 Ručno i automatsko oslobađanje
 
 U mnogim situacijama, potreba za oslobađanjem instance ne predstavlja veliki problem. Samo napišete destruktor koji se poklapa sa konstruktorom i dealocira sve što je alocirano u konstruktoru (ili, potpunije, tokom celog životnog veka klase). Vodite računa da svaku stvar oslobodite samo jednom . Obično je dobra ideja postaviti oslobođenu referencu na nil, obično je najpogodnije to uraditi pozivanjem funkcije FreeAndNil(A).
 
 Dakle, ovako:
 
+```pascal
 uses SysUtils;
 
 type
@@ -1573,9 +1610,11 @@ begin
   FreeAndNil(Gun2);
   inherited;
 end;
+```
 
 Da bi se izbegla potreba za eksplicitnim oslobađanjem instance, može se koristiti i funkcija TComponent" vlasništva" . Objekat koji je u vlasništvu biće automatski oslobođen od strane vlasnika . Mehanizam je pametan i nikada neće osloboditi već oslobođenu instancu (tako da će stvari ispravno funkcionisati i ako ranije ručno oslobodite objekat u vlasništvu). Prethodni primer možemo promeniti u ovo:
 
+```pascal
 uses SysUtils, Classes;
 
 type
@@ -1593,6 +1632,7 @@ begin
   Gun1 := TGun.Create(Self);
   Gun2 := TGun.Create(Self);
 end;
+```
 
 Imajte na umu da ovde moramo da prepišemo virtuelni TComponentkonstruktor. Dakle, ne možemo da menjamo parametre konstruktora. (Zapravo, možete — deklarisati novi konstruktor sa reintroduce. Ali budite oprezni, jer će neke funkcionalnosti, npr. strimovanje, i dalje koristiti virtuelni konstruktor, zato se uverite da ispravno radi u oba slučaja.)
 
@@ -1600,6 +1640,7 @@ Imajte na umu da uvek možete koristiti nilvrednost za vlasnika. Na ovaj način 
 
 Još jedan mehanizam za automatsko oslobađanje je OwnsObjectsfunkcionalnost (već podrazumevano true!) klasa lista kao što TFPGObjectListsu ili TObjectList. Tako možemo napisati i:
 
+```pascal
 uses SysUtils, Classes, FGL;
 
 type
@@ -1632,7 +1673,8 @@ begin
     It will automatically free its contents. }
   FreeAndNil(Guns);
 
-  { No need to free the Gun1, Gun2 anymore. It's a nice habit to set to "nil"
+  { 
+    No need to free the Gun1, Gun2 anymore. It's a nice habit to set to "nil"
     their references now, as we know they are freed. In this simple class,
     with so simple destructor, it's obvious that they cannot be accessed
     anymore -- but doing this pays off in case of larger and more complicated
@@ -1640,40 +1682,44 @@ begin
 
     Alternatively, we could avoid declaring Gun1 and Gun2,
     and instead use Guns[0] and Guns[1] in own code.
-    Or create a method like Gun1 that returns Guns[0]. }
+    Or create a method like Gun1 that returns Guns[0]. 
+  }
   Gun1 := nil;
   Gun2 := nil;
   inherited;
 end;
+```
 
 Imajte na umu da je mehanizam "vlasništva" nad klasama lista jednostavan i da ćete dobiti grešku ako oslobodite instancu koristeći neki drugi način, iako se ona takođe nalazi unutar liste. Koristite metodu Extractda uklonite nešto sa liste bez oslobađanja, čime preuzimate odgovornost da je sami oslobodite.
 
 U Castle Game Engine-u : Potomci TX3DNodeimaju automatsko upravljanje memorijom kada se ubace kao deca drugog TX3DNode. Korenski X3D čvor, TX3DRootNode, je zauzvrat obično u vlasništvu TCastleSceneCore. Neke druge stvari takođe imaju jednostavan mehanizam vlasništva — potražite parametre i svojstva koja se zovu OwnsXxx.
-5.4. Virtuelni destruktor pod nazivom Destroy
+
+### 5.4 Virtuelni destruktor pod nazivom Destroy
 
 Kao što ste videli u gornjim primerima, kada se klasa uništi, poziva se ona koja se destructorpoziva Destroy.
 
 U teoriji, mogli biste imati više destruktora, ali u praksi to skoro nikada nije dobra ideja. Mnogo je lakše imati samo jedan destruktor Destroykoji se zove , koji se zatim poziva od strane Freemetode, koju zatim poziva FreeAndNilprocedura.
 
 Destruktor Destroyu TObjectje definisan kao virtuelna metoda, tako da bi trebalo uvek da ga označite overrideključnom reči u svim vašim klasama (pošto sve klase potiču od TObject). Ovo čini da Freemetoda ispravno radi. Podsetite se kako virtuelne metode rade iz Virtuelnih metoda, prevazilaženja i ponovnog uvođenja .
-Napomena
-	
 
+**Napomena**:  
 Ove informacije o destruktorima su, zaista, nekonzistentne sa konstruktorima .
 
 Normalno je da klasa ima više konstruktora. Obično se svi zovu Createi imaju samo različite parametre, ali je takođe u redu izmisliti i druga imena za konstruktore.
 
-Takođe, Createkonstruktor u TObjectnije virtuelan , tako da ga ne obeležavate sa overrideu potomcima.
+Takođe, `Create` konstruktor u `TObject` nije virtuelan, tako da ga ne obeležavate sa `override` u potomcima.
 
 Sve ovo vam daje malo dodatne fleksibilnosti pri definisanju konstruktora. Često nije potrebno da ih napravite virtuelnim, tako da podrazumevano niste primorani da to uradite.
 
-Međutim, imajte na umu da se ovo menja za TComponentpotomke. TComponentdefiniše virtuelni konstruktor Create(AOwner: TComponent). Potreban mu je virtuelni konstruktor da bi sistem strimovanja radio. Prilikom definisanja potomaka TComponent, trebalo bi da prepišete ovaj konstruktor (i označite ga overrideključnom reči ) i da izvršite svu inicijalizaciju unutar njega. I dalje je u redu definisati dodatne konstruktore, ali oni treba da deluju samo kao "pomoćnici" . Instanca treba uvek da radi kada se kreira pomoću Create(AOwner: TComponent)konstruktora, u suprotnom neće biti ispravno konstruisana prilikom strimovanja. Strimovanje se koristi npr. prilikom čuvanja i učitavanja ove komponente na Lazarus formi.
-5.5. Besplatno obaveštenje
+Međutim, imajte na umu da se ovo menja za `TComponent` potomke. `TComponent` definiše virtuelni konstruktor `Create(AOwner: TComponent)`. Potreban mu je virtuelni konstruktor da bi sistem strimovanja radio. Prilikom definisanja potomaka `TComponent`, trebalo bi da prepišete ovaj konstruktor (i označite ga `override` ključnom reči ) i da izvršite svu inicijalizaciju unutar njega. I dalje je u redu definisati dodatne konstruktore, ali oni treba da deluju samo kao "pomoćnici" . Instanca treba uvek da radi kada se kreira pomoću `Create(AOwner: TComponent)` konstruktora, u suprotnom neće biti ispravno konstruisana prilikom strimovanja. Strimovanje se koristi npr. prilikom čuvanja i učitavanja ove komponente na Lazarus formi.
+
+### 5.5 Besplatno obaveštenje
 
 Ako kopirate referencu na instancu, tako da imate dve reference na istu memoriju, a zatim se jedna od njih oslobodi — druga postaje "viseći pokazivač" . Ne bi trebalo da joj se pristupa, jer ukazuje na memoriju koja više nije alocirana. Pristupanje njoj može dovesti do greške tokom izvršavanja ili vraćanja "smeća" (jer se memorija može ponovo koristiti za druge stvari u vašem programu).
 
-Korišćenje FreeAndNilza oslobađanje instance ovde ne pomaže. FreeAndNilpostavlja nilsamo referencu koju je dobio — ne postoji način da automatski postavi sve ostale reference. Razmotrite ovaj kod:
+Korišćenje `FreeAndNil` za oslobađanje instance ovde ne pomaže. `FreeAndNil` postavlja `nil` samo referencu koju je dobio — ne postoji način da automatski postavi sve ostale reference. Razmotrite ovaj kod:
 
+```pascal
 var
   Obj1, Obj2: TObject;
 begin
@@ -1683,85 +1729,87 @@ begin
 
   // what happens if we access Obj1 or Obj2 here?
 end;
+```
 
-    Na kraju ovog bloka, nalazi Obj1se nil. Ako neki kod mora da mu pristupi, može pouzdano da ga koristi if Obj1 <> nil then …​da bi izbegao pozivanje metoda na oslobođenoj instanci, kao što je
+- Na kraju ovog bloka, nalazi se "Obj1" `nil`. Ako neki kod mora da mu pristupi, može pouzdano da ga koristi `if Obj1 <> nil then` …​da bi izbegao pozivanje metoda na oslobođenoj instanci, kao što je:
 
-    if Obj1 <> nil then
-      WriteLn(Obj1.ClassName);
+  ```pascal
+  if Obj1 <> nil then
+    WriteLn(Obj1.ClassName);
+  ```  
 
-    Pokušaj pristupa polju instance nilrezultira predvidljivim izuzetkom tokom izvršavanja. Dakle, čak i ako neki kod neće proveriti Obj1 <> nili slepo će pristupiti Obj1polju , dobićete jasan izuzetak tokom izvršavanja.
+  Pokušaj pristupa polju instance `nil` rezultira predvidljivim izuzetkom tokom izvršavanja. Dakle, čak i ako neki kod neće proveriti Obj1 <> nili slepo će pristupiti "Obj1" polju, dobićete jasan izuzetak tokom izvršavanja.
 
-    Isto važi i za pozivanje virtuelne metode ili pozivanje nevirtuelne metode koja je pristupila polju instance nil.
+  Isto važi i za pozivanje virtuelne metode ili pozivanje nevirtuelne metode koja je pristupila polju instance nil.
 
-    Sa Obj2, stvari su manje predvidljive. Nije nil, ali je nevažeće. Pokušaj pristupa polju nevažeće instance koja nije nula rezultira nepredvidivim ponašanjem — možda izuzetkom kršenja pristupa, možda vraćenim podacima o smeću.
+  Sa Obj2, stvari su manje predvidljive. Nije nil, ali je nevažeće. Pokušaj pristupa polju nevažeće instance koja nije nula rezultira nepredvidivim ponašanjem — možda izuzetkom kršenja pristupa, možda vraćenim podacima o smeću.
 
 Postoje različita rešenja za to:
 
-    Jedno rešenje je, pa, biti pažljiv i pročitati dokumentaciju. Ne pretpostavljati ništa o životnom veku reference, ako ju je kreirao drugi kod. Ako klasa TCarima polje koje ukazuje na neku instancu klase , konvencijaTWheel je da je referenca na klasu ` wheel` validna sve dok postoji referenca na klasu ` car` , a klasa ` car` će osloboditi svoje točkove unutar svog destruktora. Ali to je samo konvencija, dokumentacija bi trebalo da pomene ako se dešava nešto komplikovanije.
+- Jedno rešenje je, pa, biti pažljiv i pročitati dokumentaciju. Ne pretpostavljati ništa o životnom veku reference, ako ju je kreirao drugi kod. Ako klasa TCarima polje koje ukazuje na neku instancu klase , konvencijaTWheel je da je referenca na klasu ` wheel` validna sve dok postoji referenca na klasu ` car` , a klasa ` car` će osloboditi svoje točkove unutar svog destruktora. Ali to je samo konvencija, dokumentacija bi trebalo da pomene ako se dešava nešto komplikovanije.
 
-    U gornjem primeru, odmah nakon oslobađanja Obj1instance, možete jednostavno Obj2eksplicitno postaviti promenljivu na nil. To je trivijalno u ovom jednostavnom slučaju.
+  U gornjem primeru, odmah nakon oslobađanja Obj1instance, možete jednostavno Obj2eksplicitno postaviti promenljivu na nil. To je trivijalno u ovom jednostavnom slučaju.
 
-    Najbolje rešenje za budućnost je korišćenje TComponentmehanizma klase "obaveštavanja o slobodi". Jedna komponenta može biti obaveštena kada se druga komponenta oslobodi i tako postaviti njenu referencu na nil.
+- Najbolje rešenje za budućnost je korišćenje TComponentmehanizma klase "obaveštavanja o slobodi". Jedna komponenta može biti obaveštena kada se druga komponenta oslobodi i tako postaviti njenu referencu na nil.
 
-    Tako dobijate nešto poput slabe reference . Može se nositi sa različitim scenarijima upotrebe, na primer, možete dozvoliti kodu izvan klase da postavi vašu referencu, a spoljni kod takođe može osloboditi instancu u bilo kom trenutku.
+Tako dobijate nešto poput slabe reference . Može se nositi sa različitim scenarijima upotrebe, na primer, možete dozvoliti kodu izvan klase da postavi vašu referencu, a spoljni kod takođe može osloboditi instancu u bilo kom trenutku.
 
-    Ovo zahteva da obe klase potiču od TComponent. Njegova upotreba se generalno svodi na pozivanje FreeNotification, RemoveFreeNotificationi prepisivanje Notification.
+Ovo zahteva da obe klase potiču od TComponent. Njegova upotreba se generalno svodi na pozivanje FreeNotification, RemoveFreeNotificationi prepisivanje Notification.
 
-    Evo kompletnog primera koji pokazuje kako se koristi ovaj mehanizam, zajedno sa konstruktorom/destruktorom i svojstvom setera. Ponekad se može uraditi jednostavnije, ali ovo je potpuna verzija koja je uvek ispravna :)
+Evo kompletnog primera koji pokazuje kako se koristi ovaj mehanizam, zajedno sa konstruktorom/destruktorom i svojstvom setera. Ponekad se može uraditi jednostavnije, ali ovo je potpuna verzija koja je uvek ispravna :)
+  
+```pascal
+type
+  TControl = class(TComponent)
+  end;
+ TContainer = class(TComponent)
+  private
+    FSomeSpecialControl: TControl;
+    procedure SetSomeSpecialControl(const Value: TControl);
+  protected
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+  public
+    destructor Destroy; override;
+    property SomeSpecialControl: TControl
+      read FSomeSpecialControl write SetSomeSpecialControl;
+  end;
+implementation
+procedure TContainer.Notification(AComponent: TComponent; Operation: TOperation);
+  begin
+  inherited;
+  if (Operation = opRemove) and (AComponent = FSomeSpecialControl) then
+    { set to nil by SetSomeSpecialControl to clean nicely }
+    SomeSpecialControl := nil;
+  end;
+procedure TContainer.SetSomeSpecialControl(const Value: TControl);
+begin
+  if FSomeSpecialControl <> Value then
+  begin
+    if FSomeSpecialControl <> nil then
+      FSomeSpecialControl.RemoveFreeNotification(Self);
+    FSomeSpecialControl := Value;
+    if FSomeSpecialControl <> nil then
+      FSomeSpecialControl.FreeNotification(Self);
+  end;
+end;
 
-    type
-      TControl = class(TComponent)
-      end;
+destructor TContainer.Destroy;
+begin
+  { set to nil by SetSomeSpecialControl, to detach free notification }
+  SomeSpecialControl := nil;
+  inherited;
+end;
+```
 
-      TContainer = class(TComponent)
-      private
-        FSomeSpecialControl: TControl;
-        procedure SetSomeSpecialControl(const Value: TControl);
-      protected
-        procedure Notification(AComponent: TComponent; Operation: TOperation); override;
-      public
-        destructor Destroy; override;
-        property SomeSpecialControl: TControl
-          read FSomeSpecialControl write SetSomeSpecialControl;
-      end;
+### 5.6 Besplatni posmatrač obaveštenja (Castle Game Engine)
 
-    implementation
+U Castle Game Engine - u podstičemo korišćenje `TFreeNotificationObserver` iz `CastleClassUtils` unita umesto direktnog pozivanja `FreeNotification` i `RemoveFreeNotification` prevazilaženja `Notification`.
 
-    procedure TContainer.Notification(AComponent: TComponent; Operation: TOperation);
-    begin
-      inherited;
-      if (Operation = opRemove) and (AComponent = FSomeSpecialControl) then
-        { set to nil by SetSomeSpecialControl to clean nicely }
-        SomeSpecialControl := nil;
-    end;
+Generalno, korišćenje `TFreeNotificationObserver` izgleda malo jednostavnije nego `FreeNotification` direktno korišćenje mehanizma (mada priznajem da je to stvar ukusa). Ali posebno kada se ista instanca klase mora posmatrati zbog više razloga , onda `TFreeNotificationObserver` je mnogo jednostavnije za korišćenje (direktno korišćenje `FreeNotification` u ovom slučaju može postati komplikovano, jer morate paziti da ne odjavite obaveštenje prerano).
 
-    procedure TContainer.SetSomeSpecialControl(const Value: TControl);
-    begin
-      if FSomeSpecialControl <> Value then
-      begin
-        if FSomeSpecialControl <> nil then
-          FSomeSpecialControl.RemoveFreeNotification(Self);
-        FSomeSpecialControl := Value;
-        if FSomeSpecialControl <> nil then
-          FSomeSpecialControl.FreeNotification(Self);
-      end;
-    end;
+Ovo je primer koda koji koristi `TFreeNotificationObserver`, da bi se postigao isti efekat kao u primeru u prethodnom odeljku:
 
-    destructor TContainer.Destroy;
-    begin
-      { set to nil by SetSomeSpecialControl, to detach free notification }
-      SomeSpecialControl := nil;
-      inherited;
-    end;
-
-5.6. Besplatni posmatrač obaveštenja (Castle Game Engine)
-
-U Castle Game Engine- u podstičemo korišćenje TFreeNotificationObserverfrom CastleClassUtilsjedinice umesto direktnog pozivanja FreeNotificationi RemoveFreeNotificationprevazilaženja Notification.
-
-Generalno, korišćenje TFreeNotificationObserverizgleda malo jednostavnije nego FreeNotificationdirektno korišćenje mehanizma (mada priznajem da je to stvar ukusa). Ali posebno kada se ista instanca klase mora posmatrati zbog više razloga , onda TFreeNotificationObserverje mnogo jednostavnije za korišćenje (direktno korišćenje FreeNotificationu ovom slučaju može postati komplikovano, jer morate paziti da ne odjavite obaveštenje prerano).
-
-Ovo je primer koda koji koristi TFreeNotificationObserver, da bi se postigao isti efekat kao u primeru u prethodnom odeljku:
-
+```pascal
 type
   TControl = class(TComponent)
   end;
@@ -1803,12 +1851,15 @@ begin
   // set property to nil when the referenced component is freed
   SomeSpecialControl := nil;
 end;
+```
 
-Pogledajte https://castle-engine.io/custom_components .
-6. Izuzeci
-6.1. Pregled
+Pogledajte https://castle-engine.io/custom_components.
 
-Izuzeci dozvoljavaju prekid normalnog izvršavanja koda .
+## 6 Izuzeci
+
+### 6.1 Pregled
+
+Izuzeci dozvoljavaju prekid normalnog izvršavanja koda.
 
     U bilo kom trenutku u programu, možete pokrenuti izuzetak koristeći raiseključnu reč . U stvari, linije koda koje slede nakon raise …​poziva se neće izvršiti.
 
@@ -1838,10 +1889,11 @@ Izuzeci dozvoljavaju prekid normalnog izvršavanja koda .
 
     U većini slučajeva, objekat se konstruiše istovremeno kada se poziva raise, kao raise ESomethingBadHappened.Create('Description of what bad thing happened.').
 
-6.2. Podizanje
+### 6.2. Podizanje
 
 Ako želite da pokrenete sopstveni izuzetak, deklarišite ga i pozovite raise …​kada je to potrebno:
 
+```pascal
 type
   EInvalidParameter = class(Exception);
 
@@ -1851,11 +1903,13 @@ begin
   if Pos(' ', Result) <> 0 then
     raise EInvalidParameter.Create('Invalid parameter, space is not allowed');
 end;
+```
 
 Imajte na umu da izraz koji sledi raisetreba da bude validna instanca klase koju treba podići. Skoro uvek ćete ovde kreirati instancu izuzetka.
 
 Takođe možete koristiti CreateFmtkonstruktor, što je praktična prečica za Create(Format(MessageFormat, MessageArguments)). Ovo je uobičajen način da se poruci o izuzetku pruži više informacija. Prethodni primer možemo poboljšati ovako:
 
+```pascal
 type
   EInvalidParameter = class(Exception);
 
@@ -1865,11 +1919,13 @@ begin
   if Pos(' ', Result) <> 0 then
     raise EInvalidParameter.CreateFmt('Invalid parameter %s, space is not allowed', [Result]);
 end;
+```
 
-6.3. Hvatanje
+### 6.3. Hvatanje
 
 Možete uhvatiti izuzetak ovako:
 
+```pascal
 var
   Parameter1, Parameter2, Parameter3: String;
 begin
@@ -1886,18 +1942,22 @@ begin
       WriteLn('EInvalidParameter exception occurred');
   end;
 end;
+```
 
 Da bismo poboljšali gornji primer, možemo deklarisati ime za instancu izuzetka (koristićemo ga Eu primeru). Na ovaj način možemo ispisati poruku o izuzetku:
 
+```pascal
 try
 ...
 except
   on E: EInvalidParameter do
     WriteLn('EInvalidParameter exception occurred with message: ' + E.Message);
 end;
+```
 
 Takođe bi se moglo testirati za više klasa izuzetaka:
 
+```pascal
 try
 ...
 except
@@ -1906,9 +1966,11 @@ except
   on E: ESomeOtherException do
     WriteLn('ESomeOtherException exception occurred with message: ' + E.Message);
 end;
+```
 
 Takođe možete reagovati na bilo koji izuzetak, ako ne koristite nijedan onizraz:
 
+```pascal
 try
 ...
 except
@@ -1916,6 +1978,7 @@ except
 end;
 // WARNING: DO NOT FOLLOW THIS EXAMPLE WITHOUT READING A WARNING BELOW
 // ABOUT "CAPTURING ALL EXCEPTIONS"
+```
 
 Generalno, trebalo bi da hvatate samo izuzetke određene klase, koji signaliziraju određeni problem sa kojim znate šta da radite . Budite oprezni sa hvatanjem izuzetaka opšteg tipa (kao što je hvatanje bilo kog Exceptionili bilo kog TObject), jer možete lako hvatati previše izuzetaka i kasnije izazvati probleme prilikom debagovanja drugih problema. Kao i u svim programskim jezicima sa izuzecima, dobro pravilo kojeg se treba pridržavati je da nikada ne hvatate izuzetak koji ne znate kako da rešite . Posebno, nemojte hvatati izuzetak samo kao jednostavno rešenje problema, bez prethodnog istraživanja zašto se izuzetak javlja.
 
@@ -1925,6 +1988,7 @@ Generalno, trebalo bi da hvatate samo izuzetke određene klase, koji signalizira
 
 Drugi način da se uhvate svi izuzeci je korišćenje:
 
+```pascal
 try
 ...
 except
@@ -1933,9 +1997,11 @@ except
 end;
 // WARNING: DO NOT FOLLOW THIS EXAMPLE WITHOUT READING A WARNING ABOVE
 // ABOUT "CAPTURING ALL EXCEPTIONS"
+```
 
 Iako je obično dovoljno da se snimi Exception:
 
+```pascal
 try
 ...
 except
@@ -1944,9 +2010,11 @@ except
 end;
 // WARNING: DO NOT FOLLOW THIS EXAMPLE WITHOUT READING A WARNING ABOVE
 // ABOUT "CAPTURING ALL EXCEPTIONS"
+```
 
 Možete "ponovo pokrenuti" izuzetak u except …​ endbloku, ako tako odlučite. Možete to učiniti samo raise Eako je instanca izuzetka E, takođe možete koristiti bez parametara raise. Na primer:
 
+```pascal
 try
 ...
 except
@@ -1958,12 +2026,15 @@ except
       raise;
   end;
 end;
+```
 
 Imajte na umu da, iako je izuzetak instanca objekta, nikada ga ne bi trebalo ručno oslobađati nakon pokretanja. Kompilator će generisati odgovarajući kod koji osigurava oslobađanje objekta izuzetka nakon što se obradi.
-6.4. Konačno (izvršavanje stvari bez obzira na to da li se dogodio izuzetak)
 
-Često se konstrukcija koristi try .. finally .. endza oslobađanje instance nekog objekta, bez obzira na to da li se dogodio izuzetak prilikom korišćenja ovog objekta. Način pisanja izgleda ovako:
+### 6.4. Konačno (izvršavanje stvari bez obzira na to da li se dogodio izuzetak)
 
+Često se konstrukcija koristi `try .. finally .. end` za oslobađanje instance nekog objekta, bez obzira na to da li se dogodio izuzetak prilikom korišćenja ovog objekta. Način pisanja izgleda ovako:
+
+```pascal
 procedure MyProcedure;
 var
   MyInstance: TMyClass;
@@ -1976,11 +2047,13 @@ begin
     FreeAndNil(MyInstance);
   end;
 end;
+```
 
-Ovo uvek funkcioniše i ne izaziva curenje memorije, čak i ako MyInstance.DoSomethingili MyInstance.DoSomethingElseizazove izuzetak.
+Ovo uvek funkcioniše i ne izaziva curenje memorije, čak i ako "MyInstance.DoSomething" ili "MyInstance.DoSomethingElse" izazove izuzetak.
 
-Imajte na umu da ovo uzima u obzir da lokalne promenljive, kao MyInstancegore, imaju nedefinisane vrednosti (mogu sadržati slučajno "memorijsko smeće") pre prvog dodeljivanja. To jest, pisanje nečega poput ovoga ne bi bilo validno:
+Imajte na umu da ovo uzima u obzir da lokalne promenljive, kao "MyInstance" gore, imaju nedefinisane vrednosti (mogu sadržati slučajno "memorijsko smeće") pre prvog dodeljivanja. To jest, pisanje nečega poput ovoga ne bi bilo validno:
 
+```pascal
 // INCORRECT EXAMPLE:
 procedure MyProcedure;
 var
@@ -1995,11 +2068,13 @@ begin
     FreeAndNil(MyInstance);
   end;
 end;
+```
 
 Gore navedeni primer nije validan: ako se izuzetak desi unutar TMyClass.Create(konstruktor takođe može da podigne izuzetak) ili unutar CallSomeOtherProcedure, tada MyInstancepromenljiva nije inicijalizovana. Pozivanje FreeAndNil(MyInstance)će pokušati da pozove destruktor MyInstance, što će najverovatnije dovesti do pada programa sa greškom kršenja pristupa (greška segmentacije) . U stvari, jedan izuzetak izaziva drugi izuzetak, što će izveštaj o grešci učiniti ne baš korisnim: nećete videti poruku originalnog izuzetka.
 
 Ponekad je opravdano popraviti gornji kod tako što se prvo inicijalizuju sve lokalne promenljive na nil(na kojima FreeAndNilje pozivanje bezbedno i neće ništa uraditi). Ovo ima smisla ako oslobodite mnogo instanci klase. Dakle, dva primera koda ispod podjednako dobro funkcionišu:
 
+```pascal
 procedure MyProcedure;
 var
   MyInstance1: TMyClass1;
@@ -2027,9 +2102,11 @@ begin
     FreeAndNil(MyInstance1);
   end;
 end;
+```
 
 Verovatno je čitljivije u donjem obliku:
 
+```pascal
 procedure MyProcedure;
 var
   MyInstance1: TMyClass1;
@@ -2054,32 +2131,37 @@ begin
     FreeAndNil(MyInstance1);
   end;
 end;
+```
 
-Napomena
-	U ovom jednostavnom primeru, takođe biste mogli dati validan argument da kod treba podeliti na 3 odvojene procedure, od kojih jedna poziva drugu.
+**Napomena**:  
+U ovom jednostavnom primeru, takođe biste mogli dati validan argument da kod treba podeliti na 3 odvojene procedure, od kojih jedna poziva drugu.
 
-Poslednji deo bloka try .. finally .. endse izvršava u većini mogućih scenarija kada napustite glavni kod. Razmotrite ovo:
+Poslednji deo bloka `try .. finally .. end` se izvršava u većini mogućih scenarija kada napustite glavni kod. Razmotrite ovo:
 
+```pascal
 try
   A;
 finally
   B;
 end;
+```
 
 Dakle, Bizvršiće se ako
 
-    Izazvalo Aje (i nije ga uhvatilo) izuzetak.
+- Izazvalo Aje (i nije ga uhvatilo) izuzetak.
 
-    Ili ćete pozvati Exitili (ako ste u toku) Breakili Continueodmah nakon pozivanja A.
+- Ili ćete pozvati Exitili (ako ste u toku) Breakili Continueodmah nakon pozivanja A.
 
-    Ili se ništa od navedenog nije desilo, i kod se Ajednostavno izvršio bez ikakvog izuzetka, a vi niste pozvali Exit, Breakili Continuebilo šta drugo.
+- Ili se ništa od navedenog nije desilo, i kod se Ajednostavno izvršio bez ikakvog izuzetka, a vi niste pozvali Exit, Breakili Continuebilo šta drugo.
 
 Jedini način da se zaista izbegne Bizvršavanje jeste da se bezuslovno prekine proces aplikacije korišćenjem `` Haltili nekih platformski specifičnih API-ja (kao što je libc exit na Unix-u ) unutar ` A. Što se generalno ne bi trebalo raditi — fleksibilnije je koristiti izuzetke za prekid aplikacije, jer to omogućava nekom drugom kodu da ima priliku da se očisti.
-Napomena
-	Ne try .. finally .. endhvata izuzetak. Izuzetak će se i dalje širiti naviše i može ga hvatati blok try .. except .. endvan ovog.
 
-Primer try .. finally .. endzajedno sa Exitpozivima:
+**Napomena**:  
+Ne `try .. finally .. end` hvata izuzetak. Izuzetak će se i dalje širiti naviše i može ga hvatati blok `try .. except .. end` van ovog.
 
+Primer `try .. finally .. end` zajedno sa `Exit` pozivima:
+
+```pascal
 procedure MyProcedure;
 begin
   try
@@ -2091,23 +2173,27 @@ begin
   end;
   WriteLn('This will not happen');
 end;
+```
 
-Pogledajte poglavlje o izuzecima za detaljniji opis izuzetaka , uključujući kako raiseih koristiti i try …​ except …​ endkako ih hvatati.
-6.5. Kako različite biblioteke prikazuju izuzetke
+Pogledajte poglavlje o izuzecima za detaljniji opis izuzetaka, uključujući kako `raise` koristiti i `try …​ except …​ end` kako ih hvatati.
 
-    U slučaju Lazarus LCL-a, izuzeci koji se javljaju tokom događaja (razni povratni pozivi dodeljeni OnXxxsvojstvima LCL komponenti) biće zabeleženi i rezultiraće lepom dijaloškom porukom koja omogućava korisniku da nastavi i zaustavi aplikaciju. To znači da vaši sopstveni izuzeci ne "izlaze" iz Application.ProcessMessages, tako da automatski ne prekidaju aplikaciju. Možete konfigurisati šta se dešava koristeći TApplicationProperties.OnException.
+### 6.5. Kako različite biblioteke prikazuju izuzetke
 
-    Slično tome, u slučaju Castle Game Engine-a sa CastleWindow: izuzetak se interno beleži i rezultira lepom porukom o grešci. Dakle, izuzeci ne "izlaze" iz Application.ProcessMessages. Ponovo, možete konfigurisati šta se dešava koristeći Application.OnException.
+- U slučaju Lazarus LCL-a, izuzeci koji se javljaju tokom događaja (razni povratni pozivi dodeljeni OnXxxsvojstvima LCL komponenti) biće zabeleženi i rezultiraće lepom dijaloškom porukom koja omogućava korisniku da nastavi i zaustavi aplikaciju. To znači da vaši sopstveni izuzeci ne "izlaze" iz Application.ProcessMessages, tako da automatski ne prekidaju aplikaciju. Možete konfigurisati šta se dešava koristeći TApplicationProperties.OnException.
 
-    Neke druge GUI biblioteke mogu da urade slično kao gore navedeno.
+- Slično tome, u slučaju Castle Game Engine-a sa CastleWindow: izuzetak se interno beleži i rezultira lepom porukom o grešci. Dakle, izuzeci ne "izlaze" iz Application.ProcessMessages. Ponovo, možete konfigurisati šta se dešava koristeći Application.OnException.
 
-    U slučaju drugih aplikacija, možete konfigurisati kako se izuzetak prikazuje dodeljivanjem globalnog povratnog poziva funkciji OnHaltProgram.
+- Neke druge GUI biblioteke mogu da urade slično kao gore navedeno.
 
-7. Biblioteka za vreme izvršavanja
-7.1. Ulaz/izlaz korišćenjem tokova podataka
+- U slučaju drugih aplikacija, možete konfigurisati kako se izuzetak prikazuje dodeljivanjem globalnog povratnog poziva funkciji OnHaltProgram.
 
-Moderni programi bi trebalo da koriste TStreamklasu i njene brojne potomke za obavljanje ulaz/izlaz. Ona ima mnogo korisnih potomaka, kao što su TFileStream, TMemoryStream, TStringStream.
+## 7. Runtime biblioteka
 
+### 7.1. Ulaz/izlaz korišćenjem tokova podataka
+
+Moderni programi bi trebalo da koriste `TStream` klasu i njene brojne potomke za obavljanje ulaz/izlaz. Ona ima mnogo korisnih potomaka, kao što su `TFileStream`, `TMemoryStream`, `TStringStream`.
+
+```pascal
 {$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
 {$ifdef MSWINDOWS} {$apptype CONSOLE} {$endif}
 
@@ -2136,18 +2222,22 @@ begin
 
   WriteLn('Read from file got integer: ', OutputInt);
 end.
+```
 
 U Castle Game Engine-u : Trebalo bi da koristite Downloadfunkciju da biste kreirali strim koji dobija podatke sa bilo koje URL adrese. Na ovaj način se podržavaju regularne datoteke, HTTP i HTTPS resursi, Android resursi i još mnogo toga. Štaviše, da biste otvorili resurs unutar podataka vaše igre (u datapoddirektorijumu), koristite posebnu castle-data:/xxxURL adresu. Primeri:
 
+```pascal
 EnableNetwork := true;
 S := Download('https://castle-engine.io/latest.zip');
 
 S := Download('file:///home/michalis/my_binary_file.data');
 
 S := Download('castle-data:/gui/my_image.png');
+```
 
 Za čitanje tekstualnih datoteka, savetujemo korišćenje TCastleTextReaderklase . Ona pruža API orijentisan na linije i obuhvata TStreamunutrašnjost. TCastleTextReaderKonstruktor može da uzme gotov URL ili možete da mu prosledite svoj prilagođeni TStreamizvorni kod.
 
+```pascal
 Text := TCastleTextReader.Create('castle-data:/my_data.txt');
 try
   while not Text.Eof do
@@ -2155,9 +2245,11 @@ try
 finally
   FreeAndNil(Text);
 end;
+```
 
-Dokumentacija svih funkcija Castle Game Engine-a za učitavanje i čuvanje strimova, uključujući Downloadfunkciju i TCastleTextReaderklasu, nalazi se na https://castle-engine.io/url .
-7.2. Kontejneri (liste, rečnici) korišćenjem generičkih klasifikacija
+Dokumentacija svih funkcija Castle Game Engine-a za učitavanje i čuvanje strimova, uključujući Downloadfunkciju i TCastleTextReaderklasu, nalazi se na <https://castle-engine.io/url>.
+
+### 7.2. Kontejneri (liste, rečnici) korišćenjem generičkih klasifikacija
 
 Jezik i biblioteka za izvršavanje nude razne fleksibilne kontejnere. Postoji veliki broj negeneričkih klasa (kao što su TListi TObjectListiz Contnrsjedinice), a postoje i dinamički nizovi ( array of TMyType). Ali da biste postigli najveću fleksibilnost i bezbednost tipa, savetujem da za većinu vaših potreba koristite generičke kontejnere .
 
@@ -2165,41 +2257,41 @@ Generički kontejneri vam pružaju mnogo korisnih metoda za dodavanje, uklanjanj
 
 Trenutno postoje tri biblioteke koje pružaju generičke kontejnere u FPC-u:
 
-    Generics.Collectionsjedinica i prijatelji (od FPC >= 3.2.0)
+- Generics.Collectionsjedinica i prijatelji (od FPC >= 3.2.0)
 
-    FGLjedinica
+- FGLjedinica
 
-    GVectorjedinica i prijatelji (zajedno u fcl-stl)
+- GVector unit i prijatelji (zajedno u fcl-stl)
 
 Savetujemo korišćenje Generics.Collectionsjedinice. Generički kontejneri koje ona implementira su
 
-    prepun korisnih karakteristika,
+- prepun korisnih karakteristika,
 
-    veoma efikasno (posebno važno za pristup rečnicima pomoću ključeva),
+- veoma efikasno (posebno važno za pristup rečnicima pomoću ključeva),
 
-    kompatibilan između FPC-a i Delphi-ja,
+- kompatibilan između FPC-a i Delphi-ja,
 
-    Imenovanje je u skladu sa drugim delovima standardne biblioteke (kao što su negenerički kontejneri iz Contnrsjedinice).
+- Imenovanje je u skladu sa drugim delovima standardne biblioteke (kao što su negenerički kontejneri iz Contnrsjedinice).
 
 U Castle Game Engine-u : Intenzivno ga koristimo Generics.Collectionsu celom endžinu i savetujemo vam da ga koristite Generics.Collectionsi u svojim aplikacijama!
 
-Najvažniji časovi iz ove Generics.Collectionsjedinice su:
+Najvažnije klase iz ove Generics.Collections unita su:
 
-TList
+**TList**:  
+Generička lista tipova.
 
-    Generički spisak tipova.
-Lista objekata
+**Lista objekata**  
+Generička lista instanci objekata. Može da "poseduje" decu, što znači da će ih automatski osloboditi.
 
-    Generička lista instanci objekata. Može da "poseduje" decu, što znači da će ih automatski osloboditi.
-TRečnik
+**TDictionary**  
+Generički rečnik.
 
-    Generički rečnik.
-TObjectDictionary
-
-    Generički rečnik koji može da "poseduje" ključeve i/ili vrednosti.
+**TObjectDictionary**:
+Generički rečnik koji može da "poseduje" ključeve i/ili vrednosti.
 
 Evo kako se koristi jednostavan generički izraz TObjectList:
 
+```pascal
 {$ifdef FPC} {$mode objfpc}{$H+}{$J-} {$endif}
 {$ifdef MSWINDOWS} {$apptype CONSOLE} {$endif}
 
@@ -2231,6 +2323,7 @@ begin
     Writeln(Apples[1].Name);
   finally FreeAndNil(Apples) end;
 end.
+```
 
 Imajte na umu da neke operacije zahtevaju poređenje dve stavke, kao što su sortiranje i pretraživanje (npr. pomoću Sorti IndexOfmetoda). Generics.CollectionsKontejneri koriste upoređivač za ovo. Podrazumevani upoređivač je razuman za sve tipove, čak i za zapise (u kom slučaju upoređuje sadržaj memorije, što je razuman podrazumevani podešavanje barem za pretraživanje pomoću IndexOf).
 
