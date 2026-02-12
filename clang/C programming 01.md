@@ -21,27 +21,29 @@ Završimo ovo putovanje kroz traku sećanja priznanjem. Uprkos tome što sam dob
 
 Toliko o upoznavanju i dobrim starim danima. U narednim mesecima ćemo se prepustiti omiljenoj zabavi, objavljivanju i objašnjenju alata C jezika za višekratnu upotrebu. Napisao sam četiri knjige i nekoliko članaka na tu temu, a povratne informacije čitalaca govore da je kraj itekako vredan traganja. Ova kolona je dobar medij za takav materijal; Objavljivanje besplatnih softverskih alata je cenjena tradicija DDS-a.
 
-Mali program za dešifrovanje u ovom izdanju ne mora nužno da bude primer onoga što možete očekivati od ove kolone. Kao i kod prethodnih kolona "C sanduk", većina ovih kolona će imati značajne primere C koda. Međutim, neke kolumne će odstupiti da bi raspravljale o drugim stvarima. Mogao bih da recenziram knjigu ili proizvod ili intervjuišem C-svetilo. Povremeno ću posvetiti kolumnu pismima od vas dragi čitaoci. Međutim, uvek će postojati bar vinjeta koda. Tako je mala igra u Listingu One.
+Mali program za dešifrovanje u ovom izdanju ne mora nužno da bude primer onoga što možete očekivati od ove kolone. Kao i kod prethodnih kolona "C sanduk", većina ovih kolona će imati značajne primere C koda. Međutim, neke kolumne će odstupiti da bi raspravljale o drugim stvarima. Mogao bih da recenziram knjigu ili proizvod ili intervjuišem C-svetilo. Povremeno ću posvetiti kolumnu pismima od vas dragi čitaoci. Međutim, uvek će postojati bar vinjeta koda. Tako je mala igra u Listingu 1.
 
 Jedna od prednosti pisanja kolumne je da možete da uključite neke svoje stvari. U prošlosti sam vodio ne baš uspešan posao sa prodajom softverskih alata poštom. Neki od proizvoda su i dalje dostupni, ali više nemam nikakav poslovni interes za njih. Povremeno se u ovoj kolumni može raspravljati o jednom od njih ako je relevantno za predmet. Ako se to dogodi, reći ću vam o posebnom odnosu koji imam sa predmetom kako biste razumeli moj neobuzdani entuzijazam i prihvatili ga kako god želite. Sve to na stranu, ne ustručavam se da vas ohrabrim da čitate moje knjige.
 
-## Kroketi
+## Krokiji
 
-Džejms J. Kilpatrik je nacionalni politički komentator sa širokom čitalačkom publikom na uredničkim stranicama mnogih novina. Pored pisanja i pojavljivanja u televizijskim programima, gospodin Kilpatrik je sebe postavio za jednog od čuvara dobrog stila i pravilne upotrebe engleskog jezika. (Samoimenovani čuvari stila i upotrebe su jedina vrsta koju dobijamo – niko drugi ne brine dovoljno da ih imenuje.) Napisao je divnu knjigu pod nazivom Umetnost pisca u kojoj navodi ono što on naziva svojim uputstvima o praksi pisanja. Kilpatrikovi kroketi su kućni ljubimci kao što su zloupotrebe reči nadamo se i jedino, a njegova lista je pametno predstavljena i ima mnogo smisla. Ako volite da čitate ili pišete, preporučujem vam da pročitate Umetnost pisca. Sam predgovor Vilijama F. Baklija vredi svoje cene. Nemojte se odlagati ako se politika bilo kog autora razlikuje od vaše. U Umetnosti pisca nema političkih izjava, samo dobar smisao za pisanu reč. Pozajmivši Kilpatrikovu ideju i prenevši njenu primenu sa engleskog na C, svaka kolona "Programiranje C" će ponuditi jedan ili više mojih sopstvenih C programskih kroketa kada mi padnu na pamet i kada naiđem na njih. Evo nekoliko primera za početak liste.
+Džejms J. Kilpatrik je nacionalni politički komentator sa širokom čitalačkom publikom na uredničkim stranicama mnogih novina. Pored pisanja i pojavljivanja u televizijskim programima, gospodin Kilpatrik je sebe postavio za jednog od čuvara dobrog stila i pravilne upotrebe engleskog jezika. (Samoimenovani čuvari stila i upotrebe su jedina vrsta koju dobijamo – niko drugi ne brine dovoljno da ih imenuje.) Napisao je divnu knjigu pod nazivom "Umetnost pisca" u kojoj navodi ono što on naziva svojim uputstvima o praksi pisanja. Kilpatrikovi krokiji su kućni ljubimci kao što su zloupotrebe reči nadamo se i jedino, a njegova lista je pametno predstavljena i ima mnogo smisla. Ako volite da čitate ili pišete, preporučujem vam da pročitate "Umetnost pisca". Sam predgovor Vilijama F. Baklija vredi svoje cene. Nemojte se odlagati ako se politika bilo kog autora razlikuje od vaše. U "Umetnosti pisca" nema političkih izjava, samo dobar smisao za pisanu reč. Pozajmivši Kilpatrikovu ideju i prenevši njenu primenu sa engleskog na C, svaka kolona "Programiranje C" će ponuditi jedan ili više mojih sopstvenih C programskih krokija kada mi padnu na pamet i kada naiđem na njih. Evo nekoliko primera za početak liste.
 
-Example 1: PC verzija crypto.c
+Primer 1: PC verzija crypto.c
 
 ```c
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-char crypto [80];        /* encrypted message */
-char decoded [80]        /* decrypted message */
-char alphabet [] - "\nabcdefghijklmnopqrstuvwxyz"'
-char subs [] - "                                ";
+char crypto [80];       /* encrypted message */
+char decoded [80];      /* decrypted message */
+char alphabet [];       /*"abcdefghijklmnopqrstuvwxyz"*/
+char subs [];           /*"                          "*/
+
 /* -----ANSI.SYS screen driver-----------*/
 #define cursor (x,y) printf("\033[%02dH",y,x)
 #define clear_screen() puts("\033[2]")
+
 main ()
 {
     int i, cp, a, b;
@@ -51,14 +53,14 @@ main ()
     puts("Enter the encrpted quote:\n");
     fget(crypto, 80, stdin);
     for (i = 0; i < strlen(crypto); i++)
-        decoded[i] = ' ';           /* clear the decrypted msg */
+        decoded[i] = ' ';       /* clear the decrypted msg */
     decoded[i] = '\0';
     while (1)  {
         cursor(1,9);
         puts(decoded);
-        puts(alphabet);          /* display the alphabet */
+        puts(alphabet);         /* display the alphabet */
         puts("\nEnter 2 letter substitution: (xy):");
-        fgets(sb, "99", 2) == 0)
+        if(fgets(sb, "99", 2) == 0)
             break;
         a = *sb, b = *(sb+1);
         if (isalpha(a) && isalpha(b)) {
@@ -77,7 +79,7 @@ main ()
 }
 ```
 
-Example 2: Nekoliko načina za postavljanje zagrada i uvlačenje linija.
+Primer 2: Nekoliko načina za postavljanje zagrada i uvlačenje linija.
 
 ```c
 /* --- then ... endif style (K&R, too) --- */
@@ -86,55 +88,57 @@ if (a == b)    {
     bar();
 }
 /* --- begin ... end style --- */
-if (a == b) {
+if (a == b)
+{
     foo();
     bar();
 }
 /* --- do ... doend style --- */
-if (a == b) {
+if (a == b)
+    {
     foo();
     bar();
-}
+    }
 /* --- poised roadrunner style (ugh!) --- */
-if (a == b) {
-    foo();
-    bar();    
-}
+if (a == b)
+{   foo();
+    bar();    }
 ```
 
-### C kroked broj 1
+### C kroki broj 1
 
 Uznemiren sam programima predprocesora jezika C ili datotekama makroa koji vas podstiču da kodirate u nekoj nestandardnoj sintaksi, koja se zatim prevodi u C. Praksa sugeriše da je jeziku C potrebno poboljšanje (izvan ANSI i C + +, naravno). Na primer, neki predprocesori ili makroi žele da koristite početak i kraj umesto otvorenih i zatvorenih zagrada, navodno da bi vaš kod izgledao više kao Pascal ili na drugi način čitljiviji. po mom mišljenju, početnicima C programerima bolje je bez ovih takozvanih C pojačivača. Bolje je naučiti pravu stvar i zavoleti je mnogo ranije.
 
-### C Kroked broj 2
+### C kroki broj 2
 
-Ne volim da čitam C programe konnlllllnlllji su nedosledni u svom pozicioniraju zagrada i kodu za uvlačeje. Primer 2, ova stranica, predstavja nekoliko načina na koje možete postaviti zagrade i uvući linije.
+Ne volim da čitam C programe koji su nedosledni u svom pozicioniraju zagrada i kodu za uvlačeje. Primer 2, ova stranica, predstavja nekoliko načina na koje možete postaviti zagrade i uvući linije.
 
 Koji god od ovih ili drugih stilova da preferirate, budite dosledni ili rizikujte da izazovete probleme sledećem čitaču vašeg koda. Problem nedoslednosti obično se pojavjuje kada neko modifikuje kod drugog i dva programera preferiraju različite stilove. Program sa takvim mešanim konvencijama je haos.
 
-Dva kuka su dovojna da vam daju ideju i trebalo bi da budu dovojna za mesečnu kolumnu. Moje kroše su zasnovane na mojim mišjejima i ne odražavaju ničiju zvaničnu sankciju. Nisu svi krošei o upotrebi C. Neki bi mogli biti o kompajlerima ili bibliotekama ili piscima ili bilo čemu što se tiče. Ako želite da dodate ili oduzmete spisak – možda se zamarate piscima koji uvek koriste foo i bar u svojim primerima – molimo vas da svoje priloge pošajete na DDS ili na BIKS (alstevens) na CompuServe (71101,1262). Ukjučiću zanimjive, smešne ili na neki drugi način relevantne kročete u ovu kolonu zajedno sa imenima saradnika za kročeti.
+Dva krokija su dovojna da vam daju ideju i trebalo bi da budu dovojna za mesečnu kolumnu. Moji krokiji su zasnovani na mojim mišjejima i ne odražavaju ničiju zvaničnu sankciju. Nisu svi krokiji o upotrebi C. Neki bi mogli biti o kompajlerima ili bibliotekama ili piscima ili bilo čemu što se mene tiče. Ako želite da dodate ili oduzmete spisak – možda se zamarate piscima koji uvek koriste foo i bar u svojim primerima – molimo vas da svoje priloge pošajete na DDS ili na BIX (alstevens) na CompuServe (71101,1262). Ukjučiću zanimjive, smešne ili na neki drugi način relevantne krokije u ovu kolonu zajedno sa imenima saradnika za C krokije.
 
 ## Odeljak za knjige
 
-Knjiga meseca je Macintosh Programming Secrets od Skota Knastera. Nema C kod, ali knjiga je neophodna za čitanje za svakog programera koji će se pozabaviti Macintosh-om. Ne dozvolite da vas doza Pascala uplaši; ti Pascal momci će se uskoro pojaviti, a trenutno postoji nekoliko dobrih C kompajlera za Macintosh.
+Knjiga meseca je Macintosh "Programming Secrets" od Skota Knastera. Nema C kod, ali knjiga je neophodna za čitanje za svakog programera koji će se pozabaviti Macintosh-om. Ne dozvolite da vas doza Pascala uplaši; ti Pascal momci će se uskoro pojaviti, a trenutno postoji nekoliko dobrih C kompajlera za Macintosh.
 
 Osim što je dobar uvod u unutrašnjost ove fascinantne mašine, knjiga je smešna baš kada treba, i nikada nije smešna kada ne. Obično ne volim kompjuterske knjige koje pokušavaju da budu smešne. Često autor ne može da to izvede, koristeći zamornu parodiju ili umornu satiru. Knaster je uspešno izbalansirao zabavni humor i vredne tehničke informacije. Većina pisaca želi da to mogu da urade i da se izvuku. Obično mudri stari urednik sa zelenim nijansama za oči, zlobnom crvenom olovkom i bledim smislom za humor precrta sve te duhovite dragulje. (ako ne čitate ove reči, to se ponovo dogodilo). I pored toga, pozivamo vas da pročitate Knasterovo delo. On je imao vlast nad tim urednikom i uspeo je da na tržište izbaci knjigu koja vas obaveštava, zabavlja i mestimično nasmeje.
 
-## Sin K&R
+## Dete K&R
 
 Deset godina nakon prvog izdanja, Programski jezik C je objavljen u drugom izdanju. Dešava se da može biti mnogo C programera koji nikada nisu pročitali prvo izdanje. Sramota. Mnoštvo drugih knjiga o C-u ima za cilj da ponovo uradi ono što "bela knjiga” najbolje radi: opiše C programerima. Za moj novac, K&R je i dalje najbolji uvod u C ako već znate šta je programiranje. Drugo izdanje dostiže ANSI standard u nastajanju (oh, toliko dugo je "nastajao") iako je Prentice Hol možda bio mudar da sačeka zvanični standard, a ne da promoviše knjigu kao "zasnovanu na nacrtu predloženog ANSI C" u baneru na koricama. Pretpostavljam da je nacrt prilično blizu konačnog standarda, ali ova rana publikacija verovatno znači da ću morati da platim još 21 dolar kada se ukloni oznaka "nacrt" za sledeće štampanje drugog izdanja.
 
+**PS.**:  
 Viđen ovog leta u Parizu: francuski automobil sa hromiranim amblemom koji identifikuje njegov model: "Turbo D." Novi jezik i kompajler od Filipa, možda?
 
 ### Zbunjujuće ali neophodne C konstrukcije
 
 Pretpostavimo da imate niz struktura i da svaka struktura ima niz pokazivača funkcija. Sada, s obzirom na pokazivač na niz struktura, ceo broj koji ide u indeks na željeni element strukture u nizu, i ceo broj koji je u indeksu na funkciju koju želite da pozovete, kako napisati izraz koji poziva funkciju?
 
-Dok razmišljate o tome, evo neke pozadine. Ova vežba nije još jedna C zagonetka, već pravi problem na koji se susreće drajver menija opšte namene. Upravljački program koristi nizove struktura i stringova da opiše hijerarhiju menija. Ovaj koncept alatke menija za višekratnu upotrebu je centralni za većinu C sistema koje sam razvijao, a njegov format se povremeno menjao da bi podržao različite stilove prezentacije menija. Nećete biti iznenađeni da ista tehnika značajno figurira u novom projektu "C programiranje" koji će uskoro biti otkriven.
+Dok razmišljate o tome, evo neke pozadine. Ova vežba nije još jedna C zagonetka, već pravi problem na koji se susreće pisac menija opšte namene. Upravljački program koristi nizove struktura i stringova da opiše hijerarhiju menija. Ovaj koncept alatke menija za višekratnu upotrebu je centralni za većinu C sistema koje sam razvijao, a njegov format se povremeno menjao da bi podržao različite stilove prezentacije menija. Nećete biti iznenađeni da ista tehnika značajno figurira u novom projektu "C programiranje" koji će uskoro biti otkriven.
 
-Upravo pomenuta struktura opisuje meni. Niz tih struktura predstavlja sve menije u programu. Niz pokazivača funkcija predstavlja funkcije koje treba pozvati kada korisnik odabere odgovarajuće komande menija. Primer 3, ova stranica, prikazuje relevantne strukture podataka i stavke. U problemu, pokazivač mnn pokazuje na niz menija, curr_menu ceo broj predstavlja trenutni meni, a ceo broj za izbor predstavlja trenutni ceo broj za izbor. Zamislite da želite da pozovete odgovarajuću funkciju i prosledite joj broj menija i broj za izbor koji su doveli do njenog poziva.
+Upravo pomenuta struktura opisuje meni. Niz tih struktura predstavlja sve menije u programu. Niz pokazivača funkcija predstavlja funkcije koje treba pozvati kada korisnik odabere odgovarajuće komande menija. Primer 3, ova stranica, prikazuje relevantne strukture podataka i stavke. U problemu, pokazivač "mnn" pokazuje na niz menija, "curr_menu" ceo broj predstavlja trenutni meni, a "selection" predstavlja trenutni ceo broj za izbor. Zamislite da želite da pozovete odgovarajuću funkciju i prosledite joj broj menija i broj za izbor koji su doveli do njenog poziva.
 
-Example 3: Struktura koja ukazuje na niz menija i funkcija za njihovu kontrolu.
+Primer 3: Struktura koja ukazuje na niz menija i funkcija za njihovu kontrolu.
 
 ```c
 struct menus {
@@ -149,10 +153,12 @@ int selection;
 
 Iskusni C programer može intuitivno smisliti tačan izraz bez razmišljanja o tome. Novi C programer će, međutim, morati da radi na tome neko vreme. Možete tvrditi da novi C programer nikada ne bi imao ovu dilemu jer konstrukcija ne bi bila očigledna – programer bi dizajnirao jednostavniju strukturu podataka – možda različite nizove za svaki meni. Ipak, ovi problemi su stvarni i bolje ćete razumeti jezik C nakon što ih rešite.
 
-Da li se odgovor čini očiglednim? Ako jeste, čestitam. Ako ne, razjasniće se kada to shvatite. Ranije sam, kao mladi C programer, dizajnirao sebe u ovom uglu ne shvatajući koliko će to biti zbunjujuće. Tačna sintaksa pozivajuće izjave je ono što mi je izmicalo. Dakle, uzimajući komponente iskaza, isprobao sam svaku varijaciju zagrada, indeksa i operatora pokazivača dok izjava nije proradila. Rešenje koje je radilo sa jednim kompajlerom nije uspelo sa nekoliko drugih. Onaj koji je kasnije prikazan bio je onaj koji su svi prevodioci prihvatili. Da biste ga izvukli, možete razložiti različite delove problema, što je bolji pristup od moje metode kamen spoticanja. Počinjemo tako što znamo da poziv funkcije preko pokazivača izgleda ovako:
+Da li se odgovor čini očiglednim? Ako jeste, čestitam. Ako ne, razjasniće se kada to shvatite. Ranije sam, kao mladi C programer, dizajnirao sebe u ovom uglu ne shvatajući koliko će to biti zbunjujuće. Tačna sintaksa pozivajuće izjave je ono što mi je izmicalo. Dakle, uzimajući komponente iskaza, isprobao sam svaku varijaciju zagrada, indeksa i operatora pokazivača dok izjava nije proradila. Rešenje koje je radilo sa jednim kompajlerom nije uspelo sa nekoliko drugih. Onaj koji je kasnije prikazan bio je onaj koji su svi prevodioci prihvatili.
+
+Da biste ga izvukli, možete razložiti različite delove problema, što je bolji pristup od moje metode kamen spoticanja. Počinjemo tako što znamo da poziv funkcije preko pokazivača izgleda ovako:
 
 ```c
-(*func)(curr_menu,selection);
+(*func)(curr_menu, selection);
 ```
 
 Func pokazivač sadrži adresu neke funkcije. U ANSI standardu, možete izostaviti zvezdicu i zagrade za vezivanje tako da poziv funkcije izgleda kao običan poziv funkcije bez pokazivača. Nisam baš spreman za ovu novu konvenciju. Starija konvencija – koja je još uvek podržana, hvala Bogu – govori vam dok čitate izjavu da se poziv vrši preko pokazivača. Ova konvencija vam daje naznaku gde da tražite funkciju koja se poziva. Takvi tragovi su vredni kada pretražujete neki stari, možda nedovoljno komentarisani kod. Više volim kada jezik pomaže da se objasni sam.
@@ -163,7 +169,7 @@ Evo načina na koji se adresa funkcije dodeljuje pokazivaču funkcije:
 func = funcname;
 ```
 
-Jednostavno, zar ne? To ste već znali. Pretpostavimo sada da je pokazivač funkcije u nizu. Ako izbor korisničkog menija odgovara nizu, dodeljivanje izgleda ovako:
+Jednostavno, zar ne? To ste već znali. Pretpostavimo sada da je "func" pokazivač na niz funkcija. Ako "selection" korisničkog menija odgovara stavki u nizu, dodeljivanje izgleda ovako:
 
 ```c
 func[selection] = funcname;
@@ -175,25 +181,25 @@ I ovaj zadatak je očigledan. Ali da biste pozvali ovaj niz pokazivača, potreba
 (*func[selection]) (curr_menu,selection);
 ```
 
-Ovaj poziv nije tako očigledan. Trebalo mi je malo eksperimentisanja da dođem do toga. Sada na strukturu: ako pokazivač funkcije u strukturi nije bio u nizu, a mm je ukazivao na konkretnu strukturu, dodeljivanje bi bilo ovako:
+Ovaj poziv nije tako očigledan. Trebalo mi je malo eksperimentisanja da dođem do toga. Sada na idemo strukturu: ako je pokazivač funkcije u strukturi bio u nizu, a "mn" je ukazivao na konkretnu strukturu, dodeljivanje bi bilo ovako:
 
 ```c
-mm->func = funcname;
+mn->func = funcname;
 ```
 
 Tada bi poziv izgledao ovako:
 
 ```c
-(*mm->func)(curr_menu, selection);
+(*mn->func)(curr_menu, selection);
 ```
 
-Napredak do ove tačke takođe nije tako očigledan, ali razuman. Trebalo mi je vremena da shvatim blizinu operatora pokazivača zvezdice i zagrada. Sada dodajte indeks selekcije u izjavu i to izgleda ovako:
+Napredak do ove tačke takođe nije tako očigledan, ali je razuman. Trebalo mi je vremena da shvatim blizinu operatora pokazivača - zvezdice i zagrada. Sada dodajte indeks selekcije u izjavu i to izgleda ovako:
 
 ```c
-(*mm->func[selection]) (curr_menu, selection);
+(*mn->func[selection]) (curr_menu, selection);
 ```
 
-Ali u problemu, pokazivač mm pokazuje na niz – prvi element strukture u nizu – umesto na željeni element strukture, a ceo broj curr_menu pokazuje koji element u nizu predstavlja trenutni meni. Dakle, konačni odgovor je ovaj:
+Ali u problemu, pokazivač "mn" pokazuje na niz struktura – prvi element strukture u nizu – umesto na željeni element strukture, a ceo broj curr_menu pokazuje koji element u nizu predstavlja trenutni meni. Dakle, konačni odgovor je ovaj:
 
 ```c
 (*(mm + curr_menu)->func[selection])(curr_menu, selection);
@@ -202,12 +208,15 @@ Ali u problemu, pokazivač mm pokazuje na niz – prvi element strukture u nizu 
 The new ANSI rule would simplify it only a little as shown here.
 
 ```c
-(mm + curr_menu) >func[selection](curr_menu, selection);
+(mn + curr_menu)->func[selection](curr_menu, selection); 
+
+// ili 
+mn[cur_menu]->func[selection](curr_menu, selection);
 ```
 
 Zbog bliskog odnosa između pokazivača i nizova, postoje varijacije ovog izraza koje će takođe funkcionisati. Svi su podjednako zagonetni.
 
-Ovakvi problemi će obeshrabriti sve osim najjačih srca. Kada se C programeri okupe oko hladnjaka i razgovaraju o takvim stvarima, oni imaju tendenciju da takva rešenja odbace kao trivijalna i očigledna. Izluđujuća je karakteristika C-a da su odgovori na zagonetke kodiranja neuhvatljivi kada ih ne znate i očigledni kada ih znate. Ova karakteristika vas tera da se zapitate da li ste jedini koji ne razumete. Ohrabri se. Osim ako niste kompjuterski naučnik i stručnjak za jezik sa prirodnom sklonošću refleksivnom raščlanjivanju s leva na desno i evaluaciji prioriteta, moraćete s vremena na vreme da rešite problem poput ovog. Koristeći postepeni pristup otkrivanju složenog C idioma, kao što je ovaj ilustrovan ovde, možete izbeći metod pokušaja i greške koji sam nevino koristio. Evo saveta. Prijavite se na BIKS ili CompuServe i pitajte nekoga. Tamo ima nekih pametnih ljudi i skoro sigurno će neko od njih rešiti sličan problem. Ako nije, neko je obično voljan da ode van mreže, smisli rešenje i ponovo se prijavi da objavi odgovor. Nikada me nisu razočarali ovi velikodušni ljudi.
+Ovakvi problemi će obeshrabriti sve osim najjačih srca. Kada se C programeri okupe oko hladnjaka i razgovaraju o takvim stvarima, oni imaju tendenciju da takva rešenja odbace kao trivijalna i očigledna. Izluđujuća je karakteristika C-a da su odgovori na zagonetke kodiranja neuhvatljivi kada ih ne znate i očigledni kada ih znate. Ova karakteristika vas tera da se zapitate da li ste jedini koji ne razumete. Ohrabri se. Osim ako niste kompjuterski naučnik i stručnjak za jezik sa prirodnom sklonošću refleksivnom raščlanjivanju s leva na desno i evaluaciji prioriteta, moraćete s vremena na vreme da rešite problem poput ovog. Koristeći postepeni pristup otkrivanju složenog C idioma, kao što je ovaj ilustrovan ovde, možete izbeći metod pokušaja i greške koji sam nevino koristio. Evo saveta. Prijavite se na BIX ili CompuServe i pitajte nekoga. Tamo ima nekih pametnih ljudi i skoro sigurno će neko od njih rešiti sličan problem. Ako nije, neko je obično voljan da ode van mreže, smisli rešenje i ponovo se prijavi da objavi odgovor. Nikada me nisu razočarali ovi velikodušni ljudi.
 
 ## C programski projekat
 
@@ -222,5 +231,3 @@ Ovaj projekat će biti interaktivan. Vaši komentari i sugestije će doprineti n
 ## C Odjava za programiranje
 
 Želeo bih da završim ovo, svoje prvo putovanje u rubrici "Programiranje C", vrhom kape mom prethodniku, Alenu Holubu, čiji je doprinos unapređenju jezika C značajan. Nismo se sreli, ali sam stekao mnogo od njegovog rada u njegovoj kolumni i njegovim knjigama. Alen je dobio glas zahvalnosti u predgovoru za drugo izdanje Kernigana i Ričijevog Programskog jezika C. U ovom poslu, takvo priznanje je ekvivalent Oskaru. Zbogom, Alen, u tvojim novim poduhvatima.
-
-DDS
