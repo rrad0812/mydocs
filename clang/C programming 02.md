@@ -3,7 +3,7 @@
 
 ## Jedenje slona: projekat počinje
 
-Al Stevens
+Al Stevens, septembar '88
 
 Ovog meseca inauguriramo projekat kolumne "C programiranje", funkciju u kojoj ćemo razviti komunikacioni program za koji bi trebalo da bude potrebno nekoliko meseci da se završi. Da bismo započeli projekat, moramo uzeti u obzir zahteve programa. Po mom mišljenju, dve procedure su neophodne tokom razvoja računarskog sistema:
 
@@ -37,11 +37,11 @@ Da bismo započeli projekat kolumne "C programiranje", počećemo sa bibliotekom
 
 Funkcije prozora koriste funkcije konzole Turbo C tekstualnog režima za upravljanje postavljanjem prozora i prikazom podataka. Iz tog razloga će vam trebati Turbo C, verzija 1.5 ili novija.
 
-Listing 1, strana 112, je "window.h", koji sadrži prototipove globalnih funkcija, neke #define izjave, strukture prozora i informacije o konfiguraciji. Nekoliko reči o konfiguraciji: Mnogi programi dolaze sa instalacionim programom koji vas vodi kroz izbor boja ekrana i slično. Nećemo uključiti takvu funkciju jer je ovo program za programere, koji programeri prave i koji programeri koriste. Programeri mogu da rukuju parametrima konfiguracije promenom izvornog koda i kompajliranjem. Da bih olakšao taj proces, koristiću #define makroe za stavke konfiguracije gde god je to moguće. Videćete blok takvih makroa na dnu liste jedan. Ovi makroi vam omogućavaju da konfigurišete boje ekrana programa. Postoji osam stavki ekrana koje se mogu prilagoditi. Ovo će vam dati nagovještaj o tome šta dolazi u paketu prozora u narednim mesecima. Osam stavki su: ekrani za prikaz podataka, blokovi podataka (na primer, označeni blokovi u uređivaču teksta), prozori pomoći, meniji, trake za biranje menija, prozori za unos podataka, polja u prozorima za unos podataka i poruke o grešci. Kao što je ovde objavljeno, konfiguracija koristi uzorak crno-belih za sve stavke. Po želji možete koristiti i druge boje. Globalni simboli za boje su dati u Turbo C "conio.h". Mogući globalni simboli su BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN, LIGHT GRAY, DARK GRAY, LIGHT BLUE, LIGHT GREEN, LIGHT CYAN, LIGHT RED, LIGHT MAGENTA, YELLOW, i WHITE.
+[Listing 1](#listing-1), je "window.h", koji sadrži prototipove globalnih funkcija, neke #define izjave, strukture prozora i informacije o konfiguraciji. Nekoliko reči o konfiguraciji: Mnogi programi dolaze sa instalacionim programom koji vas vodi kroz izbor boja ekrana i slično. Nećemo uključiti takvu funkciju jer je ovo program za programere, koji programeri prave i koji programeri koriste. Programeri mogu da rukuju parametrima konfiguracije promenom izvornog koda i kompajliranjem. Da bih olakšao taj proces, koristiću #define makroe za stavke konfiguracije gde god je to moguće. Videćete blok takvih makroa na dnu liste jedan. Ovi makroi vam omogućavaju da konfigurišete boje ekrana programa. Postoji osam stavki ekrana koje se mogu prilagoditi. Ovo će vam dati nagovještaj o tome šta dolazi u paketu prozora u narednim mesecima. Osam stavki su: ekrani za prikaz podataka, blokovi podataka (na primer, označeni blokovi u uređivaču teksta), prozori pomoći, meniji, trake za biranje menija, prozori za unos podataka, polja u prozorima za unos podataka i poruke o grešci. Kao što je ovde objavljeno, konfiguracija koristi uzorak crno-belih za sve stavke. Po želji možete koristiti i druge boje. Globalni simboli za boje su dati u Turbo C "conio.h". Mogući globalni simboli su BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN, LIGHT GRAY, DARK GRAY, LIGHT BLUE, LIGHT GREEN, LIGHT CYAN, LIGHT RED, LIGHT MAGENTA, YELLOW, i WHITE.
 
 Obratite pažnju na ezoterične prototipove i strukturu ispod komentara "interne Turbo C stvari". Oni pružaju pristup internoj video logici Turbo C i kompatibilni su sa Turbo C, verzijom 1.5. Ako Borland promeni ove konstrukcije u budućoj verziji, moraćemo da izvršimo prilagođavanja. Koristio sam ove konstrukcije za direktno čitanje i pisanje sa ekrana van domena onoga što dozvoljavaju tekstualne video funkcije u Turbo C-u. One nas oslobađaju od asemblerskog jezika i statusnih registara video retrace. Ovo je veoma upitno, neprenosivo, rizično programiranje hakerskog mentaliteta. Ovim se upozoravate da nikada ne koristite takve prakse u svom kodu.
 
-Listing 2, strana 112, je "window.c", biblioteka funkcija prozora. Biblioteka prozora pruža šest osnovnih funkcija za podršku prozorima. Koncept prozora predviđa da se poslednji postavljeni prozor adresira bilo kojim narednim prozorskim operacijama, tako da kada se prozor izbriše, onaj koji je uspostavljen pre nego što postane trenutni prozor. Evo opisa svake od funkcija.
+[Listing 2](#listing-2), je "window.c", biblioteka funkcija prozora. Biblioteka prozora pruža šest osnovnih funkcija za podršku prozorima. Koncept prozora predviđa da se poslednji postavljeni prozor adresira bilo kojim narednim prozorskim operacijama, tako da kada se prozor izbriše, onaj koji je uspostavljen pre nego što postane trenutni prozor. Evo opisa svake od funkcija.
 
 **estabilish_window**  
 Pozovite ovu funkciju da biste uspostavili i prikazali prozor. Očekuje sedam celih brojeva u svojoj listi parametara. Prva četiri parametra identično označavaju položaj ekrana prozora u koordinatama znakova u odnosu na jedan. Četiri koordinate su leva, gornja, desna i donja. Najveći mogući prozor je, dakle, 1,1,80,25. Sledeća dva parametra daju boju prednjeg plana (teksta) i pozadine prozora. Ovde će raditi globalne vrednosti boje koje su gore navedene. Poslednji parametar je TRUE ili FALSE da kaže funkcijama prozora da li treba da sačuvaju i vrate video memoriju ispod prozora. Ovaj parametar govori da li je prozor iskačući prozor ili ne. Obezbeđen je kao pogodnost za uštedu prostora na hrpi kada prozori ne moraju da čuvaju ono što pokrivaju.
@@ -142,7 +142,7 @@ Kembel zaslužuje moje poštovanje svojim priznanjem Koulu Porteru i Džoniju Me
 
 Sledećeg meseca ćemo dodati neke funkcije u biblioteku prozora, pogledati drugu knjigu i pokrenuti još neke kvačice. Do tada, ostanite u formi i nastavite da kodirate.
 
-[LISTING 1]
+## LISTING 1
 
 ```c
 /*---------- window.h -----------*/
@@ -249,7 +249,7 @@ extern struct {
 #define ERRORBG WHITE
 ```
 
-[LISTING 2]
+## LISTING 2
 
 ```c
 /* ----------------------- window.c --------------------- */

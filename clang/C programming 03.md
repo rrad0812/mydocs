@@ -3,7 +3,7 @@
 
 ## Kontrola ekrana, Programiranje kao umetnost (?) i C ++
 
-Al Stevens
+Al Stevens, oktobar '88
 
 Prošlog meseca smo započeli programski projekat "C Column" sa bibliotekom video prozora opšte namene za IBM PC i kompatibilne računare. Ovo izdanje nastavlja taj projekat sa setom softverskih alata orijentisanih na prozore koji koriste funkcije prozora od prošlog meseca. Do sada nismo naterali program da uradi bilo šta; to dolazi kasnije. Konačni program će biti drajver komunikacionih usluga koji će koristiti pretplatnici na on-line usluge.
 
@@ -13,7 +13,7 @@ Ovog meseca dodajemo mogućnost menija prozora i drajver ekrana za unos podataka
 
 Program koji pravimo koristi meni sa kliznom trakom na vrhu ekrana sa nizom izbora prikazanih horizontalno preko trake. Izbor može imati pridruženi iskačući meni. Da bismo izgradili ovu mogućnost, koristićemo funkciju menija opšte namene koju vode tabele struktura. Strukture su definisane izvan funkcija menija i opisuju prikaze menija i softver koji izvršava svaki izbor menija. Kasniji alati, kao što je uređivač teksta, koristiće ove menije. Tako će biti i sa komunikacionim programom aplikacije.
 
-Listing One, strana 128, je "menu.h". Ova datoteka će biti uključena u programe koji moraju da opisuju i izvršavaju menije koristeći funkcije menija. Meni opisujete tako što deklarišete i inicijalizujete niz struktura koje su imenovane pomoću tipedef "MENU". Svaki element u nizu opisuje izbor na kliznom meniju na vrhu ekrana. Članovi strukture opisuju selekciju. Evo opisa svakog člana:
+[Listing 1](#listing-1) je "menu.h". Ova datoteka će biti uključena u programe koji moraju da opisuju i izvršavaju menije koristeći funkcije menija. Meni opisujete tako što deklarišete i inicijalizujete niz struktura koje su imenovane pomoću tipedef "MENU". Svaki element u nizu opisuje izbor na kliznom meniju na vrhu ekrana. Članovi strukture opisuju selekciju. Evo opisa svakog člana:
 
 - **mname**:  
 Pokazivač na ime selekcije kako će biti prikazano na kliznoj traci.
@@ -33,11 +33,11 @@ Pokazivač na duži niz koji će biti prikazan u donjem redu ekrana kada je izbo
 
 Sa nizom tako inicijalizovanih struktura MENU, pozivate funkciju menija __select, prosleđujući joj adresu strukture i ceo broj koji govori koji od horizontalnih izbora treba da bude istaknut kada se meni prvi put prikaže. Obično ceo broj ima vrednost 1.
 
-Listing 2, strana 128, je "menu.c", koji sadrži funkcije biblioteke koje prikazuju menije, dobijaju izbor korisnika i izvršavaju odgovarajuće funkcije.
+[Listing 2](#listing-2) je "menu.c", koji sadrži funkcije biblioteke koje prikazuju menije, dobijaju izbor korisnika i izvršavaju odgovarajuće funkcije.
 
-Listing 3, na strani 129, je "testmenu.c", primer jednostavnog programa menija koji pokazuje kako se softver menija može koristiti. Primer je sažetak menija koji će se koristiti u okviru uređivača teksta dela komunikacionog softverskog paketa. Primer ne radi ništa. To samo ilustruje kako se koriste funkcije menija. Kompilirajte ga i povežite ga sa funkcijama menija i prozora i on će prikazati i kretati se po menijima. Slika 1, strana 111, prikazuje menije onako kako su prvi put prikazani. Tasteri sa strelicama biraju iskačuće menije i pomeraju trake kursora. Taster Enter bira stavku menija. Meni sa opcijama pokazuje primer kako možete da koristite ove menije za uključivanje i isključivanje režima rada.
+[Listing 3](#listing-3) je "testmenu.c", primer jednostavnog programa menija koji pokazuje kako se softver menija može koristiti. Primer je sažetak menija koji će se koristiti u okviru uređivača teksta dela komunikacionog softverskog paketa. Primer ne radi ništa. To samo ilustruje kako se koriste funkcije menija. Kompilirajte ga i povežite ga sa funkcijama menija i prozora i on će prikazati i kretati se po menijima. Slika 1, strana 111, prikazuje menije onako kako su prvi put prikazani. Tasteri sa strelicama biraju iskačuće menije i pomeraju trake kursora. Taster Enter bira stavku menija. Meni sa opcijama pokazuje primer kako možete da koristite ove menije za uključivanje i isključivanje režima rada.
 
-Kompilirajte i povežite testmenu.c sa menu.c na Listingu dva i vindov.c iz prošlomesečne C kolone. Biće vam potreban Listing 1, "menu.h" i "window.h" od prošlog meseca.
+Kompilirajte i povežite "testmenu.c" sa "menu.c" i "window.c" iz prošlomesečne C kolumne. Biće vam potreban "menu.h" i "window.h" od prošlog meseca.
 
 Možete da napravite ugnežđene slojeve ovih menija tako što ćete pozvati menu_select iz funkcije koja je izvršena iz menija višeg nivoa. U stvari, meni urednika koji smo simulirali u ovom primeru biće pozvan iz uređivačke funkcije koja se poziva iz menija školjke.
 
@@ -47,7 +47,7 @@ Funkcije koje poziva menadžer menija će dobiti dva cela broja kao parametre. O
 
 ### Ekrani za unos podataka
 
-Listing 4, strana 130, je "input.h", a listing 5, na strani 130, je "entry.c". Ove dve datoteke koriste biblioteku prozora za implementaciju ekrana za unos podataka opšte namene. Evo kako to funkcioniše: uspostavljate prozor i gradite niz definicija polja za unos podataka. Upisujete neke informacije koje traže u prozor i pozivate softver za unos podataka, prosleđujući mu adresu niza definicija polja. Softver za unos podataka preuzima i prikuplja korisničke ključne unose u vaše bafere. Sve dobre stvari o skakanju sa polja na polje i prozorima pomoći i slično upravlja biblioteka za unos podataka.
+[Listing 4](#listing-4) je "input.h", a [Listing 5](#listing-5) je "entry.c". Ove dve datoteke koriste biblioteku prozora za implementaciju ekrana za unos podataka opšte namene. Evo kako to funkcioniše: uspostavljate prozor i gradite niz definicija polja za unos podataka. Upisujete neke informacije koje traže u prozor i pozivate softver za unos podataka, prosleđujući mu adresu niza definicija polja. Softver za unos podataka preuzima i prikuplja korisničke ključne unose u vaše bafere. Sve dobre stvari o skakanju sa polja na polje i prozorima pomoći i slično upravlja biblioteka za unos podataka.
 
 Struktura u "entry.h" pod nazivom "FIELD" se koristi za opisivanje polja za unos podataka. Pravite niz ovih struktura koje završava strukturom nulte vrednosti. Evo objašnjenja svakog od članova u strukturi:
 
@@ -57,10 +57,10 @@ Broj reda u kome će polje biti prikazano u trenutnom prozoru.
   Slika 1: Test meni (iz testmenu.c)
 
 - **fcol**:  
-Broj kolone polja. (Napomena: Redovi i kolone su u odnosu na jedan. Krajnja gornja leva pozicija u prozoru je red 1, kolona 1.)
+Broj kolumne polja. (Napomena: Redovi i kolumne su u odnosu na jedan. Krajnja gornja leva pozicija u prozoru je red 1, kolona 1.)
 
 - **fk**:  
-Broj kolone u toku koji koristi softver za unos podataka. Ova vrednost treba da bude inicijalizovana na 1.
+Broj kolumne u toku koji koristi softver za unos podataka. Ova vrednost treba da bude inicijalizovana na 1.
 
 - **fbuff**: Pokazivač na bafer gde će se čuvati vrednost podataka kada je korisnik unese.
 
@@ -74,13 +74,13 @@ Pokazivač na masku polja. Maske su nizovi podvlačenja i drugih znakova. Podvu�
 - **fhelp**:  
 Pokazivač na mnemoniku prozora pomoći u polju, koji će biti objašnjen drugi put. Za sada neka bude NULL.
 
-Listing 6, na strani 134 je program "testentr.c", koji ilustruje upotrebu ekrana za unos podataka. On uspostavlja prozor sa naslovom i upisuje neke poruke u prozoru. Zatim poziva funkciju unosa podataka da prikupi vrednosti podataka u svoj bafer. Parametri su:
+[Listing 6](#listing-6) je program "testentr.c", koji ilustruje upotrebu ekrana za unos podataka. On uspostavlja prozor sa naslovom i upisuje neke poruke u prozoru. Zatim poziva funkciju unosa podataka da prikupi vrednosti podataka u svoj bafer. Parametri su:
 
 - adresa niza FIELD struktura,
 - TRUE vrednost koja govori funkciji da inicijalizuje bafere na nizove razmaka koji su završeni nulom,
 - i celobrojna vrednost 1 da kaže funkciji da počne sa kursorom polja na prvom polju u nizu.
 
-Slika 2, strana 113, prikazuje ekran koji je prikazan u primeru nakon unosa nekih vrednosti podataka.
+Slika 2 prikazuje ekran koji je prikazan u primeru nakon unosa nekih vrednosti podataka.
 
 Da biste koristili ekran (koji ne radi ništa osim prikupljanja podataka u bafer, jednostavno ukucate neke vrednosti podataka).
 
@@ -94,7 +94,7 @@ Da biste koristili ekran (koji ne radi ništa osim prikupljanja podataka u bafer
 
 Esc će prekinuti unos podataka i vratiti vrednost ključa za završetak pozivaocu funkcije za unos podataka.
 
-Kompilirajte i povežite "testentr.c" sa "entry.c" na Listingu 5 i windov.c iz prošlomesečne C kolumne. Biće vam potreban listing 4, "entri.h" i "windov.h" od prošlog meseca.
+Kompilirajte i povežite "testentr.c" sa "entry.c" i "window.c" iz prošlomesečne C kolumne. Biće vam potreban "entri.h" i "windov.h" od prošlog meseca.
 
 Možete da zadržite "testmenu.c" i "testentr.c" kao primere i da testirate druge menije i ekrane za unos podataka koje biste mogli da dizajnirate. Oni, međutim, neće biti deo projekta programiranja C kolumne osim kao primeri. Ostale izvorne datoteke su čuvari.
 
@@ -125,15 +125,15 @@ Da li je programiranje disciplina? Ne na način na koji ja to radim.
 
 Slede mišljenja:
 
-Otkrića novih formula za beton i boju su nauke. Arhitektura i portret su umetnosti. Stolarija i krečenje kuća su zanati. Hodanje po gredi je disciplina.
+- Otkrića novih formula za beton i boju su nauke. Arhitektura i portret su umetnosti. Stolarija i krečenje kuća su zanati. Hodanje po gredi je disciplina.
 
-Otkriće novog algoritma sortiranja je nauka. Njegovo objavljivanje je umetnost. Njegova upotreba je zanatska. Njegove metodologije dizajna su discipline, koje se uvek odbacuju kada se približe rokovi.
+- Otkriće novog algoritma sortiranja je nauka. Njegovo objavljivanje je umetnost. Njegova upotreba je zanatska. Njegove metodologije dizajna su discipline, koje se uvek odbacuju kada se približe rokovi.
 
-Možda mnogi ljudi koji nisu umetnički nadareni to priželjkuju i tako to što rade nazivaju umetnošću. Moj doktor to radi, ali postoji ožiljak na mom stomaku iznad mesta gde mi je nekada bila žučna kesa koji prkosi estetskoj ceni. Isto tako, mi sebe nazivamo naučnicima da podignemo svoj značaj na nekoliko nivoa. Ako, međutim, dozvolimo da nas svrstavaju u red molera i vešalica za gipsane zidove, skloni smo da mislimo da smo izgubili kastu i da smo se odrekli mističnosti koja pripada posebnim ljudima. Nije tako.
+- Možda mnogi ljudi koji nisu umetnički nadareni to priželjkuju i tako to što rade nazivaju umetnošću. Moj doktor to radi, ali postoji ožiljak na mom stomaku iznad mesta gde mi je nekada bila žučna kesa koji prkosi estetskoj ceni. Isto tako, mi sebe nazivamo naučnicima da podignemo svoj značaj na nekoliko nivoa. Ako, međutim, dozvolimo da nas svrstavaju u red molera i vešalica za gipsane zidove, skloni smo da mislimo da smo izgubili kastu i da smo se odrekli mističnosti koja pripada posebnim ljudima. Nije tako.
 
 Dakle, sada znate. Programeri su zanatlije i dobri stari momci (i devojke takođe). Dodaj mi još jednu Pabst Blue Ribbon.
 
-## C+ +
+## C++
 
 Svakih desetak godina dolazi još jedan novi metod programiranja i rečeno nam je da će ovaj novi talas preplaviti stare puteve i bolje je da se popnemo na dasku za surfovanje ili da budemo ostavljeni, jecajući i nezaposleni. Početkom šezdesetih bili smo uvučeni i vrištali u Cobol i Fortran, sve vreme očajnički hvatajući se za poslednju omiljenu listu Autokodera. Kako smo se držali tih znakova reči, adresnih registara i indeksnih registara, verujući da bez njih programiranje ne bi bilo ništa manje nego nemoguće. Baš kada su naši udarci atrofirali i naši vriskovi su izbledeli, a mi smo podlegli, oni su nam oduzeli pokušaj, izmislili vreme i gurnuli nam nešto što se zove strukturirano programiranje u lice. Na kraju smo to zavoleli – ko ne bi – ali te promene nije bilo lako progutati jer su zahtevale od nas da razmišljamo o strukturama koda na načine koji su strani od onoga što smo praktikovali kao drugu prirodu.
 
@@ -153,7 +153,7 @@ Do nedavno je C++ implementiran kao pretprocesor koji je kompajliran u C jezik, 
 
 Sada je talenat koji je ušao u razvoj Datalight-a usmeren na C++ svet. Imam kopiju prvog izdanja Zortech C++ kompajlera i planiram da ga koristim da naučim C++ i objektno orijentisano programiranje ako ikada uspem da shvatim šta je objekat. Zortech priručnik ima primere. Objekti su tosteri u koje možete ubaciti hleb, podesiti temperaturu i testirati da li je iskočio tost. Vidite na šta mislim? Još jedan kroše u izradi. Dok nastavljam sa ovom potragom za istinom -kompjuterstvo? Ja ću objaviti svoj napredak u C kolumni. Napišite da li vidite objekat koji bih mogao prepoznati.
 
-[LISTING 1]
+## LISTING 1
 
 ```c
 /* ----------- menu.h ---------- */
@@ -173,7 +173,7 @@ char *display_menubar(MENU *);
 void restore_menubar(char *);
 ```
 
-[LISTING 2]
+## LISTING 2
 
 ```c
 /* ------------ menu.c ------------ */
@@ -379,7 +379,7 @@ static void light(int onoff)
 }
 ```
 
-[LISTING 3]
+## LISTING 3
 
 ```c
 /* --------- testmenu.c ------------ */
@@ -476,7 +476,7 @@ static int quit(hs,vs)
 }
 ```
 
-[LISTING 4]
+## LISTING 4
 
 ```c
 /* --------- entry.h ---------- */
@@ -498,7 +498,7 @@ void insert_line(void);
 #define INSERTING TRUE      /* initial Insert mode */
 ```
 
-[LISTING 5]
+## LISTING 5
 
 ```c
 /* --------- entry.c ---------- */
@@ -864,7 +864,7 @@ void insert_line()
 }
 ```
 
-[LISTING 6]
+## LISTING 6
 
 ```c
 /* ----------- testentr.c --------- */

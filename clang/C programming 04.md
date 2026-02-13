@@ -3,7 +3,7 @@
 
 ## Prozorski uređivač teksta
 
-Al Stevens
+Al Stevens, novembar '88
 
 Ovaj mesec dodajem uređivač teksta u PC C skup alata koji pravimo. Prethodne dve kolumne „C programiranje“ sadržale su biblioteku prozora, prozore za unos podataka i menadžer menija. Buduće kolumne će paketu dodati prozore pomoći, komunikacijske funkcije i protokole za prenos datoteka. Na kraju će sve to biti okupljeno u integrisani komukacioni program. Ali pre nego što dođemo do uređivača teksta ovog meseca, želim da se pozabavim brigom čitalaca koja stalno dobijam.
 
@@ -17,7 +17,7 @@ Program koji proizilazi iz svega ovoga biće komunikacioni paket za pristup on-l
 
 Pošto uređivači obično rade iz komandnog jezika i pošto većina korisnika ima lične preferencije za uređivanje komandi, naš program takođe mora da dozvoli korisniku da izmeni skup komandi.
 
-Listing 1 i listing 2 su "editor.h" i "editor.c". Oni čine osnovni uređivač teksta prozora. Sledećeg meseca ćemo dodati iskačući meni, funkcije pretraživanja teksta i neke funkcije upravljanja datotekama za kreiranje, uređivanje, čuvanje i spajanje tekstualnih datoteka. Prošireni program za uređivanje će činiti mali procesor teksta, onaj koji se može integrisati u C aplikaciju tačno onako kako nameravamo da je koristimo za poštu i poruke na forumu. Kao i svi naši alati, uređivač je dizajniran tako da se može ponovo koristiti za druge projekte koje vi ili ja možemo preduzeti.
+[Listing 1 i listing 2 su "editor.h" i "editor.c". Oni čine osnovni uređivač teksta prozora. Sledećeg meseca ćemo dodati iskačući meni, funkcije pretraživanja teksta i neke funkcije upravljanja datotekama za kreiranje, uređivanje, čuvanje i spajanje tekstualnih datoteka. Prošireni program za uređivanje će činiti mali procesor teksta, onaj koji se može integrisati u C aplikaciju tačno onako kako nameravamo da je koristimo za poštu i poruke na forumu. Kao i svi naši alati, uređivač je dizajniran tako da se može ponovo koristiti za druge projekte koje vi ili ja možemo preduzeti.
 
 Pre nego što opišem kod, hajde da razgovaramo o filozofiji urednika. Morao sam da razmotrim tri stvari u dizajnu:
 
@@ -29,7 +29,7 @@ Pre nego što opišem kod, hajde da razgovaramo o filozofiji urednika. Morao sam
 
 Odlučio sam da prilagodim prozorski uređivač teksta iz mojih knjiga o Turbo C i QuickC. Kod radi ispravno, moj i tvoj je za korišćenje i relativno je mali. Ovde je modifikovano da koristi sažetije funkcije prozora iz ove kolumne i da bude proširivo u smislu da je lako dodati komande bez modifikacije izvornog koda samog uređivača. Takođe sada ima potencijal za rekurzivne pozive uredniku. Iako ne postoje neposredni planovi za uređivač sa više prozora ili za uređivač koji se može rekurzivno pozvati, uređivač ne bi trebalo da isključi te funkcije. Prema tome, kod će omogućiti aplikaciji da sačuva trenutno okruženje urednika i ponovo pozove uređivača za drugo okruženje (prozor, bafer i tako dalje).
 
-Da biste koristili uređivač teksta prozora u programu, morate obezbediti prozor i bafer sa, možda, nekim tekstom koji je već u njemu. Veličina bafera je funkcija širine najšire dozvoljene linije teksta i maksimalnog broja redova teksta. Kada ga izvršite, kažete uredniku ove dve dimenzije. Editor pretpostavlja da je prozor dovoljno širok da zadrži redove i da je bafer dovoljno dubok za tekstualnu datoteku sa maksimalnim brojem redova. Ovaj pristup, koji koristi razmake na kraju za popunjavanje svakog reda, koristi više memorije bafera od one koja koristi nove redove u tekstu, ali kod za upravljanje kursorom i blokovima teksta je manje složen. Bafer je u suštini ki pravougaonik od i redova sa k kolona.
+Da biste koristili uređivač teksta prozora u programu, morate obezbediti prozor i bafer sa, možda, nekim tekstom koji je već u njemu. Veličina bafera je funkcija širine najšire dozvoljene linije teksta i maksimalnog broja redova teksta. Kada ga izvršite, kažete uredniku ove dve dimenzije. Editor pretpostavlja da je prozor dovoljno širok da zadrži redove i da je bafer dovoljno dubok za tekstualnu datoteku sa maksimalnim brojem redova. Ovaj pristup, koji koristi razmake na kraju za popunjavanje svakog reda, koristi više memorije bafera od one koja koristi nove redove u tekstu, ali kod za upravljanje kursorom i blokovima teksta je manje složen. Bafer je u suštini k*i pravougaonik od i redova sa k kolona.
 
 Pošto fiksni pravougaoni bafer mora da stane horizontalno unutar prozora, uređivač ne obezbeđuje horizontalno pomeranje. To znači da linije ne mogu da se protežu dalje od desne margine prozora. To takođe znači da tekstualna datoteka ne može imati promenljive margine. Ovo su funkcije koje menjamo da bismo dobili efikasan uređivač unutar aplikacije, a njihov gubitak ne ugrožava naše zahteve za alatom za sastavljanje poruka.
 
@@ -71,17 +71,17 @@ Ovo su osnovne funkcije za uređivanje teksta bafera teksta koji se uređuje kro
 
 ### Kod editora
 
-Listing 1 je "editor.h". Koristi se za definisanje skupa komandi urednika i podešavanja podrazumevanog režima. Naredbe #define za komande dodeljuju vrednosti ključa mnemotehnici komande. Ključne vrednosti su preuzete iz "window.h" ili su ovde definisane. Pritisci na tastere imaju vrednosti koje vraća funkcija getkei u "window.c". Vrednosti za funkcijske tastere se formiraju dodavanjem vrednosti 128 kodu za skeniranje koji vraća BIOS, čime se postavlja najvažniji bit i formira jedinstvena 8-bitna vrednost za pritisak tastera. Pošto "window.h" nema definisane sve moguće vrednosti ključeva, svaki dodatak skupu alata koji treba druge vrednosti ključeva mora sam da ih definiše. Dakle, imamo dve definicije tastera Alt na vrhu "editor.h".
+[Listing 1](#listing-1) je "editor.h". Koristi se za definisanje skupa komandi urednika i podešavanja podrazumevanog režima. Naredbe #define za komande dodeljuju vrednosti ključa mnemotehnici komande. Ključne vrednosti su preuzete iz "window.h" ili su ovde definisane. Pritisci na tastere imaju vrednosti koje vraća funkcija getkei u "window.c". Vrednosti za funkcijske tastere se formiraju dodavanjem vrednosti 128 kodu za skeniranje koji vraća BIOS, čime se postavlja najvažniji bit i formira jedinstvena 8-bitna vrednost za pritisak tastera. Pošto "window.h" nema definisane sve moguće vrednosti ključeva, svaki dodatak skupu alata koji treba druge vrednosti ključeva mora sam da ih definiše. Dakle, imamo dve definicije tastera Alt na vrhu "editor.h".
 
 - Mnemonik **TAB** definiše širinu tabulatora. Kao što je ovde objavljeno, TAB je 4, tako da će se tabulatori pojaviti na 5, 9, 13 i tako dalje. Ako promenite TAB, pozicije kartica će se promeniti u skladu sa tim.
 
-- Promenljiva REFORMING je podešena na TRUE ili FALSE da bi se odredilo da li će se automatsko reformisanje pasusa dogoditi dok kucate. Ako ga postavite na TRUE, uređivač testira da vidi da li pasus treba da se reformiše svaki put kada se izbriše znak ili reč i kada dođe do prelamanja reči. Ovaj test upoređuje beli prostor na kraju tekućeg reda sa dužinom prve reči u sledećem redu. Ako reč stane na kraj trenutnog reda, pasus se menja. Ovo je pogodnost kada unosite neobrađeni tekst; to bi bio bol u vratu za šifru ili sto. Stoga će softver menija sledećeg meseca uključivati komandu za uključivanje i isključivanje režima. Na nekim sporim procesorima automatsko reformatiranje postaje sporije kada je reč premotana blizu vrha dugog pasusa, a prikaz tastera koje kucate zaostaje za brzinom srednjeg do brzog daktilografa. Da biste poboljšali ove performanse, uklonite poziv test-para u funkciji carttn u editor.c. Ovo će promeniti pravila reformatiranja tokom prelamanja reči tako da rade samo na trenutnom i sledećem redu teksta, gurajući ostatak pasusa niz ceo red kada je potrebno mesto. Kasnije će pritiskom na komandu PARAGRAPH (F2) završiti operaciju reformatiranja. Ovaj pristup je blizak načinu na koji VordStar funkcioniše. Originalni pristup je sličan, ali ne tako brz kao KsiVrite.
+- Promenljiva **REFORMING** je podešena na TRUE ili FALSE da bi se odredilo da li će se automatsko reformisanje pasusa dogoditi dok kucate. Ako ga postavite na TRUE, uređivač testira da vidi da li pasus treba da se reformiše svaki put kada se izbriše znak ili reč i kada dođe do prelamanja reči. Ovaj test upoređuje beli prostor na kraju tekućeg reda sa dužinom prve reči u sledećem redu. Ako reč stane na kraj trenutnog reda, pasus se menja. Ovo je pogodnost kada unosite neobrađeni tekst; to bi bio bol u vratu za šifru ili sto. Stoga će softver menija sledećeg meseca uključivati komandu za uključivanje i isključivanje režima. Na nekim sporim procesorima automatsko reformatiranje postaje sporije kada je reč premotana blizu vrha dugog pasusa, a prikaz tastera koje kucate zaostaje za brzinom srednjeg do brzog daktilografa. Da biste poboljšali ove performanse, uklonite poziv test-para u funkciji carttn u editor.c. Ovo će promeniti pravila reformatiranja tokom prelamanja reči tako da rade samo na trenutnom i sledećem redu teksta, gurajući ostatak pasusa niz ceo red kada je potrebno mesto. Kasnije će pritiskom na komandu PARAGRAPH (F2) završiti operaciju reformatiranja. Ovaj pristup je blizak načinu na koji VordStar funkcioniše. Originalni pristup je sličan, ali ne tako brz kao KsiVrite.
 
 - Promenljiva **INSERT** je postavljena na TRUE ili FALSE da bi se naznačilo da li je kucanje u režimu umetanja ili preklapanja. Vrednost dodeljena globalnom simbolu je podrazumevani režim kada se pokrene uređivač. Nakon toga taster Ins prebacuje režim. #ifndef je za programe koji koriste funkcije unosa podataka od oktobra. Ta biblioteka takođe ima INSERT režim za šablone za unos podataka, a #ifndef sprečava da se dva #define izraza sukobe.
 
 `editor.h` definiše strukturu "edit_env", koja sadrži sve varijable koje se odnose na okruženje određenog poziva urednika. Kasnije, ako odlučimo da koristimo više prozora ili ako treba da pozovemo sekundarni uređivač iz primarnog, složićemo pojavu strukture deklarisane kao "ev" u "editor.c".
 
-"editor.c" sadrži funkciju za uređivanje teksta prozora. Pozivate funkciju pod nazivom "text_editor" i prosledite joj adresu vašeg bafera za uređivanje, maksimalan broj redova u baferu i dužinu najduže linije. Morate da uspostavite prozor sa "estabtish_window u "window.c", i taj prozor mora biti u stanju da sadrži linije širine navedene u pozivu "text_editor". Drugim rečima, prozor mora biti širok najmanje koliko dužina linije plus dva za ivice prozora. Veličina bafera mora biti najmanje dužina reda puta broj redova i treba da sadrži tekstualne podatke ili razmake koji se mogu prikazati. Funkcija "text_editor" vraća pritisak na taster koji je prekinuo sesiju uređivanja. Ova vrednost će biti ili taster "Esc" ili komanda "QUIT" (Alt-Q kako je objavljeno). Program može testirati ovu vrednost da bi znao šta korisnik namerava da uradi sa baferom teksta.
+"editor.c", [Listing 2](#listing-2) sadrži funkciju za uređivanje teksta prozora. Pozivate funkciju pod nazivom "text_editor" i prosledite joj adresu vašeg bafera za uređivanje, maksimalan broj redova u baferu i dužinu najduže linije. Morate da uspostavite prozor sa "estabtish_window u "window.c", i taj prozor mora biti u stanju da sadrži linije širine navedene u pozivu "text_editor". Drugim rečima, prozor mora biti širok najmanje koliko dužina linije plus dva za ivice prozora. Veličina bafera mora biti najmanje dužina reda puta broj redova i treba da sadrži tekstualne podatke ili razmake koji se mogu prikazati. Funkcija "text_editor" vraća pritisak na taster koji je prekinuo sesiju uređivanja. Ova vrednost će biti ili taster "Esc" ili komanda "QUIT" (Alt-Q kako je objavljeno). Program može testirati ovu vrednost da bi znao šta korisnik namerava da uradi sa baferom teksta.
 
 Funkcija "text_editor" prikazuje tekst u prozoru i počinje da prihvata ključeve podataka ili komande od korisnika. Svakim pritiskom na taster poziva se funkcija na koju ukazuje pokazivač funkcije "status_line". Ovo omogućava aplikacijskom programu da prikaže informacije o statusu bafera kao što su brojevi stranica i redova i podešavanja režima. Da bi koristila ovu funkciju, aplikacija mora da inicijalizuje pokazivač na adresu funkcije koja prikazuje status. Koristićemo ovu funkciju sledećeg meseca.
 
@@ -89,7 +89,7 @@ Promenljiva pod nazivom "forcechar" se pojavljuje u redovima 84 i 85. Ako "force
 
 Funkcija može da vidi spoljnu strukturu pod nazivom "ev" da bi ispitala okruženje uređivača, može da modifikuje to okruženje i može da prisili izvršenje komande kada se vrati postavljanjem vrednosti komande u "forcechar". Ovaj mehanizam će se koristiti sledećeg meseca za dodavanje upravljanja datotekama, menija i pretraživanja teksta uređivaču. To je način na koji uređivač činimo proširivim bez modifikacije koda u samom uređivaču.
 
-Kroki broj 6: Zastareli komentari
+### Kroki broj 6: Zastareli komentari
 
 Većina koda u "editor.c" objašnjava sam sebe, kao što se C kod može objasniti bez opširnih komentara. Bar ja tako mislim. Meni to radi, a nadam se da će i vama. Moje prakse komentarisanja prate konvenciju koja identifikuje svrhu svake funkcije u komentaru na početku funkcije. Promenljive koje nisu očigledne dobijaju komentare koji opisuju njihovu svrhu. Tamo gde kod postane potpuno zamućen, ubaciću komentare kako bude napredovao, ali uglavnom više volim da pustim da kod sam sebe opisuje. Ova navika i sklonost proizilaze iz godina čitanja koda drugih gde su njihovi opsežni i opsežni komentari prethodili kodu generacijama modifikacija. Bio sam uljuljkan u verovanje u lepo napravljene komentare i samim tim bio sam podsvesno uslovljen da pretpostavim stvari koje nisu istinite. Ovo gubi vreme. Kasnije, kada moja zbunjenost dostigne nepodnošljiv nivo, pribegavam čitanju koda, samo da bih otkrio da se ne slaže sa komentarima. Bez obzira da li su komentari izjave o namerama koje nikada nisu realizovane ili tačni opisi koda više nisu na mestu; komentari govore jedno, a kod drugo.
 
@@ -103,11 +103,11 @@ S druge strane, moj drugar Bil Čejni kaže da bi svako ko ne pruži dovoljno ko
 
 Primer za korišćenje uređivača teksta
 
-"Testedit.c", Listing 3 je jednostavan primer upotrebe uređivača teksta. Kompilirajte i povežite "testedit.c" sa "editor.c" i "window.c". Pokrećete ga tako što ćete na komandnoj liniji dati ime tekstualnoj datoteci. Ovo nije standardna tekstualna datoteka; to je slika pravougaonog bafera uređivača, tako da kada prvi put pokrenete "testedit", možete dati ime datoteke koje ne postoji i program će je napraviti. "testedit" uspostavlja prozor, čita datoteku – ako postoji – u bafer i poziva funkciju "text_editor". Ako se taster Esc ne vrati, što znači da ste pritisnuli taster QUIT (Alt-Q), bafer se upisuje u datoteku koju ste imenovali u komandnoj liniji. Ako pritisnete Esc, program izlazi bez upisivanja bafera.
+"Testedit.c", [Listing 3](#listing-3) je jednostavan primer upotrebe uređivača teksta. Kompilirajte i povežite "testedit.c" sa "editor.c" i "window.c". Pokrećete ga tako što ćete na komandnoj liniji dati ime tekstualnoj datoteci. Ovo nije standardna tekstualna datoteka; to je slika pravougaonog bafera uređivača, tako da kada prvi put pokrenete "testedit", možete dati ime datoteke koje ne postoji i program će je napraviti. "testedit" uspostavlja prozor, čita datoteku – ako postoji – u bafer i poziva funkciju "text_editor". Ako se taster Esc ne vrati, što znači da ste pritisnuli taster QUIT (Alt-Q), bafer se upisuje u datoteku koju ste imenovali u komandnoj liniji. Ako pritisnete Esc, program izlazi bez upisivanja bafera.
 
 Ovaj program nije mnogo pametan. Njegova svrha je da pokaže kako da podesite, koristite i izađete iz uređivača teksta prozora. Ponuda za sledeći mesec uključuje novi uređivač u mali procesor teksta koji sam ranije pomenuo. Preduzeću drastične mere da testiram mali procesor teksta kada budem pisao kolumnu sledećeg meseca. Ja ću, barem privremeno, napustiti svoj voljeni XWrite i koristiti mali procesor teksta za rad tokom meseca, rizikujući plodove svog kreativnog rada novom i neproverenom uređivaču teksta. Ovo je, dragi čitaoci, posvećenost i posvećenost. Ništa manje ne očekujte od DDJ kolumniste.
 
-[LISTING 1]
+## LISTING 1
 
 ```c
 /* ------------ editor.h ------------- */
@@ -167,7 +167,7 @@ struct edit_env    {
 };
 ```
 
-[LISTING 2]
+## LISTING 2
 
 ```c
 /* ----------------------- editor.c ---------------------- */
@@ -915,7 +915,7 @@ static void disp_line(int y)
 }
 ```
 
-[LISTING THREE]
+## LISTING 3
 
 ```c
 /* --------- testedit.c ------------ */
