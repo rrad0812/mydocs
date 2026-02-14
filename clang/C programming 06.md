@@ -95,7 +95,7 @@ Funkcija "vpoke" ubacuje vrednost od 2 bajta u lokaciju video memorije sa istom 
 
 Turbo C i Microsoft C definišu svoje prototipove funkcija u datotekama zaglavlja uglavnom na isti način. Iste datoteke zaglavlja definišu iste ANSI standardne funkcije. Međutim, postoje dve manje razlike. Turbo C definiše sve funkcije dodele memorije u "alloc.h", a Microsoft C koristi "malloc.h". Turbo C koristi "mem.h" za prototipove funkcija sličnih onima koje Microsoft C stavlja u "memory.h". Da biste zaobišli ovaj problem, možete staviti surogat "alloc.h" i "mem.h" datoteke u svoje Microsoft C datoteke zaglavlja. Datoteka "alloc.h treba" da jednostavno `#include malloc.h`. "Mem.h" će `#include memory.h`. Nisam uključio liste ovih jednostrukih.
 
-## A C Crotchet: The ANSI Gotcha
+## C Kroki: ANSI Gotcha
 
 U svom cilju da specificira standardni jezik C koji je sve za sve računare, ANSI X3J11 komitet se suočio sa nekim teškim problemima. Njihova rešenja ne daju uvek najbolji odgovor za sve. Nekada davno, ako ste kodirali ovu izjavu:
 

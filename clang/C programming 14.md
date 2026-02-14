@@ -124,7 +124,7 @@ Program u [Listing 5](#listing-5) je look.c. On demonstrira klase prozora sa pro
 
 Konvencija C++ toka za datoteke je ona za koju smatram da je manje nego intuitivna. Baferi su objekti, a tokovi su objekti. Deklarišete bafer i kažete mu da otvori datoteku. Zatim deklarišete tok i povezujete ga sa baferom. Da biste čitali i pisali datoteku, šaljete poruke metodama strima. Čini mi se da bi sve to moglo da se uradi sa jednim objektom što bi ga učinilo jednostavnijim i lakšim za razumevanje. Ali pošto je konvolucija dva objekta BS tehnika, proizvođači kompajlera će je, bez sumnje, zauvek održavati u ime usaglašenosti.
 
-Program "look.c" čita sve redove teksta iz datoteke, stavlja svaki red u novi bafer i stavlja adrese bafera u niz pokazivača znakova. Zatim tekst ide u prozor preko preopterećenog << operatora.
+Program "look.c" čita sve redove teksta iz datoteke, stavlja svaki red u novi bafer i stavlja adrese bafera u niz pokazivača znakova. Zatim tekst ide u prozor preko preopterećenog `<<` operatora.
 
 Da bi demonstrirao upotrebu izvedene klase YesNo, program koristi prozor YesNo da pita da li želite da nastavite. Ako je tako, program poziva funkciju člana stranice da bi vam omogućio skrolovanje i listanje kroz tekst.
 

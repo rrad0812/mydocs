@@ -93,10 +93,6 @@ The consequences of the issue will vary from user to user. Those of you using Tu
 
 The upshot of this episode is that I am now the proud owner of a copy of the "Draft Proposed American National Standard for Information Systems -- Programming Language C" document dated December 7, 1988 and a card-carrying member of the X3J11 committee. Just in time -- their work is done.
 
-## Availability
-
-All source code for articles in this issue is available on a single disk. To order, send $14.95 (Calif. residents add sales tax) to Dr. Dobb's Journal, 501 Galveston Dr., Redwood City, CA 94063, or call 800-356-2002 (from inside Calif.) or 800-533-4372 (from outside Calif.). Please specify the issue number and format (MS-DOS, Macintosh, Kaypro).
-
 ## LISTING 1
 
 ```c

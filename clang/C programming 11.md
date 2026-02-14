@@ -121,10 +121,6 @@ On Thursday Microsoft bowed out of the Codeview/Turbo Debugger shootout. David I
 
 Borland hosted a grand party on Thursday night. There was food, drink, T-shirts, and a competent jazz quintet of Borland employees -- guitar, flute, keyboards, bass, and drums. In the second set, Philippe Kahn, the flamboyant leader of Borland, sat in and played the tenor saxophone. Don't give up the day gig, Philippe.
 
-## Availability
-
-All source code for articles in this issue is available on a single disk. To order, send $14.95 (Calif. residents add sales tax) to Dr. Dobb's Journal, 501 Galveston Dr., Redwood City, CA 94063; or call 800-356-2002 (from inside Calif.) or 800-533-4372 (from outside Calif.). Please specify the issue number and format (MS-DOS, Macintosh, Kaypro).
-
 ## Listing 1
 
 ```c
